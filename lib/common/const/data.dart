@@ -1,0 +1,1 @@
+const DEVICE_ID = 'DEVICE_ID';
