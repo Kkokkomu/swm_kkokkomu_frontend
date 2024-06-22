@@ -77,9 +77,19 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
               shortsController.play();
             }
           },
-          child: AspectRatio(
-            aspectRatio: shortsController.value.aspectRatio,
-            child: VideoPlayer(shortsController),
+          child: Stack(
+            children: [
+              SizedBox.expand(
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: 9.0,
+                    height: 16.0,
+                    child: VideoPlayer(shortsController),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
