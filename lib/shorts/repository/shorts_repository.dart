@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart' hide Headers;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:swm_kkokkomu_frontend/common/dio/dio.dart';
@@ -9,7 +10,8 @@ part 'shorts_repository.g.dart';
 final shortsRepositoryProvider = Provider<ShortsRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
-  final repository = ShortsRepository(dio, baseUrl: 'http://test');
+  final repository =
+      ShortsRepository(dio, baseUrl: dotenv.env['BASE_URL'] ?? '');
 
   return repository;
 });
