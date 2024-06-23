@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
@@ -69,30 +71,189 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
 
         final shortsController = cp.data[index].videoController;
 
-        return GestureDetector(
-          onTap: () {
-            if (shortsController.value.isPlaying) {
-              shortsController.pause();
-            } else {
-              shortsController.play();
-            }
-          },
-          child: Stack(
-            children: [
-              SizedBox.expand(
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: SizedBox(
-                    width: 9.0,
-                    height: 16.0,
-                    child: VideoPlayer(shortsController),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        return SingleShorts(
+          shortsController: shortsController,
         );
       },
+    );
+  }
+}
+
+class SingleShorts extends StatefulWidget {
+  final VideoPlayerController shortsController;
+
+  const SingleShorts({
+    super.key,
+    required this.shortsController,
+  });
+
+  @override
+  State<SingleShorts> createState() => _SingleShortsState();
+}
+
+class _SingleShortsState extends State<SingleShorts> {
+  bool isTapped = false;
+  Timer? _hideButtonTimer;
+
+  @override
+  void dispose() {
+    _hideButtonTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (widget.shortsController.value.isPlaying) {
+          widget.shortsController.pause();
+        } else {
+          widget.shortsController.play();
+        }
+
+        _hideButtonTimer?.cancel();
+        _hideButtonTimer = Timer(const Duration(milliseconds: 1100), () {
+          if (mounted) {
+            setState(() {
+              isTapped = false;
+            });
+          }
+        });
+
+        setState(() {
+          isTapped = true;
+        });
+      },
+      child: Stack(
+        children: [
+          SizedBox.expand(
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: SizedBox(
+                width: 9.0,
+                height: 16.0,
+                child: VideoPlayer(widget.shortsController),
+              ),
+            ),
+          ),
+          if (widget.shortsController.value.isPlaying && isTapped)
+            const Center(
+              child: StartButton(),
+            ),
+          if (!widget.shortsController.value.isPlaying && isTapped)
+            const Center(
+              child: PauseButton(),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class StartButton extends StatefulWidget {
+  const StartButton({
+    super.key,
+  });
+
+  @override
+  State<StartButton> createState() => _StartButtonState();
+}
+
+class _StartButtonState extends State<StartButton> {
+  double _scale = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _scale = 1.0;
+        });
+      }
+
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (mounted) {
+          setState(() {
+            _scale = 0.0;
+          });
+        }
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedScale(
+      scale: _scale,
+      duration: const Duration(milliseconds: 300),
+      child: Container(
+        width: 80.0,
+        height: 80.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.black.withOpacity(0.5),
+        ),
+        child: const Icon(
+          Icons.play_arrow,
+          color: Colors.white,
+          size: 40.0,
+        ),
+      ),
+    );
+  }
+}
+
+class PauseButton extends StatefulWidget {
+  const PauseButton({
+    super.key,
+  });
+
+  @override
+  State<PauseButton> createState() => _PauseButtonState();
+}
+
+class _PauseButtonState extends State<PauseButton> {
+  double _scale = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _scale = 1.0;
+        });
+      }
+
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (mounted) {
+          setState(() {
+            _scale = 0.0;
+          });
+        }
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedScale(
+      scale: _scale,
+      duration: const Duration(milliseconds: 300),
+      child: Container(
+        width: 80.0,
+        height: 80.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.black.withOpacity(0.5),
+        ),
+        child: const Icon(
+          Icons.pause,
+          color: Colors.white,
+          size: 40.0,
+        ),
+      ),
     );
   }
 }
