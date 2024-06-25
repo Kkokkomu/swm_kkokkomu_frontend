@@ -25,6 +25,7 @@ class _ShortsCommentState extends ConsumerState<ShortsComment> {
   late double _commentSizeLarge;
   late double _commentSizeMedium;
   final double _commentSizeSmall = 0.0;
+  bool isFirstBuild = true;
 
   @override
   void initState() {
@@ -74,9 +75,7 @@ class _ShortsCommentState extends ConsumerState<ShortsComment> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        setState(() {
-          _commentHeight = _commentSizeMedium;
-        });
+        setCommentSizeMedium();
       }
     });
   }
@@ -111,10 +110,13 @@ class _ShortsCommentState extends ConsumerState<ShortsComment> {
     final shortsCommentVisibility =
         ref.watch(shortsCommentVisibilityProvider(widget.newsID));
 
-    if (shortsCommentVisibility.isShortsCommentVisible &&
+    if (!isFirstBuild &&
+        shortsCommentVisibility.isShortsCommentVisible &&
         _commentHeight == 0.0) {
       setCommentSizeMedium();
     }
+
+    isFirstBuild = false;
 
     return AnimatedContainer(
       duration: _isAnimated ? const Duration(milliseconds: 300) : Duration.zero,
