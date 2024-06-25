@@ -5,12 +5,17 @@ part 'shorts_model.g.dart';
 
 @JsonSerializable()
 class ShortsModel {
-  final String videoUrl;
+  final id;
+  final String shortform_url;
+  final String related_url;
   final VideoPlayerController videoController;
 
   ShortsModel({
-    required this.videoUrl,
-  }) : videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+    required this.id,
+    required this.shortform_url,
+    required this.related_url,
+  }) : videoController =
+            VideoPlayerController.networkUrl(Uri.parse(shortform_url));
 
   factory ShortsModel.fromJson(Map<String, dynamic> json) =>
       _$ShortsModelFromJson(json);

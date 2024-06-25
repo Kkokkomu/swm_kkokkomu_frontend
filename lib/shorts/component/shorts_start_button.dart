@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class StartButton extends StatefulWidget {
-  const StartButton({
+class ShortsStartButton extends StatefulWidget {
+  const ShortsStartButton({
     super.key,
   });
 
   @override
-  State<StartButton> createState() => _StartButtonState();
+  State<ShortsStartButton> createState() => _StartButtonState();
 }
 
-class _StartButtonState extends State<StartButton> {
+class _StartButtonState extends State<ShortsStartButton> {
   double _scale = 0.0;
 
   @override

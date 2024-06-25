@@ -1,26 +1,30 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:swm_kkokkomu_frontend/shorts/component/pause_button.dart';
-import 'package:swm_kkokkomu_frontend/shorts/component/start_button.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/shorts/component/shorts_comment.dart';
+import 'package:swm_kkokkomu_frontend/shorts/component/shorts_pause_button.dart';
+import 'package:swm_kkokkomu_frontend/shorts/component/shorts_start_button.dart';
+import 'package:swm_kkokkomu_frontend/shorts/model/shorts_model.dart';
+import 'package:swm_kkokkomu_frontend/shorts/provider/shorts_comment_provider.dart';
 import 'package:video_player/video_player.dart';
 
 const _floatingButtonSize = 36.0;
 const _emojiDetailAnimationDuration = 350;
 
-class SingleShorts extends StatefulWidget {
-  final VideoPlayerController shortsController;
+class SingleShorts extends ConsumerStatefulWidget {
+  final ShortsModel shortsModel;
 
   const SingleShorts({
     super.key,
-    required this.shortsController,
+    required this.shortsModel,
   });
 
   @override
-  State<SingleShorts> createState() => _SingleShortsState();
+  ConsumerState<SingleShorts> createState() => _SingleShortsState();
 }
 
-class _SingleShortsState extends State<SingleShorts> {
+class _SingleShortsState extends ConsumerState<SingleShorts> {
   bool _isPauseButtonTapped = false;
   bool _isEmojiButtonTapped = false;
   bool _isEmojiDetailButtonVisible = false;
@@ -70,114 +74,173 @@ class _SingleShortsState extends State<SingleShorts> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (widget.shortsController.value.isPlaying) {
-          widget.shortsController.pause();
-        } else {
-          widget.shortsController.play();
-        }
+    final shortsCommentVisibility =
+        ref.watch(shortsCommentVisibilityProvider(widget.shortsModel.id));
 
-        _hidePauseButtonTimer?.cancel();
-        _hidePauseButtonTimer = Timer(const Duration(milliseconds: 1100), () {
-          if (mounted) {
-            setState(() {
-              _isPauseButtonTapped = false;
-            });
-          }
-        });
+    return SafeArea(
+      top: shortsCommentVisibility.isShortsCommentVisible,
+      child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+        return Column(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  if (shortsCommentVisibility.isShortsCommentVisible) {
+                    ref
+                        .read(shortsCommentVisibilityProvider(
+                                widget.shortsModel.id)
+                            .notifier)
+                        .toggleShortsCommentVisibility();
 
-        setState(() {
-          _isPauseButtonTapped = true;
-        });
-      },
-      onDoubleTap: _onEmojiButtonTap,
-      child: Stack(
-        children: [
-          SizedBox.expand(
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child: SizedBox(
-                width: 9.0,
-                height: 16.0,
-                child: VideoPlayer(widget.shortsController),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Stack(
-                    alignment: Alignment.centerRight,
-                    children: [
-                      const Row(),
-                      for (int i = 1; i <= _emojiButtonDetails.length; ++i)
-                        AnimatedPositioned(
-                          duration: const Duration(
-                              milliseconds: _emojiDetailAnimationDuration),
-                          right: _isEmojiButtonTapped ? i * 64.0 : 0.0,
-                          child: Opacity(
-                            opacity: _isEmojiDetailButtonVisible ? 1.0 : 0.0,
-                            child: _emojiButtonDetails[i - 1],
-                          ),
-                        ),
-                      IconButton(
-                        onPressed: _onEmojiButtonTap,
-                        icon: Icon(
-                          Icons.emoji_emotions,
-                          color: Colors.white
-                              .withOpacity(_isEmojiButtonTapped ? 0.5 : 1.0),
-                          size: _floatingButtonSize,
+                    return;
+                  }
+
+                  if (widget.shortsModel.videoController.value.isPlaying) {
+                    widget.shortsModel.videoController.pause();
+                  } else {
+                    widget.shortsModel.videoController.play();
+                  }
+
+                  _hidePauseButtonTimer?.cancel();
+                  _hidePauseButtonTimer =
+                      Timer(const Duration(milliseconds: 1100), () {
+                    if (mounted) {
+                      setState(() {
+                        _isPauseButtonTapped = false;
+                      });
+                    }
+                  });
+
+                  setState(() {
+                    _isPauseButtonTapped = true;
+                  });
+                },
+                onDoubleTap: shortsCommentVisibility.isShortsCommentVisible
+                    ? null
+                    : _onEmojiButtonTap,
+                onVerticalDragStart:
+                    shortsCommentVisibility.isShortsCommentVisible
+                        ? (_) {
+                            ref
+                                .read(shortsCommentVisibilityProvider(
+                                        widget.shortsModel.id)
+                                    .notifier)
+                                .toggleShortsCommentVisibility();
+                          }
+                        : null,
+                child: Stack(
+                  children: [
+                    SizedBox.expand(
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: SizedBox(
+                          width: 9.0,
+                          height: 16.0,
+                          child:
+                              VideoPlayer(widget.shortsModel.videoController),
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.comment,
-                      color: Colors.white,
-                      size: _floatingButtonSize,
                     ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.share,
-                      color: Colors.white,
-                      size: _floatingButtonSize,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.newspaper,
-                      color: Colors.white,
-                      size: _floatingButtonSize,
-                    ),
-                  ),
-                ],
+                    if (!shortsCommentVisibility.isShortsCommentVisible)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Stack(
+                                alignment: Alignment.centerRight,
+                                children: [
+                                  const Row(),
+                                  for (int i = 1;
+                                      i <= _emojiButtonDetails.length;
+                                      ++i)
+                                    AnimatedPositioned(
+                                      duration: const Duration(
+                                          milliseconds:
+                                              _emojiDetailAnimationDuration),
+                                      right:
+                                          _isEmojiButtonTapped ? i * 64.0 : 0.0,
+                                      child: Opacity(
+                                        opacity: _isEmojiDetailButtonVisible
+                                            ? 1.0
+                                            : 0.0,
+                                        child: _emojiButtonDetails[i - 1],
+                                      ),
+                                    ),
+                                  IconButton(
+                                    onPressed: _onEmojiButtonTap,
+                                    icon: Icon(
+                                      Icons.emoji_emotions,
+                                      color: Colors.white.withOpacity(
+                                          _isEmojiButtonTapped ? 0.5 : 1.0),
+                                      size: _floatingButtonSize,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16.0),
+                              IconButton(
+                                onPressed: () {
+                                  ref
+                                      .read(shortsCommentVisibilityProvider(
+                                              widget.shortsModel.id)
+                                          .notifier)
+                                      .toggleShortsCommentVisibility();
+                                },
+                                icon: const Icon(
+                                  Icons.comment,
+                                  color: Colors.white,
+                                  size: _floatingButtonSize,
+                                ),
+                              ),
+                              const SizedBox(height: 16.0),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.share,
+                                  color: Colors.white,
+                                  size: _floatingButtonSize,
+                                ),
+                              ),
+                              const SizedBox(height: 16.0),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.newspaper,
+                                  color: Colors.white,
+                                  size: _floatingButtonSize,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (widget.shortsModel.videoController.value.isPlaying &&
+                        _isPauseButtonTapped)
+                      const Center(
+                        child: ShortsStartButton(),
+                      ),
+                    if (!widget.shortsModel.videoController.value.isPlaying &&
+                        _isPauseButtonTapped)
+                      const Center(
+                        child: ShortsPauseButton(),
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
-          if (widget.shortsController.value.isPlaying && _isPauseButtonTapped)
-            const Center(
-              child: StartButton(),
-            ),
-          if (!widget.shortsController.value.isPlaying && _isPauseButtonTapped)
-            const Center(
-              child: PauseButton(),
-            ),
-        ],
-      ),
+            if (shortsCommentVisibility.isShortsCommentTapped)
+              ShortsComment(
+                parentHeight: constraints.maxHeight,
+                newsID: widget.shortsModel.id,
+              ),
+          ],
+        );
+      }),
     );
   }
 

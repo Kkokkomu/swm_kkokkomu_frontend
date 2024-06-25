@@ -7,10 +7,14 @@ part of 'shorts_model.dart';
 // **************************************************************************
 
 ShortsModel _$ShortsModelFromJson(Map<String, dynamic> json) => ShortsModel(
-      videoUrl: json['videoUrl'] as String,
+      id: json['id'],
+      shortform_url: json['shortform_url'] as String,
+      related_url: json['related_url'] as String,
     );
 
 Map<String, dynamic> _$ShortsModelToJson(ShortsModel instance) =>
     <String, dynamic>{
-      'videoUrl': instance.videoUrl,
+      'id': instance.id,
+      'shortform_url': instance.shortform_url,
+      'related_url': instance.related_url,
     };

@@ -40,40 +40,41 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
       );
     }
 
-    return PageView.builder(
-      scrollDirection: Axis.vertical,
-      onPageChanged: (value) async {
-        if (value == cp.data.length - 2) {
-          ref.read(shortsProvider.notifier).shortsPaginate();
-        }
+    return Container(
+      color: Colors.black,
+      child: PageView.builder(
+        scrollDirection: Axis.vertical,
+        onPageChanged: (value) async {
+          if (value == cp.data.length - 2) {
+            ref.read(shortsProvider.notifier).shortsPaginate();
+          }
 
-        if (_previousController != null) {
-          _previousController!.seekTo(Duration.zero);
-          _previousController!.pause();
-        }
+          if (_previousController != null) {
+            _previousController!.seekTo(Duration.zero);
+            _previousController!.pause();
+          }
 
-        if (value != cp.data.length) {
-          await cp.data[value].videoController.seekTo(Duration.zero);
-          cp.data[value].videoController.play();
-          _previousController = cp.data[value].videoController;
-        }
-      },
-      itemCount: cp.data.length + 1,
-      itemBuilder: (context, index) {
-        if (index == cp.data.length) {
-          return Center(
-            child: cp is CursorPaginationFetchingMore
-                ? const CircularProgressIndicator()
-                : const Text('마지막 데이터입니다.'),
+          if (value != cp.data.length) {
+            await cp.data[value].videoController.seekTo(Duration.zero);
+            cp.data[value].videoController.play();
+            _previousController = cp.data[value].videoController;
+          }
+        },
+        itemCount: cp.data.length + 1,
+        itemBuilder: (context, index) {
+          if (index == cp.data.length) {
+            return Center(
+              child: cp is CursorPaginationFetchingMore
+                  ? const CircularProgressIndicator()
+                  : const Text('마지막 데이터입니다.'),
+            );
+          }
+
+          return SingleShorts(
+            shortsModel: cp.data[index],
           );
-        }
-
-        final shortsController = cp.data[index].videoController;
-
-        return SingleShorts(
-          shortsController: shortsController,
-        );
-      },
+        },
+      ),
     );
   }
 }
