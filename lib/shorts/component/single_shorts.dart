@@ -7,6 +7,7 @@ import 'package:swm_kkokkomu_frontend/shorts/component/shorts_pause_button.dart'
 import 'package:swm_kkokkomu_frontend/shorts/component/shorts_start_button.dart';
 import 'package:swm_kkokkomu_frontend/shorts/model/shorts_model.dart';
 import 'package:swm_kkokkomu_frontend/shorts/provider/shorts_comment_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 const _floatingButtonSize = 36.0;
@@ -204,7 +205,11 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
                               ),
                               const SizedBox(height: 16.0),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  launchUrl(
+                                    Uri.parse(widget.shortsModel.related_url),
+                                  );
+                                },
                                 icon: const Icon(
                                   Icons.newspaper,
                                   color: Colors.white,
