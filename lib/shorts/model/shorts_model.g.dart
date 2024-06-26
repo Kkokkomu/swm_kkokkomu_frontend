@@ -10,6 +10,7 @@ ShortsModel _$ShortsModelFromJson(Map<String, dynamic> json) => ShortsModel(
       id: json['id'],
       shortform_url: json['shortform_url'] as String,
       related_url: json['related_url'] as String,
+      youtube_url: json['youtube_url'] as String,
     );
 
 Map<String, dynamic> _$ShortsModelToJson(ShortsModel instance) =>
@@ -17,4 +18,5 @@ Map<String, dynamic> _$ShortsModelToJson(ShortsModel instance) =>
       'id': instance.id,
       'shortform_url': instance.shortform_url,
       'related_url': instance.related_url,
+      'youtube_url': instance.youtube_url,
     };

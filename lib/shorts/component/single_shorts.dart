@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:swm_kkokkomu_frontend/shorts/component/shorts_comment.dart';
 import 'package:swm_kkokkomu_frontend/shorts/component/shorts_pause_button.dart';
 import 'package:swm_kkokkomu_frontend/shorts/component/shorts_start_button.dart';
@@ -196,7 +197,11 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
                               ),
                               const SizedBox(height: 16.0),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Share.shareUri(
+                                    Uri.parse(widget.shortsModel.youtube_url),
+                                  );
+                                },
                                 icon: const Icon(
                                   Icons.share,
                                   color: Colors.white,

@@ -8,12 +8,14 @@ class ShortsModel {
   final id;
   final String shortform_url;
   final String related_url;
+  final String youtube_url;
   final VideoPlayerController videoController;
 
   ShortsModel({
     required this.id,
     required this.shortform_url,
     required this.related_url,
+    required this.youtube_url,
   }) : videoController =
             VideoPlayerController.networkUrl(Uri.parse(shortform_url));
 
