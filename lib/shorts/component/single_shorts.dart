@@ -129,8 +129,10 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
                       child: FittedBox(
                         fit: BoxFit.fitHeight,
                         child: SizedBox(
-                          width: 9.0,
-                          height: 16.0,
+                          width: widget
+                              .shortsModel.videoController.value.size.width,
+                          height: widget
+                              .shortsModel.videoController.value.size.height,
                           child:
                               VideoPlayer(widget.shortsModel.videoController),
                         ),
