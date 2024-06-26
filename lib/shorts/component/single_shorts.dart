@@ -121,13 +121,7 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
                     : _onEmojiButtonTap,
                 onVerticalDragStart:
                     shortsCommentVisibility.isShortsCommentVisible
-                        ? (_) {
-                            ref
-                                .read(shortsCommentVisibilityProvider(
-                                        widget.shortsModel.id)
-                                    .notifier)
-                                .toggleShortsCommentVisibility();
-                          }
+                        ? (_) {}
                         : null,
                 child: Stack(
                   children: [
