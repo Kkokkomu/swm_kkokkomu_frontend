@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:swm_kkokkomu_frontend/shorts/component/shorts_comment.dart';
-import 'package:swm_kkokkomu_frontend/shorts/component/shorts_pause_button.dart';
-import 'package:swm_kkokkomu_frontend/shorts/component/shorts_start_button.dart';
-import 'package:swm_kkokkomu_frontend/shorts/model/shorts_model.dart';
+import 'package:swm_kkokkomu_frontend/shorts/component/shortform_comment.dart';
+import 'package:swm_kkokkomu_frontend/shorts/component/shortform_pause_button.dart';
+import 'package:swm_kkokkomu_frontend/shorts/component/shortform_start_button.dart';
+import 'package:swm_kkokkomu_frontend/shorts/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shorts/provider/shorts_comment_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
@@ -14,19 +14,20 @@ import 'package:video_player/video_player.dart';
 const _floatingButtonSize = 36.0;
 const _emojiDetailAnimationDuration = 350;
 
-class SingleShorts extends ConsumerStatefulWidget {
-  final ShortsModel shortsModel;
+class SingleShortForm extends ConsumerStatefulWidget {
+  final ShortFormModel shortForm;
 
-  const SingleShorts({
+  const SingleShortForm({
     super.key,
-    required this.shortsModel,
+    required this.shortForm,
   });
 
   @override
-  ConsumerState<SingleShorts> createState() => _SingleShortsState();
+  ConsumerState<SingleShortForm> createState() => _SingleShortsState();
 }
 
-class _SingleShortsState extends ConsumerState<SingleShorts> {
+class _SingleShortsState extends ConsumerState<SingleShortForm> {
+  late VideoPlayerController shortFormVideoPlayer;
   bool _isPauseButtonTapped = false;
   bool _isEmojiButtonTapped = false;
   bool _isEmojiDetailButtonVisible = false;
@@ -68,7 +69,24 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+
+    shortFormVideoPlayer = VideoPlayerController.networkUrl(Uri.parse(
+      widget.shortForm.shortForm!.shortformUrl!,
+    ));
+    shortFormVideoPlayer.initialize().then((_) async {
+      if (mounted) {
+        await shortFormVideoPlayer.setLooping(true);
+        shortFormVideoPlayer.play();
+        setState(() {});
+      }
+    });
+  }
+
+  @override
   void dispose() {
+    shortFormVideoPlayer.dispose();
     _hidePauseButtonTimer?.cancel();
     _hideEmojiDetailButtonTimer?.cancel();
     super.dispose();
@@ -76,8 +94,19 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
 
   @override
   Widget build(BuildContext context) {
-    final shortsCommentVisibility =
-        ref.watch(shortsCommentVisibilityProvider(widget.shortsModel.id));
+    final shortsCommentVisibility = ref.watch(
+      shortsCommentVisibilityProvider(widget.shortForm.shortForm!.id!),
+    );
+
+    final shortFormID = widget.shortForm.shortForm!.id!;
+    final shortFormYoutubeURL = widget.shortForm.shortForm!.youtubeUrl;
+    final shortFormRelatedURL = widget.shortForm.shortForm!.relatedUrl;
+
+    if (!shortFormVideoPlayer.value.isInitialized) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     return SafeArea(
       top: shortsCommentVisibility.isShortsCommentVisible,
@@ -91,17 +120,17 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
                   if (shortsCommentVisibility.isShortsCommentVisible) {
                     ref
                         .read(shortsCommentVisibilityProvider(
-                                widget.shortsModel.id)
+                                widget.shortForm.shortForm!.id!)
                             .notifier)
                         .toggleShortsCommentVisibility();
 
                     return;
                   }
 
-                  if (widget.shortsModel.videoController.value.isPlaying) {
-                    widget.shortsModel.videoController.pause();
+                  if (shortFormVideoPlayer.value.isPlaying) {
+                    shortFormVideoPlayer.pause();
                   } else {
-                    widget.shortsModel.videoController.play();
+                    shortFormVideoPlayer.play();
                   }
 
                   _hidePauseButtonTimer?.cancel();
@@ -131,12 +160,9 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
                       child: FittedBox(
                         fit: BoxFit.fitHeight,
                         child: SizedBox(
-                          width: widget
-                              .shortsModel.videoController.value.size.width,
-                          height: widget
-                              .shortsModel.videoController.value.size.height,
-                          child:
-                              VideoPlayer(widget.shortsModel.videoController),
+                          width: shortFormVideoPlayer.value.size.width,
+                          height: shortFormVideoPlayer.value.size.height,
+                          child: VideoPlayer(shortFormVideoPlayer),
                         ),
                       ),
                     ),
@@ -185,7 +211,7 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
                                 onPressed: () {
                                   ref
                                       .read(shortsCommentVisibilityProvider(
-                                              widget.shortsModel.id)
+                                              shortFormID)
                                           .notifier)
                                       .toggleShortsCommentVisibility();
                                 },
@@ -199,7 +225,7 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
                               IconButton(
                                 onPressed: () {
                                   Share.shareUri(
-                                    Uri.parse(widget.shortsModel.youtube_url),
+                                    Uri.parse(shortFormYoutubeURL!),
                                   );
                                 },
                                 icon: const Icon(
@@ -212,7 +238,7 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
                               IconButton(
                                 onPressed: () {
                                   launchUrl(
-                                    Uri.parse(widget.shortsModel.related_url),
+                                    Uri.parse(shortFormRelatedURL!),
                                   );
                                 },
                                 icon: const Icon(
@@ -225,24 +251,24 @@ class _SingleShortsState extends ConsumerState<SingleShorts> {
                           ),
                         ),
                       ),
-                    if (widget.shortsModel.videoController.value.isPlaying &&
+                    if (shortFormVideoPlayer.value.isPlaying &&
                         _isPauseButtonTapped)
                       const Center(
-                        child: ShortsStartButton(),
+                        child: ShortFormStartButton(),
                       ),
-                    if (!widget.shortsModel.videoController.value.isPlaying &&
+                    if (!shortFormVideoPlayer.value.isPlaying &&
                         _isPauseButtonTapped)
                       const Center(
-                        child: ShortsPauseButton(),
+                        child: ShortFormPauseButton(),
                       ),
                   ],
                 ),
               ),
             ),
             if (shortsCommentVisibility.isShortsCommentTapped)
-              ShortsComment(
+              ShortFormComment(
                 parentHeight: constraints.maxHeight,
-                newsID: widget.shortsModel.id,
+                newsID: shortFormID,
               ),
           ],
         );

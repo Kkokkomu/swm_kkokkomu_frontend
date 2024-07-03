@@ -1,5 +1,5 @@
 class ShortsCommentVisibleModel {
-  final String id;
+  final int id;
   final bool isShortsCommentTapped;
   final bool isShortsCommentVisible;
 

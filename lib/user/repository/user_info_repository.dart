@@ -16,7 +16,6 @@ final userInfoRepositoryProvider = Provider<UserInfoRepository>(
   },
 );
 
-// http://$ip/user
 @RestApi()
 abstract class UserInfoRepository {
   factory UserInfoRepository(Dio dio, {String baseUrl}) = _UserInfoRepository;

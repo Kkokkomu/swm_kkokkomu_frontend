@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'shorts_repository.dart';
+part of 'shortform_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'shorts_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _ShortsRepository implements ShortsRepository {
-  _ShortsRepository(
+class _ShortFormRepository implements ShortFormRepository {
+  _ShortFormRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,20 +19,26 @@ class _ShortsRepository implements ShortsRepository {
   String? baseUrl;
 
   @override
-  Future<List<ShortsModel>> getShortsInfos() async {
+  Future<ResponseModel<OffsetPagination<ShortFormModel>>> paginate({
+    required PaginationParams paginationParams,
+    AdditionalParams? additionalParams,
+  }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(paginationParams.toJson());
+    queryParameters.addAll(additionalParams?.toJson() ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<List<ShortsModel>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseModel<OffsetPagination<ShortFormModel>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/',
+              '',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -41,9 +47,13 @@ class _ShortsRepository implements ShortsRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    var value = _result.data!
-        .map((dynamic i) => ShortsModel.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = ResponseModel<OffsetPagination<ShortFormModel>>.fromJson(
+      _result.data!,
+      (json) => OffsetPagination<ShortFormModel>.fromJson(
+        json as Map<String, dynamic>,
+        (json) => ShortFormModel.fromJson(json as Map<String, dynamic>),
+      ),
+    );
     return value;
   }
 

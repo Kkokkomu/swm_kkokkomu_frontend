@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ShortsPauseButton extends StatefulWidget {
-  const ShortsPauseButton({
+class ShortFormPauseButton extends StatefulWidget {
+  const ShortFormPauseButton({
     super.key,
   });
 
   @override
-  State<ShortsPauseButton> createState() => _PauseButtonState();
+  State<ShortFormPauseButton> createState() => _PauseButtonState();
 }
 
-class _PauseButtonState extends State<ShortsPauseButton> {
+class _PauseButtonState extends State<ShortFormPauseButton> {
   double _scale = 0.0;
 
   @override

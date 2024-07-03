@@ -6,7 +6,7 @@ import 'package:swm_kkokkomu_frontend/shorts/model/shorts_comment_model.dart';
 
 final shortsCommentVisibilityProvider = StateNotifierProvider.family
     .autoDispose<ShortsCommentVisibilityStateNotifier,
-        ShortsCommentVisibleModel, String>(
+        ShortsCommentVisibleModel, int>(
   (ref, newsID) {
     return ShortsCommentVisibilityStateNotifier(
       ref: ref,
@@ -18,7 +18,7 @@ final shortsCommentVisibilityProvider = StateNotifierProvider.family
 class ShortsCommentVisibilityStateNotifier
     extends StateNotifier<ShortsCommentVisibleModel> {
   final Ref ref;
-  final String newsID;
+  final int newsID;
   Timer? toggleBottomNavigationBarTimer;
 
   ShortsCommentVisibilityStateNotifier({

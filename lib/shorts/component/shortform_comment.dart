@@ -3,21 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
 import 'package:swm_kkokkomu_frontend/shorts/provider/shorts_comment_provider.dart';
 
-class ShortsComment extends ConsumerStatefulWidget {
+class ShortFormComment extends ConsumerStatefulWidget {
   final double parentHeight;
-  final String newsID;
+  final int newsID;
 
-  const ShortsComment({
+  const ShortFormComment({
     super.key,
     required this.parentHeight,
     required this.newsID,
   });
 
   @override
-  ConsumerState<ShortsComment> createState() => _ShortsCommentState();
+  ConsumerState<ShortFormComment> createState() => _ShortsCommentState();
 }
 
-class _ShortsCommentState extends ConsumerState<ShortsComment> {
+class _ShortsCommentState extends ConsumerState<ShortFormComment> {
   double _commentHeight = 0.0;
   late void Function(DragUpdateDetails) _onVerticalDragUpdate;
   late void Function(DragEndDetails) _onVerticalDragEnd;
