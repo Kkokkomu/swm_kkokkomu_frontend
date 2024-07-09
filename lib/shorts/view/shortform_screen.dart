@@ -4,7 +4,6 @@ import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/shorts/component/single_shortform.dart';
 import 'package:swm_kkokkomu_frontend/shorts/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shorts/provider/shortform_provider.dart';
-import 'package:video_player/video_player.dart';
 
 class ShortsScreen extends ConsumerStatefulWidget {
   const ShortsScreen({super.key});
@@ -17,8 +16,6 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
     with AutomaticKeepAliveClientMixin<ShortsScreen> {
   @override
   bool get wantKeepAlive => true;
-
-  VideoPlayerController? _previousController;
 
   @override
   Widget build(BuildContext context) {
@@ -62,30 +59,22 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
       child: PageView.builder(
         scrollDirection: Axis.vertical,
         itemCount: cp.items.length + 1,
-        onPageChanged: (value) async {
+        onPageChanged: (value) {
           if (value == cp.items.length - 2) {
             ref.read(shortFormProvider.notifier).paginate(fetchMore: true);
           }
-
-          // if (_previousController != null) {
-          //   _previousController!.seekTo(Duration.zero);
-          //   _previousController!.pause();
-          // }
-
-          // if (value != cp.items.length) {
-          //   await cp.items[value].shortForm!.videoPlayerController!
-          //       .seekTo(Duration.zero);
-          //   cp.items[value].shortForm!.videoPlayerController!.play();
-          //   _previousController =
-          //       cp.items[value].shortForm!.videoPlayerController;
-          // }
         },
         itemBuilder: (context, index) {
           if (index == cp.items.length) {
             return Center(
               child: cp is OffsetPaginationFetchingMore
                   ? const CircularProgressIndicator()
-                  : const Text('마지막 데이터입니다.'),
+                  : const Text(
+                      '마지막 데이터입니다.',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
             );
           }
 

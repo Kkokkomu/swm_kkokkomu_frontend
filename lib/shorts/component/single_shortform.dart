@@ -1,18 +1,14 @@
 import 'dart:async';
 
+import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:swm_kkokkomu_frontend/shorts/component/shortform_comment.dart';
+import 'package:swm_kkokkomu_frontend/shorts/component/shortform_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shorts/component/shortform_pause_button.dart';
 import 'package:swm_kkokkomu_frontend/shorts/component/shortform_start_button.dart';
 import 'package:swm_kkokkomu_frontend/shorts/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shorts/provider/shorts_comment_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:video_player/video_player.dart';
-
-const _floatingButtonSize = 36.0;
-const _emojiDetailAnimationDuration = 350;
 
 class SingleShortForm extends ConsumerStatefulWidget {
   final ShortFormModel shortForm;
@@ -27,66 +23,50 @@ class SingleShortForm extends ConsumerStatefulWidget {
 }
 
 class _SingleShortsState extends ConsumerState<SingleShortForm> {
-  late VideoPlayerController shortFormVideoPlayer;
+  late BetterPlayerController _betterPlayerController;
   bool _isPauseButtonTapped = false;
-  bool _isEmojiButtonTapped = false;
-  bool _isEmojiDetailButtonVisible = false;
   Timer? _hidePauseButtonTimer;
   Timer? _hideEmojiDetailButtonTimer;
-  final List<IconButton> _emojiButtonDetails = [
-    IconButton(
-      onPressed: () {},
-      icon: const Icon(
-        Icons.emoji_emotions,
-        color: Colors.white,
-        size: _floatingButtonSize,
-      ),
-    ),
-    IconButton(
-      onPressed: () {},
-      icon: const Icon(
-        Icons.sentiment_very_dissatisfied,
-        color: Colors.white,
-        size: _floatingButtonSize,
-      ),
-    ),
-    IconButton(
-      onPressed: () {},
-      icon: const Icon(
-        Icons.sentiment_very_dissatisfied_outlined,
-        color: Colors.white,
-        size: _floatingButtonSize,
-      ),
-    ),
-    IconButton(
-      onPressed: () {},
-      icon: const Icon(
-        Icons.sentiment_very_satisfied_outlined,
-        color: Colors.white,
-        size: _floatingButtonSize,
-      ),
-    ),
-  ];
 
   @override
   void initState() {
     super.initState();
-
-    shortFormVideoPlayer = VideoPlayerController.networkUrl(Uri.parse(
+    BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
       widget.shortForm.shortForm!.shortformUrl!,
-    ));
-    shortFormVideoPlayer.initialize().then((_) async {
-      if (mounted) {
-        await shortFormVideoPlayer.setLooping(true);
-        shortFormVideoPlayer.play();
-        setState(() {});
-      }
-    });
+      cacheConfiguration: const BetterPlayerCacheConfiguration(
+        useCache: true,
+        maxCacheSize: 300 * 1024 * 1024,
+        maxCacheFileSize: 100 * 1024 * 1024,
+      ),
+      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+        minBufferMs: 5000,
+        maxBufferMs: 10000,
+        bufferForPlaybackMs: 2500,
+        bufferForPlaybackAfterRebufferMs: 5000,
+      ),
+    );
+    _betterPlayerController = BetterPlayerController(
+      const BetterPlayerConfiguration(
+        fit: BoxFit.fitHeight,
+        aspectRatio: 1 / 10,
+        autoPlay: true,
+        looping: true,
+        placeholder: Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        ),
+        controlsConfiguration: BetterPlayerControlsConfiguration(
+          showControls: false,
+        ),
+      ),
+      betterPlayerDataSource: betterPlayerDataSource,
+    );
   }
 
   @override
   void dispose() {
-    shortFormVideoPlayer.dispose();
     _hidePauseButtonTimer?.cancel();
     _hideEmojiDetailButtonTimer?.cancel();
     super.dispose();
@@ -102,12 +82,6 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
     final shortFormYoutubeURL = widget.shortForm.shortForm!.youtubeUrl;
     final shortFormRelatedURL = widget.shortForm.shortForm!.relatedUrl;
 
-    if (!shortFormVideoPlayer.value.isInitialized) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
     return SafeArea(
       top: shortsCommentVisibility.isShortsCommentVisible,
       child: LayoutBuilder(
@@ -115,154 +89,81 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
         return Column(
           children: [
             Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  if (shortsCommentVisibility.isShortsCommentVisible) {
-                    ref
-                        .read(shortsCommentVisibilityProvider(
-                                widget.shortForm.shortForm!.id!)
-                            .notifier)
-                        .toggleShortsCommentVisibility();
+              child: Stack(
+                children: [
+                  GestureDetector(
+                    // 숏폼 화면을 누를때
+                    onTap: () {
+                      // 비디오가 초기화 되지 않았을 때는 아무것도 하지 않음
+                      if (!(_betterPlayerController.isVideoInitialized() ==
+                          true)) {
+                        return;
+                      }
 
-                    return;
-                  }
+                      // 댓글창이 보이는 상태에서 숏폼 화면을 누르면 댓글창 닫음
+                      if (shortsCommentVisibility.isShortsCommentVisible) {
+                        ref
+                            .read(shortsCommentVisibilityProvider(shortFormID)
+                                .notifier)
+                            .toggleShortsCommentVisibility();
 
-                  if (shortFormVideoPlayer.value.isPlaying) {
-                    shortFormVideoPlayer.pause();
-                  } else {
-                    shortFormVideoPlayer.play();
-                  }
+                        return;
+                      }
 
-                  _hidePauseButtonTimer?.cancel();
-                  _hidePauseButtonTimer =
-                      Timer(const Duration(milliseconds: 1100), () {
-                    if (mounted) {
-                      setState(() {
-                        _isPauseButtonTapped = false;
-                      });
-                    }
-                  });
-
-                  setState(() {
-                    _isPauseButtonTapped = true;
-                  });
-                },
-                onDoubleTap: shortsCommentVisibility.isShortsCommentVisible
-                    ? null
-                    : _onEmojiButtonTap,
-                onVerticalDragStart:
-                    shortsCommentVisibility.isShortsCommentVisible
-                        ? (_) {}
-                        : null,
-                child: Stack(
-                  children: [
-                    SizedBox.expand(
-                      child: FittedBox(
-                        fit: BoxFit.fitHeight,
-                        child: SizedBox(
-                          width: shortFormVideoPlayer.value.size.width,
-                          height: shortFormVideoPlayer.value.size.height,
-                          child: VideoPlayer(shortFormVideoPlayer),
+                      // 비디오가 초기화 되었을 때는 플레이/일시정지 토글
+                      togglePausePlay();
+                    },
+                    // 댓글창이 보이는 상태에서는 드래그시 아무것도 하지 않음
+                    // 댓글창이 보이지 않는 상태에서는 드래그시 PageView 드래그 작동
+                    onVerticalDragStart:
+                        shortsCommentVisibility.isShortsCommentVisible
+                            ? (_) {}
+                            : null,
+                    child: BetterPlayer(
+                      controller: _betterPlayerController,
+                    ),
+                  ),
+                  // 댓글창이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
+                  if (!shortsCommentVisibility.isShortsCommentVisible)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const EmojiButton(),
+                            const SizedBox(height: 16.0),
+                            CommentButton(
+                              ref: ref,
+                              shortFormID: shortFormID,
+                            ),
+                            const SizedBox(height: 16.0),
+                            ShareYoutubeUrlButton(
+                              shortFormYoutubeURL: shortFormYoutubeURL!,
+                            ),
+                            const SizedBox(height: 16.0),
+                            RelatedUrlButton(
+                              shortFormRelatedURL: shortFormRelatedURL!,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    if (!shortsCommentVisibility.isShortsCommentVisible)
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Stack(
-                                alignment: Alignment.centerRight,
-                                children: [
-                                  const Row(),
-                                  for (int i = 1;
-                                      i <= _emojiButtonDetails.length;
-                                      ++i)
-                                    AnimatedPositioned(
-                                      duration: const Duration(
-                                          milliseconds:
-                                              _emojiDetailAnimationDuration),
-                                      right:
-                                          _isEmojiButtonTapped ? i * 64.0 : 0.0,
-                                      child: Opacity(
-                                        opacity: _isEmojiDetailButtonVisible
-                                            ? 1.0
-                                            : 0.0,
-                                        child: _emojiButtonDetails[i - 1],
-                                      ),
-                                    ),
-                                  IconButton(
-                                    onPressed: _onEmojiButtonTap,
-                                    icon: Icon(
-                                      Icons.emoji_emotions,
-                                      color: Colors.white.withOpacity(
-                                          _isEmojiButtonTapped ? 0.5 : 1.0),
-                                      size: _floatingButtonSize,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16.0),
-                              IconButton(
-                                onPressed: () {
-                                  ref
-                                      .read(shortsCommentVisibilityProvider(
-                                              shortFormID)
-                                          .notifier)
-                                      .toggleShortsCommentVisibility();
-                                },
-                                icon: const Icon(
-                                  Icons.comment,
-                                  color: Colors.white,
-                                  size: _floatingButtonSize,
-                                ),
-                              ),
-                              const SizedBox(height: 16.0),
-                              IconButton(
-                                onPressed: () {
-                                  Share.shareUri(
-                                    Uri.parse(shortFormYoutubeURL!),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.share,
-                                  color: Colors.white,
-                                  size: _floatingButtonSize,
-                                ),
-                              ),
-                              const SizedBox(height: 16.0),
-                              IconButton(
-                                onPressed: () {
-                                  launchUrl(
-                                    Uri.parse(shortFormRelatedURL!),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.newspaper,
-                                  color: Colors.white,
-                                  size: _floatingButtonSize,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    if (shortFormVideoPlayer.value.isPlaying &&
-                        _isPauseButtonTapped)
-                      const Center(
-                        child: ShortFormStartButton(),
-                      ),
-                    if (!shortFormVideoPlayer.value.isPlaying &&
-                        _isPauseButtonTapped)
-                      const Center(
-                        child: ShortFormPauseButton(),
-                      ),
-                  ],
-                ),
+                  if (_betterPlayerController.isVideoInitialized() == true &&
+                      _betterPlayerController.isPlaying()! &&
+                      _isPauseButtonTapped)
+                    const Center(
+                      child: ShortFormStartButton(),
+                    ),
+                  if (_betterPlayerController.isVideoInitialized() == true &&
+                      !_betterPlayerController.isPlaying()! &&
+                      _isPauseButtonTapped)
+                    const Center(
+                      child: ShortFormPauseButton(),
+                    ),
+                ],
               ),
             ),
             if (shortsCommentVisibility.isShortsCommentTapped)
@@ -276,23 +177,24 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
     );
   }
 
-  void _onEmojiButtonTap() {
-    _hideEmojiDetailButtonTimer?.cancel();
-    if (_isEmojiButtonTapped) {
-      _hideEmojiDetailButtonTimer = Timer(
-          const Duration(milliseconds: _emojiDetailAnimationDuration), () {
-        if (mounted) {
-          setState(() {
-            _isEmojiDetailButtonVisible = false;
-          });
-        }
-      });
+  void togglePausePlay() {
+    if (_betterPlayerController.isPlaying()!) {
+      _betterPlayerController.pause();
     } else {
-      _isEmojiDetailButtonVisible = true;
+      _betterPlayerController.play();
     }
 
+    _hidePauseButtonTimer?.cancel();
+    _hidePauseButtonTimer = Timer(const Duration(milliseconds: 1100), () {
+      if (mounted) {
+        setState(() {
+          _isPauseButtonTapped = false;
+        });
+      }
+    });
+
     setState(() {
-      _isEmojiButtonTapped = !_isEmojiButtonTapped;
+      _isPauseButtonTapped = true;
     });
   }
 }
