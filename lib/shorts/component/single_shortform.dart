@@ -116,8 +116,11 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
                         shortsCommentVisibility.isShortsCommentVisible
                             ? (_) {}
                             : null,
-                    child: BetterPlayer(
-                      controller: _betterPlayerController,
+                    behavior: HitTestBehavior.opaque,
+                    child: IgnorePointer(
+                      child: BetterPlayer(
+                        controller: _betterPlayerController,
+                      ),
                     ),
                   ),
                   // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
