@@ -8,9 +8,13 @@ import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 void main() async {
   await dotenv.load(fileName: 'assets/config/.env');
 
-  await BetterPlayerController(
-    const BetterPlayerConfiguration(),
-  ).clearCache();
+  final tempBetterPlayerController = BetterPlayerController(
+    const BetterPlayerConfiguration(
+      autoDispose: false,
+    ),
+  );
+  await tempBetterPlayerController.clearCache();
+  tempBetterPlayerController.dispose(forceDispose: true);
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(

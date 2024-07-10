@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/shorts/component/shortform_comment.dart';
 import 'package:swm_kkokkomu_frontend/shorts/component/shortform_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shorts/component/shortform_pause_button.dart';
@@ -34,35 +35,15 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
     BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       widget.shortForm.shortForm!.shortformUrl!,
-      cacheConfiguration: const BetterPlayerCacheConfiguration(
-        useCache: true,
-        maxCacheSize: 300 * 1024 * 1024,
-        maxCacheFileSize: 100 * 1024 * 1024,
-      ),
-      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
-        minBufferMs: 5000,
-        maxBufferMs: 10000,
-        bufferForPlaybackMs: 2500,
-        bufferForPlaybackAfterRebufferMs: 5000,
-      ),
+      cacheConfiguration: customBetterPlayerCacheConfiguration,
+      bufferingConfiguration: customBetterPlayerBufferingConfiguration,
     );
     _betterPlayerController = BetterPlayerController(
-      const BetterPlayerConfiguration(
-        fit: BoxFit.fitHeight,
-        aspectRatio: 1 / 10,
-        autoPlay: true,
-        looping: true,
-        placeholder: Center(
-          child: CircularProgressIndicator(
-            color: Colors.white,
-          ),
-        ),
-        controlsConfiguration: BetterPlayerControlsConfiguration(
-          showControls: false,
-        ),
-      ),
-      betterPlayerDataSource: betterPlayerDataSource,
+      customBetterPlayerConfiguration,
     );
+    _betterPlayerController.setupDataSource(betterPlayerDataSource).then((_) {
+      setState(() {});
+    });
   }
 
   @override
@@ -123,8 +104,10 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
                       controller: _betterPlayerController,
                     ),
                   ),
+                  // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
                   // 댓글창이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
-                  if (!shortsCommentVisibility.isShortsCommentVisible)
+                  if (_betterPlayerController.isVideoInitialized() == true &&
+                      !shortsCommentVisibility.isShortsCommentVisible)
                     Align(
                       alignment: Alignment.centerRight,
                       child: Padding(
