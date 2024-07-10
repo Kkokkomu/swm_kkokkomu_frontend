@@ -57,6 +57,8 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
     return Container(
       color: Colors.black,
       child: PageView.builder(
+        allowImplicitScrolling: true,
+        physics: const CustomPhysics(),
         scrollDirection: Axis.vertical,
         itemCount: cp.items.length + 1,
         onPageChanged: (value) {
@@ -85,4 +87,20 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
       ),
     );
   }
+}
+
+class CustomPhysics extends ScrollPhysics {
+  const CustomPhysics({ScrollPhysics? parent}) : super(parent: parent);
+
+  @override
+  CustomPhysics applyTo(ScrollPhysics? ancestor) {
+    return CustomPhysics(parent: buildParent(ancestor));
+  }
+
+  @override
+  SpringDescription get spring => const SpringDescription(
+        mass: 50,
+        stiffness: 100,
+        damping: 1,
+      );
 }

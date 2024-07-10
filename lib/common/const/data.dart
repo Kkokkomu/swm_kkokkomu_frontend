@@ -1,5 +1,4 @@
 import 'package:better_player/better_player.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 const DEVICE_ID = 'DEVICE_ID';
@@ -18,19 +17,4 @@ const customBetterPlayerBufferingConfiguration =
   maxBufferMs: 10000,
   bufferForPlaybackMs: 2500,
   bufferForPlaybackAfterRebufferMs: 5000,
-);
-
-const customBetterPlayerConfiguration = BetterPlayerConfiguration(
-  fit: BoxFit.fitHeight,
-  aspectRatio: 1 / 10,
-  autoPlay: true,
-  looping: true,
-  placeholder: Center(
-    child: CircularProgressIndicator(
-      color: Colors.white,
-    ),
-  ),
-  controlsConfiguration: BetterPlayerControlsConfiguration(
-    showControls: false,
-  ),
 );

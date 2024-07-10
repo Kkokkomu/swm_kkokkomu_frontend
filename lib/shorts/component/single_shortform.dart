@@ -32,18 +32,33 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
   @override
   void initState() {
     super.initState();
-    BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-      BetterPlayerDataSourceType.network,
-      widget.shortForm.shortForm!.shortformUrl!,
-      cacheConfiguration: customBetterPlayerCacheConfiguration,
-      bufferingConfiguration: customBetterPlayerBufferingConfiguration,
+    final customBetterPlayerConfiguration = BetterPlayerConfiguration(
+      playerVisibilityChangedBehavior: onVisibilityChanged,
+      fit: BoxFit.fitHeight,
+      aspectRatio: 1 / 10,
+      looping: true,
+      placeholder: const Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      ),
+      controlsConfiguration: const BetterPlayerControlsConfiguration(
+        showControls: false,
+      ),
     );
+
     _betterPlayerController = BetterPlayerController(
       customBetterPlayerConfiguration,
-    );
-    _betterPlayerController.setupDataSource(betterPlayerDataSource).then((_) {
-      setState(() {});
-    });
+    )..setupDataSource(
+        BetterPlayerDataSource(
+          BetterPlayerDataSourceType.network,
+          widget.shortForm.shortForm!.shortformUrl!,
+          cacheConfiguration: customBetterPlayerCacheConfiguration,
+          bufferingConfiguration: customBetterPlayerBufferingConfiguration,
+        ),
+      ).then((_) {
+        setState(() {});
+      });
   }
 
   @override
@@ -179,5 +194,22 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
     setState(() {
       _isPauseButtonTapped = true;
     });
+  }
+
+  void onVisibilityChanged(double visibleFraction) async {
+    if (visibleFraction == 1.0) {
+      _betterPlayerController.play();
+      return;
+    }
+    if (visibleFraction == 0.0 &&
+        _betterPlayerController.isVideoInitialized()! &&
+        !ref
+            .read(shortsCommentVisibilityProvider(
+                widget.shortForm.shortForm!.id!))
+            .isShortsCommentVisible) {
+      _betterPlayerController.pause();
+      _betterPlayerController.seekTo(const Duration(seconds: 0));
+      return;
+    }
   }
 }
