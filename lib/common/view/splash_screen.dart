@@ -11,12 +11,13 @@ class SplashScreen extends StatelessWidget {
     return DefaultLayout(
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('로고 들어갈자리'),
-            SizedBox(height: 16.0),
-            CircularProgressIndicator(),
+            SizedBox(
+              width: 120,
+              child: Image.asset('assets/images/splash_icon.png'),
+            ),
           ],
         ),
       ),
