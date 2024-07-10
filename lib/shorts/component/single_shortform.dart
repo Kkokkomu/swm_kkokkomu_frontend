@@ -37,11 +37,6 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
       fit: BoxFit.fitHeight,
       aspectRatio: 1 / 10,
       looping: true,
-      placeholder: const Center(
-        child: CircularProgressIndicator(
-          color: Colors.white,
-        ),
-      ),
       controlsConfiguration: const BetterPlayerControlsConfiguration(
         showControls: false,
       ),
@@ -77,6 +72,12 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
     final shortFormID = widget.shortForm.shortForm!.id!;
     final shortFormYoutubeURL = widget.shortForm.shortForm!.youtubeUrl;
     final shortFormRelatedURL = widget.shortForm.shortForm!.relatedUrl;
+
+    if (!_betterPlayerController.isVideoInitialized()!) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     return SafeArea(
       top: shortsCommentVisibility.isShortsCommentVisible,
@@ -196,7 +197,7 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
     });
   }
 
-  void onVisibilityChanged(double visibleFraction) async {
+  void onVisibilityChanged(double visibleFraction) {
     if (visibleFraction == 1.0) {
       _betterPlayerController.play();
       return;
