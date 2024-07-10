@@ -28,34 +28,12 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
   bool _isPauseButtonTapped = false;
   Timer? _hidePauseButtonTimer;
   Timer? _hideEmojiDetailButtonTimer;
+  bool _isVideoError = false;
 
   @override
   void initState() {
     super.initState();
-    final customBetterPlayerConfiguration = BetterPlayerConfiguration(
-      playerVisibilityChangedBehavior: onVisibilityChanged,
-      fit: BoxFit.fitHeight,
-      aspectRatio: 1 / 10,
-      looping: true,
-      controlsConfiguration: const BetterPlayerControlsConfiguration(
-        showControls: false,
-      ),
-    );
-
-    _betterPlayerController = BetterPlayerController(
-      customBetterPlayerConfiguration,
-    )..setupDataSource(
-        BetterPlayerDataSource(
-          BetterPlayerDataSourceType.network,
-          widget.shortForm.shortForm!.shortformUrl!,
-          cacheConfiguration: customBetterPlayerCacheConfiguration,
-          bufferingConfiguration: customBetterPlayerBufferingConfiguration,
-        ),
-      ).then((_) {
-        if (mounted) {
-          setState(() {});
-        }
-      });
+    setUpVideo();
   }
 
   @override
@@ -75,6 +53,31 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
     final shortFormID = widget.shortForm.shortForm!.id!;
     final shortFormYoutubeURL = widget.shortForm.shortForm!.youtubeUrl;
     final shortFormRelatedURL = widget.shortForm.shortForm!.relatedUrl;
+
+    if (_isVideoError) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            '비디오 에러 발생',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(
+            height: 16.0,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              _isVideoError = false;
+              setUpVideo();
+              setState(() {});
+            },
+            child: const Text('재시도'),
+          ),
+        ],
+      );
+    }
 
     if (!_betterPlayerController.isVideoInitialized()!) {
       return const Center(
@@ -180,6 +183,41 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
         );
       }),
     );
+  }
+
+  void setUpVideo() async {
+    final customBetterPlayerConfiguration = BetterPlayerConfiguration(
+      playerVisibilityChangedBehavior: onVisibilityChanged,
+      fit: BoxFit.fitHeight,
+      aspectRatio: 1 / 10,
+      looping: true,
+      controlsConfiguration: const BetterPlayerControlsConfiguration(
+        showControls: false,
+      ),
+    );
+    _betterPlayerController = BetterPlayerController(
+      customBetterPlayerConfiguration,
+    );
+
+    try {
+      await _betterPlayerController.setupDataSource(
+        BetterPlayerDataSource(
+          BetterPlayerDataSourceType.network,
+          widget.shortForm.shortForm!.shortformUrl!,
+          cacheConfiguration: customBetterPlayerCacheConfiguration,
+          bufferingConfiguration: customBetterPlayerBufferingConfiguration,
+        ),
+      );
+      if (mounted) {
+        setState(() {});
+      }
+    } catch (error) {
+      print(error);
+      _betterPlayerController.dispose(forceDispose: true);
+      setState(() {
+        _isVideoError = true;
+      });
+    }
   }
 
   void togglePausePlay() {
