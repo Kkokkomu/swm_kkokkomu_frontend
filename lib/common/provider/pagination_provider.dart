@@ -120,7 +120,16 @@ class PaginationProvider<T, U extends BasePaginationRepository<T>>
     } catch (e, stack) {
       print(e);
       print(stack);
-      state = OffsetPaginationError(message: '데이터를 가져오지 못했습니다.');
+      if (state is OffsetPagination) {
+        final pState = state as OffsetPagination<T>;
+        state = OffsetPaginationFetchingMoreError(
+          items: pState.items,
+          pageInfo: pState.pageInfo,
+          message: '데이터를 가져오지 못했습니다.',
+        );
+      } else {
+        state = OffsetPaginationError(message: '데이터를 가져오지 못했습니다.');
+      }
     }
   }
 }

@@ -68,15 +68,44 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
         },
         itemBuilder: (context, index) {
           if (index == cp.items.length) {
-            return Center(
-              child: cp is OffsetPaginationFetchingMore
-                  ? const CircularProgressIndicator()
-                  : const Text(
-                      '마지막 데이터입니다.',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+            if (cp is OffsetPaginationFetchingMore) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (cp is OffsetPaginationFetchingMoreError) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    (cp as OffsetPaginationFetchingMoreError).message,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  const SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref
+                          .read(shortFormProvider.notifier)
+                          .paginate(fetchMore: true);
+                    },
+                    child: const Text(
+                      '다시시도',
                     ),
+                  ),
+                ],
+              );
+            }
+
+            return const Center(
+              child: Text(
+                '더 가져올 데이터가 없습니다.',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             );
           }
 

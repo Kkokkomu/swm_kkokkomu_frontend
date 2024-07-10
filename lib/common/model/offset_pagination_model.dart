@@ -89,3 +89,15 @@ class OffsetPaginationFetchingMore<T> extends OffsetPagination<T> {
     required super.items,
   });
 }
+
+// 리스트의 맨 아래로 내려서
+// 추가 데이터를 요청하는중 발생한 에러
+class OffsetPaginationFetchingMoreError<T> extends OffsetPagination<T> {
+  final String message;
+
+  OffsetPaginationFetchingMoreError({
+    required super.pageInfo,
+    required super.items,
+    required this.message,
+  });
+}
