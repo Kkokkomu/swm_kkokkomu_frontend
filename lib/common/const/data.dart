@@ -7,7 +7,7 @@ final ip = dotenv.env['BASE_URL'] ?? '';
 
 const customBetterPlayerCacheConfiguration = BetterPlayerCacheConfiguration(
   useCache: true,
-  maxCacheSize: 300 * 1024 * 1024,
+  maxCacheSize: 500 * 1024 * 1024,
   maxCacheFileSize: 100 * 1024 * 1024,
 );
 

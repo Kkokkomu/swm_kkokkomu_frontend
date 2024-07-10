@@ -1,4 +1,3 @@
-import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,14 +6,6 @@ import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 
 void main() async {
   await dotenv.load(fileName: 'assets/config/.env');
-
-  final tempBetterPlayerController = BetterPlayerController(
-    const BetterPlayerConfiguration(
-      autoDispose: false,
-    ),
-  );
-  await tempBetterPlayerController.clearCache();
-  tempBetterPlayerController.dispose(forceDispose: true);
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(

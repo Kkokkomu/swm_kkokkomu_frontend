@@ -52,12 +52,15 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
           bufferingConfiguration: customBetterPlayerBufferingConfiguration,
         ),
       ).then((_) {
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       });
   }
 
   @override
   void dispose() {
+    _betterPlayerController.dispose(forceDispose: true);
     _hidePauseButtonTimer?.cancel();
     _hideEmojiDetailButtonTimer?.cancel();
     super.dispose();
