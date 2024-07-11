@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_toggle.dart';
-import 'package:swm_kkokkomu_frontend/shorts/model/shorts_comment_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shorts_comment_model.dart';
 
 final shortsCommentVisibilityProvider = StateNotifierProvider.family
     .autoDispose<ShortsCommentVisibilityStateNotifier,

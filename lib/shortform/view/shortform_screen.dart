@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
-import 'package:swm_kkokkomu_frontend/shorts/component/single_shortform.dart';
-import 'package:swm_kkokkomu_frontend/shorts/model/shortform_model.dart';
-import 'package:swm_kkokkomu_frontend/shorts/provider/shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/single_shortform.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/shortform_provider.dart';
 
 class ShortsScreen extends ConsumerStatefulWidget {
   const ShortsScreen({super.key});

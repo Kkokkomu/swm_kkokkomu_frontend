@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
-import 'package:swm_kkokkomu_frontend/shorts/provider/shorts_comment_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/shorts_comment_provider.dart';
 
 class ShortFormComment extends ConsumerStatefulWidget {
   final double parentHeight;

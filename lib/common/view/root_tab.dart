@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_toggle.dart';
-import 'package:swm_kkokkomu_frontend/shorts/view/shortform_screen.dart';
+import 'package:swm_kkokkomu_frontend/shortform/view/shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
 
 class RootTab extends ConsumerStatefulWidget {

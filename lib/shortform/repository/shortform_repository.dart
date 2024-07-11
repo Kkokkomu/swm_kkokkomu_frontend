@@ -8,7 +8,7 @@ import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/common/model/pagination_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_pagination_repository.dart';
-import 'package:swm_kkokkomu_frontend/shorts/model/shortform_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 
 part 'shortform_repository.g.dart';
 

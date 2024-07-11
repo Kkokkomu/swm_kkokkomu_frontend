@@ -4,12 +4,12 @@ import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
-import 'package:swm_kkokkomu_frontend/shorts/component/shortform_comment.dart';
-import 'package:swm_kkokkomu_frontend/shorts/component/shortform_floating_button.dart';
-import 'package:swm_kkokkomu_frontend/shorts/component/shortform_pause_button.dart';
-import 'package:swm_kkokkomu_frontend/shorts/component/shortform_start_button.dart';
-import 'package:swm_kkokkomu_frontend/shorts/model/shortform_model.dart';
-import 'package:swm_kkokkomu_frontend/shorts/provider/shorts_comment_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/shortform_comment.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/shortform_floating_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/shortform_pause_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/shortform_start_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/shorts_comment_provider.dart';
 
 class SingleShortForm extends ConsumerStatefulWidget {
   final ShortFormModel shortForm;
