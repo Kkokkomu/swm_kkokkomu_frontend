@@ -129,6 +129,18 @@ class CustomIntercepter extends Interceptor {
     //   }
     // }
 
-    return handler.reject(err);
+    return handler.resolve(
+      Response<Map<String, dynamic>>(
+        requestOptions: err.requestOptions,
+        data: {
+          'success': false,
+          'data': null,
+          'error': {
+            'code': 99999,
+            'message': '통신 에러',
+          },
+        },
+      ),
+    );
   }
 }

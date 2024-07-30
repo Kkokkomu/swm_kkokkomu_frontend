@@ -14,7 +14,9 @@ final userInfoProvider =
     final userInfoRepository = ref.watch(userInfoRepositoryProvider);
 
     return UserInfoStateNotifier(
-        storage: storage, userInfoRepository: userInfoRepository);
+      storage: storage,
+      userInfoRepository: userInfoRepository,
+    );
   },
 );
 
