@@ -34,6 +34,9 @@ class LoginScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     GestureDetector(
+                      onTap: () => ref
+                          .read(userInfoProvider.notifier)
+                          .login(SocialLoginType.APPLE),
                       child: Image.asset(
                         'assets/images/apple_login.png',
                         fit: BoxFit.fitWidth,

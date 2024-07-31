@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
@@ -22,7 +24,24 @@ class AuthRepository {
   }
 
   Future<String?> _appleLogin() async {
-    return null;
+    String? appleAuthorizationCode;
+
+    try {
+      appleAuthorizationCode = (await SignInWithApple.getAppleIDCredential(
+        scopes: [],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId: dotenv.env['APPLE_LOGIN_CLIENT_ID'] ?? '',
+          redirectUri: Uri.parse(
+            'https://$ip/callback',
+          ),
+        ),
+      ))
+          .authorizationCode;
+    } catch (e) {
+      print(e);
+    }
+
+    return appleAuthorizationCode;
   }
 
   Future<String?> _kakaoLogin() async {
