@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   static String get routeName => 'login';
 
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       child: SafeArea(
         top: false,
@@ -42,6 +44,9 @@ class LoginScreen extends StatelessWidget {
                       height: 16.0,
                     ),
                     GestureDetector(
+                      onTap: () => ref
+                          .read(userInfoProvider.notifier)
+                          .login(SocialLoginType.KAKAO),
                       child: Image.asset(
                         'assets/images/kakao_login_medium_wide.png',
                         fit: BoxFit.fitWidth,

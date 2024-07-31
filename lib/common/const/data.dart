@@ -5,6 +5,8 @@ const DEVICE_ID = 'DEVICE_ID';
 
 final ip = dotenv.env['BASE_URL'] ?? '';
 
+enum SocialLoginType { APPLE, KAKAO }
+
 const customBetterPlayerCacheConfiguration = BetterPlayerCacheConfiguration(
   useCache: true,
   maxCacheSize: 500 * 1024 * 1024,
