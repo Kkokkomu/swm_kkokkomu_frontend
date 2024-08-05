@@ -2,6 +2,8 @@ import 'package:better_player/better_player.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 const DEVICE_ID = 'DEVICE_ID';
+const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
+const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 
 final ip = dotenv.env['BASE_URL'] ?? '';
 

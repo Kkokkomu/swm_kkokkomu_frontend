@@ -37,27 +37,26 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
   }
 
   Future<void> getInfo() async {
-    String? deviceID = await storage.read(key: DEVICE_ID);
+    final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
+    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    if (deviceID == null) {
-      const uuid = Uuid();
-      deviceID = uuid.v4();
-      await storage.write(key: DEVICE_ID, value: deviceID);
-    }
+    // 인증 토큰이 없는 경우 (로그인이 불가능한 경우)
+    if (refreshToken == null || accessToken == null) {
+      final deviceID = await storage.read(key: DEVICE_ID);
 
-    try {
-      final resp =
-          await userInfoRepository.getInfo(body: PostLoginBody(uuid: deviceID));
-
-      if (resp.success != null && resp.success!) {
-        state = UserModel(id: deviceID);
-      } else {
-        throw Exception();
+      // 디바이스 아이디가 있는 경우 게스트 유저로 로그인
+      if (deviceID != null) {
+        state = GuestUserModel(id: deviceID);
+        return;
       }
-    } catch (e) {
-      print(e);
-      state = UserModelError(message: '로그인에 실패했습니다.');
+
+      // 디바이스 아이디도 없는 경우
+      state = null;
+      return;
     }
+
+    // TODO : 토큰이 있는 경우 서버로부터 유저 정보를 받아옴
+    state = null;
   }
 
   Future<UserModelBase> login(SocialLoginType socialLoginType) async {
@@ -73,6 +72,17 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
     print(resp);
 
     // TODO: 로그인 성공 시 카카오 엑세스 토큰을 자체 서버에 전송 후 유저 정보를 받아옴
+    state = UserModelError(message: '로그인에 실패했습니다.');
+    return Future.value(state);
+  }
+
+  Future<UserModelBase> guestLogin() async {
+    state = UserModelLoading();
+
+    final deviceID = const Uuid().v4();
+    await storage.write(key: DEVICE_ID, value: deviceID);
+    state = GuestUserModel(id: deviceID);
+
     return Future.value(state);
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class LoginScreen extends ConsumerWidget {
@@ -11,6 +13,21 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final userInfo = ref.watch(userInfoProvider);
+
+    // 로그인 에러시 토스트 메시지 띄우기
+    if (userInfo is UserModelError) {
+      Fluttertoast.showToast(
+        msg: '${userInfo.message}\n다시 시도해주세요.',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 2,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+
     return DefaultLayout(
       child: SafeArea(
         top: false,
@@ -31,54 +48,59 @@ class LoginScreen extends ConsumerWidget {
               ),
               Flexible(
                 flex: 1,
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () => ref
-                          .read(userInfoProvider.notifier)
-                          .login(SocialLoginType.APPLE),
-                      child: Image.asset(
-                        'assets/images/apple_login.png',
-                        fit: BoxFit.fitWidth,
-                        width: double.infinity,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    GestureDetector(
-                      onTap: () => ref
-                          .read(userInfoProvider.notifier)
-                          .login(SocialLoginType.KAKAO),
-                      child: Image.asset(
-                        'assets/images/kakao_login_medium_wide.png',
-                        fit: BoxFit.fitWidth,
-                        width: double.infinity,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    GestureDetector(
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: Container(
-                            height: 54,
-                            width: 342,
-                            color: Colors.grey,
-                            child: const Center(
-                              child: Text(
-                                '비로그인으로 둘러보기',
-                              ),
+                child: userInfo is UserModelLoading
+                    ? const CircularProgressIndicator()
+                    : Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () => ref
+                                .read(userInfoProvider.notifier)
+                                .login(SocialLoginType.APPLE),
+                            child: Image.asset(
+                              'assets/images/apple_login.png',
+                              fit: BoxFit.fitWidth,
+                              width: double.infinity,
                             ),
                           ),
-                        ),
+                          const SizedBox(
+                            height: 16.0,
+                          ),
+                          GestureDetector(
+                            onTap: () => ref
+                                .read(userInfoProvider.notifier)
+                                .login(SocialLoginType.KAKAO),
+                            child: Image.asset(
+                              'assets/images/kakao_login_medium_wide.png',
+                              fit: BoxFit.fitWidth,
+                              width: double.infinity,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16.0,
+                          ),
+                          GestureDetector(
+                            onTap: () => ref
+                                .read(userInfoProvider.notifier)
+                                .guestLogin(),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Container(
+                                  height: 54,
+                                  width: 342,
+                                  color: Colors.grey,
+                                  child: const Center(
+                                    child: Text(
+                                      '비로그인으로 둘러보기',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
               ),
             ],
           ),

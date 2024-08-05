@@ -48,12 +48,26 @@ class AuthProvider extends ChangeNotifier {
   String? redirectLogic(BuildContext _, GoRouterState state) {
     final UserModelBase? user = ref.read(userInfoProvider);
 
-    if (user is UserModelError) {
-      return '/login';
+    final logginIn = state.uri.toString() == '/login';
+
+    // 유저 정보 없는데
+    // 로그인중이면 그대로 로그인 페이지에 두고
+    // 만약에 로그인중이 아니라면 로그인 페이지로 이동
+    if (user == null) {
+      return logginIn ? null : '/login';
     }
 
-    if (user is UserModel && state.uri.toString() == '/splash') {
-      return '/';
+    // UserModel || GuestUserModel
+    // 사용자 정보가 있는 상태면
+    // 로그인 중이거나 현재 위치가 SplashScreen이면
+    // 홈으로 이동
+    if (user is UserModel || user is GuestUserModel) {
+      return logginIn || state.uri.toString() == '/splash' ? '/' : null;
+    }
+
+    // UserModelError
+    if (user is UserModelError) {
+      return !logginIn ? '/login' : null;
     }
 
     return null;

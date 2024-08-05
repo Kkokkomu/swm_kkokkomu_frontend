@@ -2,6 +2,7 @@
     <!-- 인터넷 사용 권한 설정-->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
+        android:allowBackup="false"
         android:largeHeap="true"
         android:label="swm_kkokkomu_frontend"
         android:name="${applicationName}"

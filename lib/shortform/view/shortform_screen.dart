@@ -21,6 +21,8 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
+    return const Placeholder();
+
     final shortForm = ref.watch(shortFormProvider);
 
     // 완전 처음 로딩일때

@@ -17,3 +17,11 @@ class UserModel extends UserModelBase {
     required this.id,
   });
 }
+
+class GuestUserModel extends UserModelBase {
+  final String id;
+
+  GuestUserModel({
+    required this.id,
+  });
+}
