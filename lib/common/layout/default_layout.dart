@@ -16,9 +16,11 @@ class DefaultLayout extends StatelessWidget {
   final double? appBarHeight;
   final DeviceOrientation deviceOrientation;
   final PreferredSizeWidget? bottom;
+  final GlobalKey<ScaffoldState>? scaffoldKey;
 
   const DefaultLayout({
     required this.child,
+    this.scaffoldKey,
     this.backgroundColor,
     this.appBarBackGroundColor,
     this.titleWidget,
@@ -39,6 +41,7 @@ class DefaultLayout extends StatelessWidget {
     SystemChrome.setPreferredOrientations([deviceOrientation]);
 
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: backgroundColor ?? BACKGROUND_COLOR,
       appBar: renderAppBar(),
       drawer: drawer,
