@@ -55,7 +55,7 @@ class LoginScreen extends ConsumerWidget {
                           GestureDetector(
                             onTap: () => ref
                                 .read(userInfoProvider.notifier)
-                                .login(SocialLoginType.APPLE),
+                                .login(SocialLoginType.apple),
                             child: Image.asset(
                               'assets/images/apple_login.png',
                               fit: BoxFit.fitWidth,
@@ -68,7 +68,7 @@ class LoginScreen extends ConsumerWidget {
                           GestureDetector(
                             onTap: () => ref
                                 .read(userInfoProvider.notifier)
-                                .login(SocialLoginType.KAKAO),
+                                .login(SocialLoginType.kakao),
                             child: Image.asset(
                               'assets/images/kakao_login_medium_wide.png',
                               fit: BoxFit.fitWidth,

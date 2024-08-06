@@ -1,29 +1,79 @@
+import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:retrofit/http.dart';
+import 'package:retrofit/retrofit.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/dio/dio.dart';
+import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
+import 'package:swm_kkokkomu_frontend/common/model/token_response_model.dart';
+import 'package:swm_kkokkomu_frontend/user/model/post_register_body.dart';
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  return AuthRepository();
-});
+part 'auth_repository.g.dart';
 
-class AuthRepository {
-  Future<String?> login(
+final authRepositoryProvider = Provider<AuthRepository>(
+  (ref) {
+    final dio = ref.watch(dioProvider);
+
+    return AuthRepository(dio, baseUrl: 'http://$serverHost/oauth2');
+  },
+);
+
+@RestApi()
+abstract class _AuthServiceApi {
+  // http://$serverHost/oauth2
+
+  @POST('/login/{socialLoginType}')
+  Future<ResponseModel<TokenResponseModel?>> _socialLogin({
+    @Header("Authorization") required String authorizationHeader,
+    @Path("socialLoginType") required SocialLoginType socialLoginType,
+  });
+
+  @POST('/register')
+  Future<ResponseModel<TokenResponseModel?>> register({
+    @Header("Authorization") required String authorizationHeader,
+    @Body() required PostRegisterBody requiredBody,
+  });
+}
+
+class AuthRepository extends __AuthServiceApi {
+  AuthRepository(
+    super._dio, {
+    super.baseUrl,
+  });
+
+  Future<ResponseModel<TokenResponseModel?>?> login(
     SocialLoginType socialLoginType,
   ) async {
+    String? authorizationHeader;
+
     switch (socialLoginType) {
-      case SocialLoginType.APPLE:
-        return await _appleLogin();
-      case SocialLoginType.KAKAO:
-        return await _kakaoLogin();
+      case SocialLoginType.apple:
+        authorizationHeader = await _getAppleAuthorizationCode();
+        break;
+
+      case SocialLoginType.kakao:
+        authorizationHeader = await _getKakaoAccessToken();
+        break;
+
       default:
         return null;
     }
+
+    if (authorizationHeader == null) {
+      return null;
+    }
+
+    return await super._socialLogin(
+      authorizationHeader: "Bearer $authorizationHeader",
+      socialLoginType: socialLoginType,
+    );
   }
 
-  Future<String?> _appleLogin() async {
+  Future<String?> _getAppleAuthorizationCode() async {
     String? appleAuthorizationCode;
 
     try {
@@ -32,7 +82,7 @@ class AuthRepository {
         webAuthenticationOptions: WebAuthenticationOptions(
           clientId: dotenv.env['APPLE_LOGIN_CLIENT_ID'] ?? '',
           redirectUri: Uri.parse(
-            'https://$ip/callback',
+            'https://$serverHost/callback',
           ),
         ),
       ))
@@ -44,7 +94,7 @@ class AuthRepository {
     return appleAuthorizationCode;
   }
 
-  Future<String?> _kakaoLogin() async {
+  Future<String?> _getKakaoAccessToken() async {
     String? kakaoAccessToken;
     try {
       // 카카오톡 실행 가능 여부 확인

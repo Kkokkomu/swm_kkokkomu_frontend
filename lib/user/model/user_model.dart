@@ -1,3 +1,5 @@
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+
 abstract class UserModelBase {}
 
 class UserModelLoading extends UserModelBase {}
@@ -10,11 +12,15 @@ class UserModelError extends UserModelBase {
   });
 }
 
-class UserModel extends UserModelBase {
-  final String id;
+class UserModel extends UserModelBase {}
 
-  UserModel({
-    required this.id,
+class UnregisteredUserModel extends UserModelBase {
+  final SocialLoginType socialLoginType;
+  final String accessToken;
+
+  UnregisteredUserModel({
+    required this.socialLoginType,
+    required this.accessToken,
   });
 }
 

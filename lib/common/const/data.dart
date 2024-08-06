@@ -5,9 +5,9 @@ const DEVICE_ID = 'DEVICE_ID';
 const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 
-final ip = dotenv.env['BASE_URL'] ?? '';
+final serverHost = dotenv.env['SERVER_HOST'] ?? '';
 
-enum SocialLoginType { APPLE, KAKAO }
+enum SocialLoginType { apple, kakao }
 
 const customBetterPlayerCacheConfiguration = BetterPlayerCacheConfiguration(
   useCache: true,

@@ -6,6 +6,7 @@ import 'package:swm_kkokkomu_frontend/common/view/splash_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/view/login_screen.dart';
+import 'package:swm_kkokkomu_frontend/user/view/register_screen.dart';
 
 final authProvider = ChangeNotifierProvider<AuthProvider>((ref) {
   return AuthProvider(ref: ref);
@@ -43,6 +44,11 @@ class AuthProvider extends ChangeNotifier {
           name: LoginScreen.routeName,
           builder: (_, __) => const LoginScreen(),
         ),
+        GoRoute(
+          path: '/register',
+          name: RegisterScreen.routeName,
+          builder: (_, __) => const RegisterScreen(),
+        ),
       ];
 
   String? redirectLogic(BuildContext _, GoRouterState state) {
@@ -57,12 +63,29 @@ class AuthProvider extends ChangeNotifier {
       return logginIn ? null : '/login';
     }
 
-    // UserModel || GuestUserModel
+    // UserModel
     // 사용자 정보가 있는 상태면
+    // 로그인 중이거나 현재 위치가 SplashScreen이거나 RegisterScreen이면
+    // 홈으로 이동
+    if (user is UserModel) {
+      return logginIn ||
+              state.uri.toString() == '/splash' ||
+              state.uri.toString() == '/register'
+          ? '/'
+          : null;
+    }
+
+    // GuestUserModel
+    // 게스트 유저 정보가 있는 상태면
     // 로그인 중이거나 현재 위치가 SplashScreen이면
     // 홈으로 이동
-    if (user is UserModel || user is GuestUserModel) {
+    if (user is GuestUserModel) {
       return logginIn || state.uri.toString() == '/splash' ? '/' : null;
+    }
+
+    // UnregisteredUserModel
+    if (user is UnregisteredUserModel) {
+      return state.uri.toString() != '/register' ? '/register' : null;
     }
 
     // UserModelError

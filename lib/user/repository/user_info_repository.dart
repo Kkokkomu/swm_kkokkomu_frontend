@@ -12,7 +12,7 @@ final userInfoRepositoryProvider = Provider<UserInfoRepository>(
   (ref) {
     final dio = ref.watch(dioProvider);
 
-    return UserInfoRepository(dio, baseUrl: 'http://$ip/user');
+    return UserInfoRepository(dio, baseUrl: 'http://$serverHost/user');
   },
 );
 

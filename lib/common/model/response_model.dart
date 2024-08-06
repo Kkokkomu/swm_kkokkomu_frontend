@@ -14,7 +14,13 @@ class ResponseModel<T> {
     required this.success,
     required this.data,
     required this.error,
-  });
+  }) {
+    if (success != true) {
+      print('Response 에러 발생');
+      print('ErrorCode: ${error?.code}');
+      print('ErrorMessage: ${error?.message}');
+    }
+  }
 
   factory ResponseModel.fromJson(
           Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>
