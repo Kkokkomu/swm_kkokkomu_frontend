@@ -154,4 +154,17 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
     // TODO: 토큰을 이용해 유저 모델을 가져오는 API 호출
     state = UserModel();
   }
+
+  Future<void> logout() async {
+    await authRepository.logout();
+
+    await Future.wait(
+      [
+        storage.delete(key: SecureStorageKeys.refreshTokenKey),
+        storage.delete(key: SecureStorageKeys.accessTokenKey),
+      ],
+    );
+
+    state = null;
+  }
 }

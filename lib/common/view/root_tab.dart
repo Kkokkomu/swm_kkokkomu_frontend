@@ -102,7 +102,7 @@ class _RootTabState extends ConsumerState<RootTab>
           children: const [
             ExplorationScreen(),
             ShortsScreen(),
-            MyPage(),
+            MyPageScreen(),
           ],
         ),
       ),

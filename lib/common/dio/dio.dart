@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/secure_storage/secure_storage.dart';
 
 final dioProvider = Provider<Dio>((ref) {
@@ -32,28 +33,36 @@ class CustomIntercepter extends Interceptor {
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     print('[REQ] [${options.method}] ${options.uri}');
-    print('[REQ] [${options.method}] [Headers] ${options.headers}');
+    print('[REQ] [${options.method}] [Initial Headers] ${options.headers}');
+
+    if (options.headers['accessToken'] == true) {
+      // 헤더 삭제
+      options.headers.remove('accessToken');
+
+      final accessToken =
+          await storage.read(key: SecureStorageKeys.accessTokenKey);
+
+      // 실제 토큰으로 대체
+      options.headers.addAll({
+        'Authorization': 'Bearer $accessToken',
+      });
+    }
+
+    if (options.headers['refreshToken'] == true) {
+      // 헤더 삭제
+      options.headers.remove('refreshToken');
+
+      final refreshToken =
+          await storage.read(key: SecureStorageKeys.refreshTokenKey);
+
+      // 실제 토큰으로 대체
+      options.headers.addAll({
+        'Authorization': 'Bearer $refreshToken',
+      });
+    }
+
+    print('[REQ] [${options.method}] [Adjusted Headers] ${options.headers}');
     print('[REQ] [${options.method}] [Data] ${options.data}');
-
-    // if (options.headers['accessToken'] == 'true') {
-    //   options.headers.remove('accessToken');
-
-    //   final token = await storage.read(key: ACCESS_TOKEN_KEY);
-
-    //   options.headers.addAll(
-    //     {'authorization': 'Bearer $token'},
-    //   );
-
-    //   if (options.headers['refreshToken'] == 'true') {
-    //     options.headers.remove('refreshToken');
-
-    //     final token = await storage.read(key: REFRESH_TOKEN_KEY);
-
-    //     options.headers.addAll(
-    //       {'authorization': 'Bearer $token'},
-    //     );
-    //   }
-    // }
 
     return super.onRequest(options, handler);
   }

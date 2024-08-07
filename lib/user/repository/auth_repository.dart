@@ -40,6 +40,12 @@ abstract class _AuthServiceApi {
     @Header("Authorization") required String authorizationHeader,
     @Body() required PostRegisterBody requiredBody,
   });
+
+  @POST('/logout')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<String?>> logout();
 }
 
 class AuthRepository extends __AuthServiceApi {
