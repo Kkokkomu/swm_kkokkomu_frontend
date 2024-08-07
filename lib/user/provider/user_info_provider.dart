@@ -155,8 +155,12 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
     state = UserModel();
   }
 
-  Future<void> logout() async {
-    await authRepository.logout();
+  Future<void> logout({
+    bool isAuthErrorLogout = false,
+  }) async {
+    if (!isAuthErrorLogout) {
+      await authRepository.logout();
+    }
 
     await Future.wait(
       [

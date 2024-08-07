@@ -51,8 +51,8 @@ class AuthProvider extends ChangeNotifier {
         ),
       ];
 
-  void logout() {
-    ref.read(userInfoProvider.notifier).logout();
+  void authErrorLogout() {
+    ref.read(userInfoProvider.notifier).logout(isAuthErrorLogout: true);
   }
 
   String? redirectLogic(BuildContext _, GoRouterState state) {
