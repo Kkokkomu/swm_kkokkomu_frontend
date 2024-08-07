@@ -37,16 +37,19 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
   }
 
   Future<void> getInfo() async {
-    final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    final accessToken =
+        await storage.read(key: SecureStorageKeys.accessTokenKey);
+    final refreshToken =
+        await storage.read(key: SecureStorageKeys.refreshTokenKey);
 
     // 인증 토큰이 없는 경우 (로그인이 불가능한 경우)
     if (refreshToken == null || accessToken == null) {
-      final deviceID = await storage.read(key: DEVICE_ID);
+      final guestUserId =
+          await storage.read(key: SecureStorageKeys.guestUserIdKey);
 
       // 디바이스 아이디가 있는 경우 게스트 유저로 로그인
-      if (deviceID != null) {
-        state = GuestUserModel(id: deviceID);
+      if (guestUserId != null) {
+        state = GuestUserModel(guestUserId: guestUserId);
         return;
       }
 
@@ -92,8 +95,10 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
 
     // accessToken, refreshToken 둘 다 있는 경우는 등록된 유저
     // accessToken, refreshToken 저장
-    await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
-    await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
+    await storage.write(
+        key: SecureStorageKeys.accessTokenKey, value: accessToken);
+    await storage.write(
+        key: SecureStorageKeys.refreshTokenKey, value: refreshToken);
 
     // TODO: 토큰을 이용해 유저 모델을 가져오는 API 호출
     state = UserModel();
@@ -103,9 +108,10 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
   Future<void> guestLogin() async {
     state = UserModelLoading();
 
-    final deviceID = const Uuid().v4();
-    await storage.write(key: DEVICE_ID, value: deviceID);
-    state = GuestUserModel(id: deviceID);
+    final guestUserId = const Uuid().v4();
+    await storage.write(
+        key: SecureStorageKeys.guestUserIdKey, value: guestUserId);
+    state = GuestUserModel(guestUserId: guestUserId);
   }
 
   Future<void> register({
@@ -140,8 +146,10 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
       return;
     }
 
-    await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
-    await storage.write(key: REFRESH_TOKEN_KEY, value: refreshToken);
+    await storage.write(
+        key: SecureStorageKeys.accessTokenKey, value: accessToken);
+    await storage.write(
+        key: SecureStorageKeys.refreshTokenKey, value: refreshToken);
 
     // TODO: 토큰을 이용해 유저 모델을 가져오는 API 호출
     state = UserModel();

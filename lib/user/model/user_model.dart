@@ -25,9 +25,9 @@ class UnregisteredUserModel extends UserModelBase {
 }
 
 class GuestUserModel extends UserModelBase {
-  final String id;
+  final String guestUserId;
 
   GuestUserModel({
-    required this.id,
+    required this.guestUserId,
   });
 }

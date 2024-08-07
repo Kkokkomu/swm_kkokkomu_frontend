@@ -15,8 +15,10 @@ part 'shortform_repository.g.dart';
 final shortFormRepositoryProvider = Provider<ShortFormRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
-  final repository =
-      ShortFormRepository(dio, baseUrl: 'http://$serverHost/news');
+  final repository = ShortFormRepository(
+    dio,
+    baseUrl: 'http://${Constants.serverHost}/news',
+  );
 
   return repository;
 });

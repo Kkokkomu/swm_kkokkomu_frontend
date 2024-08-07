@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class SplashScreen extends StatelessWidget {
           children: [
             SizedBox(
               width: 120,
-              child: Image.asset('assets/images/splash_icon.png'),
+              child: Image.asset(Assets.splashIcon),
             ),
           ],
         ),

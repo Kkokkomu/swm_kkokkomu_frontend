@@ -41,7 +41,7 @@ class LoginScreen extends ConsumerWidget {
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: Image.asset(
-                    'assets/images/splash_icon.png',
+                    Assets.splashIcon,
                     width: 180,
                   ),
                 ),
@@ -57,7 +57,7 @@ class LoginScreen extends ConsumerWidget {
                                 .read(userInfoProvider.notifier)
                                 .login(SocialLoginType.apple),
                             child: Image.asset(
-                              'assets/images/apple_login.png',
+                              Assets.appleLoginButtonImage,
                               fit: BoxFit.fitWidth,
                               width: double.infinity,
                             ),
@@ -70,7 +70,7 @@ class LoginScreen extends ConsumerWidget {
                                 .read(userInfoProvider.notifier)
                                 .login(SocialLoginType.kakao),
                             child: Image.asset(
-                              'assets/images/kakao_login_medium_wide.png',
+                              Assets.kakaoLoginButtonImage,
                               fit: BoxFit.fitWidth,
                               width: double.infinity,
                             ),
