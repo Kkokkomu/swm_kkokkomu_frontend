@@ -8,14 +8,14 @@ class PostRegisterBody {
   final String nickname;
   final String sex;
   final String birthday;
-  final String? recommandCode;
+  final String? recommendCode;
 
   PostRegisterBody({
     required this.provider,
     required this.nickname,
     required this.sex,
     required this.birthday,
-    this.recommandCode,
+    this.recommendCode,
   });
 
   Map<String, dynamic> toJson() => _$PostRegisterBodyToJson(this);

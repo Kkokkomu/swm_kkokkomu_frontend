@@ -12,7 +12,7 @@ PostRegisterBody _$PostRegisterBodyFromJson(Map<String, dynamic> json) =>
       nickname: json['nickname'] as String,
       sex: json['sex'] as String,
       birthday: json['birthday'] as String,
-      recommandCode: json['recommandCode'] as String?,
+      recommendCode: json['recommendCode'] as String?,
     );
 
 Map<String, dynamic> _$PostRegisterBodyToJson(PostRegisterBody instance) {
@@ -29,6 +29,6 @@ Map<String, dynamic> _$PostRegisterBodyToJson(PostRegisterBody instance) {
     }
   }
 
-  writeNotNull('recommandCode', instance.recommandCode);
+  writeNotNull('recommendCode', instance.recommendCode);
   return val;
 }

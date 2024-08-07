@@ -118,7 +118,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
     required String nickname,
     required String sex,
     required String birthday,
-    String? recommandCode,
+    String? recommendCode,
   }) async {
     if (state is! UnregisteredUserModel) {
       state = UserModelError(message: '등록에 실패했습니다.');
@@ -134,7 +134,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
         nickname: nickname,
         sex: sex,
         birthday: birthday,
-        recommandCode: recommandCode,
+        recommendCode: recommendCode,
       ),
     );
 
