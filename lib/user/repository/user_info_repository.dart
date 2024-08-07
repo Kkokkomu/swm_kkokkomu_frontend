@@ -4,7 +4,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/dio/dio.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
-import 'package:swm_kkokkomu_frontend/user/model/post_login_body.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 
 part 'user_info_repository.g.dart';
 
@@ -23,8 +23,9 @@ final userInfoRepositoryProvider = Provider<UserInfoRepository>(
 abstract class UserInfoRepository {
   factory UserInfoRepository(Dio dio, {String baseUrl}) = _UserInfoRepository;
 
-  @POST('/login')
-  Future<ResponseModel<int>> getInfo({
-    @Body() required PostLoginBody body,
-  });
+  @GET('/mypage')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<UserModel?>> getUserInfo();
 }

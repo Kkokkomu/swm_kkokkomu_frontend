@@ -47,19 +47,20 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
       final guestUserId =
           await storage.read(key: SecureStorageKeys.guestUserIdKey);
 
-      // 디바이스 아이디가 있는 경우 게스트 유저로 로그인
+      // 게스트로 로그인했던 정보가 있는 경우 게스트 유저로 로그인
       if (guestUserId != null) {
         state = GuestUserModel(guestUserId: guestUserId);
         return;
       }
 
-      // 디바이스 아이디도 없는 경우
+      // 게스트로 로그인했던 정보도 없는 경우
       state = null;
       return;
     }
 
-    // TODO: 토큰을 이용해 유저 모델을 가져오는 API 호출
-    state = UserModel();
+    // 인증 토큰이 있는 경우
+    // 토큰을 이용해 유저 정보를 가져옴
+    await _fetchUserInfoWithToken();
   }
 
   Future<void> login(SocialLoginType socialLoginType) async {
@@ -100,9 +101,8 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
     await storage.write(
         key: SecureStorageKeys.refreshTokenKey, value: refreshToken);
 
-    // TODO: 토큰을 이용해 유저 모델을 가져오는 API 호출
-    state = UserModel();
-    return;
+    // 발급받은 토큰으로 유저 정보를 가져옴
+    await _fetchUserInfoWithToken();
   }
 
   Future<void> guestLogin() async {
@@ -141,18 +141,21 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
     final accessToken = resp.data?.accessToken;
     final refreshToken = resp.data?.refreshToken;
 
+    // 등록에 실패한 경우
     if (resp.success != true || accessToken == null || refreshToken == null) {
       state = UserModelError(message: '등록에 실패했습니다.');
       return;
     }
 
+    // 등록에 성공한 경우 토큰 2개를 받아옴
+    // 받아온 토큰들을 저장
     await storage.write(
         key: SecureStorageKeys.accessTokenKey, value: accessToken);
     await storage.write(
         key: SecureStorageKeys.refreshTokenKey, value: refreshToken);
 
-    // TODO: 토큰을 이용해 유저 모델을 가져오는 API 호출
-    state = UserModel();
+    // 등록에 성공한 경우 받아온 토큰으로 유저 정보를 가져옴
+    await _fetchUserInfoWithToken();
   }
 
   Future<void> logout({
@@ -170,5 +173,20 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
     );
 
     state = null;
+  }
+
+  Future<void> _fetchUserInfoWithToken() async {
+    // 토큰을 이용해 유저 정보를 가져옴
+    final userInfoResponse = await userInfoRepository.getUserInfo();
+    final userInfo = userInfoResponse.data;
+
+    // 유저 정보를 가져오는데 실패한 경우
+    if (userInfoResponse.success != true || userInfo == null) {
+      state = UserModelError(message: '유저 정보를 가져오는데 실패했습니다.');
+      return;
+    }
+
+    // 유저 정보를 가져오는데 성공한 경우
+    state = userInfo;
   }
 }

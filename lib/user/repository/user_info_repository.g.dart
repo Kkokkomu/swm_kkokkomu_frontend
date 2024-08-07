@@ -19,21 +19,21 @@ class _UserInfoRepository implements UserInfoRepository {
   String? baseUrl;
 
   @override
-  Future<ResponseModel<int>> getInfo({required PostLoginBody body}) async {
+  Future<ResponseModel<UserModel?>> getUserInfo() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body.toJson());
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ResponseModel<int>>(Options(
-      method: 'POST',
+    final _headers = <String, dynamic>{r'accessToken': true};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseModel<UserModel>>(Options(
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/login',
+              '/mypage',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -42,9 +42,11 @@ class _UserInfoRepository implements UserInfoRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ResponseModel<int>.fromJson(
+    final value = ResponseModel<UserModel?>.fromJson(
       _result.data!,
-      (json) => json as int,
+      (json) => json == null
+          ? null
+          : UserModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }

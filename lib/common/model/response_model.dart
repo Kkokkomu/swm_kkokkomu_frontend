@@ -6,15 +6,15 @@ part 'response_model.g.dart';
   genericArgumentFactories: true,
 )
 class ResponseModel<T> {
-  final bool? success;
+  final bool success;
   final T? data;
   final ResponseErrorModel? error;
 
   ResponseModel({
-    required this.success,
+    required bool? success,
     required this.data,
     required this.error,
-  }) {
+  }) : success = success ?? false {
     if (success != true) {
       print('Response 에러 발생');
       print('ErrorCode: ${error?.code}');
