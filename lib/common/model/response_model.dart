@@ -29,7 +29,7 @@ class ResponseModel<T> {
 
 @JsonSerializable()
 class ResponseErrorModel {
-  final int? code;
+  final String? code;
   final String? message;
 
   ResponseErrorModel({

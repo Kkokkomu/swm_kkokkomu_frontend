@@ -201,7 +201,7 @@ class CustomIntercepter extends Interceptor {
           'success': false,
           'data': null,
           'error': {
-            'code': err.response?.statusCode ?? 99999,
+            'code': err.response?.statusCode.toString() ?? '99999',
             'message': err.toString(),
           },
         },

@@ -42,7 +42,7 @@ Object? _$nullableGenericToJson<T>(
 
 ResponseErrorModel _$ResponseErrorModelFromJson(Map<String, dynamic> json) =>
     ResponseErrorModel(
-      code: (json['code'] as num?)?.toInt(),
+      code: json['code'] as String?,
       message: json['message'] as String?,
     );
 
