@@ -17,7 +17,7 @@ final shortFormRepositoryProvider = Provider<ShortFormRepository>((ref) {
 
   final repository = ShortFormRepository(
     dio,
-    baseUrl: 'http://${Constants.serverHost}/news',
+    baseUrl: '${Constants.baseUrl}/news',
   );
 
   return repository;

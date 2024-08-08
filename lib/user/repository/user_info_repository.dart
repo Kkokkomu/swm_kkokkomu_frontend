@@ -14,7 +14,7 @@ final userInfoRepositoryProvider = Provider<UserInfoRepository>(
 
     return UserInfoRepository(
       dio,
-      baseUrl: 'http://${Constants.serverHost}/user',
+      baseUrl: '${Constants.baseUrl}/user',
     );
   },
 );

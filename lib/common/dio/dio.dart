@@ -89,7 +89,7 @@ class CustomIntercepter extends Interceptor {
     // 401에러가 났을때 (인증 오류)
     // 토큰을 재발급 받는 시도를하고 토큰이 재발급되면
     // 다시 새로운 토큰으로 요청을한다.
-    final tokenRefreshUrl = 'http://${Constants.serverHost}/oauth2/refresh';
+    final tokenRefreshUrl = '${Constants.baseUrl}/oauth2/refresh';
     final isStatus401 = err.response?.statusCode == 401;
     final isPathRefresh = err.requestOptions.uri.toString() == tokenRefreshUrl;
 

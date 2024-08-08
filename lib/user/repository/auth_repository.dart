@@ -20,7 +20,7 @@ final authRepositoryProvider = Provider<AuthRepository>(
 
     return AuthRepository(
       dio,
-      baseUrl: 'http://${Constants.serverHost}/oauth2',
+      baseUrl: '${Constants.baseUrl}/oauth2',
     );
   },
 );
@@ -91,7 +91,7 @@ class AuthRepository extends __AuthServiceApi {
         webAuthenticationOptions: WebAuthenticationOptions(
           clientId: dotenv.env['APPLE_LOGIN_CLIENT_ID'] ?? '',
           redirectUri: Uri.parse(
-            'https://${Constants.serverHost}/callback',
+            '${Constants.baseUrl}/callback',
           ),
         ),
       ))

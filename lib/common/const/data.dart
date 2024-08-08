@@ -2,7 +2,7 @@ import 'package:better_player/better_player.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Constants {
-  static final String serverHost = dotenv.env['SERVER_HOST'] ?? '';
+  static final String baseUrl = dotenv.env['BASE_URL'] ?? '';
 }
 
 class SecureStorageKeys {
