@@ -6,13 +6,13 @@ import 'package:swm_kkokkomu_frontend/common/dio/dio.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 
-part 'user_info_repository.g.dart';
+part 'user_repository.g.dart';
 
-final userInfoRepositoryProvider = Provider<UserInfoRepository>(
+final userRepositoryProvider = Provider<UserRepository>(
   (ref) {
     final dio = ref.watch(dioProvider);
 
-    return UserInfoRepository(
+    return UserRepository(
       dio,
       baseUrl: '${Constants.baseUrl}/user',
     );
@@ -20,8 +20,8 @@ final userInfoRepositoryProvider = Provider<UserInfoRepository>(
 );
 
 @RestApi()
-abstract class UserInfoRepository {
-  factory UserInfoRepository(Dio dio, {String baseUrl}) = _UserInfoRepository;
+abstract class UserRepository {
+  factory UserRepository(Dio dio, {String baseUrl}) = _UserRepository;
 
   @GET('/mypage')
   @Headers({

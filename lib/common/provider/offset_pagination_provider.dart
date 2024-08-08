@@ -1,16 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/model/additional_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
-import 'package:swm_kkokkomu_frontend/common/model/pagination_params.dart';
-import 'package:swm_kkokkomu_frontend/common/repository/base_pagination_repository.dart';
+import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_params.dart';
+import 'package:swm_kkokkomu_frontend/common/repository/base_offset_pagination_repository.dart';
 
-class PaginationProvider<T, U extends BasePaginationRepository<T>>
+class OffsetPaginationProvider<T, U extends BaseOffsetPaginationRepository<T>>
     extends StateNotifier<OffsetPaginationBase> {
   final U repository;
   final AdditionalParams? additionalParams;
 
-  PaginationProvider({
-    required this.repository,
+  OffsetPaginationProvider(
+    this.repository, {
     this.additionalParams,
   }) : super(OffsetPaginationLoading()) {
     paginate();
@@ -57,7 +57,7 @@ class PaginationProvider<T, U extends BasePaginationRepository<T>>
       }
 
       // PaginationParams 생성
-      PaginationParams paginationParams = PaginationParams(
+      OffsetPaginationParams offsetPaginationParams = OffsetPaginationParams(
         page: 0,
         size: fetchCount,
       );
@@ -72,7 +72,7 @@ class PaginationProvider<T, U extends BasePaginationRepository<T>>
           items: pState.items,
         );
 
-        paginationParams = paginationParams.copywith(
+        offsetPaginationParams = offsetPaginationParams.copyWith(
           page: pState.pageInfo.page + 1,
         );
       }
@@ -95,7 +95,7 @@ class PaginationProvider<T, U extends BasePaginationRepository<T>>
       }
 
       final resp = await repository.paginate(
-        paginationParams: paginationParams,
+        offsetPaginationParams,
         additionalParams: additionalParams,
       );
 

@@ -8,77 +8,71 @@ part of 'shortform_model.dart';
 
 ShortFormModel _$ShortFormModelFromJson(Map<String, dynamic> json) =>
     ShortFormModel(
-      shortForm: json['shortForm'] == null
+      shortformList: json['shortformList'] == null
           ? null
           : ShortFormUrlInfo.fromJson(
-              json['shortForm'] as Map<String, dynamic>),
-      reaction: json['reaction'] == null
+              json['shortformList'] as Map<String, dynamic>),
+      reactionCnt: json['reactionCnt'] == null
           ? null
-          : ShortFormReactionInfo.fromJson(
-              json['reaction'] as Map<String, dynamic>),
-      reactionWithUser: json['reactionWithUser'] == null
+          : ShortFormReactionCountInfo.fromJson(
+              json['reactionCnt'] as Map<String, dynamic>),
+      userReaction: json['userReaction'] == null
           ? null
-          : ShortFormReactionWithUserInfo.fromJson(
-              json['reactionWithUser'] as Map<String, dynamic>),
+          : ShortFormUserReactionInfo.fromJson(
+              json['userReaction'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ShortFormModelToJson(ShortFormModel instance) =>
     <String, dynamic>{
-      'shortForm': instance.shortForm,
-      'reaction': instance.reaction,
-      'reactionWithUser': instance.reactionWithUser,
+      'shortformList': instance.shortformList,
+      'reactionCnt': instance.reactionCnt,
+      'userReaction': instance.userReaction,
     };
 
 ShortFormUrlInfo _$ShortFormUrlInfoFromJson(Map<String, dynamic> json) =>
     ShortFormUrlInfo(
       id: (json['id'] as num?)?.toInt(),
       shortformUrl: json['shortformUrl'] as String?,
-      youtubeUrl: json['youtubeUrl'] as String?,
-      instagramUrl: json['instagramUrl'] as String?,
-      relatedUrl: json['relatedUrl'] as String?,
     );
 
 Map<String, dynamic> _$ShortFormUrlInfoToJson(ShortFormUrlInfo instance) =>
     <String, dynamic>{
       'id': instance.id,
       'shortformUrl': instance.shortformUrl,
-      'youtubeUrl': instance.youtubeUrl,
-      'instagramUrl': instance.instagramUrl,
-      'relatedUrl': instance.relatedUrl,
     };
 
-ShortFormReactionInfo _$ShortFormReactionInfoFromJson(
+ShortFormReactionCountInfo _$ShortFormReactionCountInfoFromJson(
         Map<String, dynamic> json) =>
-    ShortFormReactionInfo(
-      great: (json['great'] as num?)?.toInt(),
-      hate: (json['hate'] as num?)?.toInt(),
-      expect: (json['expect'] as num?)?.toInt(),
+    ShortFormReactionCountInfo(
+      like: (json['like'] as num?)?.toInt(),
       surprise: (json['surprise'] as num?)?.toInt(),
+      sad: (json['sad'] as num?)?.toInt(),
+      angry: (json['angry'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$ShortFormReactionInfoToJson(
-        ShortFormReactionInfo instance) =>
+Map<String, dynamic> _$ShortFormReactionCountInfoToJson(
+        ShortFormReactionCountInfo instance) =>
     <String, dynamic>{
-      'great': instance.great,
-      'hate': instance.hate,
-      'expect': instance.expect,
+      'like': instance.like,
       'surprise': instance.surprise,
+      'sad': instance.sad,
+      'angry': instance.angry,
     };
 
-ShortFormReactionWithUserInfo _$ShortFormReactionWithUserInfoFromJson(
+ShortFormUserReactionInfo _$ShortFormUserReactionInfoFromJson(
         Map<String, dynamic> json) =>
-    ShortFormReactionWithUserInfo(
-      great: json['great'] as bool,
-      hate: json['hate'] as bool,
-      expect: json['expect'] as bool,
-      surprise: json['surprise'] as bool,
+    ShortFormUserReactionInfo(
+      like: json['like'] as bool?,
+      surprise: json['surprise'] as bool?,
+      sad: json['sad'] as bool?,
+      angry: json['angry'] as bool?,
     );
 
-Map<String, dynamic> _$ShortFormReactionWithUserInfoToJson(
-        ShortFormReactionWithUserInfo instance) =>
+Map<String, dynamic> _$ShortFormUserReactionInfoToJson(
+        ShortFormUserReactionInfo instance) =>
     <String, dynamic>{
-      'great': instance.great,
-      'hate': instance.hate,
-      'expect': instance.expect,
+      'like': instance.like,
       'surprise': instance.surprise,
+      'sad': instance.sad,
+      'angry': instance.angry,
     };

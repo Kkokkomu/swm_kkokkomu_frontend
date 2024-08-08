@@ -5,32 +5,36 @@ import 'package:swm_kkokkomu_frontend/common/secure_storage/secure_storage.dart'
 import 'package:swm_kkokkomu_frontend/user/model/post_register_body.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/repository/auth_repository.dart';
-import 'package:swm_kkokkomu_frontend/user/repository/user_info_repository.dart';
+import 'package:swm_kkokkomu_frontend/user/repository/user_repository.dart';
+import 'package:swm_kkokkomu_frontend/user_setting/provider/user_shortform_setting_provider.dart';
 import 'package:uuid/uuid.dart';
 
 final userInfoProvider =
     StateNotifierProvider<UserInfoStateNotifier, UserModelBase?>(
   (ref) {
     final storage = ref.watch(secureStorageProvider);
-    final userInfoRepository = ref.watch(userInfoRepositoryProvider);
+    final userRepository = ref.watch(userRepositoryProvider);
     final authRepository = ref.watch(authRepositoryProvider);
 
     return UserInfoStateNotifier(
+      ref: ref,
       storage: storage,
-      userInfoRepository: userInfoRepository,
+      userRepository: userRepository,
       authRepository: authRepository,
     );
   },
 );
 
 class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
+  final Ref ref;
   final FlutterSecureStorage storage;
-  final UserInfoRepository userInfoRepository;
+  final UserRepository userRepository;
   final AuthRepository authRepository;
 
   UserInfoStateNotifier({
+    required this.ref,
     required this.storage,
-    required this.userInfoRepository,
+    required this.userRepository,
     required this.authRepository,
   }) : super(UserModelLoading()) {
     getInfo();
@@ -177,7 +181,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
 
   Future<void> _fetchUserInfoWithToken() async {
     // 토큰을 이용해 유저 정보를 가져옴
-    final userInfoResponse = await userInfoRepository.getUserInfo();
+    final userInfoResponse = await userRepository.getUserInfo();
     final userInfo = userInfoResponse.data;
 
     // 유저 정보를 가져오는데 실패한 경우
@@ -187,6 +191,8 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
     }
 
     // 유저 정보를 가져오는데 성공한 경우
+    // 유저 숏폼 설정을 가져오고 유저 정보를 갱신
+    await ref.read(userShortFormSettingProvider.notifier).getSetting();
     state = userInfo;
   }
 }

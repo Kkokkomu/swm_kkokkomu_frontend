@@ -47,12 +47,12 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
   @override
   Widget build(BuildContext context) {
     final shortsCommentVisibility = ref.watch(
-      shortsCommentVisibilityProvider(widget.shortForm.shortForm!.id!),
+      shortsCommentVisibilityProvider(widget.shortForm.shortformList!.id!),
     );
 
-    final shortFormID = widget.shortForm.shortForm!.id!;
-    final shortFormYoutubeURL = widget.shortForm.shortForm!.youtubeUrl;
-    final shortFormRelatedURL = widget.shortForm.shortForm!.relatedUrl;
+    final shortFormID = widget.shortForm.shortformList!.id!;
+    // final shortFormYoutubeURL = widget.shortForm.shortForm!.youtubeUrl;
+    // final shortFormRelatedURL = widget.shortForm.shortForm!.relatedUrl;
 
     if (_isVideoError) {
       return Column(
@@ -147,14 +147,14 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
                               ref: ref,
                               shortFormID: shortFormID,
                             ),
-                            const SizedBox(height: 16.0),
-                            ShareYoutubeUrlButton(
-                              shortFormYoutubeURL: shortFormYoutubeURL!,
-                            ),
-                            const SizedBox(height: 16.0),
-                            RelatedUrlButton(
-                              shortFormRelatedURL: shortFormRelatedURL!,
-                            ),
+                            // const SizedBox(height: 16.0),
+                            // ShareYoutubeUrlButton(
+                            //   shortFormYoutubeURL: shortFormYoutubeURL!,
+                            // ),
+                            // const SizedBox(height: 16.0),
+                            // RelatedUrlButton(
+                            //   shortFormRelatedURL: shortFormRelatedURL!,
+                            // ),
                           ],
                         ),
                       ),
@@ -203,7 +203,7 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
       await _betterPlayerController.setupDataSource(
         BetterPlayerDataSource(
           BetterPlayerDataSourceType.network,
-          widget.shortForm.shortForm!.shortformUrl!,
+          widget.shortForm.shortformList!.shortformUrl!,
           cacheConfiguration: customBetterPlayerCacheConfiguration,
           bufferingConfiguration: customBetterPlayerBufferingConfiguration,
         ),
@@ -250,7 +250,7 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
         _betterPlayerController.isVideoInitialized()! &&
         !ref
             .read(shortsCommentVisibilityProvider(
-                widget.shortForm.shortForm!.id!))
+                widget.shortForm.shortformList!.id!))
             .isShortsCommentVisible) {
       _betterPlayerController.pause();
       _betterPlayerController.seekTo(const Duration(seconds: 0));

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/guest_user_shortform.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/logged_in_user_shortform.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/single_shortform.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class ShortsScreen extends ConsumerStatefulWidget {
   const ShortsScreen({super.key});
@@ -19,11 +23,17 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userInfoProvider);
+
     super.build(context);
 
-    return const Placeholder();
+    if (user is UserModel) {
+      return const LoggedInUserShortform();
+    }
 
-    final shortForm = ref.watch(shortFormProvider);
+    return const GuestUserShortform();
+
+    final shortForm = ref.watch(loggedInUserShortFormProvider);
 
     // 완전 처음 로딩일때
     if (shortForm is OffsetPaginationLoading) {
@@ -44,7 +54,9 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
           const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () {
-              ref.read(shortFormProvider.notifier).paginate(forceRefetch: true);
+              ref
+                  .read(loggedInUserShortFormProvider.notifier)
+                  .paginate(forceRefetch: true);
             },
             child: const Text(
               '다시시도',
@@ -65,7 +77,9 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
         itemCount: cp.items.length + 1,
         onPageChanged: (value) {
           if (value == cp.items.length - 2) {
-            ref.read(shortFormProvider.notifier).paginate(fetchMore: true);
+            ref
+                .read(loggedInUserShortFormProvider.notifier)
+                .paginate(fetchMore: true);
           }
         },
         itemBuilder: (context, index) {
@@ -90,7 +104,7 @@ class _ShortScreenState extends ConsumerState<ShortsScreen>
                   ElevatedButton(
                     onPressed: () {
                       ref
-                          .read(shortFormProvider.notifier)
+                          .read(loggedInUserShortFormProvider.notifier)
                           .paginate(fetchMore: true);
                     },
                     child: const Text(

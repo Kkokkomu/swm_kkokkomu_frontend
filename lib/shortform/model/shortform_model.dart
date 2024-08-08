@@ -4,15 +4,16 @@ part 'shortform_model.g.dart';
 
 @JsonSerializable()
 class ShortFormModel {
-  final ShortFormUrlInfo? shortForm;
-  final ShortFormReactionInfo? reaction;
-  final ShortFormReactionWithUserInfo? reactionWithUser;
+  final ShortFormUrlInfo? shortformList;
+  final ShortFormReactionCountInfo reactionCnt;
+  final ShortFormUserReactionInfo userReaction;
 
   ShortFormModel({
-    required this.shortForm,
-    required this.reaction,
-    required this.reactionWithUser,
-  });
+    this.shortformList,
+    ShortFormReactionCountInfo? reactionCnt,
+    ShortFormUserReactionInfo? userReaction,
+  })  : reactionCnt = reactionCnt ?? ShortFormReactionCountInfo(),
+        userReaction = userReaction ?? ShortFormUserReactionInfo();
 
   factory ShortFormModel.fromJson(Map<String, dynamic> json) =>
       _$ShortFormModelFromJson(json);
@@ -22,16 +23,10 @@ class ShortFormModel {
 class ShortFormUrlInfo {
   final int? id;
   final String? shortformUrl;
-  final String? youtubeUrl;
-  final String? instagramUrl;
-  final String? relatedUrl;
 
   ShortFormUrlInfo({
-    required this.id,
-    required this.shortformUrl,
-    required this.youtubeUrl,
-    required this.instagramUrl,
-    required this.relatedUrl,
+    this.id,
+    this.shortformUrl,
   });
 
   factory ShortFormUrlInfo.fromJson(Map<String, dynamic> json) =>
@@ -39,37 +34,43 @@ class ShortFormUrlInfo {
 }
 
 @JsonSerializable()
-class ShortFormReactionInfo {
-  final int? great;
-  final int? hate;
-  final int? expect;
-  final int? surprise;
+class ShortFormReactionCountInfo {
+  final int like;
+  final int surprise;
+  final int sad;
+  final int angry;
 
-  ShortFormReactionInfo({
-    required this.great,
-    required this.hate,
-    required this.expect,
-    required this.surprise,
-  });
+  ShortFormReactionCountInfo({
+    int? like,
+    int? surprise,
+    int? sad,
+    int? angry,
+  })  : like = like ?? 0,
+        surprise = surprise ?? 0,
+        sad = sad ?? 0,
+        angry = angry ?? 0;
 
-  factory ShortFormReactionInfo.fromJson(Map<String, dynamic> json) =>
-      _$ShortFormReactionInfoFromJson(json);
+  factory ShortFormReactionCountInfo.fromJson(Map<String, dynamic> json) =>
+      _$ShortFormReactionCountInfoFromJson(json);
 }
 
 @JsonSerializable()
-class ShortFormReactionWithUserInfo {
-  final bool great;
-  final bool hate;
-  final bool expect;
+class ShortFormUserReactionInfo {
+  final bool like;
   final bool surprise;
+  final bool sad;
+  final bool angry;
 
-  ShortFormReactionWithUserInfo({
-    required this.great,
-    required this.hate,
-    required this.expect,
-    required this.surprise,
-  });
+  ShortFormUserReactionInfo({
+    bool? like,
+    bool? surprise,
+    bool? sad,
+    bool? angry,
+  })  : like = like ?? false,
+        surprise = surprise ?? false,
+        sad = sad ?? false,
+        angry = angry ?? false;
 
-  factory ShortFormReactionWithUserInfo.fromJson(Map<String, dynamic> json) =>
-      _$ShortFormReactionWithUserInfoFromJson(json);
+  factory ShortFormUserReactionInfo.fromJson(Map<String, dynamic> json) =>
+      _$ShortFormUserReactionInfoFromJson(json);
 }

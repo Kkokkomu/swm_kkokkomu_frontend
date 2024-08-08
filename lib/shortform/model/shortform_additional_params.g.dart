@@ -9,11 +9,18 @@ part of 'shortform_additional_params.dart';
 ShortFormAdditionalParams _$ShortFormAdditionalParamsFromJson(
         Map<String, dynamic> json) =>
     ShortFormAdditionalParams(
-      userId: json['userId'] as String,
+      category: json['category'] as String,
+      filter: $enumDecode(_$ShortFormSortTypeEnumMap, json['filter']),
     );
 
 Map<String, dynamic> _$ShortFormAdditionalParamsToJson(
         ShortFormAdditionalParams instance) =>
     <String, dynamic>{
-      'userId': instance.userId,
+      'category': instance.category,
+      'filter': _$ShortFormSortTypeEnumMap[instance.filter]!,
     };
+
+const _$ShortFormSortTypeEnumMap = {
+  ShortFormSortType.recommend: 'RECOMMEND',
+  ShortFormSortType.latest: 'LATEST',
+};

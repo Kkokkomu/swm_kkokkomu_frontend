@@ -1,5 +1,8 @@
 import 'package:better_player/better_player.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'data.g.dart';
 
 class Constants {
   static final String baseUrl = dotenv.env['BASE_URL'] ?? '';
@@ -11,6 +14,10 @@ class SecureStorageKeys {
   static const String refreshTokenKey = 'refresh_token';
 }
 
+class SharedPreferencesKeys {
+  static const String shortFormSortType = 'short_form_sort_type';
+}
+
 class Assets {
   static const String splashIcon = 'assets/images/splash_icon.png';
   static const String appleLoginButtonImage = 'assets/images/apple_login.png';
@@ -19,6 +26,33 @@ class Assets {
 }
 
 enum SocialLoginType { apple, kakao }
+
+@JsonEnum(alwaysCreate: true, valueField: 'name')
+enum ShortFormSortType {
+  recommend('RECOMMEND'),
+  latest('LATEST');
+
+  final String name;
+
+  const ShortFormSortType(this.name);
+
+  static final _shortFormSortTypeNameMap =
+      _$ShortFormSortTypeEnumMap.map((key, value) => MapEntry(value, key));
+
+  static ShortFormSortType? fromName(String name) =>
+      _shortFormSortTypeNameMap[name];
+}
+
+enum NewsCategory {
+  politics,
+  economy,
+  social,
+  entertain,
+  sports,
+  living,
+  world,
+  it
+}
 
 // BetterPlayer 캐시 설정값
 const customBetterPlayerCacheConfiguration = BetterPlayerCacheConfiguration(

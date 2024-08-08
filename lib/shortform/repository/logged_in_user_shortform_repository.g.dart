@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'shortform_repository.dart';
+part of 'logged_in_user_shortform_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,9 @@ part of 'shortform_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _ShortFormRepository implements ShortFormRepository {
-  _ShortFormRepository(
+class _LoggedInUserShortFormRepository
+    implements LoggedInUserShortFormRepository {
+  _LoggedInUserShortFormRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,16 +20,17 @@ class _ShortFormRepository implements ShortFormRepository {
   String? baseUrl;
 
   @override
-  Future<ResponseModel<OffsetPagination<ShortFormModel>>> paginate({
-    required PaginationParams paginationParams,
+  Future<ResponseModel<OffsetPagination<ShortFormModel>>> paginate(
+    OffsetPaginationParams offsetPaginationParams, {
     AdditionalParams? additionalParams,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(paginationParams.toJson());
+    queryParameters.addAll(offsetPaginationParams.toJson());
     queryParameters.addAll(additionalParams?.toJson() ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': true};
+    _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ResponseModel<OffsetPagination<ShortFormModel>>>(Options(
@@ -38,7 +40,7 @@ class _ShortFormRepository implements ShortFormRepository {
     )
             .compose(
               _dio.options,
-              '',
+              '/list',
               queryParameters: queryParameters,
               data: _data,
             )

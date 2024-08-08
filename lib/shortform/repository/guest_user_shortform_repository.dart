@@ -5,17 +5,18 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/dio/dio.dart';
 import 'package:swm_kkokkomu_frontend/common/model/additional_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
-import 'package:swm_kkokkomu_frontend/common/model/pagination_params.dart';
+import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
-import 'package:swm_kkokkomu_frontend/common/repository/base_pagination_repository.dart';
+import 'package:swm_kkokkomu_frontend/common/repository/base_offset_pagination_repository.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 
-part 'shortform_repository.g.dart';
+part 'guest_user_shortform_repository.g.dart';
 
-final shortFormRepositoryProvider = Provider<ShortFormRepository>((ref) {
+final guestUserShortFormRepositoryProvider =
+    Provider<GuestUserShortFormRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
-  final repository = ShortFormRepository(
+  final repository = GuestUserShortFormRepository(
     dio,
     baseUrl: '${Constants.baseUrl}/news',
   );
@@ -24,14 +25,15 @@ final shortFormRepositoryProvider = Provider<ShortFormRepository>((ref) {
 });
 
 @RestApi()
-abstract class ShortFormRepository
-    implements BasePaginationRepository<ShortFormModel> {
-  factory ShortFormRepository(Dio dio, {String baseUrl}) = _ShortFormRepository;
+abstract class GuestUserShortFormRepository
+    implements BaseOffsetPaginationRepository<ShortFormModel> {
+  factory GuestUserShortFormRepository(Dio dio, {String baseUrl}) =
+      _GuestUserShortFormRepository;
 
   @override
-  @GET('')
-  Future<ResponseModel<OffsetPagination<ShortFormModel>>> paginate({
-    @Queries() required PaginationParams paginationParams,
+  @GET('/guest/list')
+  Future<ResponseModel<OffsetPagination<ShortFormModel>>> paginate(
+    @Queries() OffsetPaginationParams offsetPaginationParams, {
     @Queries() AdditionalParams? additionalParams,
   });
 }
