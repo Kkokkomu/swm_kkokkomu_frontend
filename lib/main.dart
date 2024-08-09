@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 
 void main() async {
@@ -13,10 +14,10 @@ void main() async {
 
   // 앱 최초 실행 시 secure storage 초기화
   final prefs = await SharedPreferences.getInstance();
-  if (prefs.getBool('is_first_run') ?? true) {
+  if (prefs.getBool(SharedPreferencesKeys.isFirstRun) ?? true) {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     await storage.deleteAll();
-    prefs.setBool('is_first_run', false);
+    prefs.setBool(SharedPreferencesKeys.isFirstRun, false);
   }
 
   // 웹 환경에서 카카오 로그인을 정상적으로 완료하려면 runApp() 호출 전 아래 메서드 호출 필요

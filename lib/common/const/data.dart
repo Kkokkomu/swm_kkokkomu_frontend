@@ -15,6 +15,7 @@ class SecureStorageKeys {
 }
 
 class SharedPreferencesKeys {
+  static const String isFirstRun = 'is_first_run';
   static const String shortFormSortType = 'short_form_sort_type';
 }
 
