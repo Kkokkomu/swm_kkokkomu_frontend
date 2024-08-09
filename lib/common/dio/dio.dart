@@ -188,7 +188,13 @@ class CustomIntercepter extends Interceptor {
         // 토큰 재발급 후 재요청 실패
         print(e);
         print('토큰 재발급 후 재요청 로직 실패');
-        ref.read(authProvider.notifier).authErrorLogout();
+        if (err.requestOptions.toString() !=
+            '${Constants.baseUrl}/oauth2/logout') {
+          // 토큰이 유효하지 않으므로 로그아웃 처리를 해줘야 함
+          // 요청이 로그아웃 요청이 아니었을 경우에만 로그아웃 로직을 실행
+          // 요청이 로그아웃 요청이었을 경우 추가적으로 로그아웃 로직을 한번 더 실행할 필요 없음
+          ref.read(authProvider.notifier).authErrorLogout();
+        }
       }
     }
 

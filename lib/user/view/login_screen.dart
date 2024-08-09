@@ -18,7 +18,7 @@ class LoginScreen extends ConsumerWidget {
     // 로그인 에러시 토스트 메시지 띄우기
     if (userInfo is UserModelError) {
       Fluttertoast.showToast(
-        msg: '${userInfo.message}\n다시 시도해주세요.',
+        msg: '${userInfo.message}\n다시 로그인 해주세요.',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 2,

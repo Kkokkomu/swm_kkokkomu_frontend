@@ -176,7 +176,9 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase?> {
       ],
     );
 
-    state = null;
+    state = isAuthErrorLogout
+        ? state = UserModelError(message: '세션이 만료되었습니다.')
+        : null;
   }
 
   Future<void> _fetchUserInfoWithToken() async {
