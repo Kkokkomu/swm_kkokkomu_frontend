@@ -56,14 +56,15 @@ class AuthProvider extends ChangeNotifier {
   }
 
   String? redirectLogic(BuildContext _, GoRouterState state) {
-    final UserModelBase? user = ref.read(userInfoProvider);
+    final UserModelBase user = ref.read(userInfoProvider);
 
     final logginIn = state.uri.toString() == '/login';
 
-    // 유저 정보 없는데
+    // InitialUserModel
+    // 한번도 로그인 해본 적 없는 유저라면
     // 로그인중이면 그대로 로그인 페이지에 두고
     // 만약에 로그인중이 아니라면 로그인 페이지로 이동
-    if (user == null) {
+    if (user is InitialUserModel) {
       return logginIn ? null : '/login';
     }
 

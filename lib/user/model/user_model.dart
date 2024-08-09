@@ -12,8 +12,12 @@ class UserModelError extends UserModelBase {
 
   UserModelError({
     required this.message,
-  });
+  }) {
+    print('UserModelError: $message');
+  }
 }
+
+class InitialUserModel extends UserModelBase {}
 
 @JsonSerializable()
 class UserModel extends UserModelBase {
@@ -51,9 +55,9 @@ class UnregisteredUserModel extends UserModelBase {
 }
 
 class GuestUserModel extends UserModelBase {
-  final String guestUserId;
+  final String deviceId;
 
   GuestUserModel({
-    required this.guestUserId,
+    required this.deviceId,
   });
 }

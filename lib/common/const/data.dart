@@ -11,7 +11,7 @@ class Constants {
 }
 
 class SecureStorageKeys {
-  static const String guestUserIdKey = 'guest_user_id';
+  static const String deviceIdKey = 'device_id';
   static const String accessTokenKey = 'access_token';
   static const String refreshTokenKey = 'refresh_token';
 }
