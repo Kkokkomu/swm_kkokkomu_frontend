@@ -10,7 +10,8 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 
 void main() async {
-  await dotenv.load(fileName: 'assets/config/.env');
+  // 제일 먼저 env 파일 로드
+  await dotenv.load(fileName: Assets.env);
 
   // 앱 최초 실행 시 secure storage 초기화
   final prefs = await SharedPreferences.getInstance();
@@ -25,7 +26,7 @@ void main() async {
 
   // runApp() 호출 전 Flutter SDK 초기화
   KakaoSdk.init(
-    nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY'],
+    nativeAppKey: Constants.kakaoNativeAppKey,
   );
 
   SystemChrome.setSystemUIOverlayStyle(

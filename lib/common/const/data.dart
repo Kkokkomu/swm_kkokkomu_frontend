@@ -5,6 +5,8 @@ import 'package:json_annotation/json_annotation.dart';
 part 'data.g.dart';
 
 class Constants {
+  // dotenv.env 로 불러오는 값들은 반드시 env 파일일 로드된 후에 사용해야 함
+  static final String? kakaoNativeAppKey = dotenv.env['KAKAO_NATIVE_APP_KEY'];
   static final String baseUrl = dotenv.env['BASE_URL'] ?? '';
 }
 
@@ -20,6 +22,7 @@ class SharedPreferencesKeys {
 }
 
 class Assets {
+  static const String env = 'assets/config/.env';
   static const String splashIcon = 'assets/images/splash_icon.png';
   static const String appleLoginButtonImage = 'assets/images/apple_login.png';
   static const String kakaoLoginButtonImage =
