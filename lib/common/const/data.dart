@@ -1,8 +1,15 @@
 import 'package:better_player/better_player.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'data.g.dart';
+
+typedef PaginationWidgetBuilder<T> = Widget Function(
+  BuildContext context,
+  int index,
+  T model,
+);
 
 class Constants {
   // dotenv.env 로 불러오는 값들은 반드시 env 파일일 로드된 후에 사용해야 함
@@ -73,3 +80,20 @@ const customBetterPlayerBufferingConfiguration =
   bufferForPlaybackMs: 2500,
   bufferForPlaybackAfterRebufferMs: 5000,
 );
+
+// 스크롤 물리 효과 설정
+class CustomPhysics extends ScrollPhysics {
+  const CustomPhysics({ScrollPhysics? parent}) : super(parent: parent);
+
+  @override
+  CustomPhysics applyTo(ScrollPhysics? ancestor) {
+    return CustomPhysics(parent: buildParent(ancestor));
+  }
+
+  @override
+  SpringDescription get spring => const SpringDescription(
+        mass: 50,
+        stiffness: 100,
+        damping: 1,
+      );
+}
