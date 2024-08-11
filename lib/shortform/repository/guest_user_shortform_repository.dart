@@ -31,7 +31,7 @@ abstract class GuestUserShortFormRepository
       _GuestUserShortFormRepository;
 
   @override
-  @GET('/guest/list')
+  @GET('/list/guest')
   Future<ResponseModel<OffsetPagination<ShortFormModel>>> paginate(
     @Queries() OffsetPaginationParams offsetPaginationParams, {
     @Queries() AdditionalParams? additionalParams,

@@ -38,7 +38,7 @@ class _GuestUserShortFormRepository implements GuestUserShortFormRepository {
     )
             .compose(
               _dio.options,
-              '/guest/list',
+              '/list/guest',
               queryParameters: queryParameters,
               data: _data,
             )
