@@ -108,7 +108,7 @@ class OffsetPaginationProvider<T, U extends BaseOffsetPaginationRepository<T>>
 
         // 기존 데이터에
         // 새로운 데이터 추가
-        state = resp.data!.copywith(
+        state = resp.data!.copyWith(
           items: [
             ...pState.items,
             ...resp.data!.items,

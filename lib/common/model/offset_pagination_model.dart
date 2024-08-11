@@ -26,7 +26,7 @@ class OffsetPagination<T> extends OffsetPaginationBase {
     required this.items,
   });
 
-  OffsetPagination copywith({
+  OffsetPagination copyWith({
     OffsetPaginationMeta? pageInfo,
     List<T>? items,
   }) {
@@ -55,7 +55,7 @@ class OffsetPaginationMeta {
     required this.isLast,
   });
 
-  OffsetPaginationMeta copywith({
+  OffsetPaginationMeta copyWith({
     int? page,
     int? size,
     int? totalPages,
