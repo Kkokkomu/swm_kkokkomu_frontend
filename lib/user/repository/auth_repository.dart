@@ -87,7 +87,9 @@ class AuthRepository extends __AuthServiceApi {
 
     try {
       appleAuthorizationCode = (await SignInWithApple.getAppleIDCredential(
-        scopes: [],
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+        ],
         webAuthenticationOptions: WebAuthenticationOptions(
           clientId: dotenv.env['APPLE_LOGIN_CLIENT_ID'] ?? '',
           redirectUri: Uri.parse(
