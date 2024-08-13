@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/shorts_comment_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
 
 class ShortFormComment extends ConsumerStatefulWidget {
   final double parentHeight;
@@ -101,17 +101,17 @@ class _ShortsCommentState extends ConsumerState<ShortFormComment> {
     });
 
     ref
-        .read(shortsCommentVisibilityProvider(widget.newsID).notifier)
-        .toggleShortsCommentVisibility();
+        .read(shortFormCommentVisibilityProvider(widget.newsID).notifier)
+        .toggleShortFormCommentVisibility();
   }
 
   @override
   Widget build(BuildContext context) {
     final shortsCommentVisibility =
-        ref.watch(shortsCommentVisibilityProvider(widget.newsID));
+        ref.watch(shortFormCommentVisibilityProvider(widget.newsID));
 
     if (!isFirstBuild &&
-        shortsCommentVisibility.isShortsCommentVisible &&
+        shortsCommentVisibility.isShortFormCommentVisible &&
         _commentHeight == 0.0) {
       setCommentSizeMedium();
     }
@@ -121,8 +121,9 @@ class _ShortsCommentState extends ConsumerState<ShortFormComment> {
     return AnimatedContainer(
       duration: _isAnimated ? const Duration(milliseconds: 300) : Duration.zero,
       width: double.infinity,
-      height:
-          shortsCommentVisibility.isShortsCommentVisible ? _commentHeight : 0.0,
+      height: shortsCommentVisibility.isShortFormCommentVisible
+          ? _commentHeight
+          : 0.0,
       color: BACKGROUND_COLOR,
       child: Stack(
         children: [

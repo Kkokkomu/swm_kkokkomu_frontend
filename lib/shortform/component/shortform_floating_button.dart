@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/shorts_comment_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _floatingButtonSize = 36.0;
@@ -120,8 +120,8 @@ class CommentButton extends StatelessWidget {
     return IconButton(
       onPressed: () {
         ref
-            .read(shortsCommentVisibilityProvider(shortFormID).notifier)
-            .toggleShortsCommentVisibility();
+            .read(shortFormCommentVisibilityProvider(shortFormID).notifier)
+            .toggleShortFormCommentVisibility();
       },
       icon: const Icon(
         Icons.comment,

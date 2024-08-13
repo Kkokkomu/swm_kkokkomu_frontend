@@ -10,8 +10,6 @@ class GuestUserMyPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userInfo = ref.watch(userInfoProvider);
-
     return SafeArea(
       child: Column(
         children: [
@@ -19,6 +17,8 @@ class GuestUserMyPage extends ConsumerWidget {
             onPressed: () => showModalBottomSheet(
               context: context,
               builder: (context) {
+                final userInfo = ref.watch(userInfoProvider);
+
                 return Container(
                   color: Colors.white,
                   height: 400,

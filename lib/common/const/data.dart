@@ -15,6 +15,8 @@ class Constants {
   // dotenv.env 로 불러오는 값들은 반드시 env 파일일 로드된 후에 사용해야 함
   static final String? kakaoNativeAppKey = dotenv.env['KAKAO_NATIVE_APP_KEY'];
   static final String baseUrl = dotenv.env['BASE_URL'] ?? '';
+  static final String? defaultProfileImageUrl =
+      dotenv.env['DEFAULT_PROFILE_IMAGE_URL'];
 }
 
 class SecureStorageKeys {
@@ -64,6 +66,8 @@ enum NewsCategory {
   world,
   it
 }
+
+enum ShortFormCommentSortType { popular, latest }
 
 // BetterPlayer 캐시 설정값
 const customBetterPlayerCacheConfiguration = BetterPlayerCacheConfiguration(

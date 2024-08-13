@@ -4,12 +4,12 @@ import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
-import 'package:swm_kkokkomu_frontend/shortform/component/shortform_comment.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_pause_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_start_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/shorts_comment_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
 
 class SingleShortForm extends ConsumerStatefulWidget {
   final ShortFormModel shortForm;
@@ -46,8 +46,8 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
 
   @override
   Widget build(BuildContext context) {
-    final shortsCommentVisibility = ref.watch(
-      shortsCommentVisibilityProvider(widget.shortForm.shortformList!.id!),
+    final shortFormCommentVisibility = ref.watch(
+      shortFormCommentVisibilityProvider(widget.shortForm.shortformList!.id!),
     );
 
     final shortFormID = widget.shortForm.shortformList!.id!;
@@ -86,7 +86,7 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
     }
 
     return SafeArea(
-      top: shortsCommentVisibility.isShortsCommentVisible,
+      top: shortFormCommentVisibility.isShortFormCommentVisible,
       child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         return Column(
@@ -98,17 +98,19 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
                     // 숏폼 화면을 누를때
                     onTap: () {
                       // 비디오가 초기화 되지 않았을 때는 아무것도 하지 않음
-                      if (!(_betterPlayerController.isVideoInitialized() ==
-                          true)) {
+                      if (_betterPlayerController.isVideoInitialized() !=
+                          true) {
                         return;
                       }
 
                       // 댓글창이 보이는 상태에서 숏폼 화면을 누르면 댓글창 닫음
-                      if (shortsCommentVisibility.isShortsCommentVisible) {
+                      if (shortFormCommentVisibility
+                          .isShortFormCommentVisible) {
                         ref
-                            .read(shortsCommentVisibilityProvider(shortFormID)
-                                .notifier)
-                            .toggleShortsCommentVisibility();
+                            .read(
+                                shortFormCommentVisibilityProvider(shortFormID)
+                                    .notifier)
+                            .toggleShortFormCommentVisibility();
 
                         return;
                       }
@@ -119,7 +121,7 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
                     // 댓글창이 보이는 상태에서는 드래그시 아무것도 하지 않음
                     // 댓글창이 보이지 않는 상태에서는 드래그시 PageView 드래그 작동
                     onVerticalDragStart:
-                        shortsCommentVisibility.isShortsCommentVisible
+                        shortFormCommentVisibility.isShortFormCommentVisible
                             ? (_) {}
                             : null,
                     behavior: HitTestBehavior.opaque,
@@ -132,7 +134,7 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
                   // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
                   // 댓글창이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
                   if (_betterPlayerController.isVideoInitialized() == true &&
-                      !shortsCommentVisibility.isShortsCommentVisible)
+                      !shortFormCommentVisibility.isShortFormCommentVisible)
                     Align(
                       alignment: Alignment.centerRight,
                       child: Padding(
@@ -174,7 +176,7 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
                 ],
               ),
             ),
-            if (shortsCommentVisibility.isShortsCommentTapped)
+            if (shortFormCommentVisibility.isShortFormCommentTapped)
               ShortFormComment(
                 parentHeight: constraints.maxHeight,
                 newsID: shortFormID,
@@ -249,9 +251,9 @@ class _SingleShortsState extends ConsumerState<SingleShortForm> {
     if (visibleFraction == 0.0 &&
         _betterPlayerController.isVideoInitialized()! &&
         !ref
-            .read(shortsCommentVisibilityProvider(
+            .read(shortFormCommentVisibilityProvider(
                 widget.shortForm.shortformList!.id!))
-            .isShortsCommentVisible) {
+            .isShortFormCommentVisible) {
       _betterPlayerController.pause();
       _betterPlayerController.seekTo(const Duration(seconds: 0));
       return;
