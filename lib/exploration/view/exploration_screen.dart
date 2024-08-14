@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/root_tab_scaffold_key_provider.dart';
 
-class ExplorationScreen extends StatelessWidget {
+class ExplorationScreen extends ConsumerWidget {
   static String get routeName => 'exploration';
 
   const ExplorationScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: BACKGROUND_COLOR,
       child: SafeArea(
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  final scaffoldKey = ref.read(rootTabScaffoldKeyProvider);
+                  if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
+                    scaffoldKey.currentState?.closeDrawer();
+                    return;
+                  }
+                  scaffoldKey.currentState?.openDrawer();
+                },
+              ),
               backgroundColor: BACKGROUND_COLOR,
               elevation: 0.0,
               scrolledUnderElevation: 0.0,

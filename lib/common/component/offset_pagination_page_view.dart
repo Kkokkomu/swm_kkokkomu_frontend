@@ -6,7 +6,7 @@ import 'package:swm_kkokkomu_frontend/common/provider/offset_pagination_provider
 import 'package:swm_kkokkomu_frontend/common/repository/base_offset_pagination_repository.dart';
 
 class OffsetPaginationPageView<T> extends ConsumerWidget {
-  final StateNotifierProvider<
+  final AutoDisposeStateNotifierProvider<
       OffsetPaginationProvider<T, BaseOffsetPaginationRepository<T>>,
       OffsetPaginationBase> provider;
   final PaginationWidgetBuilder<T> itemBuilder;

@@ -6,7 +6,7 @@ import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/repository/logged_in_user_shortform_repository.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/provider/user_shortform_setting_provider.dart';
 
-final loggedInUserShortFormProvider = StateNotifierProvider<
+final loggedInUserShortFormProvider = StateNotifierProvider.autoDispose<
     LoggedInUserShortFormStateNotifier, OffsetPaginationBase>(
   (ref) {
     final shortFormRepository =

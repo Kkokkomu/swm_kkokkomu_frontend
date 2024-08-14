@@ -3,11 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
 
 class ExplorationScreenDrawer extends StatelessWidget {
-  final GlobalKey<ScaffoldState> scaffoldKey;
-
   const ExplorationScreenDrawer({
     super.key,
-    required this.scaffoldKey,
   });
 
   @override

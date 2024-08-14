@@ -56,7 +56,7 @@ class RootTab extends ConsumerWidget {
         }
 
         if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
-          scaffoldKey.currentState?.openEndDrawer();
+          scaffoldKey.currentState?.closeDrawer();
           return;
         }
 
@@ -65,7 +65,7 @@ class RootTab extends ConsumerWidget {
       child: DefaultLayout(
         scaffoldKey: scaffoldKey,
         drawer: navigationShell.currentIndex == 0
-            ? ExplorationScreenDrawer(scaffoldKey: scaffoldKey)
+            ? const ExplorationScreenDrawer()
             : null,
         bottomNavigationBar: SizedBox(
           height: isBottomNavigationBarVisible ? null : 0.0,
