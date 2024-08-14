@@ -1,74 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_toggle.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/root_tab_scaffold_key_provider.dart';
 import 'package:swm_kkokkomu_frontend/exploration/component/exploration_screen_drawer.dart';
-import 'package:swm_kkokkomu_frontend/exploration/view/exploration_screen.dart';
-import 'package:swm_kkokkomu_frontend/shortform/view/shortform_screen.dart';
-import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/guest_user_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class RootTab extends ConsumerStatefulWidget {
-  static String get routeName => 'home';
+class RootTab extends ConsumerWidget {
+  final StatefulNavigationShell navigationShell;
 
-  const RootTab({super.key});
-
-  @override
-  ConsumerState<RootTab> createState() => _RootTabState();
-}
-
-class _RootTabState extends ConsumerState<RootTab>
-    with SingleTickerProviderStateMixin {
-  late TabController controller;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  int index = 1;
+  const RootTab({
+    super.key,
+    required this.navigationShell,
+  });
 
   @override
-  void initState() {
-    super.initState();
-
-    controller = TabController(
-      length: 3,
-      vsync: this,
-      initialIndex: index,
-    );
-
-    controller.addListener(tabListener);
-  }
-
-  @override
-  void dispose() {
-    controller.removeListener(tabListener);
-
-    super.dispose();
-  }
-
-  void tabListener() {
-    setState(() {
-      index = controller.index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isBottomNavigationBarVisible =
         ref.watch(bottomNavigationBarToggleProvider);
+    final user = ref.watch(userInfoProvider);
+    final scaffoldKey = ref.read(rootTabScaffoldKeyProvider);
+
+    void refreshCurrentTab(RootTabBottomNavigationBarType tabType) {
+      switch (tabType) {
+        case RootTabBottomNavigationBarType.exploration:
+          break;
+        case RootTabBottomNavigationBarType.shortForm:
+          if (user is UserModel) {
+            ref
+                .read(loggedInUserShortFormProvider.notifier)
+                .paginate(forceRefetch: true);
+          }
+          if (user is GuestUserModel) {
+            ref
+                .read(guestUserShortFormProvider.notifier)
+                .paginate(forceRefetch: true);
+          }
+          break;
+        case RootTabBottomNavigationBarType.myPage:
+          break;
+      }
+    }
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (_) {
-        // Drawer가 열려 있다면 Drawer 닫기
-        if (_scaffoldKey.currentState!.isDrawerOpen) {
-          _scaffoldKey.currentState!.closeDrawer();
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
           return;
         }
+
+        if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
+          scaffoldKey.currentState?.openEndDrawer();
+          return;
+        }
+
         appExitShowDialog(context);
       },
       child: DefaultLayout(
-        scaffoldKey: _scaffoldKey,
-        drawer: index == 0
-            ? ExplorationScreenDrawer(scaffoldKey: _scaffoldKey)
+        scaffoldKey: scaffoldKey,
+        drawer: navigationShell.currentIndex == 0
+            ? ExplorationScreenDrawer(scaffoldKey: scaffoldKey)
             : null,
         bottomNavigationBar: SizedBox(
           height: isBottomNavigationBarVisible ? null : 0.0,
@@ -77,9 +74,14 @@ class _RootTabState extends ConsumerState<RootTab>
             unselectedFontSize: 12,
             type: BottomNavigationBarType.fixed,
             onTap: (int index) {
-              controller.animateTo(index);
+              if (index == navigationShell.currentIndex) {
+                refreshCurrentTab(RootTabBottomNavigationBarType.values[index]);
+                navigationShell.goBranch(index, initialLocation: true);
+                return;
+              }
+              navigationShell.goBranch(index);
             },
-            currentIndex: index,
+            currentIndex: navigationShell.currentIndex,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.explore),
@@ -87,7 +89,7 @@ class _RootTabState extends ConsumerState<RootTab>
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.electric_bolt),
-                label: 'Shorts',
+                label: 'ShortForm',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),
@@ -96,15 +98,7 @@ class _RootTabState extends ConsumerState<RootTab>
             ],
           ),
         ),
-        child: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: controller,
-          children: const [
-            ExplorationScreen(),
-            ShortsScreen(),
-            MyPageScreen(),
-          ],
-        ),
+        child: navigationShell,
       ),
     );
   }

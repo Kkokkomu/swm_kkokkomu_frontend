@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/go_router_navigator_key_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/view/root_tab.dart';
 import 'package:swm_kkokkomu_frontend/common/view/splash_screen.dart';
+import 'package:swm_kkokkomu_frontend/exploration/view/exploration_screen.dart';
+import 'package:swm_kkokkomu_frontend/shortform/view/shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/view/login_screen.dart';
+import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/register_screen.dart';
 
 final authProvider = ChangeNotifierProvider<AuthProvider>((ref) {
@@ -28,11 +32,40 @@ class AuthProvider extends ChangeNotifier {
     );
   }
 
-  List<GoRoute> get routes => [
-        GoRoute(
-          path: '/',
-          name: RootTab.routeName,
-          builder: (_, __) => const RootTab(),
+  List<RouteBase> get routes => [
+        StatefulShellRoute.indexedStack(
+          parentNavigatorKey: ref.read(rootNavigatorKeyProvider),
+          builder: (_, state, navigationShell) =>
+              RootTab(navigationShell: navigationShell),
+          branches: <StatefulShellBranch>[
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/exploration',
+                  name: ExplorationScreen.routeName,
+                  builder: (_, __) => const ExplorationScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/shortform',
+                  name: ShortFormScreen.routeName,
+                  builder: (_, __) => const ShortFormScreen(),
+                ),
+              ],
+            ),
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/mypage',
+                  name: MyPageScreen.routeName,
+                  builder: (_, __) => const MyPageScreen(),
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
           path: '/splash',
@@ -58,7 +91,7 @@ class AuthProvider extends ChangeNotifier {
   String? redirectLogic(BuildContext _, GoRouterState state) {
     final UserModelBase user = ref.read(userInfoProvider);
 
-    final logginIn = state.uri.toString() == '/login';
+    final logginIn = state.fullPath == '/login';
 
     // InitialUserModel
     // 한번도 로그인 해본 적 없는 유저라면
@@ -71,26 +104,26 @@ class AuthProvider extends ChangeNotifier {
     // UserModel
     // 사용자 정보가 있는 상태면
     // 로그인 중이거나 현재 위치가 SplashScreen이거나 RegisterScreen이면
-    // 홈으로 이동
+    // 홈(숏폼화면)으로 이동
     if (user is UserModel) {
       return logginIn ||
-              state.uri.toString() == '/splash' ||
-              state.uri.toString() == '/register'
-          ? '/'
+              state.fullPath == '/splash' ||
+              state.fullPath == '/register'
+          ? '/shortform'
           : null;
     }
 
     // GuestUserModel
     // 게스트 유저 정보가 있는 상태면
     // 로그인 중이거나 현재 위치가 SplashScreen이면
-    // 홈으로 이동
+    // 홈(숏폼화면)으로 이동
     if (user is GuestUserModel) {
-      return logginIn || state.uri.toString() == '/splash' ? '/' : null;
+      return logginIn || state.fullPath == '/splash' ? '/shortform' : null;
     }
 
     // UnregisteredUserModel
     if (user is UnregisteredUserModel) {
-      return state.uri.toString() != '/register' ? '/register' : null;
+      return state.fullPath != '/register' ? '/register' : null;
     }
 
     // UserModelError

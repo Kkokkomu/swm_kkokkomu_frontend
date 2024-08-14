@@ -14,10 +14,10 @@ class ShortFormComment extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ShortFormComment> createState() => _ShortsCommentState();
+  ConsumerState<ShortFormComment> createState() => _ShortFormCommentState();
 }
 
-class _ShortsCommentState extends ConsumerState<ShortFormComment> {
+class _ShortFormCommentState extends ConsumerState<ShortFormComment> {
   double _commentHeight = 0.0;
   late void Function(DragUpdateDetails) _onVerticalDragUpdate;
   late void Function(DragEndDetails) _onVerticalDragEnd;
@@ -107,11 +107,11 @@ class _ShortsCommentState extends ConsumerState<ShortFormComment> {
 
   @override
   Widget build(BuildContext context) {
-    final shortsCommentVisibility =
+    final shortFormCommentVisibility =
         ref.watch(shortFormCommentVisibilityProvider(widget.newsID));
 
     if (!isFirstBuild &&
-        shortsCommentVisibility.isShortFormCommentVisible &&
+        shortFormCommentVisibility.isShortFormCommentVisible &&
         _commentHeight == 0.0) {
       setCommentSizeMedium();
     }
@@ -121,7 +121,7 @@ class _ShortsCommentState extends ConsumerState<ShortFormComment> {
     return AnimatedContainer(
       duration: _isAnimated ? const Duration(milliseconds: 300) : Duration.zero,
       width: double.infinity,
-      height: shortsCommentVisibility.isShortFormCommentVisible
+      height: shortFormCommentVisibility.isShortFormCommentVisible
           ? _commentHeight
           : 0.0,
       color: BACKGROUND_COLOR,
@@ -131,7 +131,7 @@ class _ShortsCommentState extends ConsumerState<ShortFormComment> {
             slivers: [
               SliverPersistentHeader(
                 pinned: true,
-                delegate: ShortsCommentHeaderDelegate(
+                delegate: ShortFormCommentHeaderDelegate(
                   onVerticalDragUpdate: _onVerticalDragUpdate,
                   onVerticalDragEnd: _onVerticalDragEnd,
                   closeComment: setCommentSizeSmall,
@@ -272,12 +272,12 @@ class _ShortsCommentState extends ConsumerState<ShortFormComment> {
   }
 }
 
-class ShortsCommentHeaderDelegate extends SliverPersistentHeaderDelegate {
+class ShortFormCommentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final void Function(DragUpdateDetails) _onVerticalDragUpdate;
   final void Function(DragEndDetails) _onVerticalDragEnd;
   final void Function() _closeComment;
 
-  ShortsCommentHeaderDelegate({
+  ShortFormCommentHeaderDelegate({
     required void Function(DragUpdateDetails) onVerticalDragUpdate,
     required void Function(DragEndDetails) onVerticalDragEnd,
     required void Function() closeComment,

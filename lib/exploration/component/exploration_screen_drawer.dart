@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
 
 class ExplorationScreenDrawer extends StatelessWidget {
@@ -29,17 +30,13 @@ class ExplorationScreenDrawer extends StatelessWidget {
           ListTile(
             title: const Text('Item 1'),
             onTap: () {
-              if (scaffoldKey.currentState!.isDrawerOpen) {
-                scaffoldKey.currentState!.closeDrawer();
-              }
+              context.pop();
             },
           ),
           ListTile(
             title: const Text('Item 2'),
             onTap: () {
-              if (scaffoldKey.currentState!.isDrawerOpen) {
-                scaffoldKey.currentState!.closeDrawer();
-              }
+              context.pop();
             },
           ),
         ],

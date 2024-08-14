@@ -5,23 +5,14 @@ import 'package:swm_kkokkomu_frontend/shortform/component/logged_in_user_shortfo
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class ShortsScreen extends ConsumerStatefulWidget {
-  const ShortsScreen({super.key});
+class ShortFormScreen extends ConsumerWidget {
+  static String get routeName => 'shortform';
+
+  const ShortFormScreen({super.key});
 
   @override
-  ConsumerState<ShortsScreen> createState() => _ShortScreenState();
-}
-
-class _ShortScreenState extends ConsumerState<ShortsScreen>
-    with AutomaticKeepAliveClientMixin<ShortsScreen> {
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userInfoProvider);
-
-    super.build(context);
 
     if (user is UserModel) {
       return const LoggedInUserShortform();

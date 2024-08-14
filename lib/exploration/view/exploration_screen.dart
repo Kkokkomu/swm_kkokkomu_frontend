@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
 
 class ExplorationScreen extends StatelessWidget {
+  static String get routeName => 'exploration';
+
   const ExplorationScreen({super.key});
 
   @override

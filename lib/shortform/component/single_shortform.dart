@@ -20,10 +20,10 @@ class SingleShortForm extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<SingleShortForm> createState() => _SingleShortsState();
+  ConsumerState<SingleShortForm> createState() => _SingleShortFormState();
 }
 
-class _SingleShortsState extends ConsumerState<SingleShortForm> {
+class _SingleShortFormState extends ConsumerState<SingleShortForm> {
   late BetterPlayerController _betterPlayerController;
   bool _isPauseButtonTapped = false;
   Timer? _hidePauseButtonTimer;

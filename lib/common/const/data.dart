@@ -69,6 +69,22 @@ enum NewsCategory {
 
 enum ShortFormCommentSortType { popular, latest }
 
+enum RootTabBottomNavigationBarType {
+  exploration(RoutePath.exploration),
+  shortForm(RoutePath.shortForm),
+  myPage(RoutePath.myPage);
+
+  final String path;
+
+  const RootTabBottomNavigationBarType(this.path);
+}
+
+class RoutePath {
+  static const String exploration = '/exploration';
+  static const String shortForm = '/shortform';
+  static const String myPage = '/mypage';
+}
+
 // BetterPlayer 캐시 설정값
 const customBetterPlayerCacheConfiguration = BetterPlayerCacheConfiguration(
   useCache: true,

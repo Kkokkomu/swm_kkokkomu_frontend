@@ -5,23 +5,14 @@ import 'package:swm_kkokkomu_frontend/user/component/logged_in_user_my_page.dart
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class MyPageScreen extends ConsumerStatefulWidget {
+class MyPageScreen extends ConsumerWidget {
+  static String get routeName => 'mypage';
+
   const MyPageScreen({super.key});
 
   @override
-  ConsumerState<MyPageScreen> createState() => _MyPageState();
-}
-
-class _MyPageState extends ConsumerState<MyPageScreen>
-    with AutomaticKeepAliveClientMixin<MyPageScreen> {
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final userInfo = ref.watch(userInfoProvider);
-
-    super.build(context);
 
     if (userInfo is UserModel) {
       return const LoggedInUserMyPage();
