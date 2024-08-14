@@ -64,7 +64,7 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
         scrollDirection: Axis.vertical,
         itemCount: paginationData.items.length + 1,
         onPageChanged: (value) {
-          if (value == paginationData.items.length - 2) {
+          if (value == paginationData.items.length - 4) {
             ref.read(provider.notifier).paginate(fetchMore: true);
           }
         },
@@ -93,6 +93,15 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
                         ref.read(provider.notifier).paginate(fetchMore: true),
                     child: const Text(
                       '다시시도',
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () => ref
+                        .read(provider.notifier)
+                        .paginate(forceRefetch: true),
+                    child: const Text(
+                      '전체 새로고침',
                     ),
                   ),
                 ],

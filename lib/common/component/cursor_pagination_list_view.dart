@@ -128,6 +128,15 @@ class _PaginationListViewState<T extends IModelWithId>
                                     '다시시도',
                                   ),
                                 ),
+                                const SizedBox(height: 16.0),
+                                ElevatedButton(
+                                  onPressed: () => ref
+                                      .read(widget.provider.notifier)
+                                      .paginate(forceRefetch: true),
+                                  child: const Text(
+                                    '전체 새로고침',
+                                  ),
+                                ),
                               ],
                             )
                           : const Text('더 가져올 데이터가 없습니다.'),

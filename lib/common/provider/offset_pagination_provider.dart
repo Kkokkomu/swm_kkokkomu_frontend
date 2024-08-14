@@ -17,7 +17,7 @@ class OffsetPaginationProvider<T, U extends BaseOffsetPaginationRepository<T>>
   }
 
   Future<void> paginate({
-    int fetchCount = 5,
+    int fetchCount = 10,
     // 추가로 데이터 더 가져오기
     // true - 추가로 데이터 더 가져옴
     // false - 새로고침 (현재 상태를 덮어씌움)
