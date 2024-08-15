@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_visibility_model.dart';
 
@@ -20,7 +17,6 @@ class ShortFormCommentVisibilityStateNotifier
     extends StateNotifier<ShortFormCommentVisibilityModel> {
   final Ref ref;
   final int newsID;
-  Timer? toggleBottomNavigationBarTimer;
 
   ShortFormCommentVisibilityStateNotifier({
     required this.ref,
@@ -34,19 +30,14 @@ class ShortFormCommentVisibilityStateNotifier
         );
 
   void toggleShortFormCommentVisibility() {
-    toggleBottomNavigationBarTimer?.cancel();
-    if (state.isShortFormCommentVisible) {
-      toggleBottomNavigationBarTimer =
-          Timer(Constants.shortFormCommentAnimationDuration, () {
-        ref.read(bottomNavigationBarStateProvider.notifier).state = true;
-      });
-    } else {
-      ref.read(bottomNavigationBarStateProvider.notifier).state = false;
-    }
-
     state = state.copyWith(
       isShortFormCommentVisible: !state.isShortFormCommentVisible,
       isShortFormCommentTapped: true,
     );
+
+    // 댓글창 등장시 하단 네비게이션바 숨기기
+    if (state.isShortFormCommentVisible) {
+      ref.read(bottomNavigationBarStateProvider.notifier).state = false;
+    }
   }
 }
