@@ -56,8 +56,8 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
 
     final paginationData = state as OffsetPagination<T>;
 
-    return Container(
-      color: Colors.black,
+    return RefreshIndicator(
+      onRefresh: () => ref.read(provider.notifier).paginate(forceRefetch: true),
       child: PageView.builder(
         allowImplicitScrolling: true,
         physics: const CustomPhysics(),
@@ -85,7 +85,7 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
                     (paginationData as OffsetPaginationFetchingMoreError)
                         .message,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.black),
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(
@@ -108,13 +108,26 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
               );
             }
 
-            return const Center(
-              child: Text(
-                '더 가져올 데이터가 없습니다.',
-                style: TextStyle(
-                  color: Colors.white,
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  '더 가져올 데이터가 없습니다.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
                 ),
-              ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                ElevatedButton(
+                  onPressed: () =>
+                      ref.read(provider.notifier).paginate(forceRefetch: true),
+                  child: const Text('새로고침'),
+                ),
+              ],
             );
           }
 

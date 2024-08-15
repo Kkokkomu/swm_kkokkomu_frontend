@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_floating_button.dart';
@@ -29,6 +30,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
   Timer? _hidePauseButtonTimer;
   Timer? _hideEmojiDetailButtonTimer;
   bool _isVideoError = false;
+  bool _isSwipedToPlay = true;
 
   @override
   void initState() {
@@ -61,7 +63,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
           const Text(
             '비디오 에러 발생',
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
           const SizedBox(
@@ -215,6 +217,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
       }
     } catch (error) {
       print(error);
+      print('에러 비디오: ${widget.shortForm.shortformList!.shortformUrl}');
       _betterPlayerController.dispose(forceDispose: true);
       setState(() {
         _isVideoError = true;
@@ -244,19 +247,44 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
   }
 
   void onVisibilityChanged(double visibleFraction) {
-    if (visibleFraction == 1.0) {
+    final isCommentVisible = ref
+        .read(shortFormCommentVisibilityProvider(
+            widget.shortForm.shortformList!.id!))
+        .isShortFormCommentVisible;
+
+    if (visibleFraction == 1.0 &&
+        _betterPlayerController.isPlaying() == false &&
+        _isSwipedToPlay) {
+      _isSwipedToPlay = false;
       _betterPlayerController.play();
       return;
     }
-    if (visibleFraction == 0.0 &&
-        _betterPlayerController.isVideoInitialized()! &&
-        !ref
-            .read(shortFormCommentVisibilityProvider(
-                widget.shortForm.shortformList!.id!))
-            .isShortFormCommentVisible) {
-      _betterPlayerController.pause();
-      _betterPlayerController.seekTo(const Duration(seconds: 0));
-      return;
+
+    if (visibleFraction < 0.5 &&
+        _betterPlayerController.isVideoInitialized() == true &&
+        !isCommentVisible) {
+      _isSwipedToPlay = true;
+
+      if (_betterPlayerController.isPlaying() == true) {
+        _betterPlayerController.pause();
+
+        final currentRoutePath =
+            GoRouter.of(context).routeInformationProvider.value.uri.path;
+        final currentPosition =
+            _betterPlayerController.videoPlayerController?.value.position;
+
+        // 숏폼 탭이 아닌 다른 탭으로 이동한 경우 비디오를 정지만 하고 0초로 되돌리지 않음
+        if (!(currentRoutePath == RoutePath.shortForm) &&
+            currentPosition != null) {
+          // 다시 숏폼 탭으로 돌아왔을 때 스무스한 재생을 위해 1초 전으로 이동
+          _betterPlayerController.seekTo(
+            currentPosition - const Duration(seconds: 1),
+          );
+          return;
+        }
+
+        _betterPlayerController.seekTo(const Duration(seconds: 0));
+      }
     }
   }
 }
