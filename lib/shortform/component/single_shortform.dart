@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
-import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_pause_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_start_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_box.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
 
 class SingleShortForm extends ConsumerStatefulWidget {
@@ -51,8 +52,10 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
     final shortFormCommentVisibility = ref.watch(
       shortFormCommentVisibilityProvider(widget.shortForm.shortformList!.id!),
     );
+    final isBottomNavigationBarVisible =
+        ref.watch(bottomNavigationBarStateProvider);
 
-    final shortFormID = widget.shortForm.shortformList!.id!;
+    final shortFormId = widget.shortForm.shortformList!.id!;
     // final shortFormYoutubeURL = widget.shortForm.shortForm!.youtubeUrl;
     // final shortFormRelatedURL = widget.shortForm.shortForm!.relatedUrl;
 
@@ -89,8 +92,8 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
 
     return SafeArea(
       top: shortFormCommentVisibility.isShortFormCommentVisible,
-      child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
+      child:
+          LayoutBuilder(builder: (BuildContext _, BoxConstraints constraints) {
         return Column(
           children: [
             Expanded(
@@ -110,7 +113,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                           .isShortFormCommentVisible) {
                         ref
                             .read(
-                                shortFormCommentVisibilityProvider(shortFormID)
+                                shortFormCommentVisibilityProvider(shortFormId)
                                     .notifier)
                             .toggleShortFormCommentVisibility();
 
@@ -134,9 +137,9 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                     ),
                   ),
                   // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
-                  // 댓글창이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
+                  // 바텀네비게이션바가 보이지 않는 상태(댓글창 있는 상태)에서는 플로팅 버튼들이 보이지 않음
                   if (_betterPlayerController.isVideoInitialized() == true &&
-                      !shortFormCommentVisibility.isShortFormCommentVisible)
+                      isBottomNavigationBarVisible)
                     Align(
                       alignment: Alignment.centerRight,
                       child: Padding(
@@ -149,7 +152,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                             const SizedBox(height: 16.0),
                             CommentButton(
                               ref: ref,
-                              shortFormID: shortFormID,
+                              shortFormId: shortFormId,
                             ),
                             // const SizedBox(height: 16.0),
                             // ShareYoutubeUrlButton(
@@ -179,9 +182,9 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
               ),
             ),
             if (shortFormCommentVisibility.isShortFormCommentTapped)
-              ShortFormComment(
-                parentHeight: constraints.maxHeight,
-                newsID: shortFormID,
+              ShortFormCommentBox(
+                newsId: shortFormId,
+                maxShortFormCommentBoxHeight: constraints.maxHeight,
               ),
           ],
         );

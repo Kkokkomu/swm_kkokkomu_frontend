@@ -1,45 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
 
-class ShortFormComment extends ConsumerStatefulWidget {
-  final double parentHeight;
-  final int newsID;
+class ShortFormCommentBody extends ConsumerStatefulWidget {
+  final int newsId;
+  final double maxCommentBodyHeight;
 
-  const ShortFormComment({
+  const ShortFormCommentBody({
     super.key,
-    required this.parentHeight,
-    required this.newsID,
+    required this.newsId,
+    required this.maxCommentBodyHeight,
   });
 
   @override
-  ConsumerState<ShortFormComment> createState() => _ShortFormCommentState();
+  ConsumerState<ShortFormCommentBody> createState() =>
+      _ShortFormCommentBodyState();
 }
 
-class _ShortFormCommentState extends ConsumerState<ShortFormComment> {
-  double _commentHeight = 0.0;
+class _ShortFormCommentBodyState extends ConsumerState<ShortFormCommentBody> {
+  double _commentBodyHeight = 0.0;
   late void Function(DragUpdateDetails) _onVerticalDragUpdate;
   late void Function(DragEndDetails) _onVerticalDragEnd;
   bool _isAnimated = true;
-  late double _commentSizeLarge;
-  late double _commentSizeMedium;
-  final double _commentSizeSmall = 0.0;
+  late double _commentBodySizeLarge;
+  late double _commentBodySizeMedium;
+  final double _commentBodySizeSmall = 0.0;
   bool isFirstBuild = true;
 
   @override
   void initState() {
     super.initState();
 
-    _commentSizeLarge = widget.parentHeight;
-    _commentSizeMedium = widget.parentHeight * 0.6;
+    _commentBodySizeLarge = widget.maxCommentBodyHeight;
+    _commentBodySizeMedium = _commentBodySizeLarge * 0.6;
 
     _onVerticalDragUpdate = (details) {
-      _commentHeight -= details.delta.dy;
-      if (_commentHeight < 0.0) {
-        _commentHeight = 0.0;
-      } else if (_commentHeight > _commentSizeLarge) {
-        _commentHeight = _commentSizeLarge;
+      _commentBodyHeight -= details.delta.dy;
+
+      if (_commentBodyHeight < 0.01) {
+        _commentBodyHeight = 0.01;
+      } else if (_commentBodyHeight > _commentBodySizeLarge) {
+        _commentBodyHeight = _commentBodySizeLarge;
       }
       setState(() {
         _isAnimated = false;
@@ -50,79 +53,81 @@ class _ShortFormCommentState extends ConsumerState<ShortFormComment> {
       bool isScrollUp = details.velocity.pixelsPerSecond.dy <= -500.0;
       bool isScrollDown = details.velocity.pixelsPerSecond.dy >= 500.0;
 
-      if (_commentHeight >= widget.parentHeight * 0.75) {
+      if (_commentBodyHeight >= widget.maxCommentBodyHeight * 0.75) {
         if (isScrollDown) {
-          setCommentSizeMedium();
+          setCommentBodySizeMedium();
         } else {
-          setCommentSizeLarge();
+          setCommentBodySizeLarge();
         }
-      } else if (_commentHeight <= widget.parentHeight * 0.45) {
+      } else if (_commentBodyHeight <= widget.maxCommentBodyHeight * 0.45) {
         if (isScrollUp) {
-          setCommentSizeMedium();
+          setCommentBodySizeMedium();
         } else {
-          setCommentSizeSmall();
+          setCommentBodySizeSmall();
         }
       } else {
         if (isScrollUp) {
-          setCommentSizeLarge();
+          setCommentBodySizeLarge();
         } else if (isScrollDown) {
-          setCommentSizeSmall();
+          setCommentBodySizeSmall();
         } else {
-          setCommentSizeMedium();
+          setCommentBodySizeMedium();
         }
       }
     };
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        setCommentSizeMedium();
+        setCommentBodySizeMedium();
       }
     });
   }
 
-  void setCommentSizeLarge() {
+  void setCommentBodySizeLarge() {
     setState(() {
-      _commentHeight = _commentSizeLarge;
+      _commentBodyHeight = _commentBodySizeLarge;
       _isAnimated = true;
     });
   }
 
-  void setCommentSizeMedium() {
+  void setCommentBodySizeMedium() {
     setState(() {
-      _commentHeight = _commentSizeMedium;
+      _commentBodyHeight = _commentBodySizeMedium;
       _isAnimated = true;
     });
   }
 
-  void setCommentSizeSmall() {
+  void setCommentBodySizeSmall() {
     setState(() {
-      _commentHeight = _commentSizeSmall;
+      _commentBodyHeight = _commentBodySizeSmall;
       _isAnimated = true;
     });
 
     ref
-        .read(shortFormCommentVisibilityProvider(widget.newsID).notifier)
+        .read(shortFormCommentVisibilityProvider(widget.newsId).notifier)
         .toggleShortFormCommentVisibility();
   }
 
   @override
   Widget build(BuildContext context) {
     final shortFormCommentVisibility =
-        ref.watch(shortFormCommentVisibilityProvider(widget.newsID));
+        ref.watch(shortFormCommentVisibilityProvider(widget.newsId));
 
     if (!isFirstBuild &&
         shortFormCommentVisibility.isShortFormCommentVisible &&
-        _commentHeight == 0.0) {
-      setCommentSizeMedium();
+        _commentBodyHeight == 0.0) {
+      setCommentBodySizeMedium();
     }
 
     isFirstBuild = false;
 
     return AnimatedContainer(
-      duration: _isAnimated ? const Duration(milliseconds: 300) : Duration.zero,
+      duration: _isAnimated
+          ? Constants.shortFormCommentAnimationDuration
+          : Duration.zero,
       width: double.infinity,
       height: shortFormCommentVisibility.isShortFormCommentVisible
-          ? _commentHeight
+          ? _commentBodyHeight
           : 0.0,
       color: BACKGROUND_COLOR,
       child: Stack(
@@ -134,7 +139,7 @@ class _ShortFormCommentState extends ConsumerState<ShortFormComment> {
                 delegate: ShortFormCommentHeaderDelegate(
                   onVerticalDragUpdate: _onVerticalDragUpdate,
                   onVerticalDragEnd: _onVerticalDragEnd,
-                  closeComment: setCommentSizeSmall,
+                  closeComment: setCommentBodySizeSmall,
                 ),
               ),
               SliverPadding(
@@ -223,48 +228,7 @@ class _ShortFormCommentState extends ConsumerState<ShortFormComment> {
                   itemCount: 10,
                 ),
               ),
-              const SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 72.0,
-                ),
-              ),
             ],
-          ),
-          Positioned(
-            bottom: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: Column(
-              children: [
-                const Divider(
-                  height: 1.0,
-                  thickness: 1.0,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 80.0,
-                  color: Colors.white,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(width: 16.0),
-                      const Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: '댓글을 입력하세요.',
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.send),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

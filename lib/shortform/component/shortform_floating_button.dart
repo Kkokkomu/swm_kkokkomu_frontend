@@ -107,12 +107,12 @@ class _EmojiButtonState extends State<EmojiButton> {
 
 class CommentButton extends StatelessWidget {
   final WidgetRef ref;
-  final int shortFormID;
+  final int shortFormId;
 
   const CommentButton({
     super.key,
     required this.ref,
-    required this.shortFormID,
+    required this.shortFormId,
   });
 
   @override
@@ -120,7 +120,7 @@ class CommentButton extends StatelessWidget {
     return IconButton(
       onPressed: () {
         ref
-            .read(shortFormCommentVisibilityProvider(shortFormID).notifier)
+            .read(shortFormCommentVisibilityProvider(shortFormId).notifier)
             .toggleShortFormCommentVisibility();
       },
       icon: const Icon(

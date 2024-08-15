@@ -33,7 +33,8 @@ void main() async {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
 
@@ -50,6 +51,11 @@ class _App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+
+    // SafeArea 를 고려한 BottomNavigationBar 높이 설정
+    Constants.bottomNavigationBarHeightWithSafeArea =
+        Constants.bottomNavigationBarHeight +
+            MediaQuery.of(context).padding.bottom;
 
     return MaterialApp.router(
       localizationsDelegates: const [

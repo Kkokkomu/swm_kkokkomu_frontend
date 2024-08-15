@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
-import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_toggle.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/root_tab_scaffold_key_provider.dart';
 import 'package:swm_kkokkomu_frontend/exploration/component/exploration_screen_drawer.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/guest_user_shortform_provider.dart';
@@ -23,7 +23,7 @@ class RootTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isBottomNavigationBarVisible =
-        ref.watch(bottomNavigationBarToggleProvider);
+        ref.watch(bottomNavigationBarStateProvider);
     final user = ref.watch(userInfoProvider);
     final scaffoldKey = ref.read(rootTabScaffoldKeyProvider);
 
@@ -68,7 +68,9 @@ class RootTab extends ConsumerWidget {
             ? const ExplorationScreenDrawer()
             : null,
         bottomNavigationBar: SizedBox(
-          height: isBottomNavigationBarVisible ? null : 0.0,
+          height: isBottomNavigationBarVisible
+              ? Constants.bottomNavigationBarHeightWithSafeArea
+              : 0.0,
           child: BottomNavigationBar(
             selectedFontSize: 12,
             unselectedFontSize: 12,

@@ -17,6 +17,16 @@ class Constants {
   static final String baseUrl = dotenv.env['BASE_URL'] ?? '';
   static final String? defaultProfileImageUrl =
       dotenv.env['DEFAULT_PROFILE_IMAGE_URL'];
+
+  // BottomNavigationBar 높이
+  static const double bottomNavigationBarHeight = 60.0;
+  // SafeArea 를 고려한 BottomNavigationBar 높이
+  // 반드시 main.dart 에서 SafeArea 높이를 사용하여 수정 후 사용해야함
+  static double bottomNavigationBarHeightWithSafeArea =
+      bottomNavigationBarHeight;
+
+  static const Duration shortFormCommentAnimationDuration =
+      Duration(milliseconds: 200);
 }
 
 class SecureStorageKeys {
