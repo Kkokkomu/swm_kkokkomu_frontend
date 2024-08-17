@@ -40,7 +40,7 @@ class AnimationDuration {
   // 숏폼 재생/정지 버튼 전체 시간
   // 홀드 시간 + 애니메이션 시간 * 2
   static const Duration startPauseButtonTotalDuration =
-      Duration(microseconds: 1100);
+      Duration(milliseconds: 1100);
 }
 
 class SecureStorageKeys {
