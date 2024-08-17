@@ -29,7 +29,7 @@ class Constants {
 class AnimationDuration {
   // 숏폼 댓글 애니메이션 시간
   static const Duration shortFormCommentAnimationDuration =
-      Duration(milliseconds: 200);
+      Duration(milliseconds: 300);
 
   // 숏폼 재생/정지 버튼 애니메이션 시간
   static const Duration startPauseButtonScaleAnimationDuration =

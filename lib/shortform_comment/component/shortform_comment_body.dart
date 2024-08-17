@@ -123,6 +123,7 @@ class _ShortFormCommentBodyState extends ConsumerState<ShortFormCommentBody> {
     isFirstBuild = false;
 
     return AnimatedContainer(
+      curve: Curves.easeInOut,
       onEnd: () {
         // 댓글창이 닫히면 숏폼 플로팅 버튼 보이게 함
         if (!shortFormCommentVisibility.isShortFormCommentVisible) {
