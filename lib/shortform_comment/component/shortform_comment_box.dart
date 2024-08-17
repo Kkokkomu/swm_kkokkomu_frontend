@@ -27,6 +27,7 @@ class ShortFormCommentBox extends ConsumerWidget {
               Constants.bottomNavigationBarHeightWithSafeArea,
           newsId: newsId,
         ),
+        // 하단 네비게이션바가 보이지 않을 때만 댓글 입력창을 보여줌
         if (!isBottomNavigationBarVisible) const ShortFormCommentInputCard(),
       ],
     );

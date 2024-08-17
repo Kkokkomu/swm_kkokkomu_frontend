@@ -24,9 +24,23 @@ class Constants {
   // 반드시 main.dart 에서 SafeArea 높이를 사용하여 수정 후 사용해야함
   static double bottomNavigationBarHeightWithSafeArea =
       bottomNavigationBarHeight;
+}
 
+class AnimationDuration {
+  // 숏폼 댓글 애니메이션 시간
   static const Duration shortFormCommentAnimationDuration =
       Duration(milliseconds: 200);
+
+  // 숏폼 재생/정지 버튼 애니메이션 시간
+  static const Duration startPauseButtonScaleAnimationDuration =
+      Duration(milliseconds: 300);
+  // 숏폼 재생/정지 버튼 홀드 시간
+  static const Duration startPauseButtonHoldDuration =
+      Duration(milliseconds: 500);
+  // 숏폼 재생/정지 버튼 전체 시간
+  // 홀드 시간 + 애니메이션 시간 * 2
+  static const Duration startPauseButtonTotalDuration =
+      Duration(microseconds: 1100);
 }
 
 class SecureStorageKeys {

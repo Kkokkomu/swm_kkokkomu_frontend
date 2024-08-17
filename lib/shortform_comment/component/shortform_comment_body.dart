@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
-import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_floating_button_visibility_provider.dart';
 
 class ShortFormCommentBody extends ConsumerStatefulWidget {
   final int newsId;
@@ -124,13 +124,16 @@ class _ShortFormCommentBodyState extends ConsumerState<ShortFormCommentBody> {
 
     return AnimatedContainer(
       onEnd: () {
-        // 댓글창이 닫히면 BottomNavigationBar를 보이게 함
+        // 댓글창이 닫히면 숏폼 플로팅 버튼 보이게 함
         if (!shortFormCommentVisibility.isShortFormCommentVisible) {
-          ref.read(bottomNavigationBarStateProvider.notifier).state = true;
+          ref
+              .read(shortFormFloatingButtonVisibilityProvider(widget.newsId)
+                  .notifier)
+              .state = true;
         }
       },
       duration: _isAnimated
-          ? Constants.shortFormCommentAnimationDuration
+          ? AnimationDuration.shortFormCommentAnimationDuration
           : Duration.zero,
       width: double.infinity,
       height: shortFormCommentVisibility.isShortFormCommentVisible

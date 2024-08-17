@@ -5,20 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
-import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_pause_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_start_button.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_box.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_floating_button_visibility_provider.dart';
 
 class SingleShortForm extends ConsumerStatefulWidget {
-  final ShortFormModel shortForm;
+  static const Duration _seekBackTime = Duration(seconds: 1);
+
+  final int newsId;
+  final String shortFormUrl;
 
   const SingleShortForm({
     super.key,
-    required this.shortForm,
+    required this.newsId,
+    required this.shortFormUrl,
   });
 
   @override
@@ -50,14 +53,11 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
   @override
   Widget build(BuildContext context) {
     final shortFormCommentVisibility = ref.watch(
-      shortFormCommentVisibilityProvider(widget.shortForm.shortformList!.id!),
+      shortFormCommentVisibilityProvider(widget.newsId),
     );
-    final isBottomNavigationBarVisible =
-        ref.watch(bottomNavigationBarStateProvider);
-
-    final shortFormId = widget.shortForm.shortformList!.id!;
-    // final shortFormYoutubeURL = widget.shortForm.shortForm!.youtubeUrl;
-    // final shortFormRelatedURL = widget.shortForm.shortForm!.relatedUrl;
+    final isShortFormFloatingButtonVisible = ref.watch(
+      shortFormFloatingButtonVisibilityProvider(widget.newsId),
+    );
 
     if (_isVideoError) {
       return Column(
@@ -84,7 +84,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
       );
     }
 
-    if (!_betterPlayerController.isVideoInitialized()!) {
+    if (_betterPlayerController.isVideoInitialized() != true) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -112,9 +112,9 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                       if (shortFormCommentVisibility
                           .isShortFormCommentVisible) {
                         ref
-                            .read(
-                                shortFormCommentVisibilityProvider(shortFormId)
-                                    .notifier)
+                            .read(shortFormCommentVisibilityProvider(
+                                    widget.newsId)
+                                .notifier)
                             .toggleShortFormCommentVisibility();
 
                         return;
@@ -137,9 +137,8 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                     ),
                   ),
                   // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
-                  // 바텀네비게이션바가 보이지 않는 상태(댓글창 있는 상태)에서는 플로팅 버튼들이 보이지 않음
                   if (_betterPlayerController.isVideoInitialized() == true &&
-                      isBottomNavigationBarVisible)
+                      isShortFormFloatingButtonVisible)
                     Align(
                       alignment: Alignment.centerRight,
                       child: Padding(
@@ -152,7 +151,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                             const SizedBox(height: 16.0),
                             CommentButton(
                               ref: ref,
-                              shortFormId: shortFormId,
+                              newsId: widget.newsId,
                             ),
                             // const SizedBox(height: 16.0),
                             // ShareYoutubeUrlButton(
@@ -167,13 +166,13 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                       ),
                     ),
                   if (_betterPlayerController.isVideoInitialized() == true &&
-                      _betterPlayerController.isPlaying()! &&
+                      _betterPlayerController.isPlaying() == true &&
                       _isPauseButtonTapped)
                     const Center(
                       child: ShortFormStartButton(),
                     ),
                   if (_betterPlayerController.isVideoInitialized() == true &&
-                      !_betterPlayerController.isPlaying()! &&
+                      _betterPlayerController.isPlaying() == false &&
                       _isPauseButtonTapped)
                     const Center(
                       child: ShortFormPauseButton(),
@@ -181,9 +180,10 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                 ],
               ),
             ),
+            // 댓글 버튼을 눌렀을때 댓글 위젯 생성
             if (shortFormCommentVisibility.isShortFormCommentTapped)
               ShortFormCommentBox(
-                newsId: shortFormId,
+                newsId: widget.newsId,
                 maxShortFormCommentBoxHeight: constraints.maxHeight,
               ),
           ],
@@ -210,7 +210,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
       await _betterPlayerController.setupDataSource(
         BetterPlayerDataSource(
           BetterPlayerDataSourceType.network,
-          widget.shortForm.shortformList!.shortformUrl!,
+          widget.shortFormUrl,
           cacheConfiguration: customBetterPlayerCacheConfiguration,
           bufferingConfiguration: customBetterPlayerBufferingConfiguration,
         ),
@@ -220,7 +220,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
       }
     } catch (error) {
       print(error);
-      print('에러 비디오: ${widget.shortForm.shortformList!.shortformUrl}');
+      print('에러 비디오: ${widget.shortFormUrl}');
       _betterPlayerController.dispose(forceDispose: true);
       setState(() {
         _isVideoError = true;
@@ -229,14 +229,15 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
   }
 
   void togglePausePlay() {
-    if (_betterPlayerController.isPlaying()!) {
+    if (_betterPlayerController.isPlaying() == true) {
       _betterPlayerController.pause();
     } else {
       _betterPlayerController.play();
     }
 
     _hidePauseButtonTimer?.cancel();
-    _hidePauseButtonTimer = Timer(const Duration(milliseconds: 1100), () {
+    _hidePauseButtonTimer =
+        Timer(AnimationDuration.startPauseButtonTotalDuration, () {
       if (mounted) {
         setState(() {
           _isPauseButtonTapped = false;
@@ -251,8 +252,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
 
   void onVisibilityChanged(double visibleFraction) {
     final isCommentVisible = ref
-        .read(shortFormCommentVisibilityProvider(
-            widget.shortForm.shortformList!.id!))
+        .read(shortFormCommentVisibilityProvider(widget.newsId))
         .isShortFormCommentVisible;
 
     if (visibleFraction == 1.0 &&
@@ -281,12 +281,12 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
             currentPosition != null) {
           // 다시 숏폼 탭으로 돌아왔을 때 스무스한 재생을 위해 1초 전으로 이동
           _betterPlayerController.seekTo(
-            currentPosition - const Duration(seconds: 1),
+            currentPosition - SingleShortForm._seekBackTime,
           );
           return;
         }
 
-        _betterPlayerController.seekTo(const Duration(seconds: 0));
+        _betterPlayerController.seekTo(Duration.zero);
       }
     }
   }

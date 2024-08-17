@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 
 class ShortFormStartButton extends StatefulWidget {
   const ShortFormStartButton({
@@ -22,7 +23,9 @@ class _StartButtonState extends State<ShortFormStartButton> {
         });
       }
 
-      Future.delayed(const Duration(milliseconds: 800), () {
+      Future.delayed(
+          AnimationDuration.startPauseButtonScaleAnimationDuration +
+              AnimationDuration.startPauseButtonHoldDuration, () {
         if (mounted) {
           setState(() {
             _scale = 0.0;
@@ -36,7 +39,7 @@ class _StartButtonState extends State<ShortFormStartButton> {
   Widget build(BuildContext context) {
     return AnimatedScale(
       scale: _scale,
-      duration: const Duration(milliseconds: 300),
+      duration: AnimationDuration.startPauseButtonScaleAnimationDuration,
       child: Container(
         width: 80.0,
         height: 80.0,
