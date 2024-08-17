@@ -64,6 +64,7 @@ class RootTab extends ConsumerWidget {
       },
       child: DefaultLayout(
         scaffoldKey: scaffoldKey,
+        resizeToAvoidBottomInset: false,
         drawer: navigationShell.currentIndex == 0
             ? const ExplorationScreenDrawer()
             : null,

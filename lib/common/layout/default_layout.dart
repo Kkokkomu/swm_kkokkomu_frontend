@@ -17,6 +17,7 @@ class DefaultLayout extends StatelessWidget {
   final DeviceOrientation deviceOrientation;
   final PreferredSizeWidget? bottom;
   final GlobalKey<ScaffoldState>? scaffoldKey;
+  final bool? resizeToAvoidBottomInset;
 
   const DefaultLayout({
     required this.child,
@@ -33,6 +34,7 @@ class DefaultLayout extends StatelessWidget {
     this.bottom,
     this.drawerEnableOpenDragGesture = false,
     this.deviceOrientation = DeviceOrientation.portraitUp,
+    this.resizeToAvoidBottomInset,
     super.key,
   });
 
@@ -42,6 +44,7 @@ class DefaultLayout extends StatelessWidget {
 
     return Scaffold(
       key: scaffoldKey,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       backgroundColor: backgroundColor ?? BACKGROUND_COLOR,
       appBar: renderAppBar(),
       drawer: drawer,

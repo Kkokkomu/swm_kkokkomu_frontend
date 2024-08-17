@@ -26,11 +26,26 @@ class ShortFormCommentInputCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(width: 16.0),
-                const Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: '댓글을 입력하세요.',
-                      border: InputBorder.none,
+                Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (_) {
+                          return const ShortFormCommentInputInBottomSheet();
+                        },
+                      );
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                          hintText: '댓글을 입력하세요',
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -42,6 +57,54 @@ class ShortFormCommentInputCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ShortFormCommentInputInBottomSheet extends StatelessWidget {
+  const ShortFormCommentInputInBottomSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: SizedBox(
+        height: 80.0,
+        child: Column(
+          children: [
+            const Divider(
+              height: ShortFormCommentInputCard._dividerHeight,
+              thickness: 1.0,
+            ),
+            Container(
+              color: Colors.white,
+              height: 79.0,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(width: 16.0),
+                  Expanded(
+                    child: TextFormField(
+                      autofocus: true,
+                      maxLines: 2,
+                      decoration: const InputDecoration(
+                        hintText: '댓글을 입력하세요',
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.send),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
