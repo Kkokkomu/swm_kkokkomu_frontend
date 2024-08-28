@@ -4,6 +4,7 @@ import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_pause_button.dart';
@@ -82,7 +83,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
 
     if (_betterPlayerController.isVideoInitialized() != true) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CustomCircularProgressIndicator(),
       );
     }
 

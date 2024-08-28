@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
@@ -27,7 +28,7 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
     // 완전 처음 로딩일때
     if (state is OffsetPaginationLoading) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CustomCircularProgressIndicator(),
       );
     }
 
@@ -77,7 +78,7 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
           if (index == paginationData.items.length) {
             if (paginationData is OffsetPaginationFetchingMore) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CustomCircularProgressIndicator(),
               );
             }
 

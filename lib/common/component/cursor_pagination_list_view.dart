@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
@@ -56,7 +57,7 @@ class _PaginationListViewState<T extends IModelWithId>
     // 완전 처음 로딩일때
     if (state is CursorPaginationLoading) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CustomCircularProgressIndicator(),
       );
     }
 
@@ -106,7 +107,7 @@ class _PaginationListViewState<T extends IModelWithId>
                 ),
                 child: Center(
                   child: paginationData is CursorPaginationFetchingMore
-                      ? const CircularProgressIndicator()
+                      ? const CustomCircularProgressIndicator()
                       : paginationData is CursorPaginationFetchingMoreError
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,

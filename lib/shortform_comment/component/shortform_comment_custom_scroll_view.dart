@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/const/app_colors.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
@@ -106,7 +107,7 @@ class _ShortFormCommentCustomScrollViewState
                   if (state is CursorPaginationLoading) {
                     return const SliverToBoxAdapter(
                       child: Center(
-                        child: CircularProgressIndicator(),
+                        child: CustomCircularProgressIndicator(),
                       ),
                     );
                   }
@@ -154,7 +155,7 @@ class _ShortFormCommentCustomScrollViewState
                           child: Center(
                             child: paginationData
                                     is CursorPaginationFetchingMore
-                                ? const CircularProgressIndicator()
+                                ? const CustomCircularProgressIndicator()
                                 : paginationData
                                         is CursorPaginationFetchingMoreError
                                     ? Column(

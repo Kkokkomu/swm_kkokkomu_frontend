@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
@@ -35,7 +36,7 @@ class LoginScreen extends ConsumerWidget {
               Flexible(
                 flex: 1,
                 child: userInfo is UserModelLoading
-                    ? const CircularProgressIndicator()
+                    ? const CustomCircularProgressIndicator()
                     : Column(
                         children: [
                           GestureDetector(
