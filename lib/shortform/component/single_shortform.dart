@@ -208,8 +208,8 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
         setState(() {});
       }
     } catch (error) {
-      print(error);
-      print('에러 비디오: ${widget.shortFormUrl}');
+      debugPrint(error.toString());
+      debugPrint('에러 비디오: ${widget.shortFormUrl}');
       _betterPlayerController.dispose(forceDispose: true);
       setState(() {
         _isVideoError = true;

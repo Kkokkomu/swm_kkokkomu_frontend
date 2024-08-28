@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'response_model.g.dart';
@@ -16,9 +17,9 @@ class ResponseModel<T> {
     required this.error,
   }) : success = success ?? false {
     if (success != true) {
-      print('Response 에러 발생');
-      print('ErrorCode: ${error?.code}');
-      print('ErrorMessage: ${error?.message}');
+      debugPrint('Response 에러 발생');
+      debugPrint('ErrorCode: ${error?.code}');
+      debugPrint('ErrorMessage: ${error?.message}');
     }
   }
 

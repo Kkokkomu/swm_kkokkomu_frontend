@@ -8,7 +8,7 @@ Widget buildSingleShortForm(
   final shortFormUrl = shortFormModel.shortformList?.shortformUrl;
 
   if (newsId == null || shortFormUrl == null) {
-    print('newsId or shortFormUrl is null');
+    debugPrint('newsId or shortFormUrl is null');
 
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,

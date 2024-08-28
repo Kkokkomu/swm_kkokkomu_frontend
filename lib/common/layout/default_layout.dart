@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
+import 'package:swm_kkokkomu_frontend/common/const/app_colors.dart';
 
 class DefaultLayout extends StatelessWidget {
   final Color? backgroundColor;
@@ -45,7 +45,7 @@ class DefaultLayout extends StatelessWidget {
     return Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      backgroundColor: backgroundColor ?? BACKGROUND_COLOR,
+      backgroundColor: backgroundColor ?? AppColors.white000,
       appBar: renderAppBar(),
       drawer: drawer,
       drawerEnableOpenDragGesture: drawerEnableOpenDragGesture,
@@ -61,7 +61,7 @@ class DefaultLayout extends StatelessWidget {
     } else {
       return AppBar(
         scrolledUnderElevation: 0.0,
-        backgroundColor: appBarBackGroundColor ?? BACKGROUND_COLOR,
+        backgroundColor: appBarBackGroundColor ?? AppColors.white000,
         elevation: 0,
         centerTitle: true,
         toolbarHeight: appBarHeight,

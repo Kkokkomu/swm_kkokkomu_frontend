@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
@@ -84,7 +85,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
       // 로그인에 실패했으므로 상태를 기존 상태로 원복
       CustomToastMessage.showLoginError('로그인에 실패했습니다.');
       state = prevState;
-      print('${socialLoginType.name} 서버로부터 인증 실패');
+      debugPrint('${socialLoginType.name} 서버로부터 인증 실패');
       return;
     }
 
@@ -97,7 +98,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
       // 로그인에 실패했으므로 상태를 기존 상태로 원복
       CustomToastMessage.showLoginError('로그인에 실패했습니다.');
       state = prevState;
-      print('자체 서버에서 인증 실패');
+      debugPrint('자체 서버에서 인증 실패');
       return;
     }
 

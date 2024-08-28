@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/model/additional_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
@@ -120,8 +121,8 @@ class OffsetPaginationProvider<T, U extends BaseOffsetPaginationRepository<T>>
         state = paginationData;
       }
     } catch (e, stack) {
-      print(e);
-      print(stack);
+      debugPrint(e.toString());
+      debugPrint(stack.toString());
       if (state is OffsetPagination) {
         // 만약에 데이터가 있는 상황이라면
         // 기존 데이터를 보존한채로 에러를 보여줌

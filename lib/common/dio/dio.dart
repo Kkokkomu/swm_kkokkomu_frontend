@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
@@ -35,8 +36,9 @@ class CustomIntercepter extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    print('[REQ] [${options.method}] ${options.uri}');
-    print('[REQ] [${options.method}] [Initial Headers] ${options.headers}');
+    debugPrint('[REQ] [${options.method}] ${options.uri}');
+    debugPrint(
+        '[REQ] [${options.method}] [Initial Headers] ${options.headers}');
 
     if (options.headers['accessToken'] == true) {
       // 헤더 삭제
@@ -64,8 +66,9 @@ class CustomIntercepter extends Interceptor {
       });
     }
 
-    print('[REQ] [${options.method}] [Adjusted Headers] ${options.headers}');
-    print('[REQ] [${options.method}] [Data] ${options.data}');
+    debugPrint(
+        '[REQ] [${options.method}] [Adjusted Headers] ${options.headers}');
+    debugPrint('[REQ] [${options.method}] [Data] ${options.data}');
 
     return super.onRequest(options, handler);
   }
@@ -73,8 +76,9 @@ class CustomIntercepter extends Interceptor {
   // 2) 응답을 받을때
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print('[RES] [${response.requestOptions.method}] [Data] ${response.data}');
-    print(
+    debugPrint(
+        '[RES] [${response.requestOptions.method}] [Data] ${response.data}');
+    debugPrint(
         '[RES] [${response.requestOptions.method}] [${response.statusCode}] ${response.requestOptions.uri}');
 
     return super.onResponse(response, handler);
@@ -83,7 +87,7 @@ class CustomIntercepter extends Interceptor {
   // 3) 에러가 났을때
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    print(
+    debugPrint(
         '[ERR] [${err.requestOptions.method}] [${err.response?.statusCode}] ${err.requestOptions.uri}');
 
     // 401에러가 났을때 (인증 오류)
@@ -98,7 +102,7 @@ class CustomIntercepter extends Interceptor {
       // 요청이 refresh 토큰을 요청하는 요청이 아닌 경우 (재귀적인 요청을 방지)
       // refresh 토큰을 이용해 새로운 access 토큰을 요청하고 다시 요청을 보낸다.
       // Interceptor 로직이 없는 새로운 Dio 인스턴스를 생성해 요청을 보낸다. (재귀적인 요청을 방지)
-      print('토큰 재발급 후 재요청 로직 작동');
+      debugPrint('토큰 재발급 후 재요청 로직 작동');
 
       final dio = Dio();
 
@@ -119,16 +123,16 @@ class CustomIntercepter extends Interceptor {
           },
         );
 
-        print(
+        debugPrint(
             '[REFRESH REQ] [${tokenRefreshRequestOption.method}] ${tokenRefreshRequestOption.uri}');
-        print(
+        debugPrint(
             '[REFRESH REQ] [${tokenRefreshRequestOption.method}] [Headers] ${tokenRefreshRequestOption.headers}');
 
         final tokenRefreshResponse = await dio.fetch(tokenRefreshRequestOption);
 
-        print(
+        debugPrint(
             '[REFRESH RES] [${tokenRefreshResponse.requestOptions.method}] [Data] ${tokenRefreshResponse.data}');
-        print(
+        debugPrint(
             '[REFRESH RES] [${tokenRefreshResponse.requestOptions.method}] [${tokenRefreshResponse.statusCode}] ${tokenRefreshResponse.requestOptions.uri}');
 
         final tokenResponse = ResponseModel<TokenResponseModel?>.fromJson(
@@ -168,26 +172,26 @@ class CustomIntercepter extends Interceptor {
           },
         );
 
-        print('[RETRY REQ] [${retryOptions.method}] ${retryOptions.uri}');
-        print(
+        debugPrint('[RETRY REQ] [${retryOptions.method}] ${retryOptions.uri}');
+        debugPrint(
             '[RETRY REQ] [${retryOptions.method}] [Headers] ${retryOptions.headers}');
-        print(
+        debugPrint(
             '[RETRY REQ] [${retryOptions.method}] [Data] ${retryOptions.data}');
 
         final retryResponse = await dio.fetch(retryOptions);
 
-        print(
+        debugPrint(
             '[RETRY RES] [${retryResponse.requestOptions.method}] [Data] ${retryResponse.data}');
-        print(
+        debugPrint(
             '[RETRY RES] [${retryResponse.requestOptions.method}] [${retryResponse.statusCode}] ${retryResponse.requestOptions.uri}');
 
         // 재요청 성공
-        print('토큰 재발급 후 재요청 로직 성공');
+        debugPrint('토큰 재발급 후 재요청 로직 성공');
         return handler.resolve(retryResponse);
       } catch (e) {
         // 토큰 재발급 후 재요청 실패
-        print(e);
-        print('토큰 재발급 후 재요청 로직 실패');
+        debugPrint(e.toString());
+        debugPrint('토큰 재발급 후 재요청 로직 실패');
         if (err.requestOptions.toString() !=
             '${Constants.baseUrl}/oauth2/logout') {
           // 토큰이 유효하지 않으므로 로그아웃 처리를 해줘야 함

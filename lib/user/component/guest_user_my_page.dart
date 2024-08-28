@@ -36,7 +36,7 @@ class GuestUserMyPage extends ConsumerWidget {
                                     await ref
                                         .read(userInfoProvider.notifier)
                                         .login(SocialLoginType.apple);
-                                    context.pop();
+                                    if (context.mounted) context.pop();
                                   },
                                   child: Image.asset(
                                     Assets.appleLoginButtonImage,
@@ -52,7 +52,8 @@ class GuestUserMyPage extends ConsumerWidget {
                                     await ref
                                         .read(userInfoProvider.notifier)
                                         .login(SocialLoginType.kakao);
-                                    context.pop();
+
+                                    if (context.mounted) context.pop();
                                   },
                                   child: Image.asset(
                                     Assets.kakaoLoginButtonImage,

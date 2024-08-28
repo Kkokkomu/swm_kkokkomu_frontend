@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 
@@ -13,7 +14,7 @@ class UserModelError extends UserModelBase {
   UserModelError({
     required this.message,
   }) {
-    print('UserModelError: $message');
+    debugPrint('UserModelError: $message');
   }
 }
 
@@ -25,7 +26,7 @@ class UserModel extends UserModelBase {
   final String email;
   final bool isPremium;
   final String premiumEndDate;
-  final String profileImg;
+  final String? profileImg;
 
   UserModel({
     required String? nickname,
@@ -37,8 +38,7 @@ class UserModel extends UserModelBase {
         email = email ?? 'N/A',
         isPremium = isPremium ?? false,
         premiumEndDate = premiumEndDate ?? 'N/A',
-        profileImg = profileImg ?? '';
-  // TODO : 기본 프로필 이미지 경로 추가
+        profileImg = profileImg ?? Constants.defaultProfileImageUrl;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);

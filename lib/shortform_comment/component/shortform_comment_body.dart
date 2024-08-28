@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:swm_kkokkomu_frontend/common/const/colors.dart';
+import 'package:swm_kkokkomu_frontend/common/const/app_colors.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_card.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_custom_scroll_view.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
@@ -25,7 +25,7 @@ class ShortFormCommentBody extends ConsumerWidget {
       duration: shortFormCommentHeightController.animationDuration,
       width: double.infinity,
       height: shortFormCommentHeightController.height,
-      color: BACKGROUND_COLOR,
+      color: AppColors.white000,
       child: ShortFormCommentCustomScrollView(
         newsId: newsId,
         maxCommentBodyHeight: maxCommentBodyHeight,
