@@ -22,31 +22,7 @@ class RootTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isBottomNavigationBarVisible =
-        ref.watch(bottomNavigationBarStateProvider);
-    final user = ref.watch(userInfoProvider);
-    final scaffoldKey = ref.read(rootTabScaffoldKeyProvider);
-
-    void refreshCurrentTab(RootTabBottomNavigationBarType tabType) {
-      switch (tabType) {
-        case RootTabBottomNavigationBarType.exploration:
-          break;
-        case RootTabBottomNavigationBarType.shortForm:
-          if (user is UserModel) {
-            ref
-                .read(loggedInUserShortFormProvider.notifier)
-                .paginate(forceRefetch: true);
-          }
-          if (user is GuestUserModel) {
-            ref
-                .read(guestUserShortFormProvider.notifier)
-                .paginate(forceRefetch: true);
-          }
-          break;
-        case RootTabBottomNavigationBarType.myPage:
-          break;
-      }
-    }
+    final scaffoldKey = ref.watch(rootTabScaffoldKeyProvider);
 
     return PopScope(
       canPop: false,
@@ -68,40 +44,82 @@ class RootTab extends ConsumerWidget {
         drawer: navigationShell.currentIndex == 0
             ? const ExplorationScreenDrawer()
             : null,
-        bottomNavigationBar: SizedBox(
-          height: isBottomNavigationBarVisible
-              ? Constants.bottomNavigationBarHeightWithSafeArea
-              : 0.0,
-          child: BottomNavigationBar(
-            selectedFontSize: 12,
-            unselectedFontSize: 12,
-            type: BottomNavigationBarType.fixed,
-            onTap: (int index) {
-              if (index == navigationShell.currentIndex) {
-                refreshCurrentTab(RootTabBottomNavigationBarType.values[index]);
-                navigationShell.goBranch(index, initialLocation: true);
-                return;
-              }
-              navigationShell.goBranch(index);
-            },
-            currentIndex: navigationShell.currentIndex,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.explore),
-                label: 'Explore',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.electric_bolt),
-                label: 'ShortForm',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'My Page',
-              ),
-            ],
-          ),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          navigationShell: navigationShell,
         ),
         child: navigationShell,
+      ),
+    );
+  }
+}
+
+class CustomBottomNavigationBar extends ConsumerWidget {
+  final StatefulNavigationShell navigationShell;
+
+  const CustomBottomNavigationBar({
+    super.key,
+    required this.navigationShell,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isBottomNavigationBarVisible =
+        ref.watch(bottomNavigationBarStateProvider);
+
+    void refreshCurrentTab(RootTabBottomNavigationBarType tabType) {
+      final user = ref.read(userInfoProvider);
+
+      switch (tabType) {
+        case RootTabBottomNavigationBarType.exploration:
+          break;
+        case RootTabBottomNavigationBarType.shortForm:
+          if (user is UserModel) {
+            ref
+                .read(loggedInUserShortFormProvider.notifier)
+                .paginate(forceRefetch: true);
+          }
+          if (user is GuestUserModel) {
+            ref
+                .read(guestUserShortFormProvider.notifier)
+                .paginate(forceRefetch: true);
+          }
+          break;
+        case RootTabBottomNavigationBarType.myPage:
+          break;
+      }
+    }
+
+    return SizedBox(
+      height: isBottomNavigationBarVisible
+          ? Constants.bottomNavigationBarHeightWithSafeArea
+          : 0.0,
+      child: BottomNavigationBar(
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
+        type: BottomNavigationBarType.fixed,
+        onTap: (int index) {
+          if (index == navigationShell.currentIndex) {
+            refreshCurrentTab(RootTabBottomNavigationBarType.values[index]);
+            navigationShell.goBranch(index, initialLocation: true);
+            return;
+          }
+          navigationShell.goBranch(index);
+        },
+        currentIndex: navigationShell.currentIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explore),
+            label: 'Explore',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.electric_bolt),
+            label: 'ShortForm',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'My Page',
+          ),
+        ],
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/offset_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_offset_pagination_repository.dart';
 
@@ -20,6 +21,8 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(provider);
+    final isBottomNavigationBarVisible =
+        ref.watch(bottomNavigationBarStateProvider);
 
     // 완전 처음 로딩일때
     if (state is OffsetPaginationLoading) {
@@ -60,7 +63,9 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
       onRefresh: () => ref.read(provider.notifier).paginate(forceRefetch: true),
       child: PageView.builder(
         allowImplicitScrolling: true,
-        physics: const CustomPhysics(),
+        physics: isBottomNavigationBarVisible
+            ? const CustomPhysics()
+            : const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
         itemCount: paginationData.items.length + 1,
         onPageChanged: (value) {

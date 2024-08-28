@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _floatingButtonSize = 36.0;
@@ -108,11 +108,13 @@ class _EmojiButtonState extends State<EmojiButton> {
 class CommentButton extends StatelessWidget {
   final WidgetRef ref;
   final int newsId;
+  final double maxCommentHeight;
 
   const CommentButton({
     super.key,
     required this.ref,
     required this.newsId,
+    required this.maxCommentHeight,
   });
 
   @override
@@ -120,8 +122,8 @@ class CommentButton extends StatelessWidget {
     return IconButton(
       onPressed: () {
         ref
-            .read(shortFormCommentVisibilityProvider(newsId).notifier)
-            .toggleShortFormCommentVisibility();
+            .read(shortFormCommentHeightControllerProvider(newsId).notifier)
+            .setCommentBodySizeMedium(maxCommentHeight);
       },
       icon: const Icon(
         Icons.comment,

@@ -31,7 +31,7 @@ abstract class LoggedInUserShortFormCommentRepository
   @override
   @GET('{apiPath}')
   @Headers({
-    'accessToken': 'true',
+    'accessToken': true,
   })
   Future<ResponseModel<CursorPagination<ShortFormCommentModel>>> paginate(
     @Queries() CursorPaginationParams cursorPaginationParams, {

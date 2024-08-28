@@ -1,22 +1,22 @@
 class ShortFormCommentVisibilityModel {
   final int newsId;
-  final bool isShortFormCommentTapped;
+  final bool isShortFormCommentCreated;
   final bool isShortFormCommentVisible;
 
   ShortFormCommentVisibilityModel({
     required this.newsId,
-    required this.isShortFormCommentTapped,
+    required this.isShortFormCommentCreated,
     required this.isShortFormCommentVisible,
   });
 
   ShortFormCommentVisibilityModel copyWith({
-    bool? isShortFormCommentTapped,
+    bool? isShortFormCommentCreated,
     bool? isShortFormCommentVisible,
   }) =>
       ShortFormCommentVisibilityModel(
         newsId: newsId,
-        isShortFormCommentTapped:
-            isShortFormCommentTapped ?? this.isShortFormCommentTapped,
+        isShortFormCommentCreated:
+            isShortFormCommentCreated ?? this.isShortFormCommentCreated,
         isShortFormCommentVisible:
             isShortFormCommentVisible ?? this.isShortFormCommentVisible,
       );

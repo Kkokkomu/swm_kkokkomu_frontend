@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
 
 class ShortFormCommentCard extends StatelessWidget {
+  final ShortFormCommentModel shortFormCommentModel;
+
   const ShortFormCommentCard({
     super.key,
+    required this.shortFormCommentModel,
   });
 
   @override
@@ -20,7 +24,10 @@ class ShortFormCommentCard extends StatelessWidget {
           ),
           child: ClipOval(
             child: Image.network(
-              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+              shortFormCommentModel.user.profileImg ?? '',
+              errorBuilder: (_, __, ___) {
+                return const Icon(Icons.account_circle_outlined);
+              },
               fit: BoxFit.cover,
               height: 36.0,
               width: 36.0,
@@ -33,35 +40,41 @@ class ShortFormCommentCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '사용자 이름',
-                style: TextStyle(
+              Text(
+                shortFormCommentModel.user.nickname,
+                style: const TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Text(
-                '2021.10.10 오후 10:00',
-                style: TextStyle(
+              Text(
+                shortFormCommentModel.comment.editedAt,
+                style: const TextStyle(
                   fontSize: 12.0,
                   color: Colors.grey,
                 ),
               ),
               const SizedBox(height: 8.0),
-              const Text('댓글 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ'),
+              Text(
+                shortFormCommentModel.comment.content,
+              ),
               Row(
                 children: [
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.forum_outlined),
                   ),
-                  const Text('0'),
+                  Text(
+                    shortFormCommentModel.replyCnt.toString(),
+                  ),
                   const SizedBox(width: 16.0),
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.thumb_up_outlined),
                   ),
-                  const Text('0'),
+                  Text(
+                    shortFormCommentModel.commentLikeCnt.toString(),
+                  ),
                 ],
               ),
             ],
