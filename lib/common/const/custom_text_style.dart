@@ -84,7 +84,7 @@ class CustomTextStyle {
     color: textColor,
     fontWeight: CustomFontWeight.regular,
     fontSize: 15,
-    height: 1.5,
+    height: 1.4,
   );
 
   static final TextStyle body3Bold = TextStyle(
