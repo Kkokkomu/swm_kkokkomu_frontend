@@ -1,58 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
-class ShortFormStartButton extends StatefulWidget {
+class ShortFormStartButton extends StatelessWidget {
   const ShortFormStartButton({
     super.key,
   });
 
   @override
-  State<ShortFormStartButton> createState() => _StartButtonState();
-}
-
-class _StartButtonState extends State<ShortFormStartButton> {
-  double _scale = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        setState(() {
-          _scale = 1.0;
-        });
-      }
-
-      Future.delayed(
-          AnimationDuration.startPauseButtonScaleAnimationDuration +
-              AnimationDuration.startPauseButtonHoldDuration, () {
-        if (mounted) {
-          setState(() {
-            _scale = 0.0;
-          });
-        }
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedScale(
-      scale: _scale,
-      duration: AnimationDuration.startPauseButtonScaleAnimationDuration,
+    return IgnorePointer(
       child: Container(
         width: 80.0,
         height: 80.0,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.black.withOpacity(0.5),
+          color: ColorName.gray700.withOpacity(0.5),
         ),
         child: const Icon(
           Icons.play_arrow,
-          color: Colors.white,
+          color: ColorName.blue500,
           size: 40.0,
         ),
-      ),
+      )
+          .animate()
+          .scale(
+            duration: AnimationDuration.startPauseButtonScaleAnimationDuration,
+            begin: const Offset(0.0, 0.0),
+            end: const Offset(1.0, 1.0),
+          )
+          .then(delay: AnimationDuration.startPauseButtonHoldDuration)
+          .scale(
+            duration: AnimationDuration.startPauseButtonScaleAnimationDuration,
+            begin: const Offset(1.0, 1.0),
+            end: const Offset(0.0, 0.0),
+          ),
     );
   }
 }
