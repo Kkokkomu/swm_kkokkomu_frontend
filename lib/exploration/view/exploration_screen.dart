@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:swm_kkokkomu_frontend/common/const/app_colors.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/root_tab_scaffold_key_provider.dart';
 
 class ExplorationScreen extends ConsumerWidget {
@@ -11,7 +11,7 @@ class ExplorationScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      color: AppColors.white000,
+      color: ColorName.white000,
       child: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -27,7 +27,7 @@ class ExplorationScreen extends ConsumerWidget {
                   scaffoldKey.currentState?.openDrawer();
                 },
               ),
-              backgroundColor: AppColors.white000,
+              backgroundColor: ColorName.white000,
               elevation: 0.0,
               scrolledUnderElevation: 0.0,
               expandedHeight: 120.0,

@@ -54,14 +54,6 @@ class SharedPreferencesKeys {
   static const String shortFormSortType = 'short_form_sort_type';
 }
 
-class Assets {
-  static const String env = 'assets/config/.env';
-  static const String splashIcon = 'assets/images/splash_icon.png';
-  static const String appleLoginButtonImage = 'assets/images/apple_login.png';
-  static const String kakaoLoginButtonImage =
-      'assets/images/kakao_login_large_wide.png';
-}
-
 enum SocialLoginType { apple, kakao }
 
 @JsonEnum(alwaysCreate: true, valueField: 'name')

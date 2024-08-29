@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
@@ -37,10 +38,14 @@ class GuestUserMyPage extends ConsumerWidget {
                                     await ref
                                         .read(userInfoProvider.notifier)
                                         .login(SocialLoginType.apple);
-                                    if (context.mounted) context.pop();
+
+                                    if (context.mounted &&
+                                        ref.read(userInfoProvider)
+                                            is UserModel) {
+                                      context.pop();
+                                    }
                                   },
-                                  child: Image.asset(
-                                    Assets.appleLoginButtonImage,
+                                  child: Assets.images.appleLogin.image(
                                     fit: BoxFit.fitWidth,
                                     width: double.infinity,
                                   ),
@@ -54,10 +59,14 @@ class GuestUserMyPage extends ConsumerWidget {
                                         .read(userInfoProvider.notifier)
                                         .login(SocialLoginType.kakao);
 
-                                    if (context.mounted) context.pop();
+                                    if (context.mounted &&
+                                        ref.read(userInfoProvider)
+                                            is UserModel) {
+                                      context.pop();
+                                    }
                                   },
-                                  child: Image.asset(
-                                    Assets.kakaoLoginButtonImage,
+                                  child:
+                                      Assets.images.kakaoLoginLargeWide.image(
                                     fit: BoxFit.fitWidth,
                                     width: double.infinity,
                                   ),

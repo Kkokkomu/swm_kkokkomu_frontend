@@ -1,9 +1,10 @@
 import 'dart:ui';
 
 import 'package:swm_kkokkomu_frontend/common/const/custom_font_weight.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/fonts.gen.dart';
 
 class CustomTextStyle {
-  static const String fontFamily = 'Pretendard';
+  static const String fontFamily = FontFamily.pretendard;
   static const Color textColor = Color(0xFF000000);
 
   static final TextStyle head1 = TextStyle(

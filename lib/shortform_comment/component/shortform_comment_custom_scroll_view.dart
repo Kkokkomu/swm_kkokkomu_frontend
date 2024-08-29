@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
-import 'package:swm_kkokkomu_frontend/common/const/app_colors.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
@@ -285,7 +285,7 @@ class CommentHeader extends StatelessWidget {
       onVerticalDragUpdate: _onVerticalDragUpdate,
       onVerticalDragEnd: _onVerticalDragEnd,
       child: Container(
-        color: AppColors.white000,
+        color: ColorName.white000,
         child: Column(
           children: [
             const SizedBox(height: 6.0),

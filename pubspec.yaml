@@ -69,9 +69,20 @@ dev_dependencies:
   retrofit_generator: ">=7.0.0 <8.0.0"
   build_runner: ">=2.3.0 <4.0.0"
   json_serializable: ^6.6.2
+  flutter_gen_runner: ^5.7.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_gen:
+  output: lib/common/gen/
+
+  integrations:
+    flutter_svg: true
+
+  colors:
+    inputs:
+      - assets/color/colors.xml
 
 # The following section is specific to Flutter packages.
 flutter:

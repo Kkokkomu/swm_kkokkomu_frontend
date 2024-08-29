@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:swm_kkokkomu_frontend/common/const/app_colors.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
 class ExplorationScreenDrawer extends StatelessWidget {
   const ExplorationScreenDrawer({
@@ -10,7 +10,7 @@ class ExplorationScreenDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: AppColors.white000,
+      backgroundColor: ColorName.white000,
       child: ListView(
         children: <Widget>[
           const SizedBox(

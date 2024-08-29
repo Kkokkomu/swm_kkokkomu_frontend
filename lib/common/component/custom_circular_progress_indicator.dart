@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swm_kkokkomu_frontend/common/const/app_colors.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
 class CustomCircularProgressIndicator extends StatelessWidget {
   final Color? color;
@@ -12,7 +12,7 @@ class CustomCircularProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircularProgressIndicator(
-      color: color ?? AppColors.gray500,
+      color: color ?? ColorName.gray500,
     );
   }
 }
