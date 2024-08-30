@@ -29,6 +29,10 @@ class ShortFormCommentVisibilityStateNotifier
         );
 
   void setShortFormCommentVisibility(bool isVisible) {
+    // 변경사항이 없는 경우 아무것도 수행하지 않음
+    if (state.isShortFormCommentCreated == true &&
+        state.isShortFormCommentVisible == isVisible) return;
+
     state = state.copyWith(
       isShortFormCommentCreated: true,
       isShortFormCommentVisible: isVisible,

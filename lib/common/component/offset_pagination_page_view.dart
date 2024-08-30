@@ -22,7 +22,7 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(provider);
-    final isBottomNavigationBarVisible =
+    final bottomNavigationBarState =
         ref.watch(bottomNavigationBarStateProvider);
 
     // 완전 처음 로딩일때
@@ -64,7 +64,8 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
       onRefresh: () => ref.read(provider.notifier).paginate(forceRefetch: true),
       child: PageView.builder(
         allowImplicitScrolling: true,
-        physics: isBottomNavigationBarVisible
+        physics: bottomNavigationBarState.isBottomNavigationBarVisible &&
+                !bottomNavigationBarState.isModalBarrierVisible
             ? const CustomPhysics()
             : const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,

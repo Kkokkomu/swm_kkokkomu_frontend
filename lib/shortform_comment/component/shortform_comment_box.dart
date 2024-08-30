@@ -17,7 +17,7 @@ class ShortFormCommentBox extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isBottomNavigationBarVisible =
+    final bottomNavigationBarState =
         ref.watch(bottomNavigationBarStateProvider);
 
     return Column(
@@ -28,7 +28,8 @@ class ShortFormCommentBox extends ConsumerWidget {
           newsId: newsId,
         ),
         // 하단 네비게이션바가 보이지 않을 때만 댓글 입력창을 보여줌
-        if (!isBottomNavigationBarVisible) const ShortFormCommentInputCard(),
+        if (!bottomNavigationBarState.isBottomNavigationBarVisible)
+          const ShortFormCommentInputCard(),
       ],
     );
   }

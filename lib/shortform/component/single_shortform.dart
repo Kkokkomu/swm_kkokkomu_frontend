@@ -9,6 +9,7 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_pause_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_start_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_visibility_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_box.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
@@ -53,8 +54,10 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
 
   @override
   Widget build(BuildContext context) {
-    final shortFormVisibility =
+    final shortFormCommentVisibility =
         ref.watch(shortFormCommentVisibilityProvider(widget.newsId));
+    final isDetailEmojiButtonVisible =
+        ref.watch(detailEmojiButtonVisibilityProvider(widget.newsId));
 
     if (_isVideoError) {
       return Column(
@@ -88,7 +91,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
     }
 
     return SafeArea(
-      top: shortFormVisibility.isShortFormCommentVisible,
+      top: shortFormCommentVisibility.isShortFormCommentVisible,
       child:
           LayoutBuilder(builder: (BuildContext _, BoxConstraints constraints) {
         return Column(
@@ -106,7 +109,8 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                       }
 
                       // 댓글창이 보이는 상태에서 숏폼 화면을 누르면 댓글창 닫음
-                      if (shortFormVisibility.isShortFormCommentVisible) {
+                      if (shortFormCommentVisibility
+                          .isShortFormCommentVisible) {
                         ref
                             .read(shortFormCommentHeightControllerProvider(
                                     widget.newsId)
@@ -129,30 +133,35 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                   // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
                   // 댓글이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
                   if (_betterPlayerController.isVideoInitialized() == true &&
-                      !shortFormVisibility.isShortFormCommentVisible)
+                      !shortFormCommentVisibility.isShortFormCommentVisible)
                     Align(
-                      alignment: Alignment.centerRight,
+                      alignment: Alignment.bottomRight,
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: EdgeInsets.fromLTRB(
+                          0.0,
+                          0.0,
+                          16.0,
+                          constraints.maxHeight * 0.13 + 52.0 + 16.0,
+                        ),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            const EmojiButton(),
                             const SizedBox(height: 16.0),
                             CommentButton(
                               ref: ref,
                               newsId: widget.newsId,
                               maxCommentHeight: constraints.maxHeight,
                             ),
-                            // const SizedBox(height: 16.0),
-                            // ShareYoutubeUrlButton(
-                            //   shortFormYoutubeURL: shortFormYoutubeURL!,
-                            // ),
-                            // const SizedBox(height: 16.0),
-                            // RelatedUrlButton(
-                            //   shortFormRelatedURL: shortFormRelatedURL!,
-                            // ),
+                            const SizedBox(height: 16.0),
+                            const ShareYoutubeUrlButton(
+                              shortFormYoutubeURL: 'https://naver.com',
+                            ),
+                            const SizedBox(height: 16.0),
+                            const RelatedUrlButton(
+                              shortFormRelatedURL: 'https://naver.com',
+                            ),
                           ],
                         ),
                       ),
@@ -168,6 +177,46 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                       _isPauseButtonTapped)
                     const Center(
                       child: ShortFormPauseButton(),
+                    ),
+                  if (isDetailEmojiButtonVisible)
+                    PopScope(
+                      canPop: false,
+                      onPopInvokedWithResult: (didPop, _) {
+                        // canPop이 false 인데 pop이 호출된 경우
+                        // PopScope 가 의도된대로 작동하지 않았으므로 무시
+                        if (didPop) return;
+
+                        ref
+                            .read(detailEmojiButtonVisibilityProvider(
+                                    widget.newsId)
+                                .notifier)
+                            .setDetailEmojiButtonVisibility(false);
+                      },
+                      child: ModalBarrier(
+                        onDismiss: () => ref
+                            .read(detailEmojiButtonVisibilityProvider(
+                                    widget.newsId)
+                                .notifier)
+                            .setDetailEmojiButtonVisibility(false),
+                        dismissible: true,
+                        color: Constants.modalBarrierColor,
+                      ),
+                    ),
+                  // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
+                  // 댓글이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
+                  if (_betterPlayerController.isVideoInitialized() == true &&
+                      !shortFormCommentVisibility.isShortFormCommentVisible)
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          0.0,
+                          0.0,
+                          16.0,
+                          constraints.maxHeight * 0.13,
+                        ),
+                        child: EmojiButton(newsId: widget.newsId),
+                      ),
                     ),
                 ],
               ),

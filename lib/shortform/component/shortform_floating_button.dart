@@ -1,107 +1,106 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_visibility_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _floatingButtonSize = 36.0;
-const _emojiDetailAnimationDuration = 350;
+const _emojiDetailAnimationDuration = Duration(milliseconds: 300);
 
-final List<IconButton> emojiButtonDetails = [
-  IconButton(
-    onPressed: () {},
-    icon: const Icon(
-      Icons.emoji_emotions,
-      color: Colors.white,
-      size: _floatingButtonSize,
-    ),
-  ),
-  IconButton(
-    onPressed: () {},
-    icon: const Icon(
-      Icons.sentiment_very_dissatisfied,
-      color: Colors.white,
-      size: _floatingButtonSize,
-    ),
-  ),
-  IconButton(
-    onPressed: () {},
-    icon: const Icon(
-      Icons.sentiment_very_dissatisfied_outlined,
-      color: Colors.white,
-      size: _floatingButtonSize,
-    ),
-  ),
-  IconButton(
-    onPressed: () {},
-    icon: const Icon(
-      Icons.sentiment_very_satisfied_outlined,
-      color: Colors.white,
-      size: _floatingButtonSize,
-    ),
-  ),
-];
+class EmojiButton extends ConsumerWidget {
+  final int newsId;
 
-class EmojiButton extends StatefulWidget {
-  const EmojiButton({super.key});
+  const EmojiButton({
+    super.key,
+    required this.newsId,
+  });
 
   @override
-  State<EmojiButton> createState() => _EmojiButtonState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDetailEmojiButtonVisible =
+        ref.watch(detailEmojiButtonVisibilityProvider(newsId));
 
-class _EmojiButtonState extends State<EmojiButton> {
-  bool isEmojiButtonTapped = false;
-  bool isEmojiDetailButtonVisible = false;
-  Timer? hideEmojiDetailButtonTimer;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.centerRight,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const Row(),
-        for (int i = 1; i <= emojiButtonDetails.length; ++i)
-          AnimatedPositioned(
-            duration:
-                const Duration(milliseconds: _emojiDetailAnimationDuration),
-            right: isEmojiButtonTapped ? i * 64.0 : 0.0,
-            child: Opacity(
-              opacity: isEmojiDetailButtonVisible ? 1.0 : 0.0,
-              child: emojiButtonDetails[i - 1],
-            ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(24.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                width: 200,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(24.0),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(
+                      Icons.emoji_emotions,
+                      color: Colors.white,
+                      size: _floatingButtonSize,
+                    ),
+                    Icon(
+                      Icons.sentiment_very_dissatisfied,
+                      color: Colors.white,
+                      size: _floatingButtonSize,
+                    ),
+                    Icon(
+                      Icons.sentiment_very_dissatisfied_outlined,
+                      color: Colors.white,
+                      size: _floatingButtonSize,
+                    ),
+                    Icon(
+                      Icons.sentiment_very_satisfied_outlined,
+                      color: Colors.white,
+                      size: _floatingButtonSize,
+                    ),
+                  ],
+                ),
+              )
+                  .animate(target: isDetailEmojiButtonVisible ? 1 : 0)
+                  .scaleXY(begin: 0, end: 1, duration: Duration.zero)
+                  .fadeIn(
+                    duration: _emojiDetailAnimationDuration,
+                    curve: Curves.easeInOut,
+                  )
+                  .slideX(
+                    begin: 1.5,
+                    end: 0,
+                    duration: _emojiDetailAnimationDuration,
+                    curve: Curves.easeInOut,
+                  ),
+              IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                style: const ButtonStyle(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                onPressed: () => ref
+                    .read(detailEmojiButtonVisibilityProvider(newsId).notifier)
+                    .setDetailEmojiButtonVisibility(
+                      !isDetailEmojiButtonVisible,
+                    ),
+                icon: const Icon(
+                  Icons.emoji_emotions,
+                  color: Colors.white,
+                  size: _floatingButtonSize,
+                ),
+              ),
+            ],
           ),
-        IconButton(
-          onPressed: onEmojiButtonTap,
-          icon: Icon(
-            Icons.emoji_emotions,
-            color: Colors.white.withOpacity(isEmojiButtonTapped ? 0.5 : 1.0),
-            size: _floatingButtonSize,
-          ),
+        ),
+        const SizedBox(
+          width: 8.0,
         ),
       ],
     );
-  }
-
-  void onEmojiButtonTap() {
-    hideEmojiDetailButtonTimer?.cancel();
-    if (isEmojiButtonTapped) {
-      hideEmojiDetailButtonTimer = Timer(
-          const Duration(milliseconds: _emojiDetailAnimationDuration), () {
-        if (mounted) {
-          setState(() {
-            isEmojiDetailButtonVisible = false;
-          });
-        }
-      });
-    } else {
-      isEmojiDetailButtonVisible = true;
-    }
-
-    setState(() {
-      isEmojiButtonTapped = !isEmojiButtonTapped;
-    });
   }
 }
 

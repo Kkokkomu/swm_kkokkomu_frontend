@@ -25,16 +25,16 @@ class ShortFormPauseButton extends StatelessWidget {
         ),
       )
           .animate()
-          .scale(
+          .scaleXY(
             duration: AnimationDuration.startPauseButtonScaleAnimationDuration,
-            begin: const Offset(0.0, 0.0),
-            end: const Offset(1.0, 1.0),
+            begin: 0.0,
+            end: 1.0,
           )
           .then(delay: AnimationDuration.startPauseButtonHoldDuration)
-          .scale(
+          .scaleXY(
             duration: AnimationDuration.startPauseButtonScaleAnimationDuration,
-            begin: const Offset(1.0, 1.0),
-            end: const Offset(0.0, 0.0),
+            begin: 1.0,
+            end: 0.0,
           ),
     );
   }

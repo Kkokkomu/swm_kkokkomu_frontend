@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
@@ -63,8 +64,21 @@ class CustomBottomNavigationBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isBottomNavigationBarVisible =
+    final bottomNavigationBarState =
         ref.watch(bottomNavigationBarStateProvider);
+
+    final isShortFormScreen = navigationShell.currentIndex == 1;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          systemNavigationBarColor: isShortFormScreen &&
+                  bottomNavigationBarState.isModalBarrierVisible
+              ? Constants.modalBarrierColor
+              : Colors.transparent,
+        ),
+      );
+    });
 
     void refreshCurrentTab(RootTabBottomNavigationBarType tabType) {
       final user = ref.read(userInfoProvider);
@@ -90,35 +104,47 @@ class CustomBottomNavigationBar extends ConsumerWidget {
     }
 
     return SizedBox(
-      height: isBottomNavigationBarVisible
+      height: !isShortFormScreen ||
+              bottomNavigationBarState.isBottomNavigationBarVisible
           ? Constants.bottomNavigationBarHeightWithSafeArea
           : 0.0,
-      child: BottomNavigationBar(
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
-          if (index == navigationShell.currentIndex) {
-            refreshCurrentTab(RootTabBottomNavigationBarType.values[index]);
-            navigationShell.goBranch(index, initialLocation: true);
-            return;
-          }
-          navigationShell.goBranch(index);
-        },
-        currentIndex: navigationShell.currentIndex,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Explore',
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          BottomNavigationBar(
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            type: BottomNavigationBarType.fixed,
+            onTap: (int index) {
+              if (index == navigationShell.currentIndex) {
+                refreshCurrentTab(RootTabBottomNavigationBarType.values[index]);
+                navigationShell.goBranch(index, initialLocation: true);
+                return;
+              }
+              navigationShell.goBranch(index);
+            },
+            currentIndex: navigationShell.currentIndex,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.explore),
+                label: 'Explore',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.electric_bolt),
+                label: 'ShortForm',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'My Page',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.electric_bolt),
-            label: 'ShortForm',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'My Page',
-          ),
+          if (isShortFormScreen &&
+              bottomNavigationBarState.isModalBarrierVisible)
+            const ModalBarrier(
+              color: Constants.modalBarrierColor,
+              dismissible: false,
+            ),
         ],
       ),
     );

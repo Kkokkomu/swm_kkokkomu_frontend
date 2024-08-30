@@ -1,5 +1,5 @@
 import 'package:better_player/better_player.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -24,6 +24,8 @@ class Constants {
   // 반드시 main.dart 에서 SafeArea 높이를 사용하여 수정 후 사용해야함
   static double bottomNavigationBarHeightWithSafeArea =
       bottomNavigationBarHeight;
+
+  static const Color modalBarrierColor = Colors.black54;
 }
 
 class AnimationDuration {
