@@ -33,6 +33,7 @@ class Constants {
   static const Color modalBarrierColor = Colors.black54;
 
   static const int cursorPaginationFetchCount = 20;
+  static const int offsetPaginationFetchCount = 10;
 }
 
 class AnimationDuration {

@@ -71,7 +71,11 @@ class OffsetPaginationPageView<T> extends ConsumerWidget {
         scrollDirection: Axis.vertical,
         itemCount: paginationData.items.length + 1,
         onPageChanged: (value) {
-          if (value == paginationData.items.length - 4) {
+          if (state is! OffsetPaginationFetchingMoreError &&
+              value ==
+                  paginationData.items.length -
+                      1 -
+                      (Constants.offsetPaginationFetchCount * 0.3).toInt()) {
             ref.read(provider.notifier).paginate(fetchMore: true);
           }
         },

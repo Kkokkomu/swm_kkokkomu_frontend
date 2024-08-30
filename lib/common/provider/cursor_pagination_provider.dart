@@ -59,7 +59,8 @@ class CursorPaginationProvider<T extends IModelWithId,
       final isFetchingMore = state is CursorPaginationFetchingMore;
 
       // 2번 반환 상황
-      if (fetchMore && (isLoading || isRefetching || isFetchingMore)) {
+      if ((fetchMore || forceRefetch) &&
+          (isLoading || isRefetching || isFetchingMore)) {
         return;
       }
 

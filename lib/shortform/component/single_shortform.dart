@@ -56,8 +56,6 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
   Widget build(BuildContext context) {
     final shortFormCommentVisibility =
         ref.watch(shortFormCommentVisibilityProvider(widget.newsId));
-    final isDetailEmojiButtonVisible =
-        ref.watch(detailEmojiButtonVisibilityProvider(widget.newsId));
 
     if (_isVideoError) {
       return Column(
@@ -178,8 +176,16 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                     const Center(
                       child: ShortFormPauseButton(),
                     ),
-                  if (isDetailEmojiButtonVisible)
-                    PopScope(
+                  Consumer(
+                    builder: (_, ref, child) {
+                      final isDetailEmojiButtonVisible = ref.watch(
+                          detailEmojiButtonVisibilityProvider(widget.newsId));
+
+                      if (!isDetailEmojiButtonVisible) return const SizedBox();
+
+                      return child!;
+                    },
+                    child: PopScope(
                       canPop: false,
                       onPopInvokedWithResult: (didPop, _) {
                         // canPop이 false 인데 pop이 호출된 경우
@@ -202,6 +208,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                         color: Constants.modalBarrierColor,
                       ),
                     ),
+                  ),
                   // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
                   // 댓글이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
                   if (_betterPlayerController.isVideoInitialized() == true &&

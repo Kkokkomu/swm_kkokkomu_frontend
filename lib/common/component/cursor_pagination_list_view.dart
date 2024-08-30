@@ -6,8 +6,7 @@ import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 
-class CursorPaginationListView<T extends IModelWithId>
-    extends ConsumerStatefulWidget {
+class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
   final AutoDisposeStateNotifierProviderFamily<CursorPaginationProvider,
       CursorPaginationBase, int> provider;
   final PaginationWidgetBuilder<T> itemBuilder;
@@ -23,15 +22,8 @@ class CursorPaginationListView<T extends IModelWithId>
   });
 
   @override
-  ConsumerState<CursorPaginationListView> createState() =>
-      _PaginationListViewState<T>();
-}
-
-class _PaginationListViewState<T extends IModelWithId>
-    extends ConsumerState<CursorPaginationListView<T>> {
-  @override
-  Widget build(BuildContext context) {
-    final state = ref.watch(widget.provider(widget.id));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(provider(id));
 
     // 완전 처음 로딩일때
     if (state is CursorPaginationLoading) {
@@ -52,9 +44,8 @@ class _PaginationListViewState<T extends IModelWithId>
           ),
           const SizedBox(height: 16.0),
           ElevatedButton(
-            onPressed: () => ref
-                .read(widget.provider(widget.id).notifier)
-                .paginate(forceRefetch: true),
+            onPressed: () =>
+                ref.read(provider(id).notifier).paginate(forceRefetch: true),
             child: const Text(
               '다시시도',
             ),
@@ -72,23 +63,22 @@ class _PaginationListViewState<T extends IModelWithId>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: RefreshIndicator(
-        onRefresh: () => ref
-            .read(widget.provider(widget.id).notifier)
-            .paginate(forceRefetch: true),
+        onRefresh: () =>
+            ref.read(provider(id).notifier).paginate(forceRefetch: true),
         child: Scrollbar(
           child: ListView.separated(
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: paginationData.items.length + 1,
-            separatorBuilder: widget.separatorBuilder,
+            separatorBuilder: separatorBuilder,
             itemBuilder: (_, index) {
-              if (index ==
-                  paginationData.items.length -
-                      1 -
-                      (Constants.cursorPaginationFetchCount * 0.1).toInt()) {
+              if (state is! CursorPaginationFetchingMoreError &&
+                  index ==
+                      paginationData.items.length -
+                          1 -
+                          (Constants.cursorPaginationFetchCount * 0.1)
+                              .toInt()) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  ref
-                      .read(widget.provider(widget.id).notifier)
-                      .paginate(fetchMore: true);
+                  ref.read(provider(id).notifier).paginate(fetchMore: true);
                 });
               }
 
@@ -122,8 +112,7 @@ class _PaginationListViewState<T extends IModelWithId>
                                   const SizedBox(height: 16.0),
                                   ElevatedButton(
                                     onPressed: () => ref
-                                        .read(
-                                            widget.provider(widget.id).notifier)
+                                        .read(provider(id).notifier)
                                         .paginate(fetchMore: true),
                                     child: const Text(
                                       '다시시도',
@@ -132,8 +121,7 @@ class _PaginationListViewState<T extends IModelWithId>
                                   const SizedBox(height: 16.0),
                                   ElevatedButton(
                                     onPressed: () => ref
-                                        .read(
-                                            widget.provider(widget.id).notifier)
+                                        .read(provider(id).notifier)
                                         .paginate(forceRefetch: true),
                                     child: const Text(
                                       '전체 새로고침',
@@ -148,7 +136,7 @@ class _PaginationListViewState<T extends IModelWithId>
 
               final paginationItem = paginationData.items[index];
 
-              return widget.itemBuilder(
+              return itemBuilder(
                 context,
                 index,
                 paginationItem,

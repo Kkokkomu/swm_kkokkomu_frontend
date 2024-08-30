@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/additional_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_params.dart';
@@ -18,7 +19,7 @@ class OffsetPaginationProvider<T, U extends BaseOffsetPaginationRepository<T>>
   }
 
   Future<void> paginate({
-    int fetchCount = 10,
+    int fetchCount = Constants.offsetPaginationFetchCount,
     // 추가로 데이터 더 가져오기
     // true - 추가로 데이터 더 가져옴
     // false - 새로고침 (현재 상태를 덮어씌움)
@@ -53,7 +54,8 @@ class OffsetPaginationProvider<T, U extends BaseOffsetPaginationRepository<T>>
       final isRefetching = state is OffsetPaginationRefetching;
       final isFetchingMore = state is OffsetPaginationFetchingMore;
 
-      if (fetchMore && (isLoading || isRefetching || isFetchingMore)) {
+      if ((fetchMore || forceRefetch) &&
+          (isLoading || isRefetching || isFetchingMore)) {
         return;
       }
 

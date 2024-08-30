@@ -27,19 +27,20 @@ class ShortFormCommentSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userInfoProvider);
-    final shortFormCommentHeightController =
-        ref.watch(shortFormCommentHeightControllerProvider((newsId)));
-    final isShortFormCommentCreated = ref.watch(
-        shortFormCommentVisibilityProvider(newsId)
-            .select((value) => value.isShortFormCommentCreated));
+    return Consumer(
+      builder: (_, ref, child) {
+        final shortFormCommentHeightController =
+            ref.watch(shortFormCommentHeightControllerProvider((newsId)));
 
-    return AnimatedContainer(
-      curve: Curves.easeInOut,
-      duration: shortFormCommentHeightController.animationDuration,
-      width: double.infinity,
-      height: shortFormCommentHeightController.height,
-      color: ColorName.white000,
+        return AnimatedContainer(
+          curve: Curves.easeInOut,
+          duration: shortFormCommentHeightController.animationDuration,
+          width: double.infinity,
+          height: shortFormCommentHeightController.height,
+          color: ColorName.white000,
+          child: child,
+        );
+      },
       child: Column(
         children: [
           GestureDetector(
@@ -101,32 +102,39 @@ class ShortFormCommentSection extends ConsumerWidget {
             ),
           ),
           Expanded(
-            child: Builder(builder: (_) {
-              if (!isShortFormCommentCreated) {
-                return const SizedBox();
-              }
+            child: Consumer(
+              builder: (_, ref, __) {
+                final user = ref.watch(userInfoProvider);
+                final isShortFormCommentCreated = ref.watch(
+                    shortFormCommentVisibilityProvider(newsId)
+                        .select((value) => value.isShortFormCommentCreated));
 
-              late final AutoDisposeStateNotifierProviderFamily<
-                  CursorPaginationProvider<IModelWithId,
-                      IBaseCursorPaginationRepository<IModelWithId>>,
-                  CursorPaginationBase,
-                  int> provider;
+                if (!isShortFormCommentCreated) {
+                  return const SizedBox();
+                }
 
-              if (user is UserModel) {
-                provider = loggedInUserShortFormCommentProvider;
-              } else {
-                provider = guestUserShortFormCommentProvider;
-              }
+                late final AutoDisposeStateNotifierProviderFamily<
+                    CursorPaginationProvider<IModelWithId,
+                        IBaseCursorPaginationRepository<IModelWithId>>,
+                    CursorPaginationBase,
+                    int> provider;
 
-              return CursorPaginationListView<ShortFormCommentModel>(
-                id: newsId,
-                provider: provider,
-                separatorBuilder: (_, __) => const SizedBox(height: 16.0),
-                itemBuilder: (_, __, model) => ShortFormCommentCard(
-                  shortFormCommentModel: model,
-                ),
-              );
-            }),
+                if (user is UserModel) {
+                  provider = loggedInUserShortFormCommentProvider;
+                } else {
+                  provider = guestUserShortFormCommentProvider;
+                }
+
+                return CursorPaginationListView<ShortFormCommentModel>(
+                  id: newsId,
+                  provider: provider,
+                  separatorBuilder: (_, __) => const SizedBox(height: 16.0),
+                  itemBuilder: (_, __, model) => ShortFormCommentCard(
+                    shortFormCommentModel: model,
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
