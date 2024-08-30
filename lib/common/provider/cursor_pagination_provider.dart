@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/additional_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_params.dart';
@@ -22,7 +23,7 @@ class CursorPaginationProvider<T extends IModelWithId,
   }
 
   Future<void> paginate({
-    int fetchCount = 20,
+    int fetchCount = Constants.cursorPaginationFetchCount,
     // 추가로 데이터 더 가져오기
     // true - 추가로 데이터 더 가져옴
     // false - 새로고침 (현재 상태를 덮어씌움)

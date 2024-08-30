@@ -11,6 +11,11 @@ typedef PaginationWidgetBuilder<T> = Widget Function(
   T model,
 );
 
+typedef PaginationSeparatorBuilder = Widget Function(
+  BuildContext context,
+  int index,
+);
+
 class Constants {
   // dotenv.env 로 불러오는 값들은 반드시 env 파일일 로드된 후에 사용해야 함
   static final String? kakaoNativeAppKey = dotenv.env['KAKAO_NATIVE_APP_KEY'];
@@ -26,6 +31,8 @@ class Constants {
       bottomNavigationBarHeight;
 
   static const Color modalBarrierColor = Colors.black54;
+
+  static const int cursorPaginationFetchCount = 20;
 }
 
 class AnimationDuration {

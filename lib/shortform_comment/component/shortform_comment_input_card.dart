@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 
-class ShortFormCommentInputCard extends StatelessWidget {
+class ShortFormCommentInputCard extends ConsumerWidget {
   static const double _dividerHeight = 1.0;
+  final int newsId;
 
-  const ShortFormCommentInputCard({super.key});
+  const ShortFormCommentInputCard({
+    super.key,
+    required this.newsId,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      // 드래그시 숏폼 스와이프 되는 현상 방지
-      onVerticalDragStart: (_) {},
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bottomNavigationBarState =
+        ref.watch(bottomNavigationBarStateProvider);
+
+    // 하단 네비게이션바가 보이지 않을 때만 댓글 입력창을 보여줌
+    if (bottomNavigationBarState.isBottomNavigationBarVisible) {
+      return const SizedBox();
+    }
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+
+        ref
+            .read(shortFormCommentHeightControllerProvider(newsId).notifier)
+            .setCommentBodySizeSmall();
+      },
       child: Column(
         children: [
           const Divider(
