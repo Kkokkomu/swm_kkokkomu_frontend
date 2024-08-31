@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_height_controller_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
 
 final shortFormCommentHeightControllerProvider = StateNotifierProvider.family
     .autoDispose<ShortFormCommentHeightStateNotifier,
@@ -26,17 +25,28 @@ class ShortFormCommentHeightStateNotifier
   }) : super(
           ShortformCommentHeightControllerModel(
             newsId: newsId,
+            isShortFormCommentCreated: false,
+            isShortFormCommentVisible: false,
             height: 0.0,
             animationDuration:
                 AnimationDuration.shortFormCommentAnimationDuration,
           ),
         );
 
+  void setShortFormCommentVisibility(bool isVisible) {
+    // 변경사항이 없는 경우 아무것도 수행하지 않음
+    if (state.isShortFormCommentCreated == true &&
+        state.isShortFormCommentVisible == isVisible) return;
+
+    state = state.copyWith(
+      isShortFormCommentCreated: true,
+      isShortFormCommentVisible: isVisible,
+    );
+  }
+
   void onVerticalDragUpdate(DragUpdateDetails details, double maxHeight) {
     // 댓글이 보이지 않는 상태에서는 높이 조절이 불가능하도록 설정
-    if (!ref
-        .read(shortFormCommentVisibilityProvider(state.newsId))
-        .isShortFormCommentVisible) {
+    if (!state.isShortFormCommentVisible) {
       return;
     }
 
@@ -59,9 +69,7 @@ class ShortFormCommentHeightStateNotifier
 
   void onVerticalDragEnd(DragEndDetails details, double maxHeight) {
     // 댓글이 보이지 않는 상태에서는 높이 조절이 불가능하도록 설정
-    if (!ref
-        .read(shortFormCommentVisibilityProvider(state.newsId))
-        .isShortFormCommentVisible) {
+    if (!state.isShortFormCommentVisible) {
       return;
     }
 
@@ -105,9 +113,7 @@ class ShortFormCommentHeightStateNotifier
         .setBottomNavigationBarVisibility(false);
 
     // 댓글 창 크기 조절 시 댓글 창이 보이도록 설정
-    ref
-        .read(shortFormCommentVisibilityProvider(state.newsId).notifier)
-        .setShortFormCommentVisibility(true);
+    setShortFormCommentVisibility(true);
 
     state = state.copyWith(
       height: maxHeight,
@@ -122,9 +128,7 @@ class ShortFormCommentHeightStateNotifier
         .setBottomNavigationBarVisibility(false);
 
     // 댓글 창 크기 조절 시 댓글 창이 보이도록 설정
-    ref
-        .read(shortFormCommentVisibilityProvider(state.newsId).notifier)
-        .setShortFormCommentVisibility(true);
+    setShortFormCommentVisibility(true);
 
     state = state.copyWith(
       height: maxHeight * 0.6,
@@ -141,9 +145,7 @@ class ShortFormCommentHeightStateNotifier
         .setBottomNavigationBarVisibility(true);
 
     // 댓글 창 닫을 시 댓글 창이 사라지도록 설정
-    ref
-        .read(shortFormCommentVisibilityProvider(state.newsId).notifier)
-        .setShortFormCommentVisibility(false);
+    setShortFormCommentVisibility(false);
 
     state = state.copyWith(
       height: 0.0,

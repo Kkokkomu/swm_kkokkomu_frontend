@@ -12,7 +12,6 @@ import 'package:swm_kkokkomu_frontend/shortform/component/shortform_start_button
 import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_visibility_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_box.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
-import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
 
 class SingleShortForm extends ConsumerStatefulWidget {
   static const Duration _seekBackTime = Duration(seconds: 1);
@@ -34,7 +33,6 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
   late BetterPlayerController _betterPlayerController;
   bool _isPauseButtonTapped = false;
   Timer? _hidePauseButtonTimer;
-  Timer? _hideEmojiDetailButtonTimer;
   bool _isVideoError = false;
   bool _autoPlay = true;
 
@@ -48,14 +46,16 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
   void dispose() {
     _betterPlayerController.dispose(forceDispose: true);
     _hidePauseButtonTimer?.cancel();
-    _hideEmojiDetailButtonTimer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final shortFormCommentVisibility =
-        ref.watch(shortFormCommentVisibilityProvider(widget.newsId));
+    final isShortFormCommentVisible = ref.watch(
+      shortFormCommentHeightControllerProvider(widget.newsId).select(
+        (value) => value.isShortFormCommentVisible,
+      ),
+    );
 
     if (_isVideoError) {
       return Column(
@@ -89,7 +89,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
     }
 
     return SafeArea(
-      top: shortFormCommentVisibility.isShortFormCommentVisible,
+      top: isShortFormCommentVisible,
       child:
           LayoutBuilder(builder: (BuildContext _, BoxConstraints constraints) {
         return Column(
@@ -107,8 +107,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                       }
 
                       // 댓글창이 보이는 상태에서 숏폼 화면을 누르면 댓글창 닫음
-                      if (shortFormCommentVisibility
-                          .isShortFormCommentVisible) {
+                      if (isShortFormCommentVisible) {
                         ref
                             .read(shortFormCommentHeightControllerProvider(
                                     widget.newsId)
@@ -131,7 +130,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                   // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
                   // 댓글이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
                   if (_betterPlayerController.isVideoInitialized() == true &&
-                      !shortFormCommentVisibility.isShortFormCommentVisible)
+                      !isShortFormCommentVisible)
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
@@ -212,7 +211,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                   // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
                   // 댓글이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
                   if (_betterPlayerController.isVideoInitialized() == true &&
-                      !shortFormCommentVisibility.isShortFormCommentVisible)
+                      !isShortFormCommentVisible)
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
@@ -298,7 +297,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
 
   void onVisibilityChanged(double visibleFraction) {
     final isCommentVisible = ref
-        .read(shortFormCommentVisibilityProvider(widget.newsId))
+        .read(shortFormCommentHeightControllerProvider(widget.newsId))
         .isShortFormCommentVisible;
 
     if (visibleFraction == 1.0 &&

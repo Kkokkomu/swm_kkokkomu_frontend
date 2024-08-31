@@ -11,7 +11,6 @@ import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/guest_user_shortform_comment_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/logged_in_user_shortform_comment_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
-import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_visibility_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
@@ -106,7 +105,7 @@ class ShortFormCommentSection extends ConsumerWidget {
               builder: (_, ref, __) {
                 final user = ref.watch(userInfoProvider);
                 final isShortFormCommentCreated = ref.watch(
-                    shortFormCommentVisibilityProvider(newsId)
+                    shortFormCommentHeightControllerProvider(newsId)
                         .select((value) => value.isShortFormCommentCreated));
 
                 if (!isShortFormCommentCreated) {

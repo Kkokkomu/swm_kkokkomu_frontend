@@ -54,7 +54,7 @@ class RootTab extends ConsumerWidget {
   }
 }
 
-class CustomBottomNavigationBar extends ConsumerWidget {
+class CustomBottomNavigationBar extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
 
   const CustomBottomNavigationBar({
@@ -63,11 +63,47 @@ class CustomBottomNavigationBar extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CustomBottomNavigationBar> createState() =>
+      _CustomBottomNavigationBarState();
+}
+
+class _CustomBottomNavigationBarState
+    extends ConsumerState<CustomBottomNavigationBar> {
+  late final bool isShortFormScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    isShortFormScreen = widget.navigationShell.currentIndex == 1;
+  }
+
+  void refreshCurrentTab(RootTabBottomNavigationBarType tabType) {
+    final user = ref.read(userInfoProvider);
+
+    switch (tabType) {
+      case RootTabBottomNavigationBarType.exploration:
+        break;
+      case RootTabBottomNavigationBarType.shortForm:
+        if (user is UserModel) {
+          ref
+              .read(loggedInUserShortFormProvider.notifier)
+              .paginate(forceRefetch: true);
+        }
+        if (user is GuestUserModel) {
+          ref
+              .read(guestUserShortFormProvider.notifier)
+              .paginate(forceRefetch: true);
+        }
+        break;
+      case RootTabBottomNavigationBarType.myPage:
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final bottomNavigationBarState =
         ref.watch(bottomNavigationBarStateProvider);
-
-    final isShortFormScreen = navigationShell.currentIndex == 1;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setSystemUIOverlayStyle(
@@ -79,29 +115,6 @@ class CustomBottomNavigationBar extends ConsumerWidget {
         ),
       );
     });
-
-    void refreshCurrentTab(RootTabBottomNavigationBarType tabType) {
-      final user = ref.read(userInfoProvider);
-
-      switch (tabType) {
-        case RootTabBottomNavigationBarType.exploration:
-          break;
-        case RootTabBottomNavigationBarType.shortForm:
-          if (user is UserModel) {
-            ref
-                .read(loggedInUserShortFormProvider.notifier)
-                .paginate(forceRefetch: true);
-          }
-          if (user is GuestUserModel) {
-            ref
-                .read(guestUserShortFormProvider.notifier)
-                .paginate(forceRefetch: true);
-          }
-          break;
-        case RootTabBottomNavigationBarType.myPage:
-          break;
-      }
-    }
 
     return SizedBox(
       height: !isShortFormScreen ||
@@ -116,14 +129,14 @@ class CustomBottomNavigationBar extends ConsumerWidget {
             unselectedFontSize: 12,
             type: BottomNavigationBarType.fixed,
             onTap: (int index) {
-              if (index == navigationShell.currentIndex) {
+              if (index == widget.navigationShell.currentIndex) {
                 refreshCurrentTab(RootTabBottomNavigationBarType.values[index]);
-                navigationShell.goBranch(index, initialLocation: true);
+                widget.navigationShell.goBranch(index, initialLocation: true);
                 return;
               }
-              navigationShell.goBranch(index);
+              widget.navigationShell.goBranch(index);
             },
-            currentIndex: navigationShell.currentIndex,
+            currentIndex: widget.navigationShell.currentIndex,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.explore),
