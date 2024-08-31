@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
-import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 
 class ShortFormCommentInputCard extends ConsumerWidget {
@@ -15,11 +14,14 @@ class ShortFormCommentInputCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bottomNavigationBarState =
-        ref.watch(bottomNavigationBarStateProvider);
+    final isShortFormCommentVisible = ref.watch(
+      shortFormCommentHeightControllerProvider(newsId).select(
+        (value) => value.isShortFormCommentVisible,
+      ),
+    );
 
-    // 하단 네비게이션바가 보이지 않을 때만 댓글 입력창을 보여줌
-    if (bottomNavigationBarState.isBottomNavigationBarVisible) {
+    // 댓글이 보이지 않는 상태에서는 댓글 입력 카드를 표시하지 않음
+    if (!isShortFormCommentVisible) {
       return const SizedBox();
     }
 

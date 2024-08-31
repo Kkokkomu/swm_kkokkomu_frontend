@@ -27,6 +27,7 @@ class ShortFormCommentHeightStateNotifier
             newsId: newsId,
             isShortFormCommentCreated: false,
             isShortFormCommentVisible: false,
+            isShortFormFloatingButtonVisible: true,
             height: 0.0,
             animationDuration:
                 AnimationDuration.shortFormCommentAnimationDuration,
@@ -41,6 +42,15 @@ class ShortFormCommentHeightStateNotifier
     state = state.copyWith(
       isShortFormCommentCreated: true,
       isShortFormCommentVisible: isVisible,
+    );
+  }
+
+  void setShortFormFloatingButtonVisibility(bool isVisible) {
+    // 변경사항이 없는 경우 아무것도 수행하지 않음
+    if (state.isShortFormFloatingButtonVisible == isVisible) return;
+
+    state = state.copyWith(
+      isShortFormFloatingButtonVisible: isVisible,
     );
   }
 
@@ -112,6 +122,9 @@ class ShortFormCommentHeightStateNotifier
         .read(bottomNavigationBarStateProvider.notifier)
         .setBottomNavigationBarVisibility(false);
 
+    // 댓글 보이는 상태에서는 FloatingButton이 사라지도록 설정
+    setShortFormFloatingButtonVisibility(false);
+
     // 댓글 창 크기 조절 시 댓글 창이 보이도록 설정
     setShortFormCommentVisibility(true);
 
@@ -126,6 +139,9 @@ class ShortFormCommentHeightStateNotifier
     ref
         .read(bottomNavigationBarStateProvider.notifier)
         .setBottomNavigationBarVisibility(false);
+
+    // 댓글 보이는 상태에서는 FloatingButton이 사라지도록 설정
+    setShortFormFloatingButtonVisibility(false);
 
     // 댓글 창 크기 조절 시 댓글 창이 보이도록 설정
     setShortFormCommentVisibility(true);

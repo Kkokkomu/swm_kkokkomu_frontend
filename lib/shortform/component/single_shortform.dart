@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
@@ -107,7 +108,13 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                       }
 
                       // 댓글창이 보이는 상태에서 숏폼 화면을 누르면 댓글창 닫음
-                      if (isShortFormCommentVisible) {
+                      if (ref
+                          .read(
+                            shortFormCommentHeightControllerProvider(
+                              widget.newsId,
+                            ),
+                          )
+                          .isShortFormCommentVisible) {
                         ref
                             .read(shortFormCommentHeightControllerProvider(
                                     widget.newsId)
@@ -127,11 +134,34 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                       ),
                     ),
                   ),
-                  // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
-                  // 댓글이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
-                  if (_betterPlayerController.isVideoInitialized() == true &&
-                      !isShortFormCommentVisible)
-                    Align(
+                  Consumer(
+                    builder: (_, ref, child) {
+                      final isShortFormFloatingButtonVisible = ref.watch(
+                        shortFormCommentHeightControllerProvider(
+                          widget.newsId,
+                        ).select(
+                          (value) => value.isShortFormFloatingButtonVisible,
+                        ),
+                      );
+
+                      return child!
+                          // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
+                          // 댓글이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
+                          .animate(
+                            target:
+                                _betterPlayerController.isVideoInitialized() ==
+                                            true &&
+                                        isShortFormFloatingButtonVisible
+                                    ? 1
+                                    : 0,
+                          )
+                          .scaleXY(
+                            begin: 0.0,
+                            end: 1.0,
+                            duration: Duration.zero,
+                          );
+                    },
+                    child: Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(
@@ -163,6 +193,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                         ),
                       ),
                     ),
+                  ),
                   if (_betterPlayerController.isVideoInitialized() == true &&
                       _betterPlayerController.isPlaying() == true &&
                       _isPauseButtonTapped)
@@ -208,11 +239,34 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                       ),
                     ),
                   ),
-                  // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
-                  // 댓글이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
-                  if (_betterPlayerController.isVideoInitialized() == true &&
-                      !isShortFormCommentVisible)
-                    Align(
+                  Consumer(
+                    builder: (_, ref, child) {
+                      final isShortFormFloatingButtonVisible = ref.watch(
+                        shortFormCommentHeightControllerProvider(
+                          widget.newsId,
+                        ).select(
+                          (value) => value.isShortFormFloatingButtonVisible,
+                        ),
+                      );
+
+                      return child!
+                          // 비디오가 초기화 되지 않았을 때는 플로팅 버튼들이 보이지 않음
+                          // 댓글이 보이는 상태에서는 플로팅 버튼들이 보이지 않음
+                          .animate(
+                            target:
+                                _betterPlayerController.isVideoInitialized() ==
+                                            true &&
+                                        isShortFormFloatingButtonVisible
+                                    ? 1
+                                    : 0,
+                          )
+                          .scaleXY(
+                            begin: 0.0,
+                            end: 1.0,
+                            duration: Duration.zero,
+                          );
+                    },
+                    child: Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(
@@ -224,6 +278,7 @@ class _SingleShortFormState extends ConsumerState<SingleShortForm> {
                         child: EmojiButton(newsId: widget.newsId),
                       ),
                     ),
+                  ),
                 ],
               ),
             ),

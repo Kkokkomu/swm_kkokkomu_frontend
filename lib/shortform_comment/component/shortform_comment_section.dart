@@ -28,14 +28,28 @@ class ShortFormCommentSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Consumer(
       builder: (_, ref, child) {
-        final shortFormCommentHeightController =
-            ref.watch(shortFormCommentHeightControllerProvider((newsId)));
+        final heightAndAnimationDuration =
+            ref.watch(shortFormCommentHeightControllerProvider((newsId)).select(
+          (value) => (value.height, value.animationDuration),
+        ));
 
         return AnimatedContainer(
+          onEnd: () {
+            // 댓글창이 닫히고 애니메이션이 종료된 경우
+            // FloatingButton을 보이도록 설정
+            if (!ref
+                .read(shortFormCommentHeightControllerProvider((newsId)))
+                .isShortFormCommentVisible) {
+              ref
+                  .read(shortFormCommentHeightControllerProvider((newsId))
+                      .notifier)
+                  .setShortFormFloatingButtonVisibility(true);
+            }
+          },
           curve: Curves.easeInOut,
-          duration: shortFormCommentHeightController.animationDuration,
+          height: heightAndAnimationDuration.$1,
+          duration: heightAndAnimationDuration.$2,
           width: double.infinity,
-          height: shortFormCommentHeightController.height,
           color: ColorName.white000,
           child: child,
         );

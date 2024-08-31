@@ -128,12 +128,12 @@ const customBetterPlayerBufferingConfiguration =
 );
 
 // 스크롤 물리 효과 설정
-class CustomPhysics extends ScrollPhysics {
-  const CustomPhysics({ScrollPhysics? parent}) : super(parent: parent);
+class CustomScrollPhysics extends ScrollPhysics {
+  const CustomScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
 
   @override
-  CustomPhysics applyTo(ScrollPhysics? ancestor) {
-    return CustomPhysics(parent: buildParent(ancestor));
+  CustomScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return CustomScrollPhysics(parent: buildParent(ancestor));
   }
 
   @override

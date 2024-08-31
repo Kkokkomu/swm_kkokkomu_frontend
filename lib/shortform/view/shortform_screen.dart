@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/offset_pagination_page_view.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/offset_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_offset_pagination_repository.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/single_shortform.dart';
@@ -19,6 +21,11 @@ class ShortFormScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userInfoProvider);
+    final isBottomNavigationBarVisible = ref.watch(
+      bottomNavigationBarStateProvider.select(
+        (value) => value.isBottomNavigationBarVisible,
+      ),
+    );
 
     late final AutoDisposeStateNotifierProvider<
         OffsetPaginationProvider<ShortFormModel,
@@ -33,6 +40,9 @@ class ShortFormScreen extends ConsumerWidget {
 
     return OffsetPaginationPageView<ShortFormModel>(
       provider: provider,
+      scrollPhysics: isBottomNavigationBarVisible
+          ? const CustomScrollPhysics()
+          : const NeverScrollableScrollPhysics(),
       itemBuilder: (_, __, model) {
         final newsId = model.shortformList?.id;
         final shortFormUrl = model.shortformList?.shortformUrl;
