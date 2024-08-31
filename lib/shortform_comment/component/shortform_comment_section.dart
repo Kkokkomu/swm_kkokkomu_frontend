@@ -28,9 +28,9 @@ class ShortFormCommentSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Consumer(
       builder: (_, ref, child) {
-        final heightAndAnimationDuration =
+        final animationDurationAndHeight =
             ref.watch(shortFormCommentHeightControllerProvider((newsId)).select(
-          (value) => (value.height, value.animationDuration),
+          (value) => (duration: value.animationDuration, height: value.height),
         ));
 
         return AnimatedContainer(
@@ -47,8 +47,8 @@ class ShortFormCommentSection extends ConsumerWidget {
             }
           },
           curve: Curves.easeInOut,
-          height: heightAndAnimationDuration.$1,
-          duration: heightAndAnimationDuration.$2,
+          height: animationDurationAndHeight.height,
+          duration: animationDurationAndHeight.duration,
           width: double.infinity,
           color: ColorName.white000,
           child: child,
