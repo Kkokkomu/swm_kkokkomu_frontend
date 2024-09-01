@@ -27,7 +27,7 @@ class RootTab extends ConsumerWidget {
 
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
+      onPopInvokedWithResult: (didPop, _) {
         if (didPop) {
           return;
         }
@@ -37,7 +37,7 @@ class RootTab extends ConsumerWidget {
           return;
         }
 
-        appExitShowDialog(context);
+        showAppExitDialog(context);
       },
       child: DefaultLayout(
         scaffoldKey: scaffoldKey,

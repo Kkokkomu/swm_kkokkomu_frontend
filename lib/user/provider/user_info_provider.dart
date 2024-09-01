@@ -142,6 +142,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
     final prevState = state;
 
     if (state is! UnregisteredUserModel) {
+      // 등록을 시도하는데 UnregisteredUserModel이 아닌 경우는 로직상 에러
       // 등록에 실패했으므로 에러 토스트 메시지를 띄움
       // 등록화면에서 로그인 화면으로 이동시켜야 하므로 상태를 에러 상태로 변경
       CustomToastMessage.showLoginError('등록에 실패했습니다.');
@@ -183,6 +184,13 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
 
     // 등록에 성공한 경우 받아온 토큰으로 유저 정보를 가져옴
     await _fetchUserInfoWithToken(prevState);
+  }
+
+  void cancelRegister() {
+    // 등록화면에서 취소 버튼을 누른 경우
+    // 등록을 취소하고 로그인 화면으로 이동시키기 위해 상태를 에러 상태로 변경
+    CustomToastMessage.showLoginError('등록을 취소했습니다.');
+    state = UserModelError(message: '등록을 취소했습니다.');
   }
 
   Future<void> logout({
