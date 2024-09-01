@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/cursor_pagination_list_view.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
@@ -11,6 +12,7 @@ import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/guest_user_shortform_comment_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/logged_in_user_shortform_comment_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_sort_type_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
@@ -82,14 +84,34 @@ class ShortFormCommentSection extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 16.0),
-                        child: Text(
-                          '댓글',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Row(
+                          children: [
+                            const Text(
+                              '댓글',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 16.0),
+                            ElevatedButton(
+                              onPressed: () => ref
+                                  .read(shortFormCommentSortTypeProvider(newsId)
+                                      .notifier)
+                                  .state = ShortFormCommentSortType.popular,
+                              child: const Text('인기순'),
+                            ),
+                            const SizedBox(width: 8.0),
+                            ElevatedButton(
+                              onPressed: () => ref
+                                  .read(shortFormCommentSortTypeProvider(newsId)
+                                      .notifier)
+                                  .state = ShortFormCommentSortType.latest,
+                              child: const Text('최신순'),
+                            ),
+                          ],
                         ),
                       ),
                       IconButton(
