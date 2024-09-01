@@ -8,6 +8,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/model/provider_logger_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 
 void main() async {
@@ -40,8 +41,9 @@ void main() async {
   );
 
   runApp(
-    const ProviderScope(
-      child: _App(),
+    ProviderScope(
+      observers: [ProviderLoggerModel()],
+      child: const _App(),
     ),
   );
 }

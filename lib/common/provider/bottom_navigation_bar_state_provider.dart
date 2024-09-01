@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/model/bottom_navigation_bar_state_model.dart';
 
-final bottomNavigationBarStateProvider = StateNotifierProvider<
+final bottomNavigationBarStateProvider = StateNotifierProvider.autoDispose<
     BottomNavigationBarStateNotifier, BottomNavigationBarStateModel>(
   (ref) => BottomNavigationBarStateNotifier(),
 );
