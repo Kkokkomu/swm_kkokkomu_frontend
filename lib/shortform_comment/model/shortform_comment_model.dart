@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
 
@@ -29,6 +31,22 @@ class ShortFormCommentModel implements IModelWithId {
 
   factory ShortFormCommentModel.fromJson(Map<String, dynamic> json) =>
       _$ShortFormCommentModelFromJson(json);
+
+  ShortFormCommentModel copyWith({
+    ShortFormCommentUserInfo? user,
+    ShortFormCommentInfo? comment,
+    int? replyCnt,
+    int? commentLikeCnt,
+    bool? userLike,
+  }) {
+    return ShortFormCommentModel(
+      user: user ?? this.user,
+      comment: comment ?? this.comment,
+      replyCnt: replyCnt ?? this.replyCnt,
+      commentLikeCnt: commentLikeCnt ?? this.commentLikeCnt,
+      userLike: userLike ?? this.userLike,
+    );
+  }
 }
 
 @JsonSerializable()
@@ -71,4 +89,20 @@ class ShortFormCommentInfo {
 
   factory ShortFormCommentInfo.fromJson(Map<String, dynamic> json) =>
       _$ShortFormCommentInfoFromJson(json);
+
+  ShortFormCommentInfo copyWith({
+    int? id,
+    int? userId,
+    int? newsId,
+    String? content,
+    String? editedAt,
+  }) {
+    return ShortFormCommentInfo(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      newsId: newsId ?? this.newsId,
+      content: content ?? this.content,
+      editedAt: editedAt ?? this.editedAt,
+    );
+  }
 }

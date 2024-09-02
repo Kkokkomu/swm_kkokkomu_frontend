@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'post_shortform_comment_body.dart';
+part of 'post_shortform_comment_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

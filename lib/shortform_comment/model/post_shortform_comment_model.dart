@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'post_shortform_comment_body.g.dart';
+part 'post_shortform_comment_model.g.dart';
 
 @JsonSerializable()
 class PostShortFormCommentBody {

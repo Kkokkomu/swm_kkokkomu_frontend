@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
-import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
@@ -19,11 +20,22 @@ class LoginScreen extends ConsumerWidget {
 
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, _) {
+      onPopInvokedWithResult: (didPop, _) async {
         if (didPop) {
           return;
         }
-        showAppExitDialog(context);
+
+        final resp = await showConfirmationDialog(
+          context: context,
+          content: '앱을 종료하시겠습니까?',
+          confirmText: '종료',
+          cancelText: '취소',
+        );
+
+        // 사용자가 종료를 선택했다면 앱을 종료함
+        if (resp == true) {
+          SystemNavigator.pop();
+        }
       },
       child: DefaultLayout(
         child: SafeArea(

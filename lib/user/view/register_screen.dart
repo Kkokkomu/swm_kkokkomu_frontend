@@ -29,11 +29,21 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, _) {
+      onPopInvokedWithResult: (didPop, _) async {
         if (didPop) {
           return;
         }
-        showRegisterCancelDialog(context, ref);
+
+        final resp = await showConfirmationDialog(
+          context: context,
+          content: '회원 등록을 취소하시겠습니까?',
+          confirmText: '등록 취소',
+          cancelText: '계속하기',
+        );
+
+        if (resp == true) {
+          ref.read(userInfoProvider.notifier).cancelRegister();
+        }
       },
       child: DefaultLayout(
         titleWidget: const Text('기본 회원 정보 등록'),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_section.dart';
-import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_input_card.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_post_card.dart';
 
 class ShortFormCommentBox extends StatelessWidget {
   final int newsId;
@@ -22,7 +22,7 @@ class ShortFormCommentBox extends StatelessWidget {
               Constants.bottomNavigationBarHeightWithSafeArea,
           newsId: newsId,
         ),
-        ShortFormCommentInputCard(newsId: newsId),
+        ShortFormCommentPostCard(newsId: newsId),
       ],
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/secure_storage/secure_storage.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/user/model/post_register_body.dart';

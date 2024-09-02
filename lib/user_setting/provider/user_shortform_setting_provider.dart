@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/model/user_shortform_category_filter_model.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/model/user_shortform_setting_model.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/repository/user_setting_repository.dart';

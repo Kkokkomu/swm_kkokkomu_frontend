@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/root_tab_scaffold_key_provider.dart';
@@ -27,7 +28,7 @@ class RootTab extends ConsumerWidget {
 
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop, _) {
+      onPopInvokedWithResult: (didPop, _) async {
         if (didPop) {
           return;
         }
@@ -37,7 +38,17 @@ class RootTab extends ConsumerWidget {
           return;
         }
 
-        showAppExitDialog(context);
+        final resp = await showConfirmationDialog(
+          context: context,
+          content: '앱을 종료하시겠습니까?',
+          confirmText: '종료',
+          cancelText: '취소',
+        );
+
+        // 사용자가 종료를 선택했다면 앱을 종료함
+        if (resp == true) {
+          SystemNavigator.pop();
+        }
       },
       child: DefaultLayout(
         scaffoldKey: scaffoldKey,

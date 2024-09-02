@@ -1,4 +1,4 @@
-import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/model/user_shortform_category_filter_model.dart';
 
 class UserShortFormSettingModel {

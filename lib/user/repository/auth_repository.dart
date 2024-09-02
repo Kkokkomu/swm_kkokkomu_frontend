@@ -8,6 +8,7 @@ import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/dio/dio.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/model/token_response_model.dart';

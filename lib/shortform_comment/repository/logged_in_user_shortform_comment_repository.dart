@@ -8,7 +8,8 @@ import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
-import 'package:swm_kkokkomu_frontend/shortform_comment/model/post_shortform_comment_body.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/model/post_shortform_comment_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/model/put_shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
 
 part 'logged_in_user_shortform_comment_repository.g.dart';
@@ -46,5 +47,21 @@ abstract class LoggedInUserShortFormCommentRepository
   })
   Future<ResponseModel<ShortFormCommentInfo?>> postComment({
     @Body() required PostShortFormCommentBody body,
+  });
+
+  @PUT('')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<String?>> updateComment({
+    @Body() required PutShortFormCommentBody body,
+  });
+
+  @DELETE('')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<String?>> deleteComment({
+    @Query('commentId') required int commentId,
   });
 }

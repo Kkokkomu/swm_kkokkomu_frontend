@@ -1,9 +1,6 @@
 import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:json_annotation/json_annotation.dart';
-
-part 'data.g.dart';
 
 typedef PaginationWidgetBuilder<T> = Widget Function(
   BuildContext context,
@@ -39,11 +36,6 @@ class Constants {
   static const int unknownErrorId = -99999;
 }
 
-// loadingStateProvider 에서 사용하는 요청 종류
-// enum RequestType {
-//   postComment,
-// }
-
 class AnimationDuration {
   // 숏폼 댓글 애니메이션 시간
   static const Duration shortFormCommentAnimationDuration =
@@ -70,47 +62,6 @@ class SecureStorageKeys {
 class SharedPreferencesKeys {
   static const String isFirstRun = 'is_first_run';
   static const String shortFormSortType = 'short_form_sort_type';
-}
-
-enum SocialLoginType { apple, kakao }
-
-@JsonEnum(alwaysCreate: true, valueField: 'name')
-enum ShortFormSortType {
-  recommend('RECOMMEND'),
-  latest('LATEST');
-
-  final String name;
-
-  const ShortFormSortType(this.name);
-
-  static final _shortFormSortTypeNameMap =
-      _$ShortFormSortTypeEnumMap.map((key, value) => MapEntry(value, key));
-
-  static ShortFormSortType? fromName(String name) =>
-      _shortFormSortTypeNameMap[name];
-}
-
-enum NewsCategory {
-  politics,
-  economy,
-  social,
-  entertain,
-  sports,
-  living,
-  world,
-  it
-}
-
-enum ShortFormCommentSortType { popular, latest }
-
-enum RootTabBottomNavigationBarType {
-  exploration(RoutePath.exploration),
-  shortForm(RoutePath.shortForm),
-  myPage(RoutePath.myPage);
-
-  final String path;
-
-  const RootTabBottomNavigationBarType(this.path);
 }
 
 class RoutePath {
