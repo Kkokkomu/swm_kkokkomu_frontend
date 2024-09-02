@@ -34,7 +34,15 @@ class Constants {
 
   static const int cursorPaginationFetchCount = 20;
   static const int offsetPaginationFetchCount = 10;
+
+  // 서버로 부터 Id 값을 받지 못했을 때 사용하는 에러 Id
+  static const int unknownErrorId = -99999;
 }
+
+// loadingStateProvider 에서 사용하는 요청 종류
+// enum RequestType {
+//   postComment,
+// }
 
 class AnimationDuration {
   // 숏폼 댓글 애니메이션 시간

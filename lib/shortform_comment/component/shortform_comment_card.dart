@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class ShortFormCommentCard extends StatelessWidget {
+class ShortFormCommentCard extends ConsumerWidget {
   final ShortFormCommentModel shortFormCommentModel;
 
   const ShortFormCommentCard({
@@ -10,7 +14,17 @@ class ShortFormCommentCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userInfoProvider);
+
+    late final bool isMyComment;
+
+    if (user is UserModel && user.id == shortFormCommentModel.user.id) {
+      isMyComment = true;
+    } else {
+      isMyComment = false;
+    }
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -40,11 +54,39 @@ class ShortFormCommentCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                shortFormCommentModel.user.nickname,
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: shortFormCommentModel.user.nickname,
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    if (isMyComment)
+                      WidgetSpan(
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 8.0),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4.0,
+                            vertical: 2.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: ColorName.blue500,
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: const Text(
+                            '내 댓글',
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
               Text(
@@ -70,7 +112,12 @@ class ShortFormCommentCard extends StatelessWidget {
                   const SizedBox(width: 16.0),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.thumb_up_outlined),
+                    icon: Icon(
+                      Icons.thumb_up_outlined,
+                      color: shortFormCommentModel.userLike
+                          ? ColorName.blue500
+                          : null,
+                    ),
                   ),
                   Text(
                     shortFormCommentModel.commentLikeCnt.toString(),

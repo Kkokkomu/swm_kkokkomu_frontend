@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/logged_in_user_shortform_comment_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class ShortFormCommentInputCard extends ConsumerWidget {
-  static const double _dividerHeight = 1.0;
+class ShortFormCommentInputCard extends ConsumerStatefulWidget {
   final int newsId;
 
   const ShortFormCommentInputCard({
@@ -13,9 +18,19 @@ class ShortFormCommentInputCard extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ShortFormCommentInputCard> createState() =>
+      _ShortFormCommentInputCardState();
+}
+
+class _ShortFormCommentInputCardState
+    extends ConsumerState<ShortFormCommentInputCard> {
+  static const double _dividerHeight = 1.0;
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
     final isShortFormCommentVisible = ref.watch(
-      shortFormCommentHeightControllerProvider(newsId).select(
+      shortFormCommentHeightControllerProvider(widget.newsId).select(
         (value) => value.isShortFormCommentVisible,
       ),
     );
@@ -31,7 +46,8 @@ class ShortFormCommentInputCard extends ConsumerWidget {
         if (didPop) return;
 
         ref
-            .read(shortFormCommentHeightControllerProvider(newsId).notifier)
+            .read(shortFormCommentHeightControllerProvider(widget.newsId)
+                .notifier)
             .setCommentBodySizeSmall();
       },
       child: Column(
@@ -53,16 +69,25 @@ class ShortFormCommentInputCard extends ConsumerWidget {
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
+                      // 로그인하지 않은 사용자는 댓글 입력을 할 수 없음
+                      // 로그인 모달 바텀 시트를 띄워줌
+                      if (ref.read(userInfoProvider) is! UserModel) {
+                        showLoginModalBottomSheet(context, ref);
+                        return;
+                      }
+
                       showModalBottomSheet(
                         isScrollControlled: true,
                         context: context,
-                        builder: (_) {
-                          return const ShortFormCommentInputInBottomSheet();
-                        },
+                        builder: (_) => ShortFormCommentInputInBottomSheet(
+                          newsId: widget.newsId,
+                          controller: _controller,
+                        ),
                       );
                     },
                     child: AbsorbPointer(
                       child: TextFormField(
+                        controller: _controller,
                         readOnly: true,
                         decoration: const InputDecoration(
                           hintText: '댓글을 입력하세요',
@@ -72,9 +97,9 @@ class ShortFormCommentInputCard extends ConsumerWidget {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.send),
+                _SendButton(
+                  newsId: widget.newsId,
+                  controller: _controller,
                 ),
               ],
             ),
@@ -86,7 +111,14 @@ class ShortFormCommentInputCard extends ConsumerWidget {
 }
 
 class ShortFormCommentInputInBottomSheet extends StatelessWidget {
-  const ShortFormCommentInputInBottomSheet({super.key});
+  final int newsId;
+  final TextEditingController controller;
+
+  const ShortFormCommentInputInBottomSheet({
+    super.key,
+    required this.newsId,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -94,41 +126,85 @@ class ShortFormCommentInputInBottomSheet extends StatelessWidget {
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: SizedBox(
-        height: 80.0,
-        child: Column(
+      child: Container(
+        constraints: BoxConstraints(
+          minHeight: Constants.bottomNavigationBarHeightWithSafeArea,
+        ),
+        color: Colors.white,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Divider(
-              height: ShortFormCommentInputCard._dividerHeight,
-              thickness: 1.0,
-            ),
-            Container(
-              color: Colors.white,
-              height: 79.0,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(width: 16.0),
-                  Expanded(
-                    child: TextFormField(
-                      autofocus: true,
-                      maxLines: 2,
-                      decoration: const InputDecoration(
-                        hintText: '댓글을 입력하세요',
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.send),
-                  ),
-                ],
+            const SizedBox(width: 16.0),
+            Expanded(
+              child: TextFormField(
+                controller: controller,
+                autofocus: true,
+                minLines: 1,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                  hintText: '댓글을 입력하세요',
+                  border: InputBorder.none,
+                ),
               ),
+            ),
+            _SendButton(
+              newsId: newsId,
+              controller: controller,
+              isInBottomSheet: true,
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SendButton extends ConsumerWidget {
+  final int newsId;
+  final TextEditingController controller;
+  final bool isInBottomSheet;
+
+  const _SendButton({
+    required this.newsId,
+    required this.controller,
+    this.isInBottomSheet = false,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return IconButton(
+      onPressed: () async {
+        // 바텀 시트에서 댓글을 입력한 경우에는 바텀 시트를 닫음
+        if (isInBottomSheet) {
+          context.pop();
+        }
+
+        // 로그인하지 않은 사용자는 댓글 입력을 할 수 없음
+        // 로그인 모달 바텀 시트를 띄워주고 리턴
+        if (ref.read(userInfoProvider) is! UserModel) {
+          showLoginModalBottomSheet(context, ref);
+          return;
+        }
+
+        if (controller.text.isNotEmpty) {
+          // 댓글 작성 요청
+          final resp = await ref
+              .read(loggedInUserShortFormCommentProvider(newsId).notifier)
+              .postComment(controller.text);
+
+          // 댓글 작성에 실패한 경우
+          // 에러 메시지를 표시하고 리턴
+          if (resp == false) {
+            CustomToastMessage.showErrorToastMessage('댓글 작성에 실패했습니다');
+            return;
+          }
+
+          // 댓글 작성에 성공한 경우 완료 메시지를 표시하고 InputField를 초기화
+          CustomToastMessage.showSuccessToastMessage('댓글이 작성되었습니다');
+          controller.clear();
+        }
+      },
+      icon: const Icon(Icons.send),
     );
   }
 }

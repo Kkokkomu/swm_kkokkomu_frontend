@@ -19,6 +19,7 @@ ShortFormCommentModel _$ShortFormCommentModelFromJson(
               json['comment'] as Map<String, dynamic>),
       replyCnt: (json['replyCnt'] as num?)?.toInt(),
       commentLikeCnt: (json['commentLikeCnt'] as num?)?.toInt(),
+      userLike: json['userLike'] as bool?,
     );
 
 Map<String, dynamic> _$ShortFormCommentModelToJson(
@@ -28,6 +29,7 @@ Map<String, dynamic> _$ShortFormCommentModelToJson(
       'comment': instance.comment,
       'replyCnt': instance.replyCnt,
       'commentLikeCnt': instance.commentLikeCnt,
+      'userLike': instance.userLike,
     };
 
 ShortFormCommentUserInfo _$ShortFormCommentUserInfoFromJson(

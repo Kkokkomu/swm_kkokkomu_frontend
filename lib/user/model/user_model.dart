@@ -22,6 +22,7 @@ class InitialUserModel extends UserModelBase {}
 
 @JsonSerializable()
 class UserModel extends UserModelBase {
+  final int id;
   final String nickname;
   final String email;
   final bool isPremium;
@@ -29,12 +30,14 @@ class UserModel extends UserModelBase {
   final String? profileImg;
 
   UserModel({
+    required int? id,
     required String? nickname,
     required String? email,
     required bool? isPremium,
     required String? premiumEndDate,
     required String? profileImg,
-  })  : nickname = nickname ?? 'N/A',
+  })  : id = id ?? Constants.unknownErrorId,
+        nickname = nickname ?? 'N/A',
         email = email ?? 'N/A',
         isPremium = isPremium ?? false,
         premiumEndDate = premiumEndDate ?? 'N/A',

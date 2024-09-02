@@ -12,17 +12,20 @@ class ShortFormCommentModel implements IModelWithId {
   final ShortFormCommentInfo comment;
   final int replyCnt;
   final int commentLikeCnt;
+  final bool userLike;
 
   ShortFormCommentModel({
     ShortFormCommentUserInfo? user,
     ShortFormCommentInfo? comment,
     int? replyCnt,
     int? commentLikeCnt,
+    bool? userLike,
   })  : user = user ?? ShortFormCommentUserInfo(),
         comment = comment ?? ShortFormCommentInfo(),
         replyCnt = replyCnt ?? 0,
         commentLikeCnt = commentLikeCnt ?? 0,
-        id = comment?.id ?? -99999;
+        id = comment?.id ?? Constants.unknownErrorId,
+        userLike = userLike ?? false;
 
   factory ShortFormCommentModel.fromJson(Map<String, dynamic> json) =>
       _$ShortFormCommentModelFromJson(json);
@@ -38,7 +41,7 @@ class ShortFormCommentUserInfo {
     int? id,
     String? profileImg,
     String? nickname,
-  })  : id = id ?? -99999,
+  })  : id = id ?? Constants.unknownErrorId,
         profileImg = profileImg ?? Constants.defaultProfileImageUrl,
         nickname = nickname ?? 'N/A';
 
@@ -60,9 +63,9 @@ class ShortFormCommentInfo {
     int? newsId,
     String? content,
     String? editedAt,
-  })  : id = id ?? -99999,
-        userId = userId ?? -99999,
-        newsId = newsId ?? -99999,
+  })  : id = id ?? Constants.unknownErrorId,
+        userId = userId ?? Constants.unknownErrorId,
+        newsId = newsId ?? Constants.unknownErrorId,
         content = content ?? '',
         editedAt = editedAt ?? '1900-01-01';
 
