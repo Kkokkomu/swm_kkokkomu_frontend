@@ -42,7 +42,17 @@ class UserModel extends UserModelBase {
         email = email ?? 'N/A',
         isPremium = isPremium ?? false,
         premiumEndDate = premiumEndDate ?? 'N/A',
-        profileImg = profileImg ?? Constants.defaultProfileImageUrl;
+        profileImg = profileImg ?? Constants.defaultProfileImageUrl {
+    // 널값이 하나라도 들어오면 기본값으로 설정하고 로그를 남김
+    if (id == null ||
+        nickname == null ||
+        email == null ||
+        isPremium == null ||
+        premiumEndDate == null ||
+        profileImg == null) {
+      debugPrint('[Null Detected] UserModel: Null value detected');
+    }
+  }
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);

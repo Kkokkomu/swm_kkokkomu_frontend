@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/post_shortform_comment_model.dart';
@@ -102,10 +103,12 @@ class LoggedInUserShortFormCommentStateNotifier
 
     // 이전 상태가 CursorPagination이 아닌 경우, 즉, 댓글이 정상적으로 로드되지 않은 경우
     // 또는 유저 정보가 UserModel이 아닌 경우, 즉, 로그인이 되어있지 않은 경우
+    // 또는 댓글 ID가 알 수 없는 값인 경우, 즉, 에러 ID값인 경우
     // 부적절한 상태로 댓글 수정을 시도한 것으로 간주
     // 댓글 수정을 실패 처리
     if (prevState is! CursorPagination<ShortFormCommentModel> ||
-        userInfo is! UserModel) {
+        userInfo is! UserModel ||
+        commentId == Constants.unknownErrorId) {
       return false;
     }
 
@@ -149,10 +152,12 @@ class LoggedInUserShortFormCommentStateNotifier
 
     // 이전 상태가 CursorPagination이 아닌 경우, 즉, 댓글이 정상적으로 로드되지 않은 경우
     // 또는 유저 정보가 UserModel이 아닌 경우, 즉, 로그인이 되어있지 않은 경우
+    // 또는 댓글 ID가 알 수 없는 값인 경우, 즉, 에러 ID값인 경우
     // 부적절한 상태로 댓글 삭제를 시도한 것으로 간주
     // 댓글 삭제를 실패 처리
     if (prevState is! CursorPagination<ShortFormCommentModel> ||
-        userInfo is! UserModel) {
+        userInfo is! UserModel ||
+        commentId == Constants.unknownErrorId) {
       return false;
     }
 

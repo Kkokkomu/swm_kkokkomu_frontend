@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
@@ -27,7 +28,16 @@ class ShortFormCommentModel implements IModelWithId {
         replyCnt = replyCnt ?? 0,
         commentLikeCnt = commentLikeCnt ?? 0,
         id = comment?.id ?? Constants.unknownErrorId,
-        userLike = userLike ?? false;
+        userLike = userLike ?? false {
+    // 널값이 하나라도 들어오면 기본값으로 설정하고 로그를 남김
+    if (user == null ||
+        comment == null ||
+        replyCnt == null ||
+        commentLikeCnt == null ||
+        userLike == null) {
+      debugPrint('[Null Detected] ShortFormCommentModel: Null value detected');
+    }
+  }
 
   factory ShortFormCommentModel.fromJson(Map<String, dynamic> json) =>
       _$ShortFormCommentModelFromJson(json);
@@ -61,7 +71,13 @@ class ShortFormCommentUserInfo {
     String? nickname,
   })  : id = id ?? Constants.unknownErrorId,
         profileImg = profileImg ?? Constants.defaultProfileImageUrl,
-        nickname = nickname ?? 'N/A';
+        nickname = nickname ?? 'N/A' {
+    // 널값이 하나라도 들어오면 기본값으로 설정하고 로그를 남김
+    if (id == null || profileImg == null || nickname == null) {
+      debugPrint(
+          '[Null Detected] ShortFormCommentUserInfo: Null value detected');
+    }
+  }
 
   factory ShortFormCommentUserInfo.fromJson(Map<String, dynamic> json) =>
       _$ShortFormCommentUserInfoFromJson(json);
@@ -85,7 +101,16 @@ class ShortFormCommentInfo {
         userId = userId ?? Constants.unknownErrorId,
         newsId = newsId ?? Constants.unknownErrorId,
         content = content ?? '',
-        editedAt = editedAt ?? '1900-01-01';
+        editedAt = editedAt ?? '1900-01-01' {
+    // 널값이 하나라도 들어오면 기본값으로 설정하고 로그를 남김
+    if (id == null ||
+        userId == null ||
+        newsId == null ||
+        content == null ||
+        editedAt == null) {
+      debugPrint('[Null Detected] ShortFormCommentInfo: Null value detected');
+    }
+  }
 
   factory ShortFormCommentInfo.fromJson(Map<String, dynamic> json) =>
       _$ShortFormCommentInfoFromJson(json);
