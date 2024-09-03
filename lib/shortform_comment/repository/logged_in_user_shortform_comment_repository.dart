@@ -64,4 +64,20 @@ abstract class LoggedInUserShortFormCommentRepository
   Future<ResponseModel<String?>> deleteComment({
     @Query('commentId') required int commentId,
   });
+
+  @POST('/like')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<String?>> postCommentLike({
+    @Body() required PostShortFormCommentLikeBody body,
+  });
+
+  @DELETE('/like')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<String?>> deleteCommentLike({
+    @Query('commentId') required int commentId,
+  });
 }

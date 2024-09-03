@@ -164,8 +164,9 @@ class ShortFormCommentSection extends ConsumerWidget {
                   id: newsId,
                   provider: provider,
                   separatorBuilder: (_, __) => const SizedBox(height: 16.0),
-                  itemBuilder: (_, __, model) => ShortFormCommentCard(
+                  itemBuilder: (_, index, model) => ShortFormCommentCard(
                     shortFormCommentModel: model,
+                    index: index,
                   ),
                 );
               },

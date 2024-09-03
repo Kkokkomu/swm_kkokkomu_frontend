@@ -9,6 +9,7 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
   required BuildContext context,
   required int newsId,
   required int? commentId,
+  required int? index,
   required TextEditingController controller,
   required ShortFormCommentSendButtonType type,
 }) {
@@ -60,6 +61,7 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
                 SendButton(
                   newsId: newsId,
                   commentId: commentId,
+                  index: index,
                   controller: controller,
                   isInBottomSheet: true,
                   type: type,

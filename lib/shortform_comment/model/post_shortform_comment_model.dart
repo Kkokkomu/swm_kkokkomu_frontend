@@ -14,3 +14,14 @@ class PostShortFormCommentBody {
 
   Map<String, dynamic> toJson() => _$PostShortFormCommentBodyToJson(this);
 }
+
+@JsonSerializable()
+class PostShortFormCommentLikeBody {
+  final int commentId;
+
+  PostShortFormCommentLikeBody({
+    required this.commentId,
+  });
+
+  Map<String, dynamic> toJson() => _$PostShortFormCommentLikeBodyToJson(this);
+}

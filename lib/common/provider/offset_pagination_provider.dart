@@ -113,11 +113,11 @@ class OffsetPaginationProvider<T, U extends BaseOffsetPaginationRepository<T>>
 
         // 기존 데이터에
         // 새로운 데이터 추가
+        pState.items.addAll(paginationData.items);
+
+        // 새로운 데이터로 상태 변경
         state = paginationData.copyWith(
-          items: [
-            ...pState.items,
-            ...paginationData.items,
-          ],
+          items: pState.items,
         );
       } else {
         state = paginationData;

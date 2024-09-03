@@ -11,6 +11,7 @@ import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 class SendButton extends ConsumerWidget {
   final int newsId;
   final int? commentId;
+  final int? index;
   final TextEditingController controller;
   final bool isInBottomSheet;
   final ShortFormCommentSendButtonType type;
@@ -19,6 +20,7 @@ class SendButton extends ConsumerWidget {
     super.key,
     required this.newsId,
     required this.commentId,
+    required this.index,
     required this.controller,
     required this.type,
     required this.isInBottomSheet,
@@ -62,8 +64,8 @@ class SendButton extends ConsumerWidget {
 
           // 댓글을 수정하는 경우
           case ShortFormCommentSendButtonType.update:
-            // 댓글 수정을 요청하는데 댓글 ID가 없는 경우 에러 메시지를 표시하고 리턴
-            if (commentId == null) {
+            // 댓글 수정을 요청하는데 댓글 ID나 index가 없는 경우 에러 메시지를 표시하고 리턴
+            if (commentId == null || index == null) {
               CustomToastMessage.showErrorToastMessage('댓글 수정에 실패했습니다');
               return;
             }
@@ -74,6 +76,7 @@ class SendButton extends ConsumerWidget {
                 .updateComment(
                   commentId: commentId!,
                   content: controller.text,
+                  index: index!,
                 );
 
             // 댓글 수정에 실패한 경우 에러 메시지를 표시하고 리턴

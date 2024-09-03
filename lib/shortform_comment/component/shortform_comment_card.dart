@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
@@ -8,15 +9,18 @@ import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/show_shortform_comment_input_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/logged_in_user_shortform_comment_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_like_button_animation_trigger_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class ShortFormCommentCard extends ConsumerWidget {
   final ShortFormCommentModel shortFormCommentModel;
+  final int index;
 
   const ShortFormCommentCard({
     super.key,
     required this.shortFormCommentModel,
+    required this.index,
   });
 
   @override
@@ -117,12 +121,56 @@ class ShortFormCommentCard extends ConsumerWidget {
                   ),
                   const SizedBox(width: 16.0),
                   IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.thumb_up_outlined,
-                      color: shortFormCommentModel.userLike
-                          ? ColorName.blue500
-                          : null,
+                    onPressed: () {
+                      final user = ref.read(userInfoProvider);
+
+                      // 로그인된 사용자가 아닌 경우 로그인 바텀시트를 띄워주고 리턴
+                      if (user is! UserModel) {
+                        showLoginModalBottomSheet(context, ref);
+                        return;
+                      }
+
+                      // 댓글 좋아요 토글 요청
+                      ref
+                          .read(
+                            loggedInUserShortFormCommentProvider(
+                              shortFormCommentModel.comment.newsId,
+                            ).notifier,
+                          )
+                          .toggleCommentLike(
+                            commentId: shortFormCommentModel.id,
+                            index: index,
+                          );
+                    },
+                    icon: Consumer(
+                      builder: (_, ref, child) {
+                        final isTriggered = ref.watch(
+                          shortFormLikeButtonAnimationTriggerProvider(
+                              shortFormCommentModel.id),
+                        );
+
+                        // 좋아요 애니메이션이 트리거된 경우 애니메이션 위젯 반환
+                        if (isTriggered) {
+                          return const Icon(
+                            Icons.thumb_up,
+                            color: ColorName.blue500,
+                          )
+                              .animate()
+                              .rotate(begin: 0.0, end: -0.08)
+                              .then()
+                              .rotate(begin: 0.0, end: 0.08);
+                        }
+
+                        return child!;
+                      },
+                      child: Icon(
+                        shortFormCommentModel.userLike
+                            ? Icons.thumb_up
+                            : Icons.thumb_up_outlined,
+                        color: shortFormCommentModel.userLike
+                            ? ColorName.blue500
+                            : Colors.black,
+                      ),
                     ),
                   ),
                   Text(
@@ -155,6 +203,7 @@ class ShortFormCommentCard extends ConsumerWidget {
                   context: context,
                   newsId: shortFormCommentModel.comment.newsId,
                   commentId: shortFormCommentModel.id,
+                  index: index,
                   controller: controller,
                   type: ShortFormCommentSendButtonType.update,
                 );
@@ -181,7 +230,10 @@ class ShortFormCommentCard extends ConsumerWidget {
                         shortFormCommentModel.comment.newsId,
                       ).notifier,
                     )
-                    .deleteComment(commentId: shortFormCommentModel.id);
+                    .deleteComment(
+                      commentId: shortFormCommentModel.id,
+                      index: index,
+                    );
 
                 // 삭제 실패 시 에러 메시지 출력
                 if (resp == false) {

@@ -81,6 +81,7 @@ class _ShortFormCommentInputCardState
                         context: context,
                         newsId: widget.newsId,
                         commentId: null,
+                        index: null,
                         controller: _controller,
                         type: ShortFormCommentSendButtonType.post,
                       );
@@ -100,6 +101,7 @@ class _ShortFormCommentInputCardState
                 SendButton(
                   newsId: widget.newsId,
                   commentId: null,
+                  index: null,
                   controller: _controller,
                   isInBottomSheet: false,
                   type: ShortFormCommentSendButtonType.post,

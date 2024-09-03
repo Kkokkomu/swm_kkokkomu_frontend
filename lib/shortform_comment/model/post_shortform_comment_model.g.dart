@@ -19,3 +19,15 @@ Map<String, dynamic> _$PostShortFormCommentBodyToJson(
       'newsId': instance.newsId,
       'content': instance.content,
     };
+
+PostShortFormCommentLikeBody _$PostShortFormCommentLikeBodyFromJson(
+        Map<String, dynamic> json) =>
+    PostShortFormCommentLikeBody(
+      commentId: (json['commentId'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$PostShortFormCommentLikeBodyToJson(
+        PostShortFormCommentLikeBody instance) =>
+    <String, dynamic>{
+      'commentId': instance.commentId,
+    };
