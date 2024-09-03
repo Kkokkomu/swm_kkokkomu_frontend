@@ -5,6 +5,17 @@ part 'enums.g.dart';
 
 enum SocialLoginType { apple, kakao }
 
+@JsonEnum(valueField: 'name')
+enum GenderType {
+  man('MAN'),
+  woman('WOMAN'),
+  none('NONE');
+
+  final String name;
+
+  const GenderType(this.name);
+}
+
 @JsonEnum(alwaysCreate: true, valueField: 'name')
 enum ShortFormSortType {
   recommend('RECOMMEND'),

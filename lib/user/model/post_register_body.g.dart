@@ -10,7 +10,7 @@ PostRegisterBody _$PostRegisterBodyFromJson(Map<String, dynamic> json) =>
     PostRegisterBody(
       provider: json['provider'] as String,
       nickname: json['nickname'] as String,
-      sex: json['sex'] as String,
+      sex: $enumDecode(_$GenderTypeEnumMap, json['sex']),
       birthday: json['birthday'] as String,
       recommendCode: json['recommendCode'] as String?,
     );
@@ -19,7 +19,7 @@ Map<String, dynamic> _$PostRegisterBodyToJson(PostRegisterBody instance) {
   final val = <String, dynamic>{
     'provider': instance.provider,
     'nickname': instance.nickname,
-    'sex': instance.sex,
+    'sex': _$GenderTypeEnumMap[instance.sex]!,
     'birthday': instance.birthday,
   };
 
@@ -32,3 +32,9 @@ Map<String, dynamic> _$PostRegisterBodyToJson(PostRegisterBody instance) {
   writeNotNull('recommendCode', instance.recommendCode);
   return val;
 }
+
+const _$GenderTypeEnumMap = {
+  GenderType.man: 'MAN',
+  GenderType.woman: 'WOMAN',
+  GenderType.none: 'NONE',
+};

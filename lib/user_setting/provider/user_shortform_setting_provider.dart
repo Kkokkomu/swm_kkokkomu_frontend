@@ -50,22 +50,27 @@ class UserShortFormSettingStateNotifier
   }
 
   Future<ShortFormSortType> _getSortType() async {
+    // SharedPreferences에 저장된 ShortFormSortType을 가져옴
     final prefs = await SharedPreferences.getInstance();
     final sortTypeName =
         prefs.getString(SharedPreferencesKeys.shortFormSortType);
 
+    // 저장된 값이 없다면 기본값을 저장하고 반환
     if (sortTypeName == null) {
-      await _saveSortType(ShortFormSortType.recommend);
+      await _saveSortType(prefs, ShortFormSortType.recommend);
       return ShortFormSortType.recommend;
     }
 
+    // 저장된 값이 있다면 enum으로 변환하여 반환
     final sortType = ShortFormSortType.fromName(sortTypeName);
 
+    // 변환에 실패했다면 기본값을 저장하고 반환
     if (sortType == null) {
-      await _saveSortType(ShortFormSortType.recommend);
+      await _saveSortType(prefs, ShortFormSortType.recommend);
       return ShortFormSortType.recommend;
     }
 
+    // 변환에 성공했다면 sortType enum 반환
     return sortType;
   }
 
@@ -82,11 +87,12 @@ class UserShortFormSettingStateNotifier
     return categoryFilter;
   }
 
-  Future<void> _saveSortType(ShortFormSortType sortType) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-      SharedPreferencesKeys.shortFormSortType,
-      sortType.name,
-    );
-  }
+  Future<void> _saveSortType(
+    SharedPreferences prefs,
+    ShortFormSortType sortType,
+  ) async =>
+      await prefs.setString(
+        SharedPreferencesKeys.shortFormSortType,
+        sortType.name,
+      );
 }

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 import 'package:swm_kkokkomu_frontend/common/utils/data_utils.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
@@ -23,7 +24,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   DateTime _tempSavedDate = DateTime.now();
   DateTime _selectedBirthdayDate = DateTime.now();
   String _birthday = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  String _gender = 'MAN';
+  GenderType _gender = GenderType.none;
 
   @override
   Widget build(BuildContext context) {
@@ -121,30 +122,34 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                   Row(
                     children: [
-                      Radio<String>(
-                        value: 'MAN',
+                      Radio<GenderType>(
+                        value: GenderType.man,
                         groupValue: _gender,
                         onChanged: (value) {
                           setState(() {
-                            _gender = value ?? 'MAN';
+                            _gender = value ?? GenderType.man;
                           });
                         },
                       ),
                       const Text('남성'),
-                      Radio<String>(
-                        value: 'WOMAN',
+                      Radio<GenderType>(
+                        value: GenderType.woman,
                         groupValue: _gender,
                         onChanged: (value) {
                           setState(() {
-                            _gender = value ?? 'WOMAN';
+                            _gender = value ?? GenderType.woman;
                           });
                         },
                       ),
                       const Text('여성'),
-                      Radio<String>(
-                        value: 'NONE',
+                      Radio<GenderType>(
+                        value: GenderType.none,
                         groupValue: _gender,
-                        onChanged: null,
+                        onChanged: (value) {
+                          setState(() {
+                            _gender = value ?? GenderType.none;
+                          });
+                        },
                       ),
                       const Text('선택안함'),
                     ],

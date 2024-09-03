@@ -136,7 +136,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
 
   Future<void> register({
     required String nickname,
-    required String sex,
+    required GenderType sex,
     required String birthday,
     String? recommendCode,
   }) async {
