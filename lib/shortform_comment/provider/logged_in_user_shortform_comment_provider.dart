@@ -12,6 +12,7 @@ import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_like_
 import 'package:swm_kkokkomu_frontend/shortform_comment/repository/logged_in_user_shortform_comment_repository.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
+import 'package:swm_kkokkomu_frontend/user_setting/provider/logged_in_user_shortform_setting_provider.dart';
 
 final loggedInUserShortFormCommentProvider = StateNotifierProvider.family
     .autoDispose<LoggedInUserShortFormCommentStateNotifier,
@@ -222,6 +223,36 @@ class LoggedInUserShortFormCommentStateNotifier
     if (resp.success != true) {
       return false;
     }
+
+    return true;
+  }
+
+  Future<bool> hideUserAndComment({
+    required int userId,
+  }) async {
+    // 댓글 작성 전 상태를 저장
+    final prevState = _getValidPrevState(commentId: null);
+
+    if (prevState == null) {
+      return false;
+    }
+
+    // 유저 차단 요청
+    final hidedUserIdResp = await ref
+        .read(loggedInUserShortFormSettingProvider.notifier)
+        .hideUser(userId);
+
+    // 결과 값이 null 이면 실패 처리
+    if (hidedUserIdResp == null) {
+      return false;
+    }
+
+    // 차단된 유저 댓글 숨김
+    state = prevState.copyWith(
+      items: prevState.items
+          .where((element) => element.user.id != hidedUserIdResp)
+          .toList(),
+    );
 
     return true;
   }

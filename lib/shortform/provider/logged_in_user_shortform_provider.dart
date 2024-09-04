@@ -4,14 +4,15 @@ import 'package:swm_kkokkomu_frontend/common/provider/offset_pagination_provider
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_additional_params.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/repository/logged_in_user_shortform_repository.dart';
-import 'package:swm_kkokkomu_frontend/user_setting/provider/user_shortform_setting_provider.dart';
+import 'package:swm_kkokkomu_frontend/user_setting/provider/logged_in_user_shortform_setting_provider.dart';
 
 final loggedInUserShortFormProvider = StateNotifierProvider.autoDispose<
     LoggedInUserShortFormStateNotifier, OffsetPaginationBase>(
   (ref) {
     final shortFormRepository =
         ref.watch(loggedInUserShortFormRepositoryProvider);
-    final userShortFormSetting = ref.watch(userShortFormSettingProvider);
+    final userShortFormSetting =
+        ref.watch(loggedInUserShortFormSettingProvider);
 
     return LoggedInUserShortFormStateNotifier(
       shortFormRepository,

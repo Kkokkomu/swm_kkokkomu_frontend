@@ -246,7 +246,36 @@ class ShortFormCommentCard extends ConsumerWidget {
                 return;
 
               case ShortFormCommentPopupType.block:
-                // TODO: 차단 기능 구현
+                // 유저 차단 여부 확인 다이얼로그
+                final isDelete = await showConfirmationDialog(
+                  context: context,
+                  content: '정말 해당 유저를 차단하시겠습니까?',
+                  confirmText: '차단',
+                  cancelText: '취소',
+                );
+
+                // 사용자가 차단을 선택하지 않은 경우 리턴
+                if (isDelete != true) {
+                  return;
+                }
+
+                // 사용자가 차단을 선택한 경우 차단 요청
+                final resp = await ref
+                    .read(
+                      loggedInUserShortFormCommentProvider(
+                        shortFormCommentModel.comment.newsId,
+                      ).notifier,
+                    )
+                    .hideUserAndComment(userId: shortFormCommentModel.user.id);
+
+                // 삭제 실패 시 에러 메시지 출력
+                if (resp == false) {
+                  CustomToastMessage.showErrorToastMessage('유저 차단에 실패했습니다');
+                  return;
+                }
+
+                // 삭제 성공 시 성공 메시지 출력
+                CustomToastMessage.showSuccessToastMessage('차단 되었어요');
                 return;
 
               case ShortFormCommentPopupType.report:

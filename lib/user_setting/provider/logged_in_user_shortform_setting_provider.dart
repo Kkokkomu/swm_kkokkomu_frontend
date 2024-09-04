@@ -2,27 +2,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/user_setting/model/post_hide_user_model.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/model/user_shortform_category_filter_model.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/model/user_shortform_setting_model.dart';
-import 'package:swm_kkokkomu_frontend/user_setting/repository/user_setting_repository.dart';
+import 'package:swm_kkokkomu_frontend/user_setting/repository/logged_in_user_setting_repository.dart';
 
-final userShortFormSettingProvider = StateNotifierProvider<
-    UserShortFormSettingStateNotifier, UserShortFormSettingModel>(
+final loggedInUserShortFormSettingProvider = StateNotifierProvider<
+    LoggedInUserShortFormSettingStateNotifier, UserShortFormSettingModel>(
   (ref) {
-    final userSettingRepository = ref.watch(userSettingRepositoryProvider);
+    final loggedInUserSettingRepository =
+        ref.watch(loggedInUserSettingRepositoryProvider);
 
-    return UserShortFormSettingStateNotifier(
-      userSettingRepository: userSettingRepository,
+    return LoggedInUserShortFormSettingStateNotifier(
+      loggedInUserSettingRepository: loggedInUserSettingRepository,
     );
   },
 );
 
-class UserShortFormSettingStateNotifier
+class LoggedInUserShortFormSettingStateNotifier
     extends StateNotifier<UserShortFormSettingModel> {
-  final UserSettingRepository userSettingRepository;
+  final LoggedInUserSettingRepository loggedInUserSettingRepository;
 
-  UserShortFormSettingStateNotifier({
-    required this.userSettingRepository,
+  LoggedInUserShortFormSettingStateNotifier({
+    required this.loggedInUserSettingRepository,
   }) : super(
           UserShortFormSettingModel(
             userShortFormCategoryFilter: UserShortFormCategoryFilterModel(
@@ -75,16 +77,37 @@ class UserShortFormSettingStateNotifier
   }
 
   Future<UserShortFormCategoryFilterModel> _getCategoryFilter() async {
+    // 서버로부터 UserShortFormCategoryFilter를 가져옴
     final response =
-        await userSettingRepository.getUserShortFormCategoryFilter();
+        await loggedInUserSettingRepository.getUserShortFormCategoryFilter();
 
     final categoryFilter = response.data;
 
+    // 서버로부터 가져온 값이 없다면 초기 값(기본 값) 반환
     if (response.success != true || categoryFilter == null) {
       return state.userShortFormCategoryFilter;
     }
 
+    // 서버로부터 가져온 값이 있다면 반환
     return categoryFilter;
+  }
+
+  Future<int?> hideUser(int userId) async {
+    // 서버로부터 유저 차단 요청
+    final resp = await loggedInUserSettingRepository.hideUser(
+      body: PostHideUserModel(hidedUserId: userId),
+    );
+
+    // 차단된 유저 아이디
+    final hidedUserId = resp.data?.hidedUserId;
+
+    // 차단된 유저 아이디가 없다면, 즉, 실패했다면 null 반환
+    if (resp.success != true || hidedUserId == null) {
+      return null;
+    }
+
+    // 성공했다면 차단된 유저 아이디 반환
+    return hidedUserId;
   }
 
   Future<void> _saveSortType(

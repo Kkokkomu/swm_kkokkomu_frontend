@@ -9,7 +9,7 @@ import 'package:swm_kkokkomu_frontend/user/model/post_register_body.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/repository/auth_repository.dart';
 import 'package:swm_kkokkomu_frontend/user/repository/user_repository.dart';
-import 'package:swm_kkokkomu_frontend/user_setting/provider/user_shortform_setting_provider.dart';
+import 'package:swm_kkokkomu_frontend/user_setting/provider/logged_in_user_shortform_setting_provider.dart';
 import 'package:uuid/uuid.dart';
 
 final userInfoProvider =
@@ -267,7 +267,9 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
 
     // 유저 정보를 가져오는데 성공한 경우
     // 유저 숏폼 설정을 가져오고 유저 정보를 갱신
-    await ref.read(userShortFormSettingProvider.notifier).getSetting();
+    // 로그아웃 후 재로그인 시 이전 세팅이 남아있는 문제를 해결하기 위해 invalidate 호출 후, getSetting 호출
+    ref.invalidate(loggedInUserShortFormSettingProvider);
+    await ref.read(loggedInUserShortFormSettingProvider.notifier).getSetting();
     state = userInfo;
   }
 
