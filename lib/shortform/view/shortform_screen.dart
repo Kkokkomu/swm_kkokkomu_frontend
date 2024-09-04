@@ -44,10 +44,13 @@ class ShortFormScreen extends ConsumerWidget {
           ? const CustomScrollPhysics()
           : const NeverScrollableScrollPhysics(),
       itemBuilder: (_, __, model) {
-        final newsId = model.shortformList?.id;
-        final shortFormUrl = model.shortformList?.shortformUrl;
+        final shortFormUrlInfo = model.shortformList;
+        final newsId = shortFormUrlInfo?.id;
+        final shortFormUrl = shortFormUrlInfo?.shortformUrl;
 
-        if (newsId == null || shortFormUrl == null) {
+        if (shortFormUrlInfo == null ||
+            newsId == null ||
+            shortFormUrl == null) {
           debugPrint('newsId or shortFormUrl is null');
 
           return const Column(
@@ -66,6 +69,7 @@ class ShortFormScreen extends ConsumerWidget {
         return SingleShortForm(
           newsId: newsId,
           shortFormUrl: shortFormUrl,
+          relatedUrl: shortFormUrlInfo.relatedUrl,
         );
       },
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_visibility_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -133,12 +134,12 @@ class CommentButton extends StatelessWidget {
   }
 }
 
-class ShareYoutubeUrlButton extends StatelessWidget {
-  final String shortFormYoutubeURL;
+class ShareButton extends StatelessWidget {
+  final String shareUrl;
 
-  const ShareYoutubeUrlButton({
+  const ShareButton({
     super.key,
-    required this.shortFormYoutubeURL,
+    required this.shareUrl,
   });
 
   @override
@@ -146,7 +147,7 @@ class ShareYoutubeUrlButton extends StatelessWidget {
     return IconButton(
       onPressed: () {
         Share.shareUri(
-          Uri.parse(shortFormYoutubeURL),
+          Uri.parse(shareUrl),
         );
       },
       icon: const Icon(
@@ -169,9 +170,13 @@ class RelatedUrlButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () {
+      onPressed: () async {
+        final url = await canLaunchUrl(Uri.parse(shortFormRelatedURL))
+            ? shortFormRelatedURL
+            : Constants.relatedUrlOnError;
+
         launchUrl(
-          Uri.parse(shortFormRelatedURL),
+          Uri.parse(url),
         );
       },
       icon: const Icon(

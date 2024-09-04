@@ -33,12 +33,14 @@ ShortFormUrlInfo _$ShortFormUrlInfoFromJson(Map<String, dynamic> json) =>
     ShortFormUrlInfo(
       id: (json['id'] as num?)?.toInt(),
       shortformUrl: json['shortformUrl'] as String?,
+      relatedUrl: json['relatedUrl'] as String?,
     );
 
 Map<String, dynamic> _$ShortFormUrlInfoToJson(ShortFormUrlInfo instance) =>
     <String, dynamic>{
       'id': instance.id,
       'shortformUrl': instance.shortformUrl,
+      'relatedUrl': instance.relatedUrl,
     };
 
 ShortFormReactionCountInfo _$ShortFormReactionCountInfoFromJson(

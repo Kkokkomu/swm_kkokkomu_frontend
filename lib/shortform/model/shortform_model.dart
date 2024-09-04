@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 
 part 'shortform_model.g.dart';
 
@@ -23,11 +24,13 @@ class ShortFormModel {
 class ShortFormUrlInfo {
   final int? id;
   final String? shortformUrl;
+  final String relatedUrl;
 
   ShortFormUrlInfo({
     this.id,
     this.shortformUrl,
-  });
+    String? relatedUrl,
+  }) : relatedUrl = relatedUrl ?? Constants.relatedUrlOnError;
 
   factory ShortFormUrlInfo.fromJson(Map<String, dynamic> json) =>
       _$ShortFormUrlInfoFromJson(json);

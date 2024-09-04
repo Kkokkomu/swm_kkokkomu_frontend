@@ -15,11 +15,13 @@ import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comme
 class SingleShortForm extends ConsumerWidget {
   final int newsId;
   final String shortFormUrl;
+  final String relatedUrl;
 
   const SingleShortForm({
     super.key,
     required this.newsId,
     required this.shortFormUrl,
+    required this.relatedUrl,
   });
 
   @override
@@ -159,12 +161,14 @@ class SingleShortForm extends ConsumerWidget {
                                   maxCommentHeight: constraints.maxHeight,
                                 ),
                                 const SizedBox(height: 16.0),
-                                const ShareYoutubeUrlButton(
-                                  shortFormYoutubeURL: 'https://naver.com',
+                                ShareButton(
+                                  // TODO : 공유 기능 구현하기
+                                  // 임시로 relatedUrl을 공유 URL로 사용
+                                  shareUrl: relatedUrl,
                                 ),
                                 const SizedBox(height: 16.0),
-                                const RelatedUrlButton(
-                                  shortFormRelatedURL: 'https://naver.com',
+                                RelatedUrlButton(
+                                  shortFormRelatedURL: relatedUrl,
                                 ),
                               ],
                             ),
