@@ -12,7 +12,7 @@ import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_like_
 import 'package:swm_kkokkomu_frontend/shortform_comment/repository/logged_in_user_shortform_comment_repository.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
-import 'package:swm_kkokkomu_frontend/user_setting/provider/logged_in_user_shortform_setting_provider.dart';
+import 'package:swm_kkokkomu_frontend/user_setting/provider/logged_in_user_blocked_user_list_provider.dart';
 
 final loggedInUserShortFormCommentProvider = StateNotifierProvider.family
     .autoDispose<LoggedInUserShortFormCommentStateNotifier,
@@ -239,7 +239,7 @@ class LoggedInUserShortFormCommentStateNotifier
 
     // 유저 차단 요청
     final hidedUserIdResp = await ref
-        .read(loggedInUserShortFormSettingProvider.notifier)
+        .read(loggedInUserBlockedUserListProvider.notifier)
         .hideUser(userId);
 
     // 결과 값이 null 이면 실패 처리

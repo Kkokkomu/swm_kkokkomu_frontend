@@ -66,12 +66,6 @@ class SharedPreferencesKeys {
   static const String shortFormSortType = 'short_form_sort_type';
 }
 
-class RoutePath {
-  static const String exploration = '/exploration';
-  static const String shortForm = '/shortform';
-  static const String myPage = '/mypage';
-}
-
 // BetterPlayer 캐시 설정값
 const customBetterPlayerCacheConfiguration = BetterPlayerCacheConfiguration(
   useCache: true,

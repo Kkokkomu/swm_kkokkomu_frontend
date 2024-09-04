@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 
 part 'enums.g.dart';
 
@@ -46,9 +46,9 @@ enum NewsCategory {
 enum ShortFormCommentSortType { popular, latest }
 
 enum RootTabBottomNavigationBarType {
-  exploration(RoutePath.exploration),
-  shortForm(RoutePath.shortForm),
-  myPage(RoutePath.myPage);
+  exploration(CustomRoutePath.exploration),
+  shortForm(CustomRoutePath.shortForm),
+  myPage(CustomRoutePath.myPage);
 
   final String path;
 

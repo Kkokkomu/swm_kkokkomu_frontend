@@ -6,14 +6,14 @@ part of 'hided_user_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-HidedUserModel _$HidedUserModelFromJson(Map<String, dynamic> json) =>
-    HidedUserModel(
+HidedUserData _$HidedUserDataFromJson(Map<String, dynamic> json) =>
+    HidedUserData(
       id: (json['id'] as num?)?.toInt(),
       userName: json['userName'] as String?,
       createdAt: json['createdAt'] as String?,
     );
 
-Map<String, dynamic> _$HidedUserModelToJson(HidedUserModel instance) =>
+Map<String, dynamic> _$HidedUserDataToJson(HidedUserData instance) =>
     <String, dynamic>{
       'id': instance.id,
       'userName': instance.userName,

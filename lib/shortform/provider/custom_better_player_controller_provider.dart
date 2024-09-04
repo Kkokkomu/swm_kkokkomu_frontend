@@ -2,6 +2,7 @@ import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/custom_better_player_controller_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/short_form_play_pause_button_visibility_provider.dart';
@@ -139,7 +140,7 @@ class CustomBetterPlayerControllerStateNotifier
           _betterPlayerController?.videoPlayerController?.value.position;
 
       // 숏폼 탭이 아닌 다른 탭으로 이동한 경우 비디오를 정지만 하고 0초로 되돌리지 않음
-      if (!(currentRoutePath.startsWith(RoutePath.shortForm)) &&
+      if (!(currentRoutePath.startsWith(CustomRoutePath.shortForm)) &&
           currentPosition != null) {
         // 다시 숏폼 탭으로 돌아왔을 때 스무스한 재생을 위해 1초 전으로 이동
         _betterPlayerController?.seekTo(

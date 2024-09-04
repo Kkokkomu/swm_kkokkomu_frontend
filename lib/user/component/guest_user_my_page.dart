@@ -9,6 +9,7 @@ class GuestUserMyPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
             onPressed: () => showLoginModalBottomSheet(context, ref),
