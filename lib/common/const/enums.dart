@@ -47,7 +47,7 @@ enum ShortFormCommentSortType { popular, latest }
 
 enum RootTabBottomNavigationBarType {
   exploration(CustomRoutePath.exploration),
-  shortForm(CustomRoutePath.shortForm),
+  home(CustomRoutePath.home),
   myPage(CustomRoutePath.myPage);
 
   final String path;

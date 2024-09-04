@@ -59,7 +59,7 @@ class AuthProvider extends ChangeNotifier {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/shortform',
+                  path: '/',
                   name: ShortFormScreen.routeName,
                   builder: (_, __) => const ShortFormScreen(),
                 ),
@@ -142,7 +142,7 @@ class AuthProvider extends ChangeNotifier {
       return isLoggingIn ||
               isSplashScreen ||
               state.fullPath == CustomRoutePath.register
-          ? CustomRoutePath.shortForm
+          ? CustomRoutePath.home
           : null;
     }
 
@@ -151,7 +151,7 @@ class AuthProvider extends ChangeNotifier {
     // 로그인 중이거나 현재 위치가 SplashScreen이면
     // 홈(숏폼화면)으로 이동
     if (user is GuestUserModel && (isLoggingIn || isSplashScreen)) {
-      return CustomRoutePath.shortForm;
+      return CustomRoutePath.home;
     }
 
     return null;

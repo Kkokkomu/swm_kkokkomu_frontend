@@ -80,12 +80,12 @@ class CustomBottomNavigationBar extends ConsumerStatefulWidget {
 
 class _CustomBottomNavigationBarState
     extends ConsumerState<CustomBottomNavigationBar> {
-  late final bool isShortFormScreen;
+  late final bool isHomeScreen;
 
   @override
   void initState() {
     super.initState();
-    isShortFormScreen = widget.navigationShell.currentIndex == 1;
+    isHomeScreen = widget.navigationShell.currentIndex == 1;
   }
 
   void refreshCurrentTab(RootTabBottomNavigationBarType tabType) {
@@ -94,7 +94,7 @@ class _CustomBottomNavigationBarState
     switch (tabType) {
       case RootTabBottomNavigationBarType.exploration:
         break;
-      case RootTabBottomNavigationBarType.shortForm:
+      case RootTabBottomNavigationBarType.home:
         if (user is UserModel) {
           ref
               .read(loggedInUserShortFormProvider.notifier)
@@ -116,22 +116,24 @@ class _CustomBottomNavigationBarState
     final bottomNavigationBarState =
         ref.watch(bottomNavigationBarStateProvider);
 
+    // 홈(숏폼) 화면에서 감정표현 모달이 열려있을 때 시스템 바텀 네비게이션 바를 어둡게 처리 (안드로이드)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(
-          systemNavigationBarColor: isShortFormScreen &&
-                  bottomNavigationBarState.isModalBarrierVisible
-              ? Constants.modalBarrierColor
-              : Colors.transparent,
+          systemNavigationBarColor:
+              isHomeScreen && bottomNavigationBarState.isModalBarrierVisible
+                  ? Constants.modalBarrierColor
+                  : Colors.transparent,
         ),
       );
     });
 
     return SizedBox(
-      height: !isShortFormScreen ||
-              bottomNavigationBarState.isBottomNavigationBarVisible
-          ? Constants.bottomNavigationBarHeightWithSafeArea
-          : 0.0,
+      // 홈(숏폼) 화면에서 댓글 창이 활성화 되어있을 때 바텀 네비게이션 바를 숨김
+      height:
+          !isHomeScreen || bottomNavigationBarState.isBottomNavigationBarVisible
+              ? Constants.bottomNavigationBarHeightWithSafeArea
+              : 0.0,
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -140,11 +142,15 @@ class _CustomBottomNavigationBarState
             unselectedFontSize: 12,
             type: BottomNavigationBarType.fixed,
             onTap: (int index) {
+              // 현재 탭을 누르면 현재 탭 새로고침
               if (index == widget.navigationShell.currentIndex) {
+                // 새로고침 로직 작동
                 refreshCurrentTab(RootTabBottomNavigationBarType.values[index]);
+                // 현재 탭에 여러 페이지가 nested 되어 있을 경우 초기 페이지로 이동
                 widget.navigationShell.goBranch(index, initialLocation: true);
                 return;
               }
+              // 다른 탭을 누르면 해당 탭으로 이동
               widget.navigationShell.goBranch(index);
             },
             currentIndex: widget.navigationShell.currentIndex,
@@ -163,8 +169,8 @@ class _CustomBottomNavigationBarState
               ),
             ],
           ),
-          if (isShortFormScreen &&
-              bottomNavigationBarState.isModalBarrierVisible)
+          // 홈(숏폼) 화면에서 감정표현 모달이 열려있을 때 바텀 네비게이션 바를 어둡게 처리
+          if (isHomeScreen && bottomNavigationBarState.isModalBarrierVisible)
             const ModalBarrier(
               color: Constants.modalBarrierColor,
               dismissible: false,
