@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/secure_storage/secure_storage.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/user/model/post_register_body.dart';
@@ -268,7 +269,10 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
     // 유저 정보를 가져오는데 성공한 경우
     // 유저 숏폼 설정을 가져오고 유저 정보를 갱신
     // 로그아웃 후 재로그인 시 이전 세팅이 남아있는 문제를 해결하기 위해 invalidate 호출 후, getSetting 호출
+    // 홈(숏폼) 화면에서 비로그인 상태에서 로그인 상태로 전환할 때, 바텀 네비게이션바 상태를 초기화 하기 위해 invalidate 호출
+    // 즉, 댓글창 열어둔 상태에서 로그인했을 때, 바텀 네비게이션바가 비활성화된 상태로 남아있는 문제를 해결하기 위해 invalidate 호출
     ref.invalidate(loggedInUserShortFormSettingProvider);
+    ref.invalidate(bottomNavigationBarStateProvider);
     await ref.read(loggedInUserShortFormSettingProvider.notifier).getSetting();
     state = userInfo;
   }
