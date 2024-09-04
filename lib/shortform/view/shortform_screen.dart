@@ -21,11 +21,8 @@ class ShortFormScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userInfoProvider);
-    final isBottomNavigationBarVisible = ref.watch(
-      bottomNavigationBarStateProvider.select(
-        (value) => value.isBottomNavigationBarVisible,
-      ),
-    );
+    final bottomNavigationBarState =
+        ref.watch(bottomNavigationBarStateProvider);
 
     late final AutoDisposeStateNotifierProvider<
         OffsetPaginationProvider<ShortFormModel,
@@ -40,7 +37,11 @@ class ShortFormScreen extends ConsumerWidget {
 
     return OffsetPaginationPageView<ShortFormModel>(
       provider: provider,
-      scrollPhysics: isBottomNavigationBarVisible
+      // 바텀 네비게이션바가 보이고 모달 배리어가 보이지 않을 때만 스크롤 가능하도록 설정
+      // 댓글 창이 활성화 된 경우 -> 바텀 네비게이션바가 보이지 않음 -> 스크롤 불가능
+      // 감정입력창이 활성화 된 경우 -> 모달 배리어가 보임 -> 스크롤 불가능
+      scrollPhysics: (bottomNavigationBarState.isBottomNavigationBarVisible &&
+              !bottomNavigationBarState.isModalBarrierVisible)
           ? const CustomScrollPhysics()
           : const NeverScrollableScrollPhysics(),
       itemBuilder: (_, __, model) {
