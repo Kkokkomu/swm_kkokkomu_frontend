@@ -11,6 +11,7 @@ import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_r
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/post_shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/put_shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_report_model.dart';
 
 part 'logged_in_user_shortform_comment_repository.g.dart';
 
@@ -20,7 +21,7 @@ final loggedInUserShortFormCommentRepositoryProvider =
 
   return LoggedInUserShortFormCommentRepository(
     dio,
-    baseUrl: '${Constants.baseUrl}/comment',
+    baseUrl: Constants.baseUrl,
   );
 });
 
@@ -31,7 +32,7 @@ abstract class LoggedInUserShortFormCommentRepository
       _LoggedInUserShortFormCommentRepository;
 
   @override
-  @GET('{apiPath}')
+  @GET('/comment/{apiPath}')
   @Headers({
     'accessToken': true,
   })
@@ -41,7 +42,7 @@ abstract class LoggedInUserShortFormCommentRepository
     @Path() String apiPath = '',
   });
 
-  @POST('')
+  @POST('/comment')
   @Headers({
     'accessToken': true,
   })
@@ -49,7 +50,7 @@ abstract class LoggedInUserShortFormCommentRepository
     @Body() required PostShortFormCommentBody body,
   });
 
-  @PUT('')
+  @PUT('/comment')
   @Headers({
     'accessToken': true,
   })
@@ -57,7 +58,7 @@ abstract class LoggedInUserShortFormCommentRepository
     @Body() required PutShortFormCommentBody body,
   });
 
-  @DELETE('')
+  @DELETE('/comment')
   @Headers({
     'accessToken': true,
   })
@@ -65,7 +66,7 @@ abstract class LoggedInUserShortFormCommentRepository
     @Query('commentId') required int commentId,
   });
 
-  @POST('/like')
+  @POST('/comment/like')
   @Headers({
     'accessToken': true,
   })
@@ -73,11 +74,19 @@ abstract class LoggedInUserShortFormCommentRepository
     @Body() required PostShortFormCommentLikeBody body,
   });
 
-  @DELETE('/like')
+  @DELETE('/comment/like')
   @Headers({
     'accessToken': true,
   })
   Future<ResponseModel<String?>> deleteCommentLike({
     @Query('commentId') required int commentId,
+  });
+
+  @POST('/report/comment')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<CommentReportResponseModel?>> reportComment({
+    @Body() required PostCommentReportModel body,
   });
 }

@@ -38,10 +38,10 @@ class UserModel extends UserModelBase {
     required String? premiumEndDate,
     required String? profileImg,
   })  : id = id ?? Constants.unknownErrorId,
-        nickname = nickname ?? 'N/A',
-        email = email ?? 'N/A',
+        nickname = nickname ?? Constants.unknownErrorString,
+        email = email ?? Constants.unknownErrorString,
         isPremium = isPremium ?? false,
-        premiumEndDate = premiumEndDate ?? 'N/A',
+        premiumEndDate = premiumEndDate ?? Constants.unknownErrorString,
         profileImg = profileImg ?? Constants.defaultProfileImageUrl {
     // 널값이 하나라도 들어오면 기본값으로 설정하고 로그를 남김
     if (id == null ||

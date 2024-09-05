@@ -71,7 +71,7 @@ class ShortFormCommentUserInfo {
     String? nickname,
   })  : id = id ?? Constants.unknownErrorId,
         profileImg = profileImg ?? Constants.defaultProfileImageUrl,
-        nickname = nickname ?? 'N/A' {
+        nickname = nickname ?? Constants.unknownErrorString {
     // 널값이 하나라도 들어오면 기본값으로 설정하고 로그를 남김
     if (id == null || profileImg == null || nickname == null) {
       debugPrint(
@@ -101,7 +101,7 @@ class ShortFormCommentInfo {
         userId = userId ?? Constants.unknownErrorId,
         newsId = newsId ?? Constants.unknownErrorId,
         content = content ?? '',
-        editedAt = editedAt ?? '1900-01-01' {
+        editedAt = editedAt ?? Constants.unknownErrorString {
     // 널값이 하나라도 들어오면 기본값으로 설정하고 로그를 남김
     if (id == null ||
         userId == null ||

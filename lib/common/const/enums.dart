@@ -67,6 +67,34 @@ enum ShortFormCommentSendButtonType {
   update,
 }
 
+@JsonEnum(valueField: 'name')
+enum CommentReportType {
+  offensive('OFFENSIVE', '불쾌감을 주거나 부적절한 이름'),
+  profane('PROFANE', '욕설'),
+  violent('VIOLENT', '폭력적 또는 혐오스러운 콘텐츠'),
+  porno('PORNO', '성적인 콘텐츠'),
+  spam('SPAM', '스팸 또는 혼동을 야기하는 콘텐츠');
+
+  final String name;
+  final String message;
+
+  const CommentReportType(this.name, this.message);
+}
+
+@JsonEnum(valueField: 'name')
+enum ShortFormReportType {
+  misinformation('MISINFORMATION', '잘못된 정보'),
+  violent('VIOLENT', '폭력적 또는 혐오스러운 콘텐츠'),
+  porno('PORNO', '성적인 콘텐츠'),
+  legal('legal', '법적 문제'),
+  spam('SPAM', '스팸 또는 혼동을 야기하는 콘텐츠');
+
+  final String name;
+  final String message;
+
+  const ShortFormReportType(this.name, this.message);
+}
+
 // loadingStateProvider 에서 사용하는 요청 종류
 // enum RequestType {
 //   postComment,

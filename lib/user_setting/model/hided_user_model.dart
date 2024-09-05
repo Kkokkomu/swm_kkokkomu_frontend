@@ -37,8 +37,8 @@ class HidedUserData {
     required String? userName,
     required String? createdAt,
   })  : id = id ?? Constants.unknownErrorId,
-        userName = userName ?? 'N/A',
-        createdAt = createdAt ?? 'N/A';
+        userName = userName ?? Constants.unknownErrorString,
+        createdAt = createdAt ?? Constants.unknownErrorString;
 
   factory HidedUserData.fromJson(Map<String, dynamic> json) =>
       _$HidedUserDataFromJson(json);

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/post_shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/put_shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_additional_params.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_report_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_sort_type_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_like_button_animation_trigger_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/repository/logged_in_user_shortform_comment_repository.dart';
@@ -28,7 +30,7 @@ final loggedInUserShortFormCommentProvider = StateNotifierProvider.family
       ref: ref,
       newsId: newsId,
       additionalParams: ShortFormCommentAdditionalParams(newsId: newsId),
-      apiPath: '/${shortFormCommentSortType.name}',
+      apiPath: shortFormCommentSortType.name,
     );
   },
 );
@@ -253,6 +255,31 @@ class LoggedInUserShortFormCommentStateNotifier
           .where((element) => element.user.id != hidedUserIdResp)
           .toList(),
     );
+
+    return true;
+  }
+
+  Future<bool> reportComment({
+    required int commentId,
+    required CommentReportType reason,
+  }) async {
+    // 로그인된 유저가 아닌 경우 실패 처리
+    if (ref.read(userInfoProvider) is! UserModel) {
+      return false;
+    }
+
+    // 댓글 신고 요청
+    final resp = await repository.reportComment(
+      body: PostCommentReportModel(
+        reason: reason,
+        commentId: commentId,
+      ),
+    );
+
+    // success값이 true가 아니거나 신고된 댓글 정보가 없는 경우 실패 처리
+    if (resp.success != true || resp.data == null) {
+      return false;
+    }
 
     return true;
   }

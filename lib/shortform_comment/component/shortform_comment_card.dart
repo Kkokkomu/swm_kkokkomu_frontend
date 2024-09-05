@@ -6,6 +6,7 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_report_dialog.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/show_shortform_comment_input_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/logged_in_user_shortform_comment_provider.dart';
@@ -279,7 +280,34 @@ class ShortFormCommentCard extends ConsumerWidget {
                 return;
 
               case ShortFormCommentPopupType.report:
-                // TODO: 신고 기능 구현
+                final reportType =
+                    await showShortFormCommentReportDialog(context: context);
+
+                // 신고 사유를 선택하지 않은 경우 리턴
+                if (reportType == null) {
+                  return;
+                }
+
+                // 신고 요청
+                final resp = await ref
+                    .read(
+                      loggedInUserShortFormCommentProvider(
+                        shortFormCommentModel.comment.newsId,
+                      ).notifier,
+                    )
+                    .reportComment(
+                      commentId: shortFormCommentModel.id,
+                      reason: reportType,
+                    );
+
+                // 신고 실패 시 에러 메시지 출력
+                if (resp == false) {
+                  CustomToastMessage.showErrorToastMessage('댓글 신고에 실패했습니다.');
+                  return;
+                }
+
+                // 신고 성공 시 성공 메시지 출력
+                CustomToastMessage.showSuccessToastMessage('댓글이 신고되었습니다.');
                 return;
 
               default:
