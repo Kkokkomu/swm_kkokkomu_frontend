@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,18 +62,24 @@ class LoginScreen extends ConsumerWidget {
                       ? const CustomCircularProgressIndicator()
                       : Column(
                           children: [
-                            GestureDetector(
-                              onTap: () => ref
-                                  .read(userInfoProvider.notifier)
-                                  .login(SocialLoginType.apple),
-                              child: Assets.images.appleLogin.image(
-                                fit: BoxFit.fitWidth,
-                                width: double.infinity,
+                            if (Platform.isIOS)
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => ref
+                                        .read(userInfoProvider.notifier)
+                                        .login(SocialLoginType.apple),
+                                    child: Assets.images.appleLogin.image(
+                                      fit: BoxFit.fitWidth,
+                                      width: double.infinity,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 16.0,
+                                  ),
+                                ],
                               ),
-                            ),
-                            const SizedBox(
-                              height: 16.0,
-                            ),
                             GestureDetector(
                               onTap: () => ref
                                   .read(userInfoProvider.notifier)

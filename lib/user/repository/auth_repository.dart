@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:retrofit/http.dart';
@@ -64,7 +63,7 @@ class AuthRepository extends __AuthServiceApi {
 
     switch (socialLoginType) {
       case SocialLoginType.apple:
-        authorizationHeader = await _getAppleAuthorizationCode();
+        authorizationHeader = await _getAppleIdentityToken();
         break;
 
       case SocialLoginType.kakao:
@@ -85,27 +84,24 @@ class AuthRepository extends __AuthServiceApi {
     );
   }
 
-  Future<String?> _getAppleAuthorizationCode() async {
-    String? appleAuthorizationCode;
+  Future<String?> _getAppleIdentityToken() async {
+    String? appleIdentityToken;
 
     try {
-      appleAuthorizationCode = (await SignInWithApple.getAppleIDCredential(
+      appleIdentityToken = (await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
         ],
-        webAuthenticationOptions: WebAuthenticationOptions(
-          clientId: dotenv.env['APPLE_LOGIN_CLIENT_ID'] ?? '',
-          redirectUri: Uri.parse(
-            '${Constants.baseUrl}/callback',
-          ),
-        ),
       ))
-          .authorizationCode;
+          .identityToken;
+
+      debugPrint('애플 로그인 성공');
     } catch (e) {
+      debugPrint('애플 로그인 실패');
       debugPrint(e.toString());
     }
 
-    return appleAuthorizationCode;
+    return appleIdentityToken;
   }
 
   Future<String?> _getKakaoAccessToken() async {
