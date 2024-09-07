@@ -97,6 +97,8 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
           ),
           comment: ShortFormCommentInfo(
             id: replyInfo.id,
+            userId: replyInfo.userId,
+            newsId: replyInfo.newsId,
             content: replyInfo.content,
             editedAt: replyInfo.editedAt,
           ),
