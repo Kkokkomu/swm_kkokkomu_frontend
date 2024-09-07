@@ -21,6 +21,7 @@ class ShortFormCommentCard extends ConsumerWidget {
   final ShortFormCommentModel shortFormCommentModel;
   final int index;
   final bool isReply;
+  final bool isReplyHeader;
   final int? parentCommentId;
 
   const ShortFormCommentCard({
@@ -28,6 +29,7 @@ class ShortFormCommentCard extends ConsumerWidget {
     required this.shortFormCommentModel,
     required this.index,
     required this.isReply,
+    required this.isReplyHeader,
     required this.parentCommentId,
   });
 
@@ -76,39 +78,12 @@ class ShortFormCommentCard extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: shortFormCommentModel.user.nickname,
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    if (isMyComment)
-                      WidgetSpan(
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 8.0),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 4.0,
-                            vertical: 2.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: ColorName.blue500,
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: const Text(
-                            '내 댓글',
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
+              Text(
+                shortFormCommentModel.user.nickname,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: isMyComment ? ColorName.blue500 : ColorName.gray400,
                 ),
               ),
               Text(
@@ -208,14 +183,17 @@ class ShortFormCommentCard extends ConsumerWidget {
                       children: [
                         const SizedBox(width: 16.0),
                         IconButton(
-                          // 대댓글 버튼 클릭 시 대댓글 입력창 활성화
-                          onPressed: () => ref
-                              .read(
-                                shortFormCommentHeightControllerProvider(
-                                  shortFormCommentModel.comment.newsId,
-                                ).notifier,
-                              )
-                              .activateReply(shortFormCommentModel.id),
+                          // 대댓글의 부모 댓글인 경우 대댓글 버튼 비활성화 (재귀 방지)
+                          onPressed: isReplyHeader
+                              ? null
+                              // 대댓글 버튼 클릭 시 대댓글 입력창 활성화
+                              : () => ref
+                                  .read(
+                                    shortFormCommentHeightControllerProvider(
+                                      shortFormCommentModel.comment.newsId,
+                                    ).notifier,
+                                  )
+                                  .activateReply(shortFormCommentModel.id),
                           icon: const Icon(Icons.forum_outlined),
                         ),
                         Text(
