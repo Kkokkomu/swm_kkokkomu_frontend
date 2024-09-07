@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
@@ -376,7 +377,18 @@ class ShortFormCommentCard extends ConsumerWidget {
                     );
 
                 // 신고 실패 시 에러 메시지 출력
-                if (resp == false) {
+                if (resp.success == false) {
+                  // 이미 신고한 댓글인 경우 에러 다이얼로그 출력
+                  if (resp.errorCode ==
+                          CustomErrorCode.alreadyReportedCommentCode &&
+                      context.mounted) {
+                    showInfoDialog(
+                      context: context,
+                      content: resp.errorMessage ?? '이미 신고한 댓글입니다.',
+                    );
+                    return;
+                  }
+
                   CustomToastMessage.showErrorToastMessage('댓글 신고에 실패했습니다.');
                   return;
                 }

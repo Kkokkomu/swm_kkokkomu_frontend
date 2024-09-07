@@ -66,6 +66,7 @@ class SendButton extends ConsumerWidget {
                   context: context,
                   content: resp.errorMessage ?? '댓글 작성이 제한된 사용자입니다',
                 );
+                return;
               }
 
               CustomToastMessage.showErrorToastMessage('댓글 작성에 실패했습니다');
@@ -135,6 +136,7 @@ class SendButton extends ConsumerWidget {
                   context: context,
                   content: resp.errorMessage ?? '댓글 작성이 제한된 사용자입니다',
                 );
+                return;
               }
 
               CustomToastMessage.showErrorToastMessage('댓글 작성에 실패했습니다');

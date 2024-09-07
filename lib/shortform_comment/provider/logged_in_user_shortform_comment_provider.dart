@@ -269,13 +269,18 @@ class LoggedInUserShortFormCommentStateNotifier
     return true;
   }
 
-  Future<bool> reportComment({
+  Future<({bool success, String? errorCode, String? errorMessage})>
+      reportComment({
     required int commentId,
     required CommentReportType reason,
   }) async {
     // 로그인된 유저가 아닌 경우 실패 처리
     if (ref.read(userInfoProvider) is! UserModel) {
-      return false;
+      return (
+        success: false,
+        errorCode: CustomErrorCode.unknownCode,
+        errorMessage: '댓글 신고에 실패했습니다.'
+      );
     }
 
     // 댓글 신고 요청
@@ -288,10 +293,14 @@ class LoggedInUserShortFormCommentStateNotifier
 
     // success값이 true가 아니거나 신고된 댓글 정보가 없는 경우 실패 처리
     if (resp.success != true || resp.data == null) {
-      return false;
+      return (
+        success: false,
+        errorCode: resp.error?.code ?? CustomErrorCode.unknownCode,
+        errorMessage: resp.error?.message ?? '댓글 신고에 실패했습니다.',
+      );
     }
 
-    return true;
+    return (success: true, errorCode: null, errorMessage: null);
   }
 
   // 대댓글에서 차단한 유저를 댓글에서도 숨김 처리
