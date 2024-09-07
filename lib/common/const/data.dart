@@ -55,6 +55,10 @@ class AnimationDuration {
   // 홀드 시간 + 애니메이션 시간 * 2
   static const Duration startPauseButtonTotalDuration =
       Duration(milliseconds: 1100);
+
+  // 대댓글창 등장 애니메이션 시간
+  static const Duration replyAppearAnimationDuration =
+      Duration(milliseconds: 300);
 }
 
 class SecureStorageKeys {

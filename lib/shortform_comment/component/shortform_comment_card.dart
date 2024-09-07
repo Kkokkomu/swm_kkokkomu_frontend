@@ -10,18 +10,24 @@ import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comm
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/show_shortform_comment_input_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/logged_in_user_shortform_comment_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_like_button_animation_trigger_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_reply/provider/logged_in_user_shortform_reply_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class ShortFormCommentCard extends ConsumerWidget {
   final ShortFormCommentModel shortFormCommentModel;
   final int index;
+  final bool isReply;
+  final int? parentCommentId;
 
   const ShortFormCommentCard({
     super.key,
     required this.shortFormCommentModel,
     required this.index,
+    required this.isReply,
+    required this.parentCommentId,
   });
 
   @override
@@ -39,6 +45,10 @@ class ShortFormCommentCard extends ConsumerWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (isReply)
+          const SizedBox(
+            width: 24.0,
+          ),
         Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
@@ -114,14 +124,6 @@ class ShortFormCommentCard extends ConsumerWidget {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.forum_outlined),
-                  ),
-                  Text(
-                    shortFormCommentModel.replyCnt.toString(),
-                  ),
-                  const SizedBox(width: 16.0),
-                  IconButton(
                     onPressed: () {
                       final user = ref.read(userInfoProvider);
 
@@ -132,14 +134,27 @@ class ShortFormCommentCard extends ConsumerWidget {
                       }
 
                       // 댓글 좋아요 토글 요청
+                      // 댓글창 또는 대댓글창에 따라 다른 provider를 사용 (서로 다른 상태 관리)
+                      if (!isReply) {
+                        ref
+                            .read(
+                              loggedInUserShortFormCommentProvider(
+                                shortFormCommentModel.comment.newsId,
+                              ).notifier,
+                            )
+                            .toggleCommentLike(
+                              commentId: shortFormCommentModel.id,
+                              index: index,
+                            );
+                        return;
+                      }
+
                       ref
-                          .read(
-                            loggedInUserShortFormCommentProvider(
-                              shortFormCommentModel.comment.newsId,
-                            ).notifier,
-                          )
+                          .read(loggedInUserShortFormReplyProvider(
+                                  parentCommentId!)
+                              .notifier)
                           .toggleCommentLike(
-                            commentId: shortFormCommentModel.id,
+                            replyId: shortFormCommentModel.id,
                             index: index,
                           );
                     },
@@ -156,7 +171,16 @@ class ShortFormCommentCard extends ConsumerWidget {
                             Icons.thumb_up,
                             color: ColorName.blue500,
                           )
-                              .animate()
+                              .animate(
+                                // 좋아요 애니메이션 끝난 후에는 애니메이션 트리거 상태를 false로 변경
+                                onComplete: (_) => ref
+                                    .read(
+                                      shortFormLikeButtonAnimationTriggerProvider(
+                                              shortFormCommentModel.id)
+                                          .notifier,
+                                    )
+                                    .state = false,
+                              )
                               .rotate(begin: 0.0, end: -0.08)
                               .then()
                               .rotate(begin: 0.0, end: 0.08);
@@ -177,6 +201,27 @@ class ShortFormCommentCard extends ConsumerWidget {
                   Text(
                     shortFormCommentModel.commentLikeCnt.toString(),
                   ),
+                  if (!isReply)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(width: 16.0),
+                        IconButton(
+                          // 대댓글 버튼 클릭 시 대댓글 입력창 활성화
+                          onPressed: () => ref
+                              .read(
+                                shortFormCommentHeightControllerProvider(
+                                  shortFormCommentModel.comment.newsId,
+                                ).notifier,
+                              )
+                              .activateReply(shortFormCommentModel.id),
+                          icon: const Icon(Icons.forum_outlined),
+                        ),
+                        Text(
+                          shortFormCommentModel.replyCnt.toString(),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ],
@@ -203,10 +248,13 @@ class ShortFormCommentCard extends ConsumerWidget {
                 showShortFormCommentInputBottomSheet(
                   context: context,
                   newsId: shortFormCommentModel.comment.newsId,
+                  parentCommentId: isReply ? parentCommentId : null,
                   commentId: shortFormCommentModel.id,
                   index: index,
                   controller: controller,
-                  type: ShortFormCommentSendButtonType.update,
+                  type: isReply
+                      ? ShortFormCommentSendButtonType.replyUpdate
+                      : ShortFormCommentSendButtonType.update,
                 );
                 return;
 
@@ -225,16 +273,29 @@ class ShortFormCommentCard extends ConsumerWidget {
                 }
 
                 // 사용자가 삭제를 선택한 경우 댓글 삭제 요청
-                final resp = await ref
-                    .read(
-                      loggedInUserShortFormCommentProvider(
-                        shortFormCommentModel.comment.newsId,
-                      ).notifier,
-                    )
-                    .deleteComment(
-                      commentId: shortFormCommentModel.id,
-                      index: index,
-                    );
+                // 댓글 삭제와 대댓글 삭제 구분
+                final resp = switch (isReply) {
+                  true => await ref
+                      .read(
+                        loggedInUserShortFormReplyProvider(parentCommentId!)
+                            .notifier,
+                      )
+                      .deleteReply(
+                        newsId: shortFormCommentModel.comment.newsId,
+                        replyId: shortFormCommentModel.id,
+                        index: index,
+                      ),
+                  false => await ref
+                      .read(
+                        loggedInUserShortFormCommentProvider(
+                          shortFormCommentModel.comment.newsId,
+                        ).notifier,
+                      )
+                      .deleteComment(
+                        commentId: shortFormCommentModel.id,
+                        index: index,
+                      )
+                };
 
                 // 삭제 실패 시 에러 메시지 출력
                 if (resp == false) {
@@ -261,13 +322,27 @@ class ShortFormCommentCard extends ConsumerWidget {
                 }
 
                 // 사용자가 차단을 선택한 경우 차단 요청
-                final resp = await ref
-                    .read(
-                      loggedInUserShortFormCommentProvider(
-                        shortFormCommentModel.comment.newsId,
-                      ).notifier,
-                    )
-                    .hideUserAndComment(userId: shortFormCommentModel.user.id);
+                // 댓글창에서 차단했는지 대댓글창에서 차단했는지에 따라 다른 provider 사용
+                final resp = switch (isReply) {
+                  true => await ref
+                      .read(
+                        loggedInUserShortFormReplyProvider(parentCommentId!)
+                            .notifier,
+                      )
+                      .hideUserAndComment(
+                        newsId: shortFormCommentModel.comment.newsId,
+                        userId: shortFormCommentModel.user.id,
+                      ),
+                  false => await ref
+                      .read(
+                        loggedInUserShortFormCommentProvider(
+                          shortFormCommentModel.comment.newsId,
+                        ).notifier,
+                      )
+                      .hideUserAndComment(
+                        userId: shortFormCommentModel.user.id,
+                      ),
+                };
 
                 // 삭제 실패 시 에러 메시지 출력
                 if (resp == false) {

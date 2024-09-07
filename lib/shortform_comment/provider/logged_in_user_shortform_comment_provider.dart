@@ -284,6 +284,47 @@ class LoggedInUserShortFormCommentStateNotifier
     return true;
   }
 
+  // 대댓글에서 차단한 유저를 댓글에서도 숨김 처리
+  void setStateBlockedUserComment(int userId) {
+    final prevState = _getValidPrevState(commentId: null);
+
+    if (prevState == null) {
+      return;
+    }
+
+    state = prevState.copyWith(
+      items: prevState.items
+          .where((element) => element.user.id != userId)
+          .toList(),
+    );
+  }
+
+  // 대댓글창에서 대댓글 개수 변화될 때 댓글창에 보여지는 replyCnt 수에 반영함
+  void adjustReplyCnt({
+    required int commentId,
+    required int delta,
+  }) {
+    final prevState = _getValidPrevState(commentId: commentId);
+
+    if (prevState == null) {
+      return;
+    }
+
+    final index =
+        prevState.items.indexWhere((element) => element.id == commentId);
+
+    // 댓글 ID가 존재하지 않는 경우 무시
+    if (index == -1) {
+      return;
+    }
+
+    // 댓글 ID가 존재하는 경우 해당 댓글의 대댓글 수 조정
+    prevState.items[index] = prevState.items[index]
+        .copyWith(replyCnt: prevState.items[index].replyCnt + delta);
+
+    state = prevState.copyWith();
+  }
+
   // 댓글 관련 요청이 유효한지 확인 후, 유효한 경우 previousState 반환
   CursorPagination<ShortFormCommentModel>? _getValidPrevState({
     required int? commentId,

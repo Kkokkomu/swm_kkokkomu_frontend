@@ -38,17 +38,8 @@ class RootTab extends ConsumerWidget {
           return;
         }
 
-        final resp = await showConfirmationDialog(
-          context: context,
-          content: '앱을 종료하시겠습니까?',
-          confirmText: '종료',
-          cancelText: '취소',
-        );
-
-        // 사용자가 종료를 선택했다면 앱을 종료함
-        if (resp == true) {
-          SystemNavigator.pop();
-        }
+        // 드로어가 열려있지 않은 경우 앱 종료 다이얼로그를 띄움
+        showAppExitDialog(context);
       },
       child: DefaultLayout(
         scaffoldKey: scaffoldKey,

@@ -25,14 +25,36 @@ class ShortFormCommentHeightStateNotifier
   }) : super(
           ShortformCommentHeightControllerModel(
             newsId: newsId,
+            parentCommentId: null,
             isShortFormCommentCreated: false,
             isShortFormCommentVisible: false,
+            isReplyVisible: false,
             isShortFormFloatingButtonVisible: true,
             height: 0.0,
             animationDuration:
                 AnimationDuration.shortFormCommentAnimationDuration,
           ),
         );
+
+  // 대댓글 창을 활성화 함
+  void activateReply(int parentCommentId) => state =
+      state.copyWith(parentCommentId: parentCommentId, isReplyVisible: true);
+
+  // 대댓글 창을 비활성화 함
+  void deactivateReply() => state = state.copyWith(isReplyVisible: false);
+
+  // 대댓글 창 정보를 삭제함
+  void deleteReplyState() => state = ShortformCommentHeightControllerModel(
+        newsId: state.newsId,
+        parentCommentId: null,
+        isShortFormCommentCreated: state.isShortFormCommentCreated,
+        isShortFormCommentVisible: state.isShortFormCommentVisible,
+        isReplyVisible: state.isReplyVisible,
+        isShortFormFloatingButtonVisible:
+            state.isShortFormFloatingButtonVisible,
+        height: state.height,
+        animationDuration: state.animationDuration,
+      );
 
   void setShortFormCommentVisibility(bool isVisible) {
     // 변경사항이 없는 경우 아무것도 수행하지 않음

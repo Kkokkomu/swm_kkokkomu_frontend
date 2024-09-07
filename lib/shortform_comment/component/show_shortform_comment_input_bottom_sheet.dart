@@ -8,6 +8,7 @@ import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comm
 Future<dynamic> showShortFormCommentInputBottomSheet({
   required BuildContext context,
   required int newsId,
+  required int? parentCommentId,
   required int? commentId,
   required int? index,
   required TextEditingController controller,
@@ -18,7 +19,11 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
     isScrollControlled: true,
     builder: (BuildContext _) {
       return PopScope(
-        canPop: type == ShortFormCommentSendButtonType.update ? false : true,
+        // 댓글 수정인 경우 뒤로가기를 통해 취소시 다이얼로그를 띄워 한번 더 확인
+        canPop: type == ShortFormCommentSendButtonType.update ||
+                type == ShortFormCommentSendButtonType.replyUpdate
+            ? false
+            : true,
         onPopInvokedWithResult: (didPop, _) async {
           if (didPop) return;
 
@@ -60,6 +65,7 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
                 ),
                 SendButton(
                   newsId: newsId,
+                  parentCommentId: parentCommentId,
                   commentId: commentId,
                   index: index,
                   controller: controller,

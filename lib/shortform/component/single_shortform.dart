@@ -74,9 +74,41 @@ class SingleShortForm extends ConsumerWidget {
                   .select((value) => value.isShortFormCommentVisible),
             );
 
-            return SafeArea(
-              top: isShortFormCommentVisible,
-              child: child!,
+            return PopScope(
+              canPop: isShortFormCommentVisible ? false : true,
+              onPopInvokedWithResult: (didPop, _) {
+                if (didPop) return;
+
+                // 대댓글창이 활성화 된 경우 대댓글 입력창을 닫음
+                if (ref
+                    .read(shortFormCommentHeightControllerProvider(newsId))
+                    .isReplyVisible) {
+                  ref
+                      .read(
+                        shortFormCommentHeightControllerProvider(newsId)
+                            .notifier,
+                      )
+                      .deactivateReply();
+
+                  return;
+                }
+
+                // 대댓글창이 활성화 되지 않고 댓글 창이 활성화 된 경우 댓글 입력창을 닫음
+                if (ref
+                    .read(shortFormCommentHeightControllerProvider(newsId))
+                    .isShortFormCommentVisible) {
+                  ref
+                      .read(shortFormCommentHeightControllerProvider(newsId)
+                          .notifier)
+                      .setCommentBodySizeSmall();
+
+                  return;
+                }
+              },
+              child: SafeArea(
+                top: isShortFormCommentVisible,
+                child: child!,
+              ),
             );
           },
           child: LayoutBuilder(
@@ -250,9 +282,79 @@ class SingleShortForm extends ConsumerWidget {
                     ],
                   ),
                 ),
-                ShortFormCommentBox(
-                  newsId: newsId,
-                  maxShortFormCommentBoxHeight: constraints.maxHeight,
+                Stack(
+                  children: [
+                    ShortFormCommentBox(
+                      newsId: newsId,
+                      maxCommentBodyHeight: constraints.maxHeight -
+                          Constants.bottomNavigationBarHeightWithSafeArea,
+                      isReply: false,
+                      parentCommentId: null,
+                    ),
+                    Consumer(
+                      builder: (_, ref, __) {
+                        final replyState = ref.watch(
+                          shortFormCommentHeightControllerProvider(newsId)
+                              .select(
+                            (value) => (
+                              replyParentCommentId: value.parentCommentId,
+                              isReplyVisible: value.isReplyVisible,
+                            ),
+                          ),
+                        );
+
+                        // replyParentCommentId가 null인 경우 대댓글 입력창이 활성화 되지 않은 것으로 간주
+                        // 대댓글 입력창이 활성화 되지 않은 경우 빈 컨테이너를 반환
+                        if (replyState.replyParentCommentId == null) {
+                          return const SizedBox();
+                        }
+
+                        // 대댓글 입력창이 활성화 된 경우 대댓글 입력창을 반환
+                        return ShortFormCommentBox(
+                          newsId: newsId,
+                          maxCommentBodyHeight: constraints.maxHeight -
+                              Constants.bottomNavigationBarHeightWithSafeArea,
+                          isReply: true,
+                          parentCommentId: replyState.replyParentCommentId,
+                        )
+                            .animate(
+                              target: replyState.isReplyVisible ? 1 : 0,
+                              onComplete: (_) {
+                                // 애니메이션이 종료되었을때 대댓글 입력창이 활성화 되지 않은 경우 대댓글 입력창 정보를 삭제함
+                                if (ref
+                                        .read(
+                                          shortFormCommentHeightControllerProvider(
+                                            newsId,
+                                          ),
+                                        )
+                                        .isReplyVisible ==
+                                    false) {
+                                  ref
+                                      .read(
+                                        shortFormCommentHeightControllerProvider(
+                                          newsId,
+                                        ).notifier,
+                                      )
+                                      .deleteReplyState();
+                                }
+                              },
+                            )
+                            .scaleXY(
+                              begin: 0.0,
+                              end: 1.0,
+                              duration: Duration.zero,
+                            )
+                            .then()
+                            .slideX(
+                              curve: Curves.easeInOut,
+                              begin: 1.0,
+                              end: 0.0,
+                              duration: AnimationDuration
+                                  .replyAppearAnimationDuration,
+                            );
+                      },
+                    ),
+                  ],
                 ),
               ],
             );

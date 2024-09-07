@@ -65,6 +65,8 @@ enum ShortFormCommentPopupType {
 enum ShortFormCommentSendButtonType {
   post,
   update,
+  replyPost,
+  replyUpdate,
 }
 
 @JsonEnum(valueField: 'name')

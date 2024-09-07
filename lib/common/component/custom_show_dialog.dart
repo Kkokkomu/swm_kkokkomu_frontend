@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
@@ -35,4 +36,17 @@ Future<bool?> showConfirmationDialog({
       ],
     ),
   );
+}
+
+Future<void> showAppExitDialog(BuildContext context) async {
+  final resp = await showConfirmationDialog(
+    context: context,
+    content: '앱을 종료하시겠습니까?',
+    confirmText: '종료',
+    cancelText: '취소',
+  );
+
+  if (resp == true) {
+    SystemNavigator.pop();
+  }
 }

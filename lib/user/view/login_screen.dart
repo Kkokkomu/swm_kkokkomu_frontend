@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
@@ -27,17 +26,8 @@ class LoginScreen extends ConsumerWidget {
           return;
         }
 
-        final resp = await showConfirmationDialog(
-          context: context,
-          content: '앱을 종료하시겠습니까?',
-          confirmText: '종료',
-          cancelText: '취소',
-        );
-
-        // 사용자가 종료를 선택했다면 앱을 종료함
-        if (resp == true) {
-          SystemNavigator.pop();
-        }
+        // 사용자가 종료를 선택했다면 앱 종료 다이얼로그를 띄움
+        showAppExitDialog(context);
       },
       child: DefaultLayout(
         child: SafeArea(

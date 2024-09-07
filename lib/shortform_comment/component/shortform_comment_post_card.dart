@@ -11,10 +11,14 @@ import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class ShortFormCommentPostCard extends ConsumerStatefulWidget {
   final int newsId;
+  final int? parentCommentId;
+  final bool isReply;
 
   const ShortFormCommentPostCard({
     super.key,
     required this.newsId,
+    required this.parentCommentId,
+    required this.isReply,
   });
 
   @override
@@ -40,77 +44,73 @@ class _ShortFormCommentInputCardState
       return const SizedBox();
     }
 
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, _) {
-        if (didPop) return;
+    return Column(
+      children: [
+        const Divider(
+          height: _dividerHeight,
+          thickness: 1.0,
+        ),
+        Container(
+          width: double.infinity,
+          height:
+              Constants.bottomNavigationBarHeightWithSafeArea - _dividerHeight,
+          color: Colors.white,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(width: 16.0),
+              Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    // 로그인하지 않은 사용자는 댓글 입력을 할 수 없음
+                    // 로그인 모달 바텀 시트를 띄워줌
+                    if (ref.read(userInfoProvider) is! UserModel) {
+                      showLoginModalBottomSheet(context, ref);
+                      return;
+                    }
 
-        ref
-            .read(shortFormCommentHeightControllerProvider(widget.newsId)
-                .notifier)
-            .setCommentBodySizeSmall();
-      },
-      child: Column(
-        children: [
-          const Divider(
-            height: _dividerHeight,
-            thickness: 1.0,
-          ),
-          Container(
-            width: double.infinity,
-            height: Constants.bottomNavigationBarHeightWithSafeArea -
-                _dividerHeight,
-            color: Colors.white,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(width: 16.0),
-                Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      // 로그인하지 않은 사용자는 댓글 입력을 할 수 없음
-                      // 로그인 모달 바텀 시트를 띄워줌
-                      if (ref.read(userInfoProvider) is! UserModel) {
-                        showLoginModalBottomSheet(context, ref);
-                        return;
-                      }
-
-                      // 로그인한 사용자인 경우 댓글 입력 바텀 시트를 띄워줌
-                      showShortFormCommentInputBottomSheet(
-                        context: context,
-                        newsId: widget.newsId,
-                        commentId: null,
-                        index: null,
-                        controller: _controller,
-                        type: ShortFormCommentSendButtonType.post,
-                      );
-                    },
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        controller: _controller,
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                          hintText: '댓글을 입력하세요',
-                          border: InputBorder.none,
-                        ),
+                    // 로그인한 사용자인 경우 댓글 입력 바텀 시트를 띄워줌
+                    showShortFormCommentInputBottomSheet(
+                      context: context,
+                      newsId: widget.newsId,
+                      parentCommentId:
+                          widget.isReply ? widget.parentCommentId : null,
+                      commentId: null,
+                      index: null,
+                      controller: _controller,
+                      type: widget.isReply
+                          ? ShortFormCommentSendButtonType.replyPost
+                          : ShortFormCommentSendButtonType.post,
+                    );
+                  },
+                  child: AbsorbPointer(
+                    child: TextFormField(
+                      controller: _controller,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                        hintText: '댓글을 입력하세요',
+                        border: InputBorder.none,
                       ),
                     ),
                   ),
                 ),
-                SendButton(
-                  newsId: widget.newsId,
-                  commentId: null,
-                  index: null,
-                  controller: _controller,
-                  isInBottomSheet: false,
-                  type: ShortFormCommentSendButtonType.post,
-                ),
-              ],
-            ),
+              ),
+              SendButton(
+                newsId: widget.newsId,
+                parentCommentId: widget.isReply ? widget.parentCommentId : null,
+                commentId: null,
+                index: null,
+                controller: _controller,
+                isInBottomSheet: false,
+                type: widget.isReply
+                    ? ShortFormCommentSendButtonType.replyPost
+                    : ShortFormCommentSendButtonType.post,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
