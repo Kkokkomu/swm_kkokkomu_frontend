@@ -113,9 +113,13 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
     }
 
     // 대댓글이 추가된 경우 댓글창에 보여지는 replyCnt를 1개 증가시킴
-    ref
-        .read(loggedInUserShortFormCommentProvider(newsId).notifier)
-        .adjustReplyCnt(commentId: parentCommentId, delta: 1);
+    // 마지막 페이지가 아닌 경우에만 증가시킴
+    // 마지막 페이지인 경우 다른 로직에 의해 증가됨
+    if (!prevState.pageInfo.isLast) {
+      ref
+          .read(loggedInUserShortFormCommentProvider(newsId).notifier)
+          .setReplyCntByDelta(commentId: parentCommentId, delta: 1);
+    }
 
     return (success: true, errorCode: null, errorMessage: null);
   }
@@ -194,9 +198,13 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
     state = prevState.copyWith();
 
     // 대댓글이 삭제된 경우 댓글창에 보여지는 replyCnt를 1개 감소시킴
-    ref
-        .read(loggedInUserShortFormCommentProvider(newsId).notifier)
-        .adjustReplyCnt(commentId: parentCommentId, delta: -1);
+    // 마지막 페이지가 아닌 경우에만 감소시킴
+    // 마지막 페이지인 경우 다른 로직에 의해 감소됨
+    if (!prevState.pageInfo.isLast) {
+      ref
+          .read(loggedInUserShortFormCommentProvider(newsId).notifier)
+          .setReplyCntByDelta(commentId: parentCommentId, delta: -1);
+    }
 
     return true;
   }

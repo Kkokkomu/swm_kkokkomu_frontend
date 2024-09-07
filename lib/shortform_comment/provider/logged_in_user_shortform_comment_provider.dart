@@ -319,7 +319,37 @@ class LoggedInUserShortFormCommentStateNotifier
   }
 
   // 대댓글창에서 대댓글 개수 변화될 때 댓글창에 보여지는 replyCnt 수에 반영함
-  void adjustReplyCnt({
+  void setReplyCnt({
+    required int commentId,
+    required int cnt,
+  }) {
+    final prevState = _getValidPrevState(commentId: commentId);
+
+    if (prevState == null) {
+      return;
+    }
+
+    final index =
+        prevState.items.indexWhere((element) => element.id == commentId);
+
+    // 댓글 ID가 존재하지 않는 경우 무시
+    if (index == -1) {
+      return;
+    }
+
+    // replyCnt가 변경되지 않은 경우 무시
+    if (prevState.items[index].replyCnt == cnt) {
+      return;
+    }
+
+    // 댓글 ID가 존재하는 경우 해당 댓글의 대댓글 수 조정
+    prevState.items[index] = prevState.items[index].copyWith(replyCnt: cnt);
+
+    state = prevState.copyWith();
+  }
+
+  // replyCnt를 delta만큼 조정
+  void setReplyCntByDelta({
     required int commentId,
     required int delta,
   }) {
