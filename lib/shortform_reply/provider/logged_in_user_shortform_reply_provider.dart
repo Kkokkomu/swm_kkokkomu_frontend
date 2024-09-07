@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
@@ -45,7 +46,7 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
     super.additionalParams,
   });
 
-  Future<bool> postReply({
+  Future<({bool success, String? errorCode, String? errorMessage})> postReply({
     required int newsId,
     required String content,
   }) async {
@@ -53,7 +54,11 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
     final prevState = _getValidPrevState(replyId: null);
 
     if (prevState == null) {
-      return false;
+      return (
+        success: false,
+        errorCode: CustomErrorCode.unknownCode,
+        errorMessage: '댓글 작성에 실패했습니다.',
+      );
     }
 
     // _getValidPrevState를 통해 적절한 값을 가져왔다면 유저의 상태가 UserModel임이 보장됨
@@ -72,7 +77,11 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
 
     // success값이 true가 아니거나 작성된 대댓글 정보가 없는 경우 실패 처리
     if (resp.success != true || replyInfo == null) {
-      return false;
+      return (
+        success: false,
+        errorCode: resp.error?.code ?? CustomErrorCode.unknownCode,
+        errorMessage: resp.error?.message ?? '댓글 작성에 실패했습니다.'
+      );
     }
 
     // 기존 데이터 마지막에 새로운 데이터 추가
@@ -106,7 +115,7 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
         .read(loggedInUserShortFormCommentProvider(newsId).notifier)
         .adjustReplyCnt(commentId: parentCommentId, delta: 1);
 
-    return true;
+    return (success: true, errorCode: null, errorMessage: null);
   }
 
   Future<bool> updateReply({

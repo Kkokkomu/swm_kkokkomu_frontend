@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/model/token_response_model.dart';
@@ -211,7 +212,8 @@ class CustomIntercepter extends Interceptor {
           'success': false,
           'data': null,
           'error': {
-            'code': err.response?.statusCode.toString() ?? '99999',
+            'code': err.response?.statusCode.toString() ??
+                CustomErrorCode.unknownCode,
             'message': err.toString(),
           },
         },

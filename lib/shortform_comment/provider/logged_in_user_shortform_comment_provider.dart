@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
@@ -49,12 +50,17 @@ class LoggedInUserShortFormCommentStateNotifier
     super.apiPath,
   });
 
-  Future<bool> postComment(String content) async {
+  Future<({bool success, String? errorCode, String? errorMessage})> postComment(
+      String content) async {
     // 댓글 작성 전 상태를 저장
     final prevState = _getValidPrevState(commentId: null);
 
     if (prevState == null) {
-      return false;
+      return (
+        success: false,
+        errorCode: CustomErrorCode.unknownCode,
+        errorMessage: '댓글 작성에 실패했습니다.'
+      );
     }
 
     // _getValidPrevState를 통해 적절한 값을 가져왔다면 유저의 상태가 UserModel임이 보장됨
@@ -72,7 +78,11 @@ class LoggedInUserShortFormCommentStateNotifier
 
     // success값이 true가 아니거나 작성된 댓글 정보가 없는 경우 실패 처리
     if (resp.success != true || commentInfo == null) {
-      return false;
+      return (
+        success: false,
+        errorCode: resp.error?.code ?? CustomErrorCode.unknownCode,
+        errorMessage: resp.error?.message ?? '댓글 작성에 실패했습니다.'
+      );
     }
 
     // 기존 데이터에
@@ -94,7 +104,7 @@ class LoggedInUserShortFormCommentStateNotifier
 
     state = prevState.copyWith();
 
-    return true;
+    return (success: true, errorCode: null, errorMessage: null);
   }
 
   Future<bool> updateComment({

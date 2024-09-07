@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
@@ -56,7 +58,16 @@ class SendButton extends ConsumerWidget {
 
             // 댓글 작성에 실패한 경우
             // 에러 메시지를 표시하고 리턴
-            if (resp == false) {
+            if (resp.success == false) {
+              // 댓글 작성이 정지된 사용자인 경우 다이얼로그를 통해 안내 메시지를 표시함
+              if (resp.errorCode == CustomErrorCode.commentBannedCode &&
+                  context.mounted) {
+                showInfoDialog(
+                  context: context,
+                  content: resp.errorMessage ?? '댓글 작성이 제한된 사용자입니다',
+                );
+              }
+
               CustomToastMessage.showErrorToastMessage('댓글 작성에 실패했습니다');
               return;
             }
@@ -116,7 +127,16 @@ class SendButton extends ConsumerWidget {
 
             // 대댓글 작성에 실패한 경우
             // 에러 메시지를 표시하고 리턴
-            if (resp == false) {
+            if (resp.success == false) {
+              // 댓글 작성이 정지된 사용자인 경우 다이얼로그를 통해 안내 메시지를 표시함
+              if (resp.errorCode == CustomErrorCode.commentBannedCode &&
+                  context.mounted) {
+                showInfoDialog(
+                  context: context,
+                  content: resp.errorMessage ?? '댓글 작성이 제한된 사용자입니다',
+                );
+              }
+
               CustomToastMessage.showErrorToastMessage('댓글 작성에 실패했습니다');
               return;
             }

@@ -50,3 +50,30 @@ Future<void> showAppExitDialog(BuildContext context) async {
     SystemNavigator.pop();
   }
 }
+
+Future<void> showInfoDialog({
+  required BuildContext context,
+  required String content,
+}) {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      surfaceTintColor: Colors.white,
+      backgroundColor: Colors.white,
+      content: Text(
+        content,
+        style: const TextStyle(fontSize: 16.0),
+      ),
+      actions: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.black,
+          ),
+          onPressed: () => context.pop(),
+          child: const Text('확인'),
+        ),
+      ],
+    ),
+  );
+}
