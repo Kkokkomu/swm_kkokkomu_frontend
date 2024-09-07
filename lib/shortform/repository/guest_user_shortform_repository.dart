@@ -18,7 +18,7 @@ final guestUserShortFormRepositoryProvider =
 
   final repository = GuestUserShortFormRepository(
     dio,
-    baseUrl: '${Constants.baseUrl}/news',
+    baseUrl: '${Constants.baseUrl}/home/news',
   );
 
   return repository;

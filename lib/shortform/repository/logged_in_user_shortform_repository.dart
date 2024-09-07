@@ -18,7 +18,7 @@ final loggedInUserShortFormRepositoryProvider =
 
   final repository = LoggedInUserShortFormRepository(
     dio,
-    baseUrl: '${Constants.baseUrl}/news',
+    baseUrl: Constants.baseUrl,
   );
 
   return repository;
@@ -31,7 +31,7 @@ abstract class LoggedInUserShortFormRepository
       _LoggedInUserShortFormRepository;
 
   @override
-  @GET('/list')
+  @GET('/home/news/list')
   @Headers({
     'accessToken': true,
   })

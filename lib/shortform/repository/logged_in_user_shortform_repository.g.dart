@@ -40,7 +40,7 @@ class _LoggedInUserShortFormRepository
     )
             .compose(
               _dio.options,
-              '/list',
+              '/home/news/list',
               queryParameters: queryParameters,
               data: _data,
             )
