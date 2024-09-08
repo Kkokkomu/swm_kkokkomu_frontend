@@ -184,31 +184,55 @@ class SingleShortForm extends ConsumerWidget {
                           alignment: Alignment.bottomRight,
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(
-                              0.0,
+                              16.0,
                               0.0,
                               16.0,
                               constraints.maxHeight * 0.13 + 52.0 + 16.0,
                             ),
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                const SizedBox(height: 16.0),
-                                CommentButton(
-                                  ref: ref,
-                                  newsId: newsId,
-                                  maxCommentHeight: constraints.maxHeight,
+                                const SafeArea(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      FilterButton(),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SearchButton(),
+                                          MoreInfoButton(),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(height: 16.0),
-                                ShareButton(
-                                  // TODO : 공유 기능 구현하기
-                                  // 임시로 relatedUrl을 공유 URL로 사용
-                                  shareUrl: relatedUrl,
-                                ),
-                                const SizedBox(height: 16.0),
-                                RelatedUrlButton(
-                                  shortFormRelatedURL: relatedUrl,
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CommentButton(
+                                      ref: ref,
+                                      newsId: newsId,
+                                      maxCommentHeight: constraints.maxHeight,
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    ShareButton(
+                                      // TODO : 공유 기능 구현하기
+                                      // 임시로 relatedUrl을 공유 URL로 사용
+                                      shareUrl: relatedUrl,
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    RelatedUrlButton(
+                                      shortFormRelatedURL: relatedUrl,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

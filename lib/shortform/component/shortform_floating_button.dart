@@ -243,16 +243,80 @@ class RelatedUrlButton extends StatelessWidget {
   }
 }
 
+class FilterButton extends StatelessWidget {
+  const FilterButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomFloatingButton(
+      icon: const Icon(
+        Icons.tune,
+        color: Colors.white,
+      ),
+      onTap: () {},
+    );
+  }
+}
+
+class SearchButton extends StatelessWidget {
+  const SearchButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomFloatingButton(
+      icon: const Icon(
+        Icons.search,
+        color: Colors.white,
+      ),
+      onTap: () {},
+    );
+  }
+}
+
+class MoreInfoButton extends StatelessWidget {
+  const MoreInfoButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(),
+      style: const ButtonStyle(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      icon: const Icon(
+        Icons.more_vert,
+        color: Colors.white,
+        size: _floatingButtonSize,
+      ),
+      offset: const Offset(0, _floatingButtonSize + 16.0),
+      itemBuilder: (_) => <PopupMenuEntry>[
+        const PopupMenuItem(
+          child: Text('설명보기'),
+        ),
+        const PopupMenuDivider(),
+        const PopupMenuItem(
+          child: Text('관심없어요'),
+        ),
+        const PopupMenuDivider(),
+        const PopupMenuItem(
+          child: Text('신고하기'),
+        ),
+      ],
+    );
+  }
+}
+
 class CustomFloatingButton extends StatelessWidget {
   final Widget icon;
-  final String label;
+  final String? label;
   final Color labelColor;
   final void Function()? onTap;
 
   const CustomFloatingButton({
     super.key,
     required this.icon,
-    required this.label,
+    this.label,
     this.labelColor = ColorName.white000,
     required this.onTap,
   });
@@ -270,13 +334,14 @@ class CustomFloatingButton extends StatelessWidget {
             child: FittedBox(child: icon),
           ),
         ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12.0,
-            color: labelColor,
+        if (label != null)
+          Text(
+            label!,
+            style: TextStyle(
+              fontSize: 12.0,
+              color: labelColor,
+            ),
           ),
-        ),
       ],
     );
   }
