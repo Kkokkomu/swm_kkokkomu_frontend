@@ -141,7 +141,8 @@ class CustomBetterPlayerControllerStateNotifier
 
       // 홈(숏폼) 탭이 아닌 다른 탭(탐색, 마이페이지)으로 이동한 경우 비디오를 정지만 하고 0초로 되돌리지 않음
       if ((currentRoutePath.startsWith(CustomRoutePath.exploration) ||
-              currentRoutePath.startsWith(CustomRoutePath.myPage)) &&
+              currentRoutePath.startsWith(CustomRoutePath.myPage) ||
+              currentRoutePath.startsWith(CustomRoutePath.filter)) &&
           currentPosition != null) {
         // 다시 숏폼 탭으로 돌아왔을 때 스무스한 재생을 위해 1초 전으로 이동
         _betterPlayerController?.seekTo(

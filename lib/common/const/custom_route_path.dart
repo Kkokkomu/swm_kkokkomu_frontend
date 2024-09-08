@@ -6,4 +6,5 @@ class CustomRoutePath {
   static const String home = '/';
   static const String myPage = '/mypage';
   static const String blockedUserManagement = '/mypage/manage-blocked-users';
+  static const String filter = '/filter';
 }
