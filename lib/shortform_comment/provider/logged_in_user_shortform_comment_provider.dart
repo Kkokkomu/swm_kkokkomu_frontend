@@ -102,6 +102,9 @@ class LoggedInUserShortFormCommentStateNotifier
       ),
     );
 
+    // 페이지네이션에 의해 중복된 데이터를 불러오는 것을 방지하기 위해 postedItems에 Id값을 추가
+    postedItems.add(commentInfo.id);
+
     state = prevState.copyWith();
 
     return (success: true, errorCode: null, errorMessage: null);

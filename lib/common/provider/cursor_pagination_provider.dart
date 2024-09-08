@@ -13,6 +13,7 @@ class CursorPaginationProvider<T extends IModelWithId,
   final U repository;
   final AdditionalParams? additionalParams;
   final String apiPath;
+  final Set<int> postedItems = {};
 
   CursorPaginationProvider(
     this.repository, {
@@ -85,6 +86,8 @@ class CursorPaginationProvider<T extends IModelWithId,
       }
       // 데이터를 처음부터 가져오는 상황
       else {
+        // postedItems 초기화
+        postedItems.clear();
         // 만약에 데이터가 있는 상황이라면
         // 기존 데이터를 보존한채로 Fetch (API 요청)를 진행
         if (state is CursorPagination && !forceRefetch) {
@@ -118,13 +121,19 @@ class CursorPaginationProvider<T extends IModelWithId,
 
         // 기존 데이터에
         // 새로운 데이터 추가
-        pState.items.addAll(paginationData.items);
+        // 이때 postedItem에 들어있는 중복된 데이터는 제거
+        pState.items.addAll(
+          paginationData.items.where(
+              (element) => postedItems.contains(element.id) ? false : true),
+        );
 
         // 새로운 데이터로 상태 변경
         state = paginationData.copyWith(
           items: pState.items,
         );
       } else {
+        // 데이터를 처음부터 가져오는 상황
+        // 기존 데이터를 모두 지우고 새로운 데이터로 상태 변경
         state = paginationData;
       }
     } catch (e, stack) {
@@ -140,6 +149,9 @@ class CursorPaginationProvider<T extends IModelWithId,
           message: '데이터를 가져오지 못했습니다.',
         );
       } else {
+        // 데이터가 없는 상태에서 에러가 발생했을때
+        // postedItem을 초기화하고 에러를 보여줌
+        postedItems.clear();
         state = CursorPaginationError(message: '데이터를 가져오지 못했습니다.');
       }
     }
