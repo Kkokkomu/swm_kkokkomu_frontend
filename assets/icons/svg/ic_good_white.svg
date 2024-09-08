@@ -1,0 +1,22 @@
+<svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_469_20951)">
+<g filter="url(#filter0_d_469_20951)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M17 30.75C24.732 30.75 31 24.482 31 16.75C31 9.01801 24.732 2.75 17 2.75C9.26801 2.75 3 9.01801 3 16.75C3 24.482 9.26801 30.75 17 30.75ZM25.5374 20.2331C24.6602 23.7486 21.1709 26.375 17 26.375C12.8291 26.375 9.33981 23.7486 8.46258 20.2331C8.22858 19.2953 9.0335 18.5 10 18.5H24C24.9665 18.5 25.7714 19.2953 25.5374 20.2331ZM14.2851 13.5942C13.8649 13.7516 13.3967 13.5387 13.2392 13.1185C13.1261 12.8168 12.7997 12.5625 12.375 12.5625C11.9503 12.5625 11.6239 12.8168 11.5108 13.1185C11.3533 13.5387 10.8851 13.7516 10.4649 13.5942C10.0447 13.4367 9.8317 12.9684 9.98918 12.5482C10.3492 11.5876 11.2993 10.9375 12.375 10.9375C13.4507 10.9375 14.4008 11.5876 14.7608 12.5482C14.9183 12.9684 14.7053 13.4367 14.2851 13.5942ZM22.4892 13.1185C22.6467 13.5387 23.1149 13.7516 23.5351 13.5942C23.9553 13.4367 24.1683 12.9684 24.0108 12.5482C23.6508 11.5876 22.7007 10.9375 21.625 10.9375C20.5493 10.9375 19.5992 11.5876 19.2392 12.5482C19.0817 12.9684 19.2947 13.4367 19.7149 13.5942C20.1351 13.7516 20.6033 13.5387 20.7608 13.1185C20.8739 12.8168 21.2003 12.5625 21.625 12.5625C22.0497 12.5625 22.3761 12.8168 22.4892 13.1185Z" fill="white"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_469_20951" x="-1" y="-1.25" width="36" height="36" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_469_20951"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_469_20951" result="shape"/>
+</filter>
+<clipPath id="clip0_469_20951">
+<rect width="34" height="34" fill="white"/>
+</clipPath>
+</defs>
+</svg>

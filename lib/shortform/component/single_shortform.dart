@@ -4,9 +4,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_start_pause_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/custom_better_player_controller_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/custom_better_player_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_visibility_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_box.dart';
@@ -14,14 +16,20 @@ import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comme
 
 class SingleShortForm extends ConsumerWidget {
   final int newsId;
+  final int newsIndex;
   final String shortFormUrl;
   final String relatedUrl;
+  final ShortFormReactionCountInfo reactionCountInfo;
+  final ReactionType? userReactionType;
 
   const SingleShortForm({
     super.key,
     required this.newsId,
+    required this.newsIndex,
     required this.shortFormUrl,
     required this.relatedUrl,
+    required this.reactionCountInfo,
+    required this.userReactionType,
   });
 
   @override
@@ -184,7 +192,7 @@ class SingleShortForm extends ConsumerWidget {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 const SizedBox(height: 16.0),
                                 CommentButton(
@@ -275,7 +283,12 @@ class SingleShortForm extends ConsumerWidget {
                               16.0,
                               constraints.maxHeight * 0.13,
                             ),
-                            child: EmojiButton(newsId: newsId),
+                            child: EmojiButton(
+                              newsId: newsId,
+                              newsIndex: newsIndex,
+                              reactionCountInfo: reactionCountInfo,
+                              userReactionType: userReactionType,
+                            ),
                           ),
                         ),
                       ),

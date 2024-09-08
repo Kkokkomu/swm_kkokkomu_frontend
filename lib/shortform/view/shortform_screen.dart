@@ -44,10 +44,12 @@ class ShortFormScreen extends ConsumerWidget {
               !bottomNavigationBarState.isModalBarrierVisible)
           ? const CustomScrollPhysics()
           : const NeverScrollableScrollPhysics(),
-      itemBuilder: (_, __, model) {
+      itemBuilder: (_, index, model) {
         final shortFormUrlInfo = model.shortformList;
         final newsId = shortFormUrlInfo?.id;
         final shortFormUrl = shortFormUrlInfo?.shortformUrl;
+        final reactionCountInfo = model.reactionCnt;
+        final userReactionType = model.userReaction.getReactionType();
 
         if (shortFormUrlInfo == null ||
             newsId == null ||
@@ -69,8 +71,11 @@ class ShortFormScreen extends ConsumerWidget {
 
         return SingleShortForm(
           newsId: newsId,
+          newsIndex: index,
           shortFormUrl: shortFormUrl,
           relatedUrl: shortFormUrlInfo.relatedUrl,
+          reactionCountInfo: reactionCountInfo,
+          userReactionType: userReactionType,
         );
       },
     );

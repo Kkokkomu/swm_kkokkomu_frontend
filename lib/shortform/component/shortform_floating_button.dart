@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_visibility_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _floatingButtonSize = 36.0;
@@ -12,10 +21,16 @@ const _emojiDetailAnimationDuration = Duration(milliseconds: 300);
 
 class EmojiButton extends ConsumerWidget {
   final int newsId;
+  final int newsIndex;
+  final ShortFormReactionCountInfo reactionCountInfo;
+  final ReactionType? userReactionType;
 
   const EmojiButton({
     super.key,
     required this.newsId,
+    required this.newsIndex,
+    required this.reactionCountInfo,
+    required this.userReactionType,
   });
 
   @override
@@ -33,35 +48,23 @@ class EmojiButton extends ConsumerWidget {
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                width: 200,
-                height: 50,
+                width: 220,
                 decoration: BoxDecoration(
-                  color: Colors.amber,
+                  color: ColorName.white000,
                   borderRadius: BorderRadius.circular(24.0),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.emoji_emotions,
-                      color: Colors.white,
-                      size: _floatingButtonSize,
-                    ),
-                    Icon(
-                      Icons.sentiment_very_dissatisfied,
-                      color: Colors.white,
-                      size: _floatingButtonSize,
-                    ),
-                    Icon(
-                      Icons.sentiment_very_dissatisfied_outlined,
-                      color: Colors.white,
-                      size: _floatingButtonSize,
-                    ),
-                    Icon(
-                      Icons.sentiment_very_satisfied_outlined,
-                      color: Colors.white,
-                      size: _floatingButtonSize,
-                    ),
+                    for (ReactionType reactionType in ReactionType.values)
+                      DetailEmojiButton(
+                        newsId: newsId,
+                        newsIndex: newsIndex,
+                        reactionCountInfo: reactionCountInfo,
+                        reactionType: reactionType,
+                        userReactionType: userReactionType,
+                      ),
                   ],
                 ),
               )
@@ -77,22 +80,14 @@ class EmojiButton extends ConsumerWidget {
                     duration: _emojiDetailAnimationDuration,
                     curve: Curves.easeInOut,
                   ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                style: const ButtonStyle(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                onPressed: () => ref
+              CustomFloatingButton(
+                icon: Assets.icons.svg.icGoodWhite.svg(),
+                label: reactionCountInfo.total.toString(),
+                onTap: () => ref
                     .read(detailEmojiButtonVisibilityProvider(newsId).notifier)
                     .setDetailEmojiButtonVisibility(
                       !isDetailEmojiButtonVisible,
                     ),
-                icon: const Icon(
-                  Icons.emoji_emotions,
-                  color: Colors.white,
-                  size: _floatingButtonSize,
-                ),
               ),
             ],
           ),
@@ -101,6 +96,70 @@ class EmojiButton extends ConsumerWidget {
           width: 8.0,
         ),
       ],
+    );
+  }
+}
+
+class DetailEmojiButton extends ConsumerWidget {
+  final int newsId;
+  final int newsIndex;
+  final ShortFormReactionCountInfo reactionCountInfo;
+  final ReactionType reactionType;
+  final ReactionType? userReactionType;
+
+  const DetailEmojiButton({
+    super.key,
+    required this.newsId,
+    required this.newsIndex,
+    required this.reactionCountInfo,
+    required this.reactionType,
+    required this.userReactionType,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CustomFloatingButton(
+      icon: userReactionType == reactionType
+          ? SvgPicture.asset(reactionType.getBlueSvgPath())
+              .animate()
+              .scaleXY(
+                begin: 0.1,
+                end: 1.0,
+              )
+              .shake()
+              .then()
+              .scaleXY(
+                begin: 1.2,
+                end: 1.1,
+              )
+              .shake()
+          : SvgPicture.asset(reactionType.getGraySvgPath()),
+      label: reactionCountInfo.getReactionCountByType(reactionType).toString(),
+      labelColor: Colors.black,
+      onTap: () {
+        // 로그인 상태가 아닌 경우 이모지 버튼 닫고 로그인 모달창 띄우기
+        if (ref.read(userInfoProvider) is! UserModel) {
+          ref
+              .read(detailEmojiButtonVisibilityProvider(newsId).notifier)
+              .setDetailEmojiButtonVisibility(false);
+          showLoginModalBottomSheet(context, ref);
+          return;
+        }
+
+        // 로그인 상태인 경우 반응 정보 업데이트
+        // 이미 해당 이모지를 누른 상태인 경우 반응 삭제
+        userReactionType == reactionType
+            ? ref.read(loggedInUserShortFormProvider.notifier).deleteReaction(
+                  newsId: newsId,
+                  newsIndex: newsIndex,
+                  reactionType: reactionType,
+                )
+            : ref.read(loggedInUserShortFormProvider.notifier).postReaction(
+                  newsId: newsId,
+                  newsIndex: newsIndex,
+                  reactionType: reactionType,
+                );
+      },
     );
   }
 }
@@ -119,17 +178,15 @@ class CommentButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        ref
-            .read(shortFormCommentHeightControllerProvider(newsId).notifier)
-            .setCommentBodySizeMedium(maxCommentHeight);
-      },
+    return CustomFloatingButton(
       icon: const Icon(
         Icons.comment,
         color: Colors.white,
-        size: _floatingButtonSize,
       ),
+      label: '댓글',
+      onTap: () => ref
+          .read(shortFormCommentHeightControllerProvider(newsId).notifier)
+          .setCommentBodySizeMedium(maxCommentHeight),
     );
   }
 }
@@ -144,16 +201,14 @@ class ShareButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        Share.shareUri(
-          Uri.parse(shareUrl),
-        );
-      },
+    return CustomFloatingButton(
       icon: const Icon(
         Icons.share,
         color: Colors.white,
-        size: _floatingButtonSize,
+      ),
+      label: '공유',
+      onTap: () => Share.shareUri(
+        Uri.parse(shareUrl),
       ),
     );
   }
@@ -169,8 +224,13 @@ class RelatedUrlButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () async {
+    return CustomFloatingButton(
+      icon: const Icon(
+        Icons.newspaper,
+        color: Colors.white,
+      ),
+      label: '관련기사',
+      onTap: () async {
         final url = await canLaunchUrl(Uri.parse(shortFormRelatedURL))
             ? shortFormRelatedURL
             : Constants.relatedUrlOnError;
@@ -179,11 +239,45 @@ class RelatedUrlButton extends StatelessWidget {
           Uri.parse(url),
         );
       },
-      icon: const Icon(
-        Icons.newspaper,
-        color: Colors.white,
-        size: _floatingButtonSize,
-      ),
+    );
+  }
+}
+
+class CustomFloatingButton extends StatelessWidget {
+  final Widget icon;
+  final String label;
+  final Color labelColor;
+  final void Function()? onTap;
+
+  const CustomFloatingButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    this.labelColor = ColorName.white000,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          onTap: onTap,
+          child: SizedBox(
+            width: _floatingButtonSize,
+            height: _floatingButtonSize,
+            child: FittedBox(child: icon),
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12.0,
+            color: labelColor,
+          ),
+        ),
+      ],
     );
   }
 }

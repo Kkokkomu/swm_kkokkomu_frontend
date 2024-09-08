@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 
 part 'enums.g.dart';
 
@@ -88,13 +89,52 @@ enum ShortFormReportType {
   misinformation('MISINFORMATION', '잘못된 정보'),
   violent('VIOLENT', '폭력적 또는 혐오스러운 콘텐츠'),
   porno('PORNO', '성적인 콘텐츠'),
-  legal('legal', '법적 문제'),
+  legal('LEGAL', '법적 문제'),
   spam('SPAM', '스팸 또는 혼동을 야기하는 콘텐츠');
 
   final String name;
   final String message;
 
   const ShortFormReportType(this.name, this.message);
+}
+
+@JsonEnum(valueField: 'name')
+enum ReactionType {
+  like('LIKE'),
+  angry('ANGRY'),
+  surprise('SURPRISE'),
+  sad('SAD');
+
+  final String name;
+
+  const ReactionType(this.name);
+
+  String getWhiteSvgPath() {
+    return switch (this) {
+      ReactionType.like => Assets.icons.svg.icGoodWhite.path,
+      ReactionType.angry => Assets.icons.svg.icAngryWhite.path,
+      ReactionType.surprise => Assets.icons.svg.icSurpriseWhite.path,
+      ReactionType.sad => Assets.icons.svg.icSadWhite.path,
+    };
+  }
+
+  String getGraySvgPath() {
+    return switch (this) {
+      ReactionType.like => Assets.icons.svg.icGoodGray.path,
+      ReactionType.angry => Assets.icons.svg.icAngryGray.path,
+      ReactionType.surprise => Assets.icons.svg.icSurpriseGray.path,
+      ReactionType.sad => Assets.icons.svg.icSadGray.path,
+    };
+  }
+
+  String getBlueSvgPath() {
+    return switch (this) {
+      ReactionType.like => Assets.icons.svg.icGoodBlue.path,
+      ReactionType.angry => Assets.icons.svg.icAngryBlue.path,
+      ReactionType.surprise => Assets.icons.svg.icSurpriseBlue.path,
+      ReactionType.sad => Assets.icons.svg.icSadBlue.path,
+    };
+  }
 }
 
 // loadingStateProvider 에서 사용하는 요청 종류

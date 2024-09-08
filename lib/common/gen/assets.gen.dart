@@ -52,6 +52,18 @@ class $AssetsImagesGen {
 class $AssetsIconsSvgGen {
   const $AssetsIconsSvgGen();
 
+  /// File path: assets/icons/svg/ic_angry_blue.svg
+  SvgGenImage get icAngryBlue =>
+      const SvgGenImage('assets/icons/svg/ic_angry_blue.svg');
+
+  /// File path: assets/icons/svg/ic_angry_gray.svg
+  SvgGenImage get icAngryGray =>
+      const SvgGenImage('assets/icons/svg/ic_angry_gray.svg');
+
+  /// File path: assets/icons/svg/ic_angry_white.svg
+  SvgGenImage get icAngryWhite =>
+      const SvgGenImage('assets/icons/svg/ic_angry_white.svg');
+
   /// File path: assets/icons/svg/ic_block.svg
   SvgGenImage get icBlock => const SvgGenImage('assets/icons/svg/ic_block.svg');
 
@@ -78,6 +90,18 @@ class $AssetsIconsSvgGen {
   /// File path: assets/icons/svg/ic_entertain_gray.svg
   SvgGenImage get icEntertainGray =>
       const SvgGenImage('assets/icons/svg/ic_entertain_gray.svg');
+
+  /// File path: assets/icons/svg/ic_good_blue.svg
+  SvgGenImage get icGoodBlue =>
+      const SvgGenImage('assets/icons/svg/ic_good_blue.svg');
+
+  /// File path: assets/icons/svg/ic_good_gray.svg
+  SvgGenImage get icGoodGray =>
+      const SvgGenImage('assets/icons/svg/ic_good_gray.svg');
+
+  /// File path: assets/icons/svg/ic_good_white.svg
+  SvgGenImage get icGoodWhite =>
+      const SvgGenImage('assets/icons/svg/ic_good_white.svg');
 
   /// File path: assets/icons/svg/ic_introduction.svg
   SvgGenImage get icIntroduction =>
@@ -141,6 +165,18 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icReport =>
       const SvgGenImage('assets/icons/svg/ic_report.svg');
 
+  /// File path: assets/icons/svg/ic_sad_blue.svg
+  SvgGenImage get icSadBlue =>
+      const SvgGenImage('assets/icons/svg/ic_sad_blue.svg');
+
+  /// File path: assets/icons/svg/ic_sad_gray.svg
+  SvgGenImage get icSadGray =>
+      const SvgGenImage('assets/icons/svg/ic_sad_gray.svg');
+
+  /// File path: assets/icons/svg/ic_sad_white.svg
+  SvgGenImage get icSadWhite =>
+      const SvgGenImage('assets/icons/svg/ic_sad_white.svg');
+
   /// File path: assets/icons/svg/ic_society_blue.svg
   SvgGenImage get icSocietyBlue =>
       const SvgGenImage('assets/icons/svg/ic_society_blue.svg');
@@ -157,6 +193,18 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icSportsGray =>
       const SvgGenImage('assets/icons/svg/ic_sports_gray.svg');
 
+  /// File path: assets/icons/svg/ic_surprise_blue.svg
+  SvgGenImage get icSurpriseBlue =>
+      const SvgGenImage('assets/icons/svg/ic_surprise_blue.svg');
+
+  /// File path: assets/icons/svg/ic_surprise_gray.svg
+  SvgGenImage get icSurpriseGray =>
+      const SvgGenImage('assets/icons/svg/ic_surprise_gray.svg');
+
+  /// File path: assets/icons/svg/ic_surprise_white.svg
+  SvgGenImage get icSurpriseWhite =>
+      const SvgGenImage('assets/icons/svg/ic_surprise_white.svg');
+
   /// File path: assets/icons/svg/ic_unlike.svg
   SvgGenImage get icUnlike =>
       const SvgGenImage('assets/icons/svg/ic_unlike.svg');
@@ -171,6 +219,9 @@ class $AssetsIconsSvgGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        icAngryBlue,
+        icAngryGray,
+        icAngryWhite,
         icBlock,
         icCheckDisabled,
         icCheckEnabled,
@@ -178,6 +229,9 @@ class $AssetsIconsSvgGen {
         icEconomyGray,
         icEntertainBlue,
         icEntertainGray,
+        icGoodBlue,
+        icGoodGray,
+        icGoodWhite,
         icIntroduction,
         icItBlue,
         icItGray,
@@ -194,10 +248,16 @@ class $AssetsIconsSvgGen {
         icRe,
         icReply,
         icReport,
+        icSadBlue,
+        icSadGray,
+        icSadWhite,
         icSocietyBlue,
         icSocietyGray,
         icSportsBlue,
         icSportsGray,
+        icSurpriseBlue,
+        icSurpriseGray,
+        icSurpriseWhite,
         icUnlike,
         icWorldBlue,
         icWorldGray
