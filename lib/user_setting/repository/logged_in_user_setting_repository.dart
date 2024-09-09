@@ -31,4 +31,12 @@ abstract class LoggedInUserSettingRepository {
   })
   Future<ResponseModel<UserShortFormCategoryFilterModel?>>
       getUserShortFormCategoryFilter();
+
+  @PUT('/user-category')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<String?>> updateUserShortFormCategoryFilter({
+    @Body() required UserShortFormCategoryFilterModel body,
+  });
 }

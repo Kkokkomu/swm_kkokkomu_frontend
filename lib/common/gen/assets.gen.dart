@@ -75,6 +75,14 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icCheckEnabled =>
       const SvgGenImage('assets/icons/svg/ic_check_enabled.svg');
 
+  /// File path: assets/icons/svg/ic_checkbox_disabled.svg
+  SvgGenImage get icCheckboxDisabled =>
+      const SvgGenImage('assets/icons/svg/ic_checkbox_disabled.svg');
+
+  /// File path: assets/icons/svg/ic_checkbox_enabled.svg
+  SvgGenImage get icCheckboxEnabled =>
+      const SvgGenImage('assets/icons/svg/ic_checkbox_enabled.svg');
+
   /// File path: assets/icons/svg/ic_economy_blue.svg
   SvgGenImage get icEconomyBlue =>
       const SvgGenImage('assets/icons/svg/ic_economy_blue.svg');
@@ -155,6 +163,14 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icPoliticsGray =>
       const SvgGenImage('assets/icons/svg/ic_politics_gray.svg');
 
+  /// File path: assets/icons/svg/ic_radio_disabled.svg
+  SvgGenImage get icRadioDisabled =>
+      const SvgGenImage('assets/icons/svg/ic_radio_disabled.svg');
+
+  /// File path: assets/icons/svg/ic_radio_enabled.svg
+  SvgGenImage get icRadioEnabled =>
+      const SvgGenImage('assets/icons/svg/ic_radio_enabled.svg');
+
   /// File path: assets/icons/svg/ic_re.svg
   SvgGenImage get icRe => const SvgGenImage('assets/icons/svg/ic_re.svg');
 
@@ -225,6 +241,8 @@ class $AssetsIconsSvgGen {
         icBlock,
         icCheckDisabled,
         icCheckEnabled,
+        icCheckboxDisabled,
+        icCheckboxEnabled,
         icEconomyBlue,
         icEconomyGray,
         icEntertainBlue,
@@ -245,6 +263,8 @@ class $AssetsIconsSvgGen {
         icNaviSearchEnabled,
         icPoliticsBlue,
         icPoliticsGray,
+        icRadioDisabled,
+        icRadioEnabled,
         icRe,
         icReply,
         icReport,

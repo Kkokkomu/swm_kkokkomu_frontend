@@ -33,18 +33,48 @@ enum ShortFormSortType {
       _shortFormSortTypeNameMap[name];
 }
 
-enum NewsCategory {
-  politics,
-  economy,
-  social,
-  entertain,
-  sports,
-  living,
-  world,
-  it
-}
-
 enum ShortFormCommentSortType { popular, latest }
+
+enum NewsCategory {
+  politics('정치'),
+  economy('경제'),
+  social('사회'),
+  entertain('연예'),
+  sports('스포츠'),
+  living('생활'),
+  world('세계'),
+  it('IT');
+
+  final String label;
+
+  const NewsCategory(this.label);
+
+  String getGraySvgPath() {
+    return switch (this) {
+      NewsCategory.politics => Assets.icons.svg.icPoliticsGray.path,
+      NewsCategory.economy => Assets.icons.svg.icEconomyGray.path,
+      NewsCategory.social => Assets.icons.svg.icSocietyGray.path,
+      NewsCategory.entertain => Assets.icons.svg.icEntertainGray.path,
+      NewsCategory.sports => Assets.icons.svg.icSportsGray.path,
+      NewsCategory.living => Assets.icons.svg.icLifeGray.path,
+      NewsCategory.world => Assets.icons.svg.icWorldGray.path,
+      NewsCategory.it => Assets.icons.svg.icItGray.path,
+    };
+  }
+
+  String getBlueSvgPath() {
+    return switch (this) {
+      NewsCategory.politics => Assets.icons.svg.icPoliticsBlue.path,
+      NewsCategory.economy => Assets.icons.svg.icEconomyBlue.path,
+      NewsCategory.social => Assets.icons.svg.icSocietyBlue.path,
+      NewsCategory.entertain => Assets.icons.svg.icEntertainBlue.path,
+      NewsCategory.sports => Assets.icons.svg.icSportsBlue.path,
+      NewsCategory.living => Assets.icons.svg.icLifeBlue.path,
+      NewsCategory.world => Assets.icons.svg.icWorldBlue.path,
+      NewsCategory.it => Assets.icons.svg.icItBlue.path,
+    };
+  }
+}
 
 enum RootTabBottomNavigationBarType {
   exploration(CustomRoutePath.exploration),

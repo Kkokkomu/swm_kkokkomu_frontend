@@ -50,6 +50,50 @@ class LoggedInUserShortFormSettingStateNotifier
     );
   }
 
+  Future<bool> updateSetting({
+    required UserShortFormSettingModel setting,
+  }) async {
+    // 세팅값 업데이트
+    // 만약 모든 카테고리가 선택되어 있지 않다면 모든 카테고리를 선택하도록 변경
+    // 모두 false == 모두 true 로 취급
+    final newSetting = setting.isAllCategoryUnSelected()
+        ? setting.copyWith(
+            userShortFormCategoryFilter:
+                setting.userShortFormCategoryFilter.copyWith(
+              politics: true,
+              economy: true,
+              social: true,
+              entertain: true,
+              sports: true,
+              living: true,
+              world: true,
+              it: true,
+            ),
+          )
+        : setting;
+
+    // 변경된 설정을 적용
+    state = newSetting;
+
+    // 변경된 정렬 설정을 SharedPreferences에 저장
+    final prefs = await SharedPreferences.getInstance();
+    await _saveSortType(prefs, newSetting.shortFormSortType);
+
+    // 변경된 카테고리 설정을 서버에 저장
+    final resp =
+        await loggedInUserSettingRepository.updateUserShortFormCategoryFilter(
+      body: newSetting.userShortFormCategoryFilter,
+    );
+
+    // 서버에 저장에 실패했다면 false 반환
+    if (resp.success != true) {
+      return false;
+    }
+
+    // 서버에 저장에 성공했다면 true 반환
+    return true;
+  }
+
   Future<ShortFormSortType> _getSortType() async {
     // SharedPreferences에 저장된 ShortFormSortType을 가져옴
     final prefs = await SharedPreferences.getInstance();

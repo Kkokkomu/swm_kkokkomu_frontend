@@ -40,4 +40,27 @@ class UserShortFormCategoryFilterModel {
 
   Map<String, dynamic> toJson() =>
       _$UserShortFormCategoryFilterModelToJson(this);
+
+  UserShortFormCategoryFilterModel copyWith({
+    bool? politics,
+    bool? economy,
+    bool? social,
+    bool? entertain,
+    bool? sports,
+    bool? living,
+    bool? world,
+    bool? it,
+  }) {
+    return UserShortFormCategoryFilterModel(
+      userId: userId,
+      politics: politics ?? this.politics,
+      economy: economy ?? this.economy,
+      social: social ?? this.social,
+      entertain: entertain ?? this.entertain,
+      sports: sports ?? this.sports,
+      living: living ?? this.living,
+      world: world ?? this.world,
+      it: it ?? this.it,
+    );
+  }
 }
