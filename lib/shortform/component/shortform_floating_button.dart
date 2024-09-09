@@ -156,10 +156,12 @@ class DetailEmojiButton extends ConsumerWidget {
                   newsIndex: newsIndex,
                   reactionType: reactionType,
                 )
-            : ref.read(loggedInUserShortFormProvider.notifier).postReaction(
+            : ref.read(loggedInUserShortFormProvider.notifier).putPostReaction(
                   newsId: newsId,
                   newsIndex: newsIndex,
                   reactionType: reactionType,
+                  // userReactionType가 null이 아닌 경우는 이미 다른 이모지를 누른 상태
+                  isReacted: userReactionType != null,
                 );
       },
     );

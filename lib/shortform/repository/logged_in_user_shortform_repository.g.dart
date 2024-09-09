@@ -60,8 +60,8 @@ class _LoggedInUserShortFormRepository
   }
 
   @override
-  Future<ResponseModel<PostReactionResponseModel?>> postReaction(
-      {required PostReactionModel body}) async {
+  Future<ResponseModel<PutPostReactionResponseModel?>> postReaction(
+      {required PutPostReactionModel body}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': true};
@@ -69,7 +69,7 @@ class _LoggedInUserShortFormRepository
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ResponseModel<PostReactionResponseModel>>(Options(
+        _setStreamType<ResponseModel<PutPostReactionResponseModel>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -85,11 +85,46 @@ class _LoggedInUserShortFormRepository
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ResponseModel<PostReactionResponseModel?>.fromJson(
+    final value = ResponseModel<PutPostReactionResponseModel?>.fromJson(
       _result.data!,
       (json) => json == null
           ? null
-          : PostReactionResponseModel.fromJson(json as Map<String, dynamic>),
+          : PutPostReactionResponseModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<ResponseModel<PutPostReactionResponseModel?>> updateReaction(
+      {required PutPostReactionModel body}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': true};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseModel<PutPostReactionResponseModel>>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/news-reaction',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ResponseModel<PutPostReactionResponseModel?>.fromJson(
+      _result.data!,
+      (json) => json == null
+          ? null
+          : PutPostReactionResponseModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }

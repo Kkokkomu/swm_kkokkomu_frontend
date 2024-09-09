@@ -3,7 +3,7 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/offset_pagination_provider.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/post_reaction_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_additional_params.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/repository/logged_in_user_shortform_repository.dart';
@@ -40,10 +40,11 @@ class LoggedInUserShortFormStateNotifier extends OffsetPaginationProvider<
     super.additionalParams,
   });
 
-  Future<bool> postReaction({
+  Future<bool> putPostReaction({
     required int newsId,
     required int newsIndex,
     required ReactionType reactionType,
+    required bool isReacted,
   }) async {
     final prevState = _getValidPrevState(newsId: newsId);
 
@@ -87,12 +88,22 @@ class LoggedInUserShortFormStateNotifier extends OffsetPaginationProvider<
     state = prevState.copyWith();
 
     // 서버에 반응 정보 전송
-    final resp = await repository.postReaction(
-      body: PostReactionModel(
-        newsId: newsId,
-        reaction: reactionType,
-      ),
-    );
+    // isReacted가 true인 경우 updateReaction, false인 경우 postReaction 요청
+    // 즉, isReacted가 true인 경우 이전에 반응을 했던 경우이므로 updateReaction 요청
+    final resp = switch (isReacted) {
+      true => await repository.updateReaction(
+          body: PutPostReactionModel(
+            newsId: newsId,
+            reaction: reactionType,
+          ),
+        ),
+      false => await repository.postReaction(
+          body: PutPostReactionModel(
+            newsId: newsId,
+            reaction: reactionType,
+          ),
+        ),
+    };
 
     // 서버 요청 실패 시 false 반환
     if (resp.success != true || resp.data == null) {

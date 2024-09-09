@@ -8,7 +8,7 @@ import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_offset_pagination_repository.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/post_reaction_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 
 part 'logged_in_user_shortform_repository.g.dart';
@@ -45,8 +45,16 @@ abstract class LoggedInUserShortFormRepository
   @Headers({
     'accessToken': true,
   })
-  Future<ResponseModel<PostReactionResponseModel?>> postReaction({
-    @Body() required PostReactionModel body,
+  Future<ResponseModel<PutPostReactionResponseModel?>> postReaction({
+    @Body() required PutPostReactionModel body,
+  });
+
+  @PUT('/news-reaction')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<PutPostReactionResponseModel?>> updateReaction({
+    @Body() required PutPostReactionModel body,
   });
 
   @DELETE('/news-reaction')

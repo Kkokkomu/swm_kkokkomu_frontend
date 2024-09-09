@@ -2,34 +2,34 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 
-part 'post_reaction_model.g.dart';
+part 'put_post_reaction_model.g.dart';
 
 @JsonSerializable()
-class PostReactionModel {
+class PutPostReactionModel {
   final int newsId;
   final ReactionType reaction;
 
-  PostReactionModel({
+  PutPostReactionModel({
     required this.newsId,
     required this.reaction,
   });
 
-  Map<String, dynamic> toJson() => _$PostReactionModelToJson(this);
+  Map<String, dynamic> toJson() => _$PutPostReactionModelToJson(this);
 }
 
 @JsonSerializable()
-class PostReactionResponseModel {
+class PutPostReactionResponseModel {
   final int userId;
   final int newsId;
   final ReactionType? reaction;
 
-  PostReactionResponseModel({
+  PutPostReactionResponseModel({
     int? userId,
     int? newsId,
     this.reaction,
   })  : userId = userId ?? Constants.unknownErrorId,
         newsId = newsId ?? Constants.unknownErrorId;
 
-  factory PostReactionResponseModel.fromJson(Map<String, dynamic> json) =>
-      _$PostReactionResponseModelFromJson(json);
+  factory PutPostReactionResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$PutPostReactionResponseModelFromJson(json);
 }
