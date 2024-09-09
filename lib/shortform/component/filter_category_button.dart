@@ -39,7 +39,7 @@ class CustomCategoryButton extends StatelessWidget {
               WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
                 child: SvgPicture.asset(
-                  category.getBlueSvgPath(),
+                  category.blueSvgPath,
                   width: _iconSize,
                   height: _iconSize,
                 ),

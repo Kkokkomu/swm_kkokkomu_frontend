@@ -49,31 +49,27 @@ enum NewsCategory {
 
   const NewsCategory(this.label);
 
-  String getGraySvgPath() {
-    return switch (this) {
-      NewsCategory.politics => Assets.icons.svg.icPoliticsGray.path,
-      NewsCategory.economy => Assets.icons.svg.icEconomyGray.path,
-      NewsCategory.social => Assets.icons.svg.icSocietyGray.path,
-      NewsCategory.entertain => Assets.icons.svg.icEntertainGray.path,
-      NewsCategory.sports => Assets.icons.svg.icSportsGray.path,
-      NewsCategory.living => Assets.icons.svg.icLifeGray.path,
-      NewsCategory.world => Assets.icons.svg.icWorldGray.path,
-      NewsCategory.it => Assets.icons.svg.icItGray.path,
-    };
-  }
+  String get graySvgPath => switch (this) {
+        NewsCategory.politics => Assets.icons.svg.icPoliticsGray.path,
+        NewsCategory.economy => Assets.icons.svg.icEconomyGray.path,
+        NewsCategory.social => Assets.icons.svg.icSocietyGray.path,
+        NewsCategory.entertain => Assets.icons.svg.icEntertainGray.path,
+        NewsCategory.sports => Assets.icons.svg.icSportsGray.path,
+        NewsCategory.living => Assets.icons.svg.icLifeGray.path,
+        NewsCategory.world => Assets.icons.svg.icWorldGray.path,
+        NewsCategory.it => Assets.icons.svg.icItGray.path,
+      };
 
-  String getBlueSvgPath() {
-    return switch (this) {
-      NewsCategory.politics => Assets.icons.svg.icPoliticsBlue.path,
-      NewsCategory.economy => Assets.icons.svg.icEconomyBlue.path,
-      NewsCategory.social => Assets.icons.svg.icSocietyBlue.path,
-      NewsCategory.entertain => Assets.icons.svg.icEntertainBlue.path,
-      NewsCategory.sports => Assets.icons.svg.icSportsBlue.path,
-      NewsCategory.living => Assets.icons.svg.icLifeBlue.path,
-      NewsCategory.world => Assets.icons.svg.icWorldBlue.path,
-      NewsCategory.it => Assets.icons.svg.icItBlue.path,
-    };
-  }
+  String get blueSvgPath => switch (this) {
+        NewsCategory.politics => Assets.icons.svg.icPoliticsBlue.path,
+        NewsCategory.economy => Assets.icons.svg.icEconomyBlue.path,
+        NewsCategory.social => Assets.icons.svg.icSocietyBlue.path,
+        NewsCategory.entertain => Assets.icons.svg.icEntertainBlue.path,
+        NewsCategory.sports => Assets.icons.svg.icSportsBlue.path,
+        NewsCategory.living => Assets.icons.svg.icLifeBlue.path,
+        NewsCategory.world => Assets.icons.svg.icWorldBlue.path,
+        NewsCategory.it => Assets.icons.svg.icItBlue.path,
+      };
 }
 
 enum RootTabBottomNavigationBarType {
@@ -139,32 +135,26 @@ enum ReactionType {
 
   const ReactionType(this.name);
 
-  String getWhiteSvgPath() {
-    return switch (this) {
-      ReactionType.like => Assets.icons.svg.icGoodWhite.path,
-      ReactionType.angry => Assets.icons.svg.icAngryWhite.path,
-      ReactionType.surprise => Assets.icons.svg.icSurpriseWhite.path,
-      ReactionType.sad => Assets.icons.svg.icSadWhite.path,
-    };
-  }
+  String get whiteSvgPath => switch (this) {
+        ReactionType.like => Assets.icons.svg.icGoodWhite.path,
+        ReactionType.angry => Assets.icons.svg.icAngryWhite.path,
+        ReactionType.surprise => Assets.icons.svg.icSurpriseWhite.path,
+        ReactionType.sad => Assets.icons.svg.icSadWhite.path,
+      };
 
-  String getGraySvgPath() {
-    return switch (this) {
-      ReactionType.like => Assets.icons.svg.icGoodGray.path,
-      ReactionType.angry => Assets.icons.svg.icAngryGray.path,
-      ReactionType.surprise => Assets.icons.svg.icSurpriseGray.path,
-      ReactionType.sad => Assets.icons.svg.icSadGray.path,
-    };
-  }
+  String get graySvgPath => switch (this) {
+        ReactionType.like => Assets.icons.svg.icGoodGray.path,
+        ReactionType.angry => Assets.icons.svg.icAngryGray.path,
+        ReactionType.surprise => Assets.icons.svg.icSurpriseGray.path,
+        ReactionType.sad => Assets.icons.svg.icSadGray.path,
+      };
 
-  String getBlueSvgPath() {
-    return switch (this) {
-      ReactionType.like => Assets.icons.svg.icGoodBlue.path,
-      ReactionType.angry => Assets.icons.svg.icAngryBlue.path,
-      ReactionType.surprise => Assets.icons.svg.icSurpriseBlue.path,
-      ReactionType.sad => Assets.icons.svg.icSadBlue.path,
-    };
-  }
+  String get blueSvgPath => switch (this) {
+        ReactionType.like => Assets.icons.svg.icGoodBlue.path,
+        ReactionType.angry => Assets.icons.svg.icAngryBlue.path,
+        ReactionType.surprise => Assets.icons.svg.icSurpriseBlue.path,
+        ReactionType.sad => Assets.icons.svg.icSadBlue.path,
+      };
 }
 
 // loadingStateProvider 에서 사용하는 요청 종류

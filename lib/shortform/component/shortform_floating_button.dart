@@ -122,7 +122,7 @@ class DetailEmojiButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomFloatingButton(
       icon: userReactionType == reactionType
-          ? SvgPicture.asset(reactionType.getBlueSvgPath())
+          ? SvgPicture.asset(reactionType.blueSvgPath)
               .animate()
               .scaleXY(
                 begin: 0.1,
@@ -135,7 +135,7 @@ class DetailEmojiButton extends ConsumerWidget {
                 end: 1.1,
               )
               .shake()
-          : SvgPicture.asset(reactionType.getGraySvgPath()),
+          : SvgPicture.asset(reactionType.graySvgPath),
       label: reactionCountInfo.getReactionCountByType(reactionType).toString(),
       labelColor: Colors.black,
       onTap: () {
