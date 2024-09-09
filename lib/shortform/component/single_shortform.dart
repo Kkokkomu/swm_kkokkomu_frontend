@@ -5,7 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
-import 'package:swm_kkokkomu_frontend/shortform/component/shortform_floating_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/comment_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/emoji_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/filter_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/more_info_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/related_url_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/search_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/share_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_start_pause_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/custom_better_player_controller_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
@@ -193,21 +199,21 @@ class SingleShortForm extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                const SafeArea(
+                                SafeArea(
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      FilterButton(),
+                                      const FilterButton(),
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: [
-                                          SearchButton(),
-                                          MoreInfoButton(),
+                                          const SearchButton(),
+                                          MoreInfoButton(newsId: newsId),
                                         ],
                                       ),
                                     ],

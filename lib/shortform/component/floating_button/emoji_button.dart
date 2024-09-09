@@ -2,24 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
-import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/custom_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_visibility_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_provider.dart';
-import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-const _floatingButtonSize = 36.0;
-const _emojiDetailAnimationDuration = Duration(milliseconds: 300);
 
 class EmojiButton extends ConsumerWidget {
   final int newsId;
@@ -73,13 +66,13 @@ class EmojiButton extends ConsumerWidget {
                   .animate(target: isDetailEmojiButtonVisible ? 1 : 0)
                   .scaleXY(begin: 0, end: 1, duration: Duration.zero)
                   .fadeIn(
-                    duration: _emojiDetailAnimationDuration,
+                    duration: AnimationDuration.emojiDetailAnimationDuration,
                     curve: Curves.easeInOut,
                   )
                   .slideX(
                     begin: 1.5,
                     end: 0,
-                    duration: _emojiDetailAnimationDuration,
+                    duration: AnimationDuration.emojiDetailAnimationDuration,
                     curve: Curves.easeInOut,
                   ),
               CustomFloatingButton(
@@ -164,199 +157,6 @@ class DetailEmojiButton extends ConsumerWidget {
                   isReacted: userReactionType != null,
                 );
       },
-    );
-  }
-}
-
-class CommentButton extends StatelessWidget {
-  final WidgetRef ref;
-  final int newsId;
-  final double maxCommentHeight;
-
-  const CommentButton({
-    super.key,
-    required this.ref,
-    required this.newsId,
-    required this.maxCommentHeight,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomFloatingButton(
-      icon: const Icon(
-        Icons.comment,
-        color: Colors.white,
-      ),
-      label: '댓글',
-      onTap: () => ref
-          .read(shortFormCommentHeightControllerProvider(newsId).notifier)
-          .setCommentBodySizeMedium(maxCommentHeight),
-    );
-  }
-}
-
-class ShareButton extends StatelessWidget {
-  final String shareUrl;
-
-  const ShareButton({
-    super.key,
-    required this.shareUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomFloatingButton(
-      icon: const Icon(
-        Icons.share,
-        color: Colors.white,
-      ),
-      label: '공유',
-      onTap: () => Share.shareUri(
-        Uri.parse(shareUrl),
-      ),
-    );
-  }
-}
-
-class RelatedUrlButton extends StatelessWidget {
-  final String shortFormRelatedURL;
-
-  const RelatedUrlButton({
-    super.key,
-    required this.shortFormRelatedURL,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomFloatingButton(
-      icon: const Icon(
-        Icons.newspaper,
-        color: Colors.white,
-      ),
-      label: '관련기사',
-      onTap: () async {
-        final url = await canLaunchUrl(Uri.parse(shortFormRelatedURL))
-            ? shortFormRelatedURL
-            : Constants.relatedUrlOnError;
-
-        launchUrl(
-          Uri.parse(url),
-        );
-      },
-    );
-  }
-}
-
-class FilterButton extends ConsumerWidget {
-  const FilterButton({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return CustomFloatingButton(
-      icon: const Icon(
-        Icons.tune,
-        color: Colors.white,
-      ),
-      // TODO : 현재 로그인 상태만 필터화면으로 이동하도록 함. 비로그인 유저도 필터링 가능하게 할 건지 결정해야 함.
-      onTap: () {
-        // 로그인 상태가 아닌 경우 로그인 모달창 띄우기
-        if (ref.read(userInfoProvider) is! UserModel) {
-          showLoginModalBottomSheet(context, ref);
-          return;
-        }
-
-        // 로그인 상태인 경우 필터화면으로 이동
-        context.go(CustomRoutePath.filter);
-      },
-    );
-  }
-}
-
-class SearchButton extends StatelessWidget {
-  const SearchButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomFloatingButton(
-      icon: const Icon(
-        Icons.search,
-        color: Colors.white,
-      ),
-      onTap: () {},
-    );
-  }
-}
-
-class MoreInfoButton extends StatelessWidget {
-  const MoreInfoButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton(
-      padding: EdgeInsets.zero,
-      constraints: const BoxConstraints(),
-      style: const ButtonStyle(
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-      icon: const Icon(
-        Icons.more_vert,
-        color: Colors.white,
-        size: _floatingButtonSize,
-      ),
-      offset: const Offset(0, _floatingButtonSize + 16.0),
-      itemBuilder: (_) => <PopupMenuEntry>[
-        const PopupMenuItem(
-          child: Text('설명보기'),
-        ),
-        const PopupMenuDivider(),
-        const PopupMenuItem(
-          child: Text('관심없어요'),
-        ),
-        const PopupMenuDivider(),
-        const PopupMenuItem(
-          child: Text('신고하기'),
-        ),
-      ],
-    );
-  }
-}
-
-class CustomFloatingButton extends StatelessWidget {
-  final Widget icon;
-  final String? label;
-  final Color labelColor;
-  final void Function()? onTap;
-
-  const CustomFloatingButton({
-    super.key,
-    required this.icon,
-    this.label,
-    this.labelColor = ColorName.white000,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: SizedBox(
-            width: _floatingButtonSize,
-            height: _floatingButtonSize,
-            child: FittedBox(child: icon),
-          ),
-        ),
-        if (label != null)
-          Text(
-            label!,
-            style: TextStyle(
-              fontSize: 12.0,
-              color: labelColor,
-            ),
-          ),
-      ],
     );
   }
 }

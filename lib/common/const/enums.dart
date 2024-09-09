@@ -82,6 +82,12 @@ enum RootTabBottomNavigationBarType {
   const RootTabBottomNavigationBarType(this.path);
 }
 
+enum ShortFormMoreInfoPopupType {
+  viewDescription,
+  nonInterested,
+  report,
+}
+
 enum ShortFormCommentPopupType {
   update,
   delete,

@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/offset_pagination_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_additional_params.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
@@ -155,6 +157,42 @@ class LoggedInUserShortFormStateNotifier extends OffsetPaginationProvider<
 
     // 서버 요청 성공 시 true 반환
     return true;
+  }
+
+  Future<({bool success, String? errorCode, String? errorMessage})>
+      reportShortForm({
+    required int newsId,
+    required ShortFormReportType reason,
+  }) async {
+    final prevState = _getValidPrevState(newsId: newsId);
+
+    // 이전 상태가 유효하지 않은 경우 false 반환
+    if (prevState == null) {
+      return (
+        success: false,
+        errorCode: CustomErrorCode.unknownCode,
+        errorMessage: '신고에 실패했습니다.'
+      );
+    }
+
+    // 이전 상태가 유효한 경우 서버에 신고 요청 전송
+    final resp = await repository.reportShortForm(
+      body: PostReportShortFormBodyModel(
+        reason: reason,
+        newsId: newsId,
+      ),
+    );
+
+    // success값이 true가 아니거나 신고된 뉴스 정보가 없는 경우 실패 처리
+    if (resp.success != true || resp.data == null) {
+      return (
+        success: false,
+        errorCode: resp.error?.code ?? CustomErrorCode.unknownCode,
+        errorMessage: resp.error?.message ?? '신고에 실패했습니다.',
+      );
+    }
+
+    return (success: true, errorCode: null, errorMessage: null);
   }
 
   // 숏폼 관련 요청이 유효한지 확인 후, 유효한 경우 previousState 반환

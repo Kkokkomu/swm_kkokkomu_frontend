@@ -8,6 +8,8 @@ import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_offset_pagination_repository.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_response_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 
@@ -64,5 +66,13 @@ abstract class LoggedInUserShortFormRepository
   Future<ResponseModel<String?>> deleteReaction({
     @Query('newsId') required int newsId,
     @Query('reaction') required String reaction,
+  });
+
+  @POST('/report/news')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<PostReportShortformResponseModel?>> reportShortForm({
+    @Body() required PostReportShortFormBodyModel body,
   });
 }

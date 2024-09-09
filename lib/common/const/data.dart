@@ -27,6 +27,9 @@ class Constants {
   static double bottomNavigationBarHeightWithSafeArea =
       bottomNavigationBarHeight;
 
+  // 숏폼 화면 플로팅 버튼 크기
+  static const double shortFormFloatingButtonSize = 36.0;
+
   static const Color modalBarrierColor = Colors.black54;
 
   static const int cursorPaginationFetchCount = 20;
@@ -58,6 +61,10 @@ class AnimationDuration {
 
   // 대댓글창 등장 애니메이션 시간
   static const Duration replyAppearAnimationDuration =
+      Duration(milliseconds: 300);
+
+  // 이모지 상세 버튼 등장 애니메이션 시간
+  static const Duration emojiDetailAnimationDuration =
       Duration(milliseconds: 300);
 }
 

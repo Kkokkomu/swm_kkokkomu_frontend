@@ -3,32 +3,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
-import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_report_type_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/shortform_report_type_provider.dart';
 
-Future<CommentReportType?> showShortFormCommentReportDialog({
+Future<ShortFormReportType?> showShortFormReportDialog({
   required BuildContext context,
 }) {
-  return showDialog<CommentReportType?>(
+  return showDialog<ShortFormReportType?>(
     context: context,
     builder: (context) => Consumer(
       builder: (_, ref, child) {
-        final reportType = ref.watch(shortFormCommentReportTypeProvider);
+        final reportType = ref.watch(shortFormReportTypeProvider);
 
         return AlertDialog(
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
-          title: const Text('댓글 신고 사유 선택'),
+          title: const Text('신고 사유 선택'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              for (final type in CommentReportType.values)
-                RadioListTile<CommentReportType>(
+              for (final type in ShortFormReportType.values)
+                RadioListTile<ShortFormReportType>(
                   title: Text(type.message),
                   value: type,
                   groupValue: reportType,
                   onChanged: (value) => ref
-                      .read(shortFormCommentReportTypeProvider.notifier)
-                      .state = value ?? CommentReportType.spam,
+                      .read(shortFormReportTypeProvider.notifier)
+                      .state = value ?? ShortFormReportType.spam,
                 ),
             ],
           ),
