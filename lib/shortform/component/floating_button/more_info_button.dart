@@ -87,9 +87,8 @@ class MoreInfoButton extends ConsumerWidget {
             // 신고 실패 시 에러 메시지 출력
             if (resp.success == false) {
               // 이미 신고한 숏폼인 경우 에러 다이얼로그 출력
-              // TODO : alreadyReportedCommentCode를 사용하는 것이 맞는지 확인
               if (resp.errorCode ==
-                      CustomErrorCode.alreadyReportedCommentCode &&
+                      CustomErrorCode.alreadyReportedShortFormCode &&
                   context.mounted) {
                 showInfoDialog(
                   context: context,

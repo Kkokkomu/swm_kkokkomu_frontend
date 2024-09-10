@@ -1,5 +1,9 @@
 class CustomErrorCode {
+  // 서버로 부터 response error code 를 받지 못한 경우
   static const String unknownCode = '99999';
+
+  // 이미 신고한 숏폼을 다시 신고하는 경우
+  static const String alreadyReportedShortFormCode = '40032';
 
   // 이미 신고한 댓글을 다시 신고하는 경우
   static const String alreadyReportedCommentCode = '40028';
