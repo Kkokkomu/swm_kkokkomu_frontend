@@ -5,6 +5,7 @@ import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/offset_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/post_set_not_interested_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_additional_params.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
@@ -189,6 +190,38 @@ class LoggedInUserShortFormStateNotifier extends OffsetPaginationProvider<
         success: false,
         errorCode: resp.error?.code ?? CustomErrorCode.unknownCode,
         errorMessage: resp.error?.message ?? '신고에 실패했습니다.',
+      );
+    }
+
+    return (success: true, errorCode: null, errorMessage: null);
+  }
+
+  Future<({bool success, String? errorCode, String? errorMessage})>
+      setNotInterested({
+    required int newsId,
+  }) async {
+    final prevState = _getValidPrevState(newsId: newsId);
+
+    // 이전 상태가 유효하지 않은 경우 false 반환
+    if (prevState == null) {
+      return (
+        success: false,
+        errorCode: CustomErrorCode.unknownCode,
+        errorMessage: '관심없음 처리에 실패했습니다.'
+      );
+    }
+
+    // 이전 상태가 유효한 경우 관심없음 요청 전송
+    final resp = await repository.setNotInterested(
+      body: PostSetNotInterestedBody(newsId: newsId),
+    );
+
+    // success값이 true가 아니거나 관심없음 처리된 정보가 없는 경우 실패 처리
+    if (resp.success != true || resp.data == null) {
+      return (
+        success: false,
+        errorCode: resp.error?.code ?? CustomErrorCode.unknownCode,
+        errorMessage: resp.error?.message ?? '관심없음 처리에 실패했습니다.'
       );
     }
 

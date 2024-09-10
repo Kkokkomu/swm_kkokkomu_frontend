@@ -10,7 +10,9 @@ import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_offset_pagination_repository.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_response_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/post_set_not_interested_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_detail_info_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 
 part 'logged_in_user_shortform_repository.g.dart';
@@ -74,5 +76,13 @@ abstract class LoggedInUserShortFormRepository
   })
   Future<ResponseModel<PostReportShortformResponseModel?>> reportShortForm({
     @Body() required PostReportShortFormBodyModel body,
+  });
+
+  @POST('/home/news/not-interested')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<ShortFormDetailNewsInfo?>> setNotInterested({
+    @Body() required PostSetNotInterestedBody body,
   });
 }

@@ -58,7 +58,44 @@ class MoreInfoButton extends ConsumerWidget {
               return;
             }
 
-            // TODO : 관심없어요 처리
+            final isConfirmed = await showConfirmationDialog(
+              context: context,
+              content: '정말 관심없음 처리하시겠습니까?',
+              confirmText: '관심없음',
+              cancelText: '취소',
+            );
+
+            // 컨펌하지 않은 경우 리턴
+            if (isConfirmed != true) {
+              return;
+            }
+
+            // 관심없음 처리 요청
+            final resp = await ref
+                .read(loggedInUserShortFormProvider.notifier)
+                .setNotInterested(newsId: newsId);
+
+            // 처리 실패 시 에러 메시지 출력
+            if (resp.success == false) {
+              // 이미 관심없음 처리한 경우 에러 다이얼로그 출력
+              // TODO : 에러코드 확인 필요
+              if (resp.errorCode ==
+                      CustomErrorCode.alreadyReportedShortFormCode &&
+                  context.mounted) {
+                showInfoDialog(
+                  context: context,
+                  content: resp.errorMessage ?? '이미 관심없음 처리되었습니다.',
+                );
+                return;
+              }
+
+              CustomToastMessage.showErrorToastMessage('관심없음 처리에 실패했습니다.');
+              return;
+            }
+
+            // 성공 시 성공 메시지 출력
+            CustomToastMessage.showSuccessToastMessage('관심없음 처리되었습니다.');
+
             return;
 
           case ShortFormMoreInfoPopupType.report:
