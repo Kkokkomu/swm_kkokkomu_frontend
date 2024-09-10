@@ -236,6 +236,7 @@ class SingleShortForm extends ConsumerWidget {
                                     ),
                                     const SizedBox(height: 16.0),
                                     ShareButton(
+                                      newsId: newsId,
                                       // TODO : 공유 기능 구현하기
                                       // 임시로 relatedUrl을 공유 URL로 사용
                                       shareUrl: relatedUrl,

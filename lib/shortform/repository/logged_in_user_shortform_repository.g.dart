@@ -204,7 +204,7 @@ class _LoggedInUserShortFormRepository
 
   @override
   Future<ResponseModel<ShortFormDetailNewsInfo?>> setNotInterested(
-      {required PostSetNotInterestedBody body}) async {
+      {required PostNewsIdBody body}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': true};

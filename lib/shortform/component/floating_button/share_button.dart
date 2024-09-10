@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/custom_floating_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/post_news_id_body.dart';
+import 'package:swm_kkokkomu_frontend/shortform/repository/shortform_logging_repository.dart';
 
-class ShareButton extends StatelessWidget {
+class ShareButton extends ConsumerWidget {
+  final int newsId;
   final String shareUrl;
 
   const ShareButton({
     super.key,
+    required this.newsId,
     required this.shareUrl,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return CustomFloatingButton(
       icon: const Icon(
         Icons.share,
@@ -19,11 +24,15 @@ class ShareButton extends StatelessWidget {
       ),
       label: '공유',
       onTap: () async {
-        // TODO : 공유가 성공적으로 이루어졌는지 확인한 후, api 호출해야 함
         final resp = await Share.shareUri(
           Uri.parse(shareUrl),
         );
-        debugPrint('Share response: $resp');
+
+        if (resp.status == ShareResultStatus.success) {
+          ref
+              .read(shortFormLoggingRepositoryProvider)
+              .logNewsShare(body: PostNewsIdBody(newsId: newsId));
+        }
       },
     );
   }

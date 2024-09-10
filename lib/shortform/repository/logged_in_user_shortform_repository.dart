@@ -10,7 +10,7 @@ import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_offset_pagination_repository.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_response_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/post_set_not_interested_body.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/post_news_id_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_detail_info_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
@@ -83,6 +83,6 @@ abstract class LoggedInUserShortFormRepository
     'accessToken': true,
   })
   Future<ResponseModel<ShortFormDetailNewsInfo?>> setNotInterested({
-    @Body() required PostSetNotInterestedBody body,
+    @Body() required PostNewsIdBody body,
   });
 }

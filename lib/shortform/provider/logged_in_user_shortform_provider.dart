@@ -5,7 +5,7 @@ import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/offset_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/post_set_not_interested_body.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/post_news_id_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_additional_params.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
@@ -213,7 +213,7 @@ class LoggedInUserShortFormStateNotifier extends OffsetPaginationProvider<
 
     // 이전 상태가 유효한 경우 관심없음 요청 전송
     final resp = await repository.setNotInterested(
-      body: PostSetNotInterestedBody(newsId: newsId),
+      body: PostNewsIdBody(newsId: newsId),
     );
 
     // success값이 true가 아니거나 관심없음 처리된 정보가 없는 경우 실패 처리
