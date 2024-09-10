@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/root_tab_scaffold_key_provider.dart';
@@ -42,6 +43,14 @@ class RootTab extends ConsumerWidget {
         showAppExitDialog(context);
       },
       child: DefaultLayout(
+        // 홈(숏폼) 화면은 다크 모드이므로 상태바 아이콘을 밝게 처리
+        // 나머지는 라이트 모드이므로 상태바 아이콘을 어둡게 처리
+        statusBarIconBrightness: navigationShell.currentIndex == 1
+            ? Brightness.light
+            : Brightness.dark,
+        statusBarBrightness: navigationShell.currentIndex == 1
+            ? Brightness.light
+            : Brightness.dark,
         scaffoldKey: scaffoldKey,
         resizeToAvoidBottomInset: false,
         drawer: navigationShell.currentIndex == 0
@@ -50,6 +59,9 @@ class RootTab extends ConsumerWidget {
         bottomNavigationBar: CustomBottomNavigationBar(
           navigationShell: navigationShell,
         ),
+        backgroundColor: navigationShell.currentIndex == 1
+            ? Colors.black
+            : ColorName.white000,
         child: navigationShell,
       ),
     );

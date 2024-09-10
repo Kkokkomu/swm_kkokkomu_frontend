@@ -35,19 +35,21 @@ enum ShortFormSortType {
 
 enum ShortFormCommentSortType { popular, latest }
 
+@JsonEnum(valueField: 'name')
 enum NewsCategory {
-  politics('정치'),
-  economy('경제'),
-  social('사회'),
-  entertain('연예'),
-  sports('스포츠'),
-  living('생활'),
-  world('세계'),
-  it('IT');
+  politics('POLITICS', '정치'),
+  economy('ECONOMY', '경제'),
+  social('SOCIAL', '사회'),
+  entertain('ENTERTAIN', '연예'),
+  sports('SPORTS', '스포츠'),
+  living('LIVING', '생활'),
+  world('WORLD', '세계'),
+  it('IT', 'IT');
 
+  final String name;
   final String label;
 
-  const NewsCategory(this.label);
+  const NewsCategory(this.name, this.label);
 
   String get graySvgPath => switch (this) {
         NewsCategory.politics => Assets.icons.svg.icPoliticsGray.path,
@@ -132,14 +134,15 @@ enum ShortFormReportType {
 
 @JsonEnum(valueField: 'name')
 enum ReactionType {
-  like('LIKE'),
-  angry('ANGRY'),
-  surprise('SURPRISE'),
-  sad('SAD');
+  like('LIKE', '좋아요'),
+  angry('ANGRY', '화나요'),
+  surprise('SURPRISE', '놀라워요'),
+  sad('SAD', '슬퍼요');
 
   final String name;
+  final String label;
 
-  const ReactionType(this.name);
+  const ReactionType(this.name, this.label);
 
   String get whiteSvgPath => switch (this) {
         ReactionType.like => Assets.icons.svg.icGoodWhite.path,

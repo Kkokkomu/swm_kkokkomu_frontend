@@ -7,16 +7,22 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_report_dialog.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/show_detail_info_bottom_sheet.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class MoreInfoButton extends ConsumerWidget {
   final int newsId;
+  final ShortFormReactionCountInfo reactionCountInfo;
+  final ReactionType? userReactionType;
 
   const MoreInfoButton({
     super.key,
     required this.newsId,
+    required this.reactionCountInfo,
+    required this.userReactionType,
   });
 
   @override
@@ -36,7 +42,13 @@ class MoreInfoButton extends ConsumerWidget {
       onSelected: (value) async {
         switch (value) {
           case ShortFormMoreInfoPopupType.viewDescription:
-            // TODO : 상세설명 페이지로 이동
+            showDetailInfoBottomSheet(
+              context: context,
+              ref: ref,
+              newsId: newsId,
+              reactionCountInfo: reactionCountInfo,
+              userReactionType: userReactionType,
+            );
             return;
 
           case ShortFormMoreInfoPopupType.nonInterested:

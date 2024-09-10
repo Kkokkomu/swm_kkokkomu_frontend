@@ -12,7 +12,7 @@ class CustomCircularProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircularProgressIndicator(
-      color: color ?? ColorName.gray500,
+      color: color ?? ColorName.blue500,
     );
   }
 }

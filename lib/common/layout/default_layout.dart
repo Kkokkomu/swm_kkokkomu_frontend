@@ -18,6 +18,9 @@ class DefaultLayout extends StatelessWidget {
   final PreferredSizeWidget? bottom;
   final GlobalKey<ScaffoldState>? scaffoldKey;
   final bool? resizeToAvoidBottomInset;
+  final Color? statusBarColor;
+  final Brightness? statusBarIconBrightness;
+  final Brightness? statusBarBrightness;
 
   const DefaultLayout({
     required this.child,
@@ -35,6 +38,9 @@ class DefaultLayout extends StatelessWidget {
     this.drawerEnableOpenDragGesture = false,
     this.deviceOrientation = DeviceOrientation.portraitUp,
     this.resizeToAvoidBottomInset,
+    this.statusBarColor,
+    this.statusBarIconBrightness,
+    this.statusBarBrightness,
     super.key,
   });
 
@@ -42,16 +48,23 @@ class DefaultLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([deviceOrientation]);
 
-    return Scaffold(
-      key: scaffoldKey,
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      backgroundColor: backgroundColor ?? ColorName.white000,
-      appBar: renderAppBar(),
-      drawer: drawer,
-      drawerEnableOpenDragGesture: drawerEnableOpenDragGesture,
-      body: child,
-      bottomNavigationBar: bottomNavigationBar,
-      floatingActionButton: floatingActionButton,
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+        statusBarColor: statusBarColor,
+        statusBarIconBrightness: statusBarIconBrightness,
+        statusBarBrightness: statusBarBrightness,
+      ),
+      child: Scaffold(
+        key: scaffoldKey,
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+        backgroundColor: backgroundColor ?? ColorName.white000,
+        appBar: renderAppBar(),
+        drawer: drawer,
+        drawerEnableOpenDragGesture: drawerEnableOpenDragGesture,
+        body: child,
+        bottomNavigationBar: bottomNavigationBar,
+        floatingActionButton: floatingActionButton,
+      ),
     );
   }
 

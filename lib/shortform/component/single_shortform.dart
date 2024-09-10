@@ -17,6 +17,7 @@ import 'package:swm_kkokkomu_frontend/shortform/model/custom_better_player_contr
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/custom_better_player_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_visibility_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/shortform_detail_info_box_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_box.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 
@@ -213,7 +214,12 @@ class SingleShortForm extends ConsumerWidget {
                                             CrossAxisAlignment.center,
                                         children: [
                                           const SearchButton(),
-                                          MoreInfoButton(newsId: newsId),
+                                          MoreInfoButton(
+                                            newsId: newsId,
+                                            reactionCountInfo:
+                                                reactionCountInfo,
+                                            userReactionType: userReactionType,
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -398,6 +404,20 @@ class SingleShortForm extends ConsumerWidget {
                       },
                     ),
                   ],
+                ),
+                Consumer(
+                  builder: (_, ref, __) {
+                    final isDetailEnabled =
+                        ref.watch(shortFormDetailInfoBoxStateProvider(newsId));
+
+                    if (!isDetailEnabled) {
+                      return const SizedBox();
+                    }
+
+                    return SizedBox(
+                      height: Constants.bottomNavigationBarHeightWithSafeArea,
+                    );
+                  },
                 ),
               ],
             );
