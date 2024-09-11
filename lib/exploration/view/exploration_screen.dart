@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/root_tab_scaffold_key_provider.dart';
+import 'package:swm_kkokkomu_frontend/exploration/component/exploration_category_button.dart';
 
 class ExplorationScreen extends ConsumerWidget {
   static String get routeName => 'exploration';
@@ -16,9 +18,8 @@ class ExplorationScreen extends ConsumerWidget {
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () {
+              title: GestureDetector(
+                onTap: () {
                   final scaffoldKey = ref.read(rootTabScaffoldKeyProvider);
                   if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
                     scaffoldKey.currentState?.closeDrawer();
@@ -26,14 +27,22 @@ class ExplorationScreen extends ConsumerWidget {
                   }
                   scaffoldKey.currentState?.openDrawer();
                 },
+                child: const ExplorationCategoryButton(
+                  category: NewsCategoryInExploration.popular,
+                ),
               ),
+              automaticallyImplyLeading: false,
               backgroundColor: ColorName.white000,
               elevation: 0.0,
               scrolledUnderElevation: 0.0,
-              expandedHeight: 120.0,
               flexibleSpace: const FlexibleSpaceBar(
-                title: Text('인기 뉴스'),
-                centerTitle: true,
+                background: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Divider(
+                    thickness: 1.0,
+                    height: 1.0,
+                  ),
+                ),
               ),
               actions: [
                 IconButton(

@@ -5,10 +5,16 @@ import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 class DefaultLayout extends StatelessWidget {
   final Color? backgroundColor;
   final Color? appBarBackGroundColor;
+  final Color? appBarForegroundColor;
   final Widget child;
   final Widget? titleWidget;
+  final bool? centerTitle;
   final double? titleSpacing;
-  final double? leadingWidth;
+  final Widget? titleLeading;
+  final double? titleLeadingWidth;
+  final List<Widget>? titleActions;
+  final Widget? titleFlexibleSpace;
+  final bool automaticallyImplyLeading;
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
   final Widget? drawer;
@@ -27,9 +33,15 @@ class DefaultLayout extends StatelessWidget {
     this.scaffoldKey,
     this.backgroundColor,
     this.appBarBackGroundColor,
+    this.appBarForegroundColor,
     this.titleWidget,
+    this.centerTitle,
     this.titleSpacing,
-    this.leadingWidth,
+    this.titleLeading,
+    this.titleLeadingWidth,
+    this.titleActions,
+    this.titleFlexibleSpace,
+    this.automaticallyImplyLeading = true,
     this.bottomNavigationBar,
     this.floatingActionButton,
     this.drawer,
@@ -76,12 +88,16 @@ class DefaultLayout extends StatelessWidget {
         scrolledUnderElevation: 0.0,
         backgroundColor: appBarBackGroundColor ?? ColorName.white000,
         elevation: 0,
-        centerTitle: true,
+        centerTitle: centerTitle,
         toolbarHeight: appBarHeight,
-        leadingWidth: leadingWidth,
+        automaticallyImplyLeading: automaticallyImplyLeading,
+        leading: titleLeading,
+        leadingWidth: titleLeadingWidth,
+        flexibleSpace: titleFlexibleSpace,
+        actions: titleActions,
         titleSpacing: titleSpacing,
         title: titleWidget,
-        foregroundColor: Colors.black,
+        foregroundColor: appBarForegroundColor ?? Colors.black,
         bottom: bottom,
       );
     }

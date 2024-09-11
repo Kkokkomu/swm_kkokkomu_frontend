@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/offset_pagination_page_view.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/offset_pagination_provider.dart';
@@ -62,7 +63,7 @@ class ShortFormScreen extends ConsumerWidget {
               Text(
                 '비디오 에러 발생\n다음 비디오로 넘어가주세요.',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: ColorName.white000,
                 ),
               ),
             ],

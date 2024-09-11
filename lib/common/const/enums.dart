@@ -74,6 +74,36 @@ enum NewsCategory {
       };
 }
 
+enum NewsCategoryInExploration {
+  popular('인기 급상승'),
+  politics('정치'),
+  economy('경제'),
+  social('사회'),
+  entertain('연예'),
+  sports('스포츠'),
+  living('생활'),
+  world('세계'),
+  it('IT');
+
+  final String label;
+
+  const NewsCategoryInExploration(this.label);
+
+  String get blueChipSvgPath => switch (this) {
+        NewsCategoryInExploration.popular => Assets.icons.svg.chipPopular.path,
+        NewsCategoryInExploration.politics =>
+          Assets.icons.svg.chipPolitics.path,
+        NewsCategoryInExploration.economy => Assets.icons.svg.chipEconomy.path,
+        NewsCategoryInExploration.social => Assets.icons.svg.chipSociety.path,
+        NewsCategoryInExploration.entertain =>
+          Assets.icons.svg.chipEntertain.path,
+        NewsCategoryInExploration.sports => Assets.icons.svg.chipSports.path,
+        NewsCategoryInExploration.living => Assets.icons.svg.chipLife.path,
+        NewsCategoryInExploration.world => Assets.icons.svg.chipWorld.path,
+        NewsCategoryInExploration.it => Assets.icons.svg.chipIt.path,
+      };
+}
+
 enum RootTabBottomNavigationBarType {
   exploration(CustomRoutePath.exploration),
   home(CustomRoutePath.home),

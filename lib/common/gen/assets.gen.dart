@@ -52,6 +52,41 @@ class $AssetsImagesGen {
 class $AssetsIconsSvgGen {
   const $AssetsIconsSvgGen();
 
+  /// File path: assets/icons/svg/chip_economy.svg
+  SvgGenImage get chipEconomy =>
+      const SvgGenImage('assets/icons/svg/chip_economy.svg');
+
+  /// File path: assets/icons/svg/chip_entertain.svg
+  SvgGenImage get chipEntertain =>
+      const SvgGenImage('assets/icons/svg/chip_entertain.svg');
+
+  /// File path: assets/icons/svg/chip_it.svg
+  SvgGenImage get chipIt => const SvgGenImage('assets/icons/svg/chip_it.svg');
+
+  /// File path: assets/icons/svg/chip_life.svg
+  SvgGenImage get chipLife =>
+      const SvgGenImage('assets/icons/svg/chip_life.svg');
+
+  /// File path: assets/icons/svg/chip_politics.svg
+  SvgGenImage get chipPolitics =>
+      const SvgGenImage('assets/icons/svg/chip_politics.svg');
+
+  /// File path: assets/icons/svg/chip_popular.svg
+  SvgGenImage get chipPopular =>
+      const SvgGenImage('assets/icons/svg/chip_popular.svg');
+
+  /// File path: assets/icons/svg/chip_society.svg
+  SvgGenImage get chipSociety =>
+      const SvgGenImage('assets/icons/svg/chip_society.svg');
+
+  /// File path: assets/icons/svg/chip_sports.svg
+  SvgGenImage get chipSports =>
+      const SvgGenImage('assets/icons/svg/chip_sports.svg');
+
+  /// File path: assets/icons/svg/chip_world.svg
+  SvgGenImage get chipWorld =>
+      const SvgGenImage('assets/icons/svg/chip_world.svg');
+
   /// File path: assets/icons/svg/ic_angry_blue.svg
   SvgGenImage get icAngryBlue =>
       const SvgGenImage('assets/icons/svg/ic_angry_blue.svg');
@@ -235,6 +270,15 @@ class $AssetsIconsSvgGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        chipEconomy,
+        chipEntertain,
+        chipIt,
+        chipLife,
+        chipPolitics,
+        chipPopular,
+        chipSociety,
+        chipSports,
+        chipWorld,
         icAngryBlue,
         icAngryGray,
         icAngryWhite,
