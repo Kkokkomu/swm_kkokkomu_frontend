@@ -1,10 +1,13 @@
 import 'package:better_player/better_player.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/comment_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/emoji_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/filter_button.dart';
@@ -20,6 +23,8 @@ import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_vis
 import 'package:swm_kkokkomu_frontend/shortform/provider/shortform_detail_info_box_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_box.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class SingleShortForm extends ConsumerWidget {
   final int newsId;
@@ -254,6 +259,78 @@ class SingleShortForm extends ConsumerWidget {
                       ),
                       Center(
                         child: ShortFormStartPauseButton(newsId: newsId),
+                      ),
+                      Consumer(
+                        builder: (_, ref, child) {
+                          final user = ref.watch(userInfoProvider);
+                          final isShortFormFloatingButtonVisible = ref.watch(
+                            shortFormCommentHeightControllerProvider(
+                              newsId,
+                            ).select(
+                              (value) => value.isShortFormFloatingButtonVisible,
+                            ),
+                          );
+
+                          if (user is UserModel) {
+                            return const SizedBox();
+                          }
+
+                          return child!
+                              .animate(
+                                target:
+                                    isShortFormFloatingButtonVisible ? 1 : 0,
+                              )
+                              .scaleXY(
+                                begin: 0.0,
+                                end: 1.0,
+                                duration: Duration.zero,
+                              );
+                        },
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              16.0,
+                              0.0,
+                              0.0,
+                              constraints.maxHeight * 0.06,
+                            ),
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  const TextSpan(
+                                    text: '맞춤형 서비스를 위해서는\n',
+                                    style: TextStyle(
+                                      color: ColorName.white000,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '로그인',
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () => showLoginModalBottomSheet(
+                                            context,
+                                            ref,
+                                          ),
+                                    style: const TextStyle(
+                                      color: ColorName.blue500,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: '이 필요합니다',
+                                    style: TextStyle(
+                                      color: ColorName.white000,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                       Consumer(
                         builder: (_, ref, child) {
