@@ -73,6 +73,20 @@ Future<dynamic> showDetailInfoBottomSheet({
                           scrolledUnderElevation: 0.0,
                           title: const Text('설명'),
                           automaticallyImplyLeading: false,
+                          flexibleSpace: FlexibleSpaceBar(
+                            background: Align(
+                              alignment: Alignment.topCenter,
+                              child: Container(
+                                margin: const EdgeInsets.only(top: 8.0),
+                                width: 48.0,
+                                height: 6.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  color: ColorName.gray100,
+                                ),
+                              ),
+                            ),
+                          ),
                           actions: [
                             IconButton(
                               icon: const Icon(Icons.close),
