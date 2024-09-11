@@ -46,16 +46,12 @@ class ShortFormScreen extends ConsumerWidget {
           ? const CustomScrollPhysics()
           : const NeverScrollableScrollPhysics(),
       itemBuilder: (_, index, model) {
-        final shortFormUrlInfo = model.shortformList;
-        final newsId = shortFormUrlInfo?.id;
-        final shortFormUrl = shortFormUrlInfo?.shortformUrl;
+        final newsInfo = model.info.news;
         final reactionCountInfo = model.reactionCnt;
         final userReactionType = model.userReaction.getReactionType();
 
-        if (shortFormUrlInfo == null ||
-            newsId == null ||
-            shortFormUrl == null) {
-          debugPrint('newsId or shortFormUrl is null');
+        if (newsInfo.id == null || newsInfo.shortformUrl == null) {
+          debugPrint('newsId 또는 shortFormUrl이 null 값입니다.');
 
           return const Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -71,10 +67,11 @@ class ShortFormScreen extends ConsumerWidget {
         }
 
         return SingleShortForm(
-          newsId: newsId,
+          newsId: newsInfo.id!,
           newsIndex: index,
-          shortFormUrl: shortFormUrl,
-          relatedUrl: shortFormUrlInfo.relatedUrl,
+          shortFormUrl: newsInfo.shortformUrl!,
+          newsInfo: newsInfo,
+          keywords: model.info.keywords,
           reactionCountInfo: reactionCountInfo,
           userReactionType: userReactionType,
         );

@@ -12,7 +12,6 @@ import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_response_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_news_id_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/shortform_detail_info_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 
 part 'logged_in_user_shortform_repository.g.dart';
@@ -82,7 +81,7 @@ abstract class LoggedInUserShortFormRepository
   @Headers({
     'accessToken': true,
   })
-  Future<ResponseModel<ShortFormDetailNewsInfo?>> setNotInterested({
+  Future<ResponseModel<ShortFormNewsInfo?>> setNotInterested({
     @Body() required PostNewsIdBody body,
   });
 }

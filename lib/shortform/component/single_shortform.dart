@@ -30,7 +30,8 @@ class SingleShortForm extends ConsumerWidget {
   final int newsId;
   final int newsIndex;
   final String shortFormUrl;
-  final String relatedUrl;
+  final ShortFormNewsInfo newsInfo;
+  final List<String> keywords;
   final ShortFormReactionCountInfo reactionCountInfo;
   final ReactionType? userReactionType;
 
@@ -39,7 +40,8 @@ class SingleShortForm extends ConsumerWidget {
     required this.newsId,
     required this.newsIndex,
     required this.shortFormUrl,
-    required this.relatedUrl,
+    required this.newsInfo,
+    required this.keywords,
     required this.reactionCountInfo,
     required this.userReactionType,
   });
@@ -221,6 +223,9 @@ class SingleShortForm extends ConsumerWidget {
                                           const SearchButton(),
                                           MoreInfoButton(
                                             newsId: newsId,
+                                            newsIndex: newsIndex,
+                                            newsInfo: newsInfo,
+                                            keywords: keywords,
                                             reactionCountInfo:
                                                 reactionCountInfo,
                                             userReactionType: userReactionType,
@@ -244,11 +249,11 @@ class SingleShortForm extends ConsumerWidget {
                                       newsId: newsId,
                                       // TODO : 공유 기능 구현하기
                                       // 임시로 relatedUrl을 공유 URL로 사용
-                                      shareUrl: relatedUrl,
+                                      shareUrl: newsInfo.relatedUrl,
                                     ),
                                     const SizedBox(height: 16.0),
                                     RelatedUrlButton(
-                                      shortFormRelatedURL: relatedUrl,
+                                      shortFormRelatedURL: newsInfo.relatedUrl,
                                     ),
                                   ],
                                 ),
@@ -271,11 +276,70 @@ class SingleShortForm extends ConsumerWidget {
                             ),
                           );
 
-                          if (user is UserModel) {
-                            return const SizedBox();
-                          }
-
-                          return child!
+                          return Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                16.0,
+                                0.0,
+                                16.0,
+                                16.0,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (user is! UserModel)
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          const TextSpan(
+                                            text: '맞춤형 서비스를 위해서는\n',
+                                            style: TextStyle(
+                                              color: ColorName.white000,
+                                              fontSize: 16.0,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: '로그인',
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () =>
+                                                  showLoginModalBottomSheet(
+                                                      context),
+                                            style: const TextStyle(
+                                              color: ColorName.blue500,
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                          ),
+                                          const TextSpan(
+                                            text: '이 필요합니다',
+                                            style: TextStyle(
+                                              color: ColorName.white000,
+                                              fontSize: 16.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  const SizedBox(
+                                    height: 8.0,
+                                  ),
+                                  Text(
+                                    keywords.isEmpty
+                                        ? ''
+                                        : '#${keywords.join(' #')}',
+                                    style: const TextStyle(
+                                      color: ColorName.white000,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
                               .animate(
                                 target:
                                     isShortFormFloatingButtonVisible ? 1 : 0,
@@ -286,51 +350,6 @@ class SingleShortForm extends ConsumerWidget {
                                 duration: Duration.zero,
                               );
                         },
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(
-                              16.0,
-                              0.0,
-                              0.0,
-                              constraints.maxHeight * 0.06,
-                            ),
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: '맞춤형 서비스를 위해서는\n',
-                                    style: TextStyle(
-                                      color: ColorName.white000,
-                                      fontSize: 16.0,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '로그인',
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () => showLoginModalBottomSheet(
-                                            context,
-                                            ref,
-                                          ),
-                                    style: const TextStyle(
-                                      color: ColorName.blue500,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                  const TextSpan(
-                                    text: '이 필요합니다',
-                                    style: TextStyle(
-                                      color: ColorName.white000,
-                                      fontSize: 16.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
                       ),
                       Consumer(
                         builder: (_, ref, child) {

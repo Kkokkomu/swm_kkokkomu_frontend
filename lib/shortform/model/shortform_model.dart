@@ -8,27 +8,28 @@ part 'shortform_model.g.dart';
 
 @JsonSerializable()
 class ShortFormModel {
-  final ShortFormUrlInfo? shortformList;
+  final ShortFormInfo info;
   final ShortFormReactionCountInfo reactionCnt;
   final ShortFormUserReactionInfo userReaction;
 
   ShortFormModel({
-    this.shortformList,
+    ShortFormInfo? info,
     ShortFormReactionCountInfo? reactionCnt,
     ShortFormUserReactionInfo? userReaction,
-  })  : reactionCnt = reactionCnt ?? ShortFormReactionCountInfo(),
+  })  : info = info ?? ShortFormInfo(),
+        reactionCnt = reactionCnt ?? ShortFormReactionCountInfo(),
         userReaction = userReaction ?? ShortFormUserReactionInfo();
 
   factory ShortFormModel.fromJson(Map<String, dynamic> json) =>
       _$ShortFormModelFromJson(json);
 
   ShortFormModel copyWith({
-    ShortFormUrlInfo? shortformList,
+    ShortFormInfo? info,
     ShortFormReactionCountInfo? reactionCnt,
     ShortFormUserReactionInfo? userReaction,
   }) {
     return ShortFormModel(
-      shortformList: shortformList ?? this.shortformList,
+      info: info ?? this.info,
       reactionCnt: reactionCnt ?? this.reactionCnt,
       userReaction: userReaction ?? this.userReaction,
     );
@@ -36,19 +37,61 @@ class ShortFormModel {
 }
 
 @JsonSerializable()
-class ShortFormUrlInfo {
-  final int? id;
-  final String? shortformUrl;
-  final String relatedUrl;
+class ShortFormInfo {
+  ShortFormNewsInfo news;
+  List<String> keywords;
 
-  ShortFormUrlInfo({
+  ShortFormInfo({
+    ShortFormNewsInfo? news,
+    List<String>? keywords,
+  })  : news = news ?? ShortFormNewsInfo(),
+        keywords = keywords ?? [];
+
+  factory ShortFormInfo.fromJson(Map<String, dynamic> json) =>
+      _$ShortFormInfoFromJson(json);
+}
+
+@JsonSerializable()
+class ShortFormNewsInfo {
+  int? id;
+  String? shortformUrl;
+  String? youtubeUrl;
+  String? instagramUrl;
+  String relatedUrl;
+  String? thumbnail;
+  int viewCnt;
+  String title;
+  String summary;
+  int sharedCnt;
+  NewsCategory category;
+  String createdAt;
+  String editedAt;
+
+  ShortFormNewsInfo({
     this.id,
     this.shortformUrl,
+    this.youtubeUrl,
+    this.instagramUrl,
     String? relatedUrl,
-  }) : relatedUrl = relatedUrl ?? Constants.relatedUrlOnError;
+    this.thumbnail,
+    int? viewCnt,
+    String? title,
+    String? summary,
+    int? sharedCnt,
+    NewsCategory? category,
+    String? createdAt,
+    String? editedAt,
+  })  : relatedUrl = relatedUrl ?? Constants.relatedUrlOnError,
+        viewCnt = viewCnt ?? 0,
+        title = title ?? Constants.unknownErrorString,
+        summary = summary ?? Constants.unknownErrorString,
+        sharedCnt = sharedCnt ?? 0,
+        category = category ?? NewsCategory.social,
+        createdAt = createdAt ?? Constants.unknownErrorString,
+        editedAt = editedAt ?? Constants.unknownErrorString;
 
-  factory ShortFormUrlInfo.fromJson(Map<String, dynamic> json) =>
-      _$ShortFormUrlInfoFromJson(json);
+  factory ShortFormNewsInfo.fromJson(Map<String, dynamic> json) =>
+      _$ShortFormNewsInfoFromJson(json);
 }
 
 @JsonSerializable()

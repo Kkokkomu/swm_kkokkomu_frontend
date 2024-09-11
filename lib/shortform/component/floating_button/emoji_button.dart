@@ -137,7 +137,7 @@ class DetailEmojiButton extends ConsumerWidget {
           ref
               .read(detailEmojiButtonVisibilityProvider(newsId).notifier)
               .setDetailEmojiButtonVisibility(false);
-          showLoginModalBottomSheet(context, ref);
+          showLoginModalBottomSheet(context);
           return;
         }
 
@@ -153,6 +153,7 @@ class DetailEmojiButton extends ConsumerWidget {
                   newsId: newsId,
                   newsIndex: newsIndex,
                   reactionType: reactionType,
+                  // userReactionType가 null인 경우는 어떠한 감정표현도 하지 않은 상태
                   // userReactionType가 null이 아닌 경우는 이미 다른 이모지를 누른 상태
                   isReacted: userReactionType != null,
                 );

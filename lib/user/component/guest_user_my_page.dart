@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 
-class GuestUserMyPage extends ConsumerWidget {
+class GuestUserMyPage extends StatelessWidget {
   const GuestUserMyPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-            onPressed: () => showLoginModalBottomSheet(context, ref),
+            onPressed: () => showLoginModalBottomSheet(context),
             child: const Text('로그인'),
           ),
         ],

@@ -105,7 +105,7 @@ class ShortFormCommentCard extends ConsumerWidget {
 
                       // 로그인된 사용자가 아닌 경우 로그인 바텀시트를 띄워주고 리턴
                       if (user is! UserModel) {
-                        showLoginModalBottomSheet(context, ref);
+                        showLoginModalBottomSheet(context);
                         return;
                       }
 
@@ -213,7 +213,7 @@ class ShortFormCommentCard extends ConsumerWidget {
 
             // 로그인된 사용자가 아닌 경우 로그인 바텀시트를 띄워주고 리턴
             if (user is! UserModel) {
-              showLoginModalBottomSheet(context, ref);
+              showLoginModalBottomSheet(context);
               return;
             }
 

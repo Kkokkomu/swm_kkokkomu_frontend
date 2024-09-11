@@ -21,7 +21,7 @@ class FilterButton extends ConsumerWidget {
       onTap: () {
         // 로그인 상태가 아닌 경우 로그인 모달창 띄우기
         if (ref.read(userInfoProvider) is! UserModel) {
-          showLoginModalBottomSheet(context, ref);
+          showLoginModalBottomSheet(context);
           return;
         }
 

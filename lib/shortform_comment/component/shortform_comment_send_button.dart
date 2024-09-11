@@ -39,7 +39,7 @@ class SendButton extends ConsumerWidget {
         // 로그인하지 않은 사용자는 댓글 관련 작업을 할 수 없음
         // 로그인 모달 바텀 시트를 띄워주고 리턴
         if (ref.read(userInfoProvider) is! UserModel) {
-          showLoginModalBottomSheet(context, ref);
+          showLoginModalBottomSheet(context);
           return;
         }
 

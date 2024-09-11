@@ -8,10 +8,9 @@ part of 'shortform_model.dart';
 
 ShortFormModel _$ShortFormModelFromJson(Map<String, dynamic> json) =>
     ShortFormModel(
-      shortformList: json['shortformList'] == null
+      info: json['info'] == null
           ? null
-          : ShortFormUrlInfo.fromJson(
-              json['shortformList'] as Map<String, dynamic>),
+          : ShortFormInfo.fromJson(json['info'] as Map<String, dynamic>),
       reactionCnt: json['reactionCnt'] == null
           ? null
           : ShortFormReactionCountInfo.fromJson(
@@ -24,24 +23,71 @@ ShortFormModel _$ShortFormModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ShortFormModelToJson(ShortFormModel instance) =>
     <String, dynamic>{
-      'shortformList': instance.shortformList,
+      'info': instance.info,
       'reactionCnt': instance.reactionCnt,
       'userReaction': instance.userReaction,
     };
 
-ShortFormUrlInfo _$ShortFormUrlInfoFromJson(Map<String, dynamic> json) =>
-    ShortFormUrlInfo(
-      id: (json['id'] as num?)?.toInt(),
-      shortformUrl: json['shortformUrl'] as String?,
-      relatedUrl: json['relatedUrl'] as String?,
+ShortFormInfo _$ShortFormInfoFromJson(Map<String, dynamic> json) =>
+    ShortFormInfo(
+      news: json['news'] == null
+          ? null
+          : ShortFormNewsInfo.fromJson(json['news'] as Map<String, dynamic>),
+      keywords: (json['keywords'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
-Map<String, dynamic> _$ShortFormUrlInfoToJson(ShortFormUrlInfo instance) =>
+Map<String, dynamic> _$ShortFormInfoToJson(ShortFormInfo instance) =>
+    <String, dynamic>{
+      'news': instance.news,
+      'keywords': instance.keywords,
+    };
+
+ShortFormNewsInfo _$ShortFormNewsInfoFromJson(Map<String, dynamic> json) =>
+    ShortFormNewsInfo(
+      id: (json['id'] as num?)?.toInt(),
+      shortformUrl: json['shortformUrl'] as String?,
+      youtubeUrl: json['youtubeUrl'] as String?,
+      instagramUrl: json['instagramUrl'] as String?,
+      relatedUrl: json['relatedUrl'] as String?,
+      thumbnail: json['thumbnail'] as String?,
+      viewCnt: (json['viewCnt'] as num?)?.toInt(),
+      title: json['title'] as String?,
+      summary: json['summary'] as String?,
+      sharedCnt: (json['sharedCnt'] as num?)?.toInt(),
+      category: $enumDecodeNullable(_$NewsCategoryEnumMap, json['category']),
+      createdAt: json['createdAt'] as String?,
+      editedAt: json['editedAt'] as String?,
+    );
+
+Map<String, dynamic> _$ShortFormNewsInfoToJson(ShortFormNewsInfo instance) =>
     <String, dynamic>{
       'id': instance.id,
       'shortformUrl': instance.shortformUrl,
+      'youtubeUrl': instance.youtubeUrl,
+      'instagramUrl': instance.instagramUrl,
       'relatedUrl': instance.relatedUrl,
+      'thumbnail': instance.thumbnail,
+      'viewCnt': instance.viewCnt,
+      'title': instance.title,
+      'summary': instance.summary,
+      'sharedCnt': instance.sharedCnt,
+      'category': _$NewsCategoryEnumMap[instance.category]!,
+      'createdAt': instance.createdAt,
+      'editedAt': instance.editedAt,
     };
+
+const _$NewsCategoryEnumMap = {
+  NewsCategory.politics: 'POLITICS',
+  NewsCategory.economy: 'ECONOMY',
+  NewsCategory.social: 'SOCIAL',
+  NewsCategory.entertain: 'ENTERTAIN',
+  NewsCategory.sports: 'SPORTS',
+  NewsCategory.living: 'LIVING',
+  NewsCategory.world: 'WORLD',
+  NewsCategory.it: 'IT',
+};
 
 ShortFormReactionCountInfo _$ShortFormReactionCountInfoFromJson(
         Map<String, dynamic> json) =>

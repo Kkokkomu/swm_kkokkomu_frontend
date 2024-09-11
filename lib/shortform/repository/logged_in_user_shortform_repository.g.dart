@@ -203,7 +203,7 @@ class _LoggedInUserShortFormRepository
   }
 
   @override
-  Future<ResponseModel<ShortFormDetailNewsInfo?>> setNotInterested(
+  Future<ResponseModel<ShortFormNewsInfo?>> setNotInterested(
       {required PostNewsIdBody body}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -212,7 +212,7 @@ class _LoggedInUserShortFormRepository
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ResponseModel<ShortFormDetailNewsInfo>>(Options(
+        _setStreamType<ResponseModel<ShortFormNewsInfo>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -228,11 +228,11 @@ class _LoggedInUserShortFormRepository
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ResponseModel<ShortFormDetailNewsInfo?>.fromJson(
+    final value = ResponseModel<ShortFormNewsInfo?>.fromJson(
       _result.data!,
       (json) => json == null
           ? null
-          : ShortFormDetailNewsInfo.fromJson(json as Map<String, dynamic>),
+          : ShortFormNewsInfo.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }

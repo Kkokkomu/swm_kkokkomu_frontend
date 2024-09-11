@@ -5,22 +5,31 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_report_dialog.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/show_detail_info_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/shortform_detail_info_box_state_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class MoreInfoButton extends ConsumerWidget {
   final int newsId;
+  final int newsIndex;
+  final ShortFormNewsInfo newsInfo;
+  final List<String> keywords;
   final ShortFormReactionCountInfo reactionCountInfo;
   final ReactionType? userReactionType;
 
   const MoreInfoButton({
     super.key,
     required this.newsId,
+    required this.newsIndex,
+    required this.newsInfo,
+    required this.keywords,
     required this.reactionCountInfo,
     required this.userReactionType,
   });
@@ -42,19 +51,48 @@ class MoreInfoButton extends ConsumerWidget {
       onSelected: (value) async {
         switch (value) {
           case ShortFormMoreInfoPopupType.viewDescription:
-            showDetailInfoBottomSheet(
+            // 상세 정보 버튼 누르면
+            // 상세 정보 박스가 열려있는 상태로 변경
+            // 플로팅 버튼 숨김
+            // 바텀 네비게이션바 숨김
+            ref
+                .read(shortFormDetailInfoBoxStateProvider(newsId).notifier)
+                .state = true;
+            ref
+                .read(shortFormCommentHeightControllerProvider(newsId).notifier)
+                .setShortFormFloatingButtonVisibility(false);
+            ref
+                .read(bottomNavigationBarStateProvider.notifier)
+                .setBottomNavigationBarVisibility(false);
+
+            await showDetailInfoBottomSheet(
               context: context,
-              ref: ref,
               newsId: newsId,
-              reactionCountInfo: reactionCountInfo,
-              userReactionType: userReactionType,
+              newsIndex: newsIndex,
+              newsInfo: newsInfo,
+              keywords: keywords,
             );
+
+            // 모달 창 닫히면
+            // 상세 정보 박스가 닫힌 상태로 변경
+            // 플로팅 버튼 보임
+            // 바텀 네비게이션바 보임
+            ref
+                .read(shortFormDetailInfoBoxStateProvider(newsId).notifier)
+                .state = false;
+            ref
+                .read(shortFormCommentHeightControllerProvider(newsId).notifier)
+                .setShortFormFloatingButtonVisibility(true);
+            ref
+                .read(bottomNavigationBarStateProvider.notifier)
+                .setBottomNavigationBarVisibility(true);
+
             return;
 
           case ShortFormMoreInfoPopupType.nonInterested:
             // 로그인된 사용자가 아닌 경우 로그인 바텀시트를 띄워주고 리턴
             if (ref.read(userInfoProvider) is! UserModel) {
-              showLoginModalBottomSheet(context, ref);
+              showLoginModalBottomSheet(context);
               return;
             }
 
@@ -101,7 +139,7 @@ class MoreInfoButton extends ConsumerWidget {
           case ShortFormMoreInfoPopupType.report:
             // 로그인된 사용자가 아닌 경우 로그인 바텀시트를 띄워주고 리턴
             if (ref.read(userInfoProvider) is! UserModel) {
-              showLoginModalBottomSheet(context, ref);
+              showLoginModalBottomSheet(context);
               return;
             }
 
