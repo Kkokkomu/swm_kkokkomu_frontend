@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -10,16 +11,20 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 120,
-              child: Assets.images.splashIcon.image(),
-            ),
-          ],
+      statusBarBrightness: Brightness.light,
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              ColorName.splashGradationStart,
+              ColorName.splashGradationEnd,
+            ],
+          ),
+        ),
+        child: Center(
+          child: Assets.icons.svg.splashLogo.svg(),
         ),
       ),
     );

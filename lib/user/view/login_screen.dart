@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
@@ -30,81 +32,76 @@ class LoginScreen extends ConsumerWidget {
         showAppExitDialog(context);
       },
       child: DefaultLayout(
-        child: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        statusBarBrightness: Brightness.light,
+        child: Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                ColorName.splashGradationStart,
+                ColorName.splashGradationEnd,
+              ],
+            ),
+          ),
+          child: SafeArea(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(),
-                Flexible(
-                  flex: 1,
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Assets.images.splashIcon.image(
-                      width: 180,
+                Text(
+                  '쉽고 짧은 뉴스 플랫폼',
+                  style: CustomTextStyle.head4(color: ColorName.white000),
+                ),
+                const SizedBox(height: 24.0),
+                Assets.icons.svg.splashLogo.svg(),
+                Assets.icons.svg.splashTypoLogo.svg(),
+                const SizedBox(height: 90.0),
+                userInfo is UserModelLoading
+                    ? const SizedBox(
+                        width: 60.0,
+                        height: 60.0,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CustomCircularProgressIndicator(
+                            color: ColorName.gray400,
+                          ),
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (Platform.isIOS)
+                            GestureDetector(
+                              onTap: () => ref
+                                  .read(userInfoProvider.notifier)
+                                  .login(SocialLoginType.apple),
+                              child: Assets.icons.png.loginApple3x
+                                  .image(width: 60.0),
+                            ),
+                          if (Platform.isIOS) const SizedBox(width: 24.0),
+                          Assets.icons.png.loginGoogle3x.image(width: 60.0),
+                          const SizedBox(width: 24.0),
+                          GestureDetector(
+                            onTap: () => ref
+                                .read(userInfoProvider.notifier)
+                                .login(SocialLoginType.kakao),
+                            child: Assets.icons.png.loginKakao3x
+                                .image(width: 60.0),
+                          ),
+                        ],
+                      ),
+                const SizedBox(height: 19.0),
+                GestureDetector(
+                  onTap: () => ref.read(userInfoProvider.notifier).guestLogin(),
+                  child: Text(
+                    '로그인 없이 둘러보기',
+                    style: CustomTextStyle.detail1Reg(
+                      color: ColorName.blue100,
+                      decoration: TextDecoration.underline,
+                      decorationColor: ColorName.blue100,
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: userInfo is UserModelLoading
-                      ? const CustomCircularProgressIndicator()
-                      : Column(
-                          children: [
-                            if (Platform.isIOS)
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => ref
-                                        .read(userInfoProvider.notifier)
-                                        .login(SocialLoginType.apple),
-                                    child: Assets.images.appleLogin.image(
-                                      fit: BoxFit.fitWidth,
-                                      width: double.infinity,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 16.0,
-                                  ),
-                                ],
-                              ),
-                            GestureDetector(
-                              onTap: () => ref
-                                  .read(userInfoProvider.notifier)
-                                  .login(SocialLoginType.kakao),
-                              child: Assets.images.kakaoLoginLargeWide.image(
-                                fit: BoxFit.fitWidth,
-                                width: double.infinity,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 16.0,
-                            ),
-                            GestureDetector(
-                              onTap: () => ref
-                                  .read(userInfoProvider.notifier)
-                                  .guestLogin(),
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: FittedBox(
-                                  fit: BoxFit.fitWidth,
-                                  child: Container(
-                                    height: 54,
-                                    width: 342,
-                                    color: Colors.grey,
-                                    child: const Center(
-                                      child: Text(
-                                        '비로그인으로 둘러보기',
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
                 ),
               ],
             ),

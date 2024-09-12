@@ -25,6 +25,9 @@ class $AssetsConfigGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// Directory path: assets/icons/png
+  $AssetsIconsPngGen get png => const $AssetsIconsPngGen();
+
   /// Directory path: assets/icons/svg
   $AssetsIconsSvgGen get svg => const $AssetsIconsSvgGen();
 }
@@ -40,13 +43,27 @@ class $AssetsImagesGen {
   AssetGenImage get kakaoLoginLargeWide =>
       const AssetGenImage('assets/images/kakao_login_large_wide.png');
 
-  /// File path: assets/images/splash_icon.png
-  AssetGenImage get splashIcon =>
-      const AssetGenImage('assets/images/splash_icon.png');
+  /// List of all assets
+  List<AssetGenImage> get values => [appleLogin, kakaoLoginLargeWide];
+}
+
+class $AssetsIconsPngGen {
+  const $AssetsIconsPngGen();
+
+  /// File path: assets/icons/png/login_apple@3x.png
+  AssetGenImage get loginApple3x =>
+      const AssetGenImage('assets/icons/png/login_apple@3x.png');
+
+  /// File path: assets/icons/png/login_google@3x.png
+  AssetGenImage get loginGoogle3x =>
+      const AssetGenImage('assets/icons/png/login_google@3x.png');
+
+  /// File path: assets/icons/png/login_kakao@3x.png
+  AssetGenImage get loginKakao3x =>
+      const AssetGenImage('assets/icons/png/login_kakao@3x.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [appleLogin, kakaoLoginLargeWide, splashIcon];
+  List<AssetGenImage> get values => [loginApple3x, loginGoogle3x, loginKakao3x];
 }
 
 class $AssetsIconsSvgGen {
@@ -276,6 +293,14 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icWorldGray =>
       const SvgGenImage('assets/icons/svg/ic_world_gray.svg');
 
+  /// File path: assets/icons/svg/splash_logo.svg
+  SvgGenImage get splashLogo =>
+      const SvgGenImage('assets/icons/svg/splash_logo.svg');
+
+  /// File path: assets/icons/svg/splash_typo_logo.svg
+  SvgGenImage get splashTypoLogo =>
+      const SvgGenImage('assets/icons/svg/splash_typo_logo.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
         btnDelete,
@@ -334,7 +359,9 @@ class $AssetsIconsSvgGen {
         icSurpriseWhite,
         icUnlike,
         icWorldBlue,
-        icWorldGray
+        icWorldGray,
+        splashLogo,
+        splashTypoLogo
       ];
 }
 

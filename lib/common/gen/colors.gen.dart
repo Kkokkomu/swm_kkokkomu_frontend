@@ -67,6 +67,12 @@ class ColorName {
   /// Color: #CC15171E
   static const Color gray700WithOpacity80 = Color(0xCC15171E);
 
+  /// Color: #647EFF
+  static const Color splashGradationEnd = Color(0xFF647EFF);
+
+  /// Color: #3859FF
+  static const Color splashGradationStart = Color(0xFF3859FF);
+
   /// Color: #7BECBD
   static const Color success300 = Color(0xFF7BECBD);
 

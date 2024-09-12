@@ -25,8 +25,9 @@ class DefaultLayout extends StatelessWidget {
   final GlobalKey<ScaffoldState>? scaffoldKey;
   final bool? resizeToAvoidBottomInset;
   final Color? statusBarColor;
-  final Brightness? statusBarIconBrightness;
   final Brightness? statusBarBrightness;
+  final Color? systemNavigationBarColor;
+  final Brightness? systemNavigationBarIconBrightness;
 
   const DefaultLayout({
     required this.child,
@@ -51,8 +52,9 @@ class DefaultLayout extends StatelessWidget {
     this.deviceOrientation = DeviceOrientation.portraitUp,
     this.resizeToAvoidBottomInset,
     this.statusBarColor,
-    this.statusBarIconBrightness,
     this.statusBarBrightness,
+    this.systemNavigationBarColor,
+    this.systemNavigationBarIconBrightness,
     super.key,
   });
 
@@ -63,8 +65,10 @@ class DefaultLayout extends StatelessWidget {
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         statusBarColor: statusBarColor,
-        statusBarIconBrightness: statusBarIconBrightness,
+        statusBarIconBrightness: statusBarBrightness,
         statusBarBrightness: statusBarBrightness,
+        systemNavigationBarColor: systemNavigationBarColor,
+        systemNavigationBarIconBrightness: systemNavigationBarIconBrightness,
       ),
       child: Scaffold(
         key: scaffoldKey,

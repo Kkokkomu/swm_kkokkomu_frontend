@@ -24,4 +24,7 @@
     <color name="error300">#FF6294</color>
     <color name="success500">#05E798</color>
     <color name="success300">#7BECBD</color>
+
+    <color name="splash_gradation_start">#3859FF</color>
+    <color name="splash_gradation_end">#647EFF</color>
 </resources>

@@ -45,9 +45,6 @@ class RootTab extends ConsumerWidget {
       child: DefaultLayout(
         // 홈(숏폼) 화면은 다크 모드이므로 상태바 아이콘을 밝게 처리
         // 나머지는 라이트 모드이므로 상태바 아이콘을 어둡게 처리
-        statusBarIconBrightness: navigationShell.currentIndex == 1
-            ? Brightness.light
-            : Brightness.dark,
         statusBarBrightness: navigationShell.currentIndex == 1
             ? Brightness.light
             : Brightness.dark,
