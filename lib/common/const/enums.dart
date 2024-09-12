@@ -102,6 +102,22 @@ enum NewsCategoryInExploration {
         NewsCategoryInExploration.world => Assets.icons.svg.chipWorld.path,
         NewsCategoryInExploration.it => Assets.icons.svg.chipIt.path,
       };
+
+  String get graySvgPath => switch (this) {
+        NewsCategoryInExploration.popular =>
+          Assets.icons.svg.icPopularMini.path,
+        NewsCategoryInExploration.politics =>
+          Assets.icons.svg.icPoliticsGray.path,
+        NewsCategoryInExploration.economy =>
+          Assets.icons.svg.icEconomyGray.path,
+        NewsCategoryInExploration.social => Assets.icons.svg.icSocietyGray.path,
+        NewsCategoryInExploration.entertain =>
+          Assets.icons.svg.icEntertainGray.path,
+        NewsCategoryInExploration.sports => Assets.icons.svg.icSportsGray.path,
+        NewsCategoryInExploration.living => Assets.icons.svg.icLifeGray.path,
+        NewsCategoryInExploration.world => Assets.icons.svg.icWorldGray.path,
+        NewsCategoryInExploration.it => Assets.icons.svg.icItGray.path,
+      };
 }
 
 enum RootTabBottomNavigationBarType {

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_send_button.dart';
 
 Future<dynamic> showShortFormCommentInputBottomSheet({
@@ -57,9 +58,21 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
                     autofocus: true,
                     minLines: 1,
                     maxLines: 3,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: '댓글을 입력하세요',
                       border: InputBorder.none,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          controller.clear();
+                        },
+                        child: Assets.icons.svg.btnDelete.svg(),
+                      ),
+                      suffixIconConstraints: const BoxConstraints(
+                        minWidth: 40.0,
+                        minHeight: 40.0,
+                        maxWidth: 40.0,
+                        maxHeight: 40.0,
+                      ),
                     ),
                   ),
                 ),

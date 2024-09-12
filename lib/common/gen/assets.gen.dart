@@ -52,6 +52,10 @@ class $AssetsImagesGen {
 class $AssetsIconsSvgGen {
   const $AssetsIconsSvgGen();
 
+  /// File path: assets/icons/svg/btn_delete.svg
+  SvgGenImage get btnDelete =>
+      const SvgGenImage('assets/icons/svg/btn_delete.svg');
+
   /// File path: assets/icons/svg/chip_economy.svg
   SvgGenImage get chipEconomy =>
       const SvgGenImage('assets/icons/svg/chip_economy.svg');
@@ -198,6 +202,10 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icPoliticsGray =>
       const SvgGenImage('assets/icons/svg/ic_politics_gray.svg');
 
+  /// File path: assets/icons/svg/ic_popular_mini.svg
+  SvgGenImage get icPopularMini =>
+      const SvgGenImage('assets/icons/svg/ic_popular_mini.svg');
+
   /// File path: assets/icons/svg/ic_radio_disabled.svg
   SvgGenImage get icRadioDisabled =>
       const SvgGenImage('assets/icons/svg/ic_radio_disabled.svg');
@@ -270,6 +278,7 @@ class $AssetsIconsSvgGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        btnDelete,
         chipEconomy,
         chipEntertain,
         chipIt,
@@ -307,6 +316,7 @@ class $AssetsIconsSvgGen {
         icNaviSearchEnabled,
         icPoliticsBlue,
         icPoliticsGray,
+        icPopularMini,
         icRadioDisabled,
         icRadioEnabled,
         icRe,
