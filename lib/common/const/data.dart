@@ -66,6 +66,10 @@ class AnimationDuration {
   // 이모지 상세 버튼 등장 애니메이션 시간
   static const Duration emojiDetailAnimationDuration =
       Duration(milliseconds: 300);
+
+  // 스크롤을 맨 위로 이동하는 애니메이션 시간
+  static const Duration scrollToTopAnimationDuration =
+      Duration(milliseconds: 300);
 }
 
 class SecureStorageKeys {

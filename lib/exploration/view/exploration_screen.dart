@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/component/cursor_pagination_sliver_grid_view.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/root_tab_scaffold_key_provider.dart';
+import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
 import 'package:swm_kkokkomu_frontend/exploration/component/exploration_category_button.dart';
+import 'package:swm_kkokkomu_frontend/exploration/component/exploration_shortform_card.dart';
 import 'package:swm_kkokkomu_frontend/exploration/provider/exploration_category_provider.dart';
+import 'package:swm_kkokkomu_frontend/exploration/provider/exploration_screen_scroll_controller_provider.dart';
+import 'package:swm_kkokkomu_frontend/exploration/provider/guest_user_explore_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/exploration/provider/logged_in_user_explore_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class ExplorationScreen extends ConsumerWidget {
   static String get routeName => 'exploration';
@@ -12,81 +23,71 @@ class ExplorationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userInfoProvider);
     final category = ref.watch(explorationCategoryProvider);
+    final scrollController =
+        ref.watch(explorationScreenScrollControllerProvider);
+
+    late final AutoDisposeStateNotifierProvider<
+        CursorPaginationProvider<ShortFormModel,
+            IBaseCursorPaginationRepository<ShortFormModel>>,
+        CursorPaginationBase> provider;
+
+    if (user is UserModel) {
+      provider = loggedInUserExploreShortFormProvider;
+    } else {
+      provider = guestUserExploreShortFormProvider;
+    }
 
     return Container(
       color: ColorName.white000,
       child: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              title: GestureDetector(
-                onTap: () {
-                  final scaffoldKey = ref.read(rootTabScaffoldKeyProvider);
-                  if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
-                    scaffoldKey.currentState?.closeDrawer();
-                    return;
-                  }
-                  scaffoldKey.currentState?.openDrawer();
-                },
-                child: ExplorationCategoryButton(
-                  category: category,
-                ),
-              ),
-              automaticallyImplyLeading: false,
-              backgroundColor: ColorName.white000,
-              elevation: 0.0,
-              scrolledUnderElevation: 0.0,
-              flexibleSpace: const FlexibleSpaceBar(
-                background: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Divider(
-                    thickness: 1.0,
-                    height: 1.0,
+        child: Column(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      final scaffoldKey = ref.read(rootTabScaffoldKeyProvider);
+                      if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
+                        scaffoldKey.currentState?.closeDrawer();
+                        return;
+                      }
+                      scaffoldKey.currentState?.openDrawer();
+                    },
+                    child: ExplorationCategoryButton(
+                      category: category,
+                    ),
                   ),
-                ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      // Handle search icon press
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.notifications_none),
+                    onPressed: () {
+                      // Handle more icon press
+                    },
+                  ),
+                ],
               ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    // Handle search icon press
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.notifications_none),
-                  onPressed: () {
-                    // Handle more icon press
-                  },
-                ),
-              ],
-              pinned: true,
             ),
-            SliverPadding(
-              padding: const EdgeInsets.all(24.0),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // 열 개수
-                  childAspectRatio: 9 / 16, // 자식 위젯의 가로 세로 비율
-                  mainAxisSpacing: 32.0,
-                  crossAxisSpacing: 24.0,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Container(
-                      color: Colors.teal,
-                      child: Center(
-                        child: Text(
-                          'Item $index',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  childCount: 20, // 그리드 항목 수
+            const Divider(
+              thickness: 1.0,
+              height: 1.0,
+            ),
+            Expanded(
+              child: CursorPaginationSliverGridView<ShortFormModel>(
+                scrollController: scrollController,
+                provider: provider,
+                itemBuilder: (_, __, model) => ExplorationShortFormCard(
+                  newsInfo: model.info.news,
                 ),
               ),
             ),

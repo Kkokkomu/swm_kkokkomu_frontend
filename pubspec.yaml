@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   better_player: ^0.0.84
+  cached_network_image: ^3.4.1
   cupertino_icons: ^1.0.2
   dio: ^5.4.3+1
   flutter:
@@ -48,9 +49,10 @@ dependencies:
   kakao_flutter_sdk_user: ^1.9.5
   logger: any
   retrofit: ">=4.0.0 <5.0.0"
-  share_plus: ^9.0.0
+  share_plus: ^10.0.2
   shared_preferences: ^2.3.1
   sign_in_with_apple: ^6.1.1
+  skeletonizer: ^1.4.2
   url_launcher: ^6.3.0
   uuid: ^4.4.0
 

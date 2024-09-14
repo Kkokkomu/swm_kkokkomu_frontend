@@ -50,7 +50,8 @@ class ShortFormScreen extends ConsumerWidget {
         final reactionCountInfo = model.reactionCnt;
         final userReactionType = model.userReaction.getReactionType();
 
-        if (newsInfo.id == null || newsInfo.shortformUrl == null) {
+        if (newsInfo.id == Constants.unknownErrorId ||
+            newsInfo.shortformUrl == null) {
           debugPrint('newsId 또는 shortFormUrl이 null 값입니다.');
 
           return const Column(
@@ -67,7 +68,7 @@ class ShortFormScreen extends ConsumerWidget {
         }
 
         return SingleShortForm(
-          newsId: newsInfo.id!,
+          newsId: newsInfo.id,
           newsIndex: index,
           shortFormUrl: newsInfo.shortformUrl!,
           newsInfo: newsInfo,

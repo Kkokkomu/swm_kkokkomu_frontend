@@ -10,6 +10,7 @@ import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/root_tab_scaffold_key_provider.dart';
 import 'package:swm_kkokkomu_frontend/exploration/component/exploration_screen_drawer.dart';
+import 'package:swm_kkokkomu_frontend/exploration/provider/exploration_screen_scroll_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/guest_user_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
@@ -93,7 +94,21 @@ class _CustomBottomNavigationBarState
 
     switch (tabType) {
       case RootTabBottomNavigationBarType.exploration:
-        break;
+        final scrollController =
+            ref.read(explorationScreenScrollControllerProvider);
+        if (!scrollController.hasClients) {
+          // 만약 스크롤 컨트롤러가 스크롤뷰에 연결되어있지 않으면 스크롤을 조정하지 않음
+          return;
+        }
+
+        // 스크롤 컨트롤러가 스크롤뷰에 연결되어있으면 스크롤을 맨 위로 이동
+        scrollController.animateTo(
+          0.0,
+          duration: AnimationDuration.scrollToTopAnimationDuration,
+          curve: Curves.easeInOut,
+        );
+        return;
+
       case RootTabBottomNavigationBarType.home:
         if (user is UserModel) {
           ref
@@ -105,9 +120,10 @@ class _CustomBottomNavigationBarState
               .read(guestUserShortFormProvider.notifier)
               .paginate(forceRefetch: true);
         }
-        break;
+        return;
+
       case RootTabBottomNavigationBarType.myPage:
-        break;
+        return;
     }
   }
 

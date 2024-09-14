@@ -3,11 +3,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
 
 part 'shortform_model.g.dart';
 
 @JsonSerializable()
-class ShortFormModel {
+class ShortFormModel implements IModelWithId {
+  @override
+  final int id;
   final ShortFormInfo info;
   final ShortFormReactionCountInfo reactionCnt;
   final ShortFormUserReactionInfo userReaction;
@@ -18,7 +21,8 @@ class ShortFormModel {
     ShortFormUserReactionInfo? userReaction,
   })  : info = info ?? ShortFormInfo(),
         reactionCnt = reactionCnt ?? ShortFormReactionCountInfo(),
-        userReaction = userReaction ?? ShortFormUserReactionInfo();
+        userReaction = userReaction ?? ShortFormUserReactionInfo(),
+        id = info?.news.id ?? Constants.unknownErrorId;
 
   factory ShortFormModel.fromJson(Map<String, dynamic> json) =>
       _$ShortFormModelFromJson(json);
@@ -53,7 +57,7 @@ class ShortFormInfo {
 
 @JsonSerializable()
 class ShortFormNewsInfo {
-  int? id;
+  int id;
   String? shortformUrl;
   String? youtubeUrl;
   String? instagramUrl;
@@ -68,7 +72,7 @@ class ShortFormNewsInfo {
   String editedAt;
 
   ShortFormNewsInfo({
-    this.id,
+    int? id,
     this.shortformUrl,
     this.youtubeUrl,
     this.instagramUrl,
@@ -81,7 +85,8 @@ class ShortFormNewsInfo {
     NewsCategory? category,
     String? createdAt,
     String? editedAt,
-  })  : relatedUrl = relatedUrl ?? Constants.relatedUrlOnError,
+  })  : id = id ?? Constants.unknownErrorId,
+        relatedUrl = relatedUrl ?? Constants.relatedUrlOnError,
         viewCnt = viewCnt ?? 0,
         title = title ?? Constants.unknownErrorString,
         summary = summary ?? Constants.unknownErrorString,
