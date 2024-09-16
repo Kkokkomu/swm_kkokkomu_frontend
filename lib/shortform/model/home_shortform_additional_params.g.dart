@@ -1,22 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'shortform_additional_params.dart';
+part of 'home_shortform_additional_params.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ShortFormAdditionalParams _$ShortFormAdditionalParamsFromJson(
+HomeShortFormAdditionalParams _$HomeShortFormAdditionalParamsFromJson(
         Map<String, dynamic> json) =>
-    ShortFormAdditionalParams(
-      category: json['category'] as String,
+    HomeShortFormAdditionalParams(
       filter: $enumDecode(_$ShortFormSortTypeEnumMap, json['filter']),
     );
 
-Map<String, dynamic> _$ShortFormAdditionalParamsToJson(
-        ShortFormAdditionalParams instance) =>
+Map<String, dynamic> _$HomeShortFormAdditionalParamsToJson(
+        HomeShortFormAdditionalParams instance) =>
     <String, dynamic>{
-      'category': instance.category,
       'filter': _$ShortFormSortTypeEnumMap[instance.filter]!,
     };
 

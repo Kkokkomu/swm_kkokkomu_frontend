@@ -81,11 +81,20 @@ class ShortFormCommentBody extends StatelessWidget {
           return Consumer(
             builder: (_, ref, child) {
               // 대댓글인 경우 부모 댓글 정보를 가져옴
+              final parentCommentProvider = user is UserModel
+                  ? loggedInUserShortFormCommentProvider(newsId)
+                  : guestUserShortFormCommentProvider(newsId);
+
               final parentComment = ref.watch(
-                loggedInUserShortFormCommentProvider(newsId).select(
+                parentCommentProvider.select(
                   (value) {
-                    final parentCommentState =
-                        (value as CursorPagination<ShortFormCommentModel>);
+                    // 부모 댓글이 CursorPagination<ShortFormCommentModel>이 아닌 경우
+                    // 대댓글 모델로 null을 반환하고 대댓글 리스트를 닫음
+                    if (value is! CursorPagination<ShortFormCommentModel>) {
+                      return (index: -1, model: null);
+                    }
+
+                    final parentCommentState = value;
 
                     final parentCommentIndex = parentCommentState.items
                         .indexWhere((element) => element.id == parentCommentId);
@@ -104,17 +113,27 @@ class ShortFormCommentBody extends StatelessWidget {
               // 대댓글 숫자가 바뀐 경우 부모 댓글의 replyCnt값을 업데이트
               // 이때 대댓글 페이지가 마지막 페이지인 경우에만 업데이트 (모든 대댓글을 불러온 경우)
               ref.listen(
-                loggedInUserShortFormReplyProvider(parentCommentId!),
+                provider(parentCommentId!),
                 (_, next) {
                   if (next is CursorPagination<ShortFormCommentModel> &&
                       next.pageInfo.isLast) {
-                    ref
-                        .read(loggedInUserShortFormCommentProvider(newsId)
-                            .notifier)
-                        .setReplyCnt(
-                          commentId: parentCommentId!,
-                          cnt: next.items.length,
-                        );
+                    if (user is UserModel) {
+                      ref
+                          .read(loggedInUserShortFormCommentProvider(newsId)
+                              .notifier)
+                          .setReplyCnt(
+                            commentId: parentCommentId!,
+                            cnt: next.items.length,
+                          );
+                    } else {
+                      ref
+                          .read(guestUserShortFormCommentProvider(newsId)
+                              .notifier)
+                          .setReplyCnt(
+                            commentId: parentCommentId!,
+                            cnt: next.items.length,
+                          );
+                    }
                   }
                 },
               );

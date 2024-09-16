@@ -10,3 +10,15 @@ const _$ShortFormSortTypeEnumMap = {
   ShortFormSortType.recommend: 'RECOMMEND',
   ShortFormSortType.latest: 'LATEST',
 };
+
+const _$NewsCategoryInExplorationEnumMap = {
+  NewsCategoryInExploration.popular: 'popular',
+  NewsCategoryInExploration.politics: 'politics',
+  NewsCategoryInExploration.economy: 'economy',
+  NewsCategoryInExploration.social: 'social',
+  NewsCategoryInExploration.entertain: 'entertain',
+  NewsCategoryInExploration.sports: 'sports',
+  NewsCategoryInExploration.living: 'living',
+  NewsCategoryInExploration.world: 'world',
+  NewsCategoryInExploration.it: 'it',
+};

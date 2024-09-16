@@ -16,9 +16,9 @@ class CursorPaginationProvider<T extends IModelWithId,
   final Set<int> postedItems = {};
 
   CursorPaginationProvider(
-    this.repository, {
+    this.repository,
+    this.apiPath, {
     this.additionalParams,
-    this.apiPath = '',
   }) : super(CursorPaginationLoading()) {
     paginate();
   }
@@ -106,8 +106,8 @@ class CursorPaginationProvider<T extends IModelWithId,
 
       final resp = await repository.paginate(
         cursorPaginationParams,
+        apiPath,
         additionalParams: additionalParams,
-        apiPath: apiPath,
       );
 
       final paginationData = resp.data;

@@ -6,6 +6,7 @@ import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
+import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/filter_category_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/filter_screen_setting_provider.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/provider/logged_in_user_shortform_setting_provider.dart';
@@ -113,11 +114,19 @@ class ShortFormFilterScreen extends ConsumerWidget {
                     fit: FlexFit.tight,
                     flex: 2,
                     child: GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         // 변경된 설정을 저장
-                        ref
+                        final resp = await ref
                             .read(loggedInUserShortFormSettingProvider.notifier)
                             .updateSetting(setting: screenSetting);
+
+                        if (!resp) {
+                          CustomToastMessage.showErrorToastMessage(
+                            '필터 적용에 실패했습니다.',
+                          );
+                          return;
+                        }
+
                         // 필터 스크린을 닫음
                         if (context.mounted) context.pop();
                       },

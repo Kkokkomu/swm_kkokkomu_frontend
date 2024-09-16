@@ -14,6 +14,7 @@ final guestUserShortFormReplyProvider = StateNotifierProvider.family
 
     return GuestUserShortFormReplyStateNotifier(
       shortFormReplyRepository,
+      '',
       additionalParams:
           ShortFormReplyAdditionalParams(commentId: parentCommentId),
     );
@@ -23,7 +24,8 @@ final guestUserShortFormReplyProvider = StateNotifierProvider.family
 class GuestUserShortFormReplyStateNotifier extends CursorPaginationProvider<
     ShortFormCommentModel, GuestUserShortFormReplyRepository> {
   GuestUserShortFormReplyStateNotifier(
-    super.repository, {
+    super.repository,
+    super.apiPath, {
     super.additionalParams,
   });
 }

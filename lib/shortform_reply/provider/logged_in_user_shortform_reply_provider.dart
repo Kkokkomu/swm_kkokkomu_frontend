@@ -26,6 +26,7 @@ final loggedInUserShortFormReplyProvider = StateNotifierProvider.family
 
     return LoggedInUserShortFormReplyStateNotifier(
       shortFormReplyRepository,
+      '',
       ref: ref,
       parentCommentId: parentCommentId,
       additionalParams:
@@ -40,7 +41,8 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
   final int parentCommentId;
 
   LoggedInUserShortFormReplyStateNotifier(
-    super.repository, {
+    super.repository,
+    super.apiPath, {
     required this.ref,
     required this.parentCommentId,
     super.additionalParams,

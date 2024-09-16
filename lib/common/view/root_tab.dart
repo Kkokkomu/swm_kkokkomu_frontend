@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
@@ -11,8 +12,8 @@ import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_stat
 import 'package:swm_kkokkomu_frontend/common/provider/root_tab_scaffold_key_provider.dart';
 import 'package:swm_kkokkomu_frontend/exploration/component/exploration_screen_drawer.dart';
 import 'package:swm_kkokkomu_frontend/exploration/provider/exploration_screen_scroll_controller_provider.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/guest_user_shortform_provider.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/guest_user_home_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_home_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
@@ -27,6 +28,11 @@ class RootTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scaffoldKey = ref.watch(rootTabScaffoldKeyProvider);
+
+    // 현재 라우트 경로를 가져온 후, 숏폼 화면 인지 확인
+    final routePath = navigationShell.shellRouteContext.routerState.fullPath;
+    final isShortFormScreen = routePath == CustomRoutePath.home ||
+        routePath == CustomRoutePath.explorationShortForm;
 
     return PopScope(
       canPop: false,
@@ -44,11 +50,10 @@ class RootTab extends ConsumerWidget {
         showAppExitDialog(context);
       },
       child: DefaultLayout(
-        // 홈(숏폼) 화면은 다크 모드이므로 상태바 아이콘을 밝게 처리
+        // 숏폼 화면은 다크 모드이므로 상태바 아이콘을 밝게 처리
         // 나머지는 라이트 모드이므로 상태바 아이콘을 어둡게 처리
-        statusBarBrightness: navigationShell.currentIndex == 1
-            ? Brightness.light
-            : Brightness.dark,
+        statusBarBrightness:
+            isShortFormScreen ? Brightness.light : Brightness.dark,
         scaffoldKey: scaffoldKey,
         resizeToAvoidBottomInset: false,
         drawer: navigationShell.currentIndex == 0
@@ -57,9 +62,8 @@ class RootTab extends ConsumerWidget {
         bottomNavigationBar: CustomBottomNavigationBar(
           navigationShell: navigationShell,
         ),
-        backgroundColor: navigationShell.currentIndex == 1
-            ? Colors.black
-            : ColorName.white000,
+        // 숏폼 화면은 다크 모드이므로 배경색을 어둡게 처리
+        backgroundColor: isShortFormScreen ? Colors.black : ColorName.white000,
         child: navigationShell,
       ),
     );
@@ -112,12 +116,12 @@ class _CustomBottomNavigationBarState
       case RootTabBottomNavigationBarType.home:
         if (user is UserModel) {
           ref
-              .read(loggedInUserShortFormProvider.notifier)
+              .read(loggedInUserHomeShortFormProvider.notifier)
               .paginate(forceRefetch: true);
         }
         if (user is GuestUserModel) {
           ref
-              .read(guestUserShortFormProvider.notifier)
+              .read(guestUserHomeShortFormProvider.notifier)
               .paginate(forceRefetch: true);
         }
         return;

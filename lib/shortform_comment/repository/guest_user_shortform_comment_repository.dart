@@ -31,8 +31,8 @@ abstract class GuestUserShortFormCommentRepository
   @override
   @GET('{apiPath}')
   Future<ResponseModel<CursorPagination<ShortFormCommentModel>>> paginate(
-    @Queries() CursorPaginationParams cursorPaginationParams, {
+    @Queries() CursorPaginationParams cursorPaginationParams,
+    @Path() String apiPath, {
     @Queries() AdditionalParams? additionalParams,
-    @Path() String apiPath = '',
   });
 }

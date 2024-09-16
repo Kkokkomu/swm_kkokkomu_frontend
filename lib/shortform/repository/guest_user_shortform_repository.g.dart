@@ -19,26 +19,27 @@ class _GuestUserShortFormRepository implements GuestUserShortFormRepository {
   String? baseUrl;
 
   @override
-  Future<ResponseModel<OffsetPagination<ShortFormModel>>> paginate(
-    OffsetPaginationParams offsetPaginationParams, {
+  Future<ResponseModel<CursorPagination<ShortFormModel>>> paginate(
+    CursorPaginationParams cursorPaginationParams,
+    String apiPath, {
     AdditionalParams? additionalParams,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(offsetPaginationParams.toJson());
+    queryParameters.addAll(cursorPaginationParams.toJson());
     queryParameters.addAll(additionalParams?.toJson() ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ResponseModel<OffsetPagination<ShortFormModel>>>(Options(
+        _setStreamType<ResponseModel<CursorPagination<ShortFormModel>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/list/guest',
+              '${apiPath}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -47,9 +48,9 @@ class _GuestUserShortFormRepository implements GuestUserShortFormRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ResponseModel<OffsetPagination<ShortFormModel>>.fromJson(
+    final value = ResponseModel<CursorPagination<ShortFormModel>>.fromJson(
       _result.data!,
-      (json) => OffsetPagination<ShortFormModel>.fromJson(
+      (json) => CursorPagination<ShortFormModel>.fromJson(
         json as Map<String, dynamic>,
         (json) => ShortFormModel.fromJson(json as Map<String, dynamic>),
       ),

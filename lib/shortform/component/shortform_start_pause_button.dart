@@ -2,21 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/short_form_play_pause_button_visibility_provider.dart';
 
 class ShortFormStartPauseButton extends ConsumerWidget {
+  final ShortFormScreenType shortFormScreenType;
   final int newsId;
 
   const ShortFormStartPauseButton({
     super.key,
+    required this.shortFormScreenType,
     required this.newsId,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final buttonVisibility = ref.watch(
-      shortFormPlayPauseButtonVisibilityProvider(newsId),
+      shortFormPlayPauseButtonVisibilityProvider((
+        shortFormScreenType: shortFormScreenType,
+        newsId: newsId,
+      )),
     );
 
     // 버튼이 보이지 않는 경우 빈 위젯을 반환
@@ -25,42 +31,62 @@ class ShortFormStartPauseButton extends ConsumerWidget {
     }
 
     return buttonVisibility.isPlaying
-        ? _StartButton(newsId: newsId)
-        : _PauseButton(newsId: newsId);
+        ? _StartButton(
+            shortFormScreenType: shortFormScreenType,
+            newsId: newsId,
+          )
+        : _PauseButton(
+            shortFormScreenType: shortFormScreenType,
+            newsId: newsId,
+          );
   }
 }
 
 class _StartButton extends StatelessWidget {
+  final ShortFormScreenType shortFormScreenType;
   final int newsId;
 
   const _StartButton({
+    required this.shortFormScreenType,
     required this.newsId,
   });
 
   @override
   Widget build(BuildContext context) {
-    return _StartPauseButton(newsId: newsId, isPlaying: true);
+    return _StartPauseButton(
+      shortFormScreenType: shortFormScreenType,
+      newsId: newsId,
+      isPlaying: true,
+    );
   }
 }
 
 class _PauseButton extends StatelessWidget {
+  final ShortFormScreenType shortFormScreenType;
   final int newsId;
 
   const _PauseButton({
+    required this.shortFormScreenType,
     required this.newsId,
   });
 
   @override
   Widget build(BuildContext context) {
-    return _StartPauseButton(newsId: newsId, isPlaying: false);
+    return _StartPauseButton(
+      shortFormScreenType: shortFormScreenType,
+      newsId: newsId,
+      isPlaying: false,
+    );
   }
 }
 
 class _StartPauseButton extends ConsumerWidget {
+  final ShortFormScreenType shortFormScreenType;
   final int newsId;
   final bool isPlaying;
 
   const _StartPauseButton({
+    required this.shortFormScreenType,
     required this.newsId,
     required this.isPlaying,
   });
@@ -83,8 +109,10 @@ class _StartPauseButton extends ConsumerWidget {
       )
           .animate(
             onComplete: (_) => ref
-                .read(
-                    shortFormPlayPauseButtonVisibilityProvider(newsId).notifier)
+                .read(shortFormPlayPauseButtonVisibilityProvider((
+                  shortFormScreenType: shortFormScreenType,
+                  newsId: newsId,
+                )).notifier)
                 .state = (isButtonVisible: false, isPlaying: isPlaying),
           )
           .scaleXY(

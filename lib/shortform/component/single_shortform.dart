@@ -8,7 +8,9 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/comment_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/custom_back_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/emoji_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/filter_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/more_info_button.dart';
@@ -20,6 +22,7 @@ import 'package:swm_kkokkomu_frontend/shortform/model/custom_better_player_contr
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/custom_better_player_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_visibility_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_home_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/shortform_detail_info_box_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_box.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
@@ -27,6 +30,11 @@ import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class SingleShortForm extends ConsumerWidget {
+  final ShortFormScreenType shortFormScreenType;
+
+  /// 로그인 상태일 때만 사용하는 provider. 비로그인 상태일 때는 null
+  final AutoDisposeStateNotifierProvider<LoggedInUserShortFormStateNotifier,
+      CursorPaginationBase>? shortFormProviderWhenLoggedIn;
   final int newsId;
   final int newsIndex;
   final String shortFormUrl;
@@ -37,6 +45,8 @@ class SingleShortForm extends ConsumerWidget {
 
   const SingleShortForm({
     super.key,
+    required this.shortFormScreenType,
+    required this.shortFormProviderWhenLoggedIn,
     required this.newsId,
     required this.newsIndex,
     required this.shortFormUrl,
@@ -50,7 +60,11 @@ class SingleShortForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final betterPlayerControllerModel = ref.watch(
       customBetterPlayerControllerProvider(
-        (newsId: newsId, shortFormUrl: shortFormUrl),
+        (
+          shortFormScreenType: shortFormScreenType,
+          newsId: newsId,
+          shortFormUrl: shortFormUrl,
+        ),
       ),
     );
 
@@ -67,7 +81,7 @@ class SingleShortForm extends ConsumerWidget {
             Text(
               betterPlayerControllerModel.message,
               style: const TextStyle(
-                color: Colors.black,
+                color: ColorName.white000,
               ),
             ),
             const SizedBox(
@@ -77,7 +91,11 @@ class SingleShortForm extends ConsumerWidget {
               onPressed: () => ref
                   .read(
                     customBetterPlayerControllerProvider(
-                      (newsId: newsId, shortFormUrl: shortFormUrl),
+                      (
+                        shortFormScreenType: shortFormScreenType,
+                        newsId: newsId,
+                        shortFormUrl: shortFormUrl,
+                      ),
                     ).notifier,
                   )
                   .setUpVideo(),
@@ -162,7 +180,11 @@ class SingleShortForm extends ConsumerWidget {
 
                           ref
                               .read(customBetterPlayerControllerProvider(
-                                (newsId: newsId, shortFormUrl: shortFormUrl),
+                                (
+                                  shortFormScreenType: shortFormScreenType,
+                                  newsId: newsId,
+                                  shortFormUrl: shortFormUrl,
+                                ),
                               ).notifier)
                               .togglePausePlay();
                         },
@@ -214,7 +236,11 @@ class SingleShortForm extends ConsumerWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      const FilterButton(),
+                                      // 홈 화면에서만 필터 버튼을 보여줌
+                                      shortFormScreenType ==
+                                              ShortFormScreenType.home
+                                          ? const FilterButton()
+                                          : const CustomBackButton(),
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment:
@@ -222,6 +248,8 @@ class SingleShortForm extends ConsumerWidget {
                                         children: [
                                           const SearchButton(),
                                           MoreInfoButton(
+                                            shortFormProviderWhenLoggedIn:
+                                                shortFormProviderWhenLoggedIn,
                                             newsId: newsId,
                                             newsIndex: newsIndex,
                                             newsInfo: newsInfo,
@@ -263,7 +291,10 @@ class SingleShortForm extends ConsumerWidget {
                         ),
                       ),
                       Center(
-                        child: ShortFormStartPauseButton(newsId: newsId),
+                        child: ShortFormStartPauseButton(
+                          shortFormScreenType: shortFormScreenType,
+                          newsId: newsId,
+                        ),
                       ),
                       Consumer(
                         builder: (_, ref, child) {
@@ -417,6 +448,8 @@ class SingleShortForm extends ConsumerWidget {
                               constraints.maxHeight * 0.13,
                             ),
                             child: EmojiButton(
+                              shortFormProviderWhenLoggedIn:
+                                  shortFormProviderWhenLoggedIn,
                               newsId: newsId,
                               newsIndex: newsIndex,
                               reactionCountInfo: reactionCountInfo,
@@ -465,25 +498,6 @@ class SingleShortForm extends ConsumerWidget {
                         )
                             .animate(
                               target: replyState.isReplyVisible ? 1 : 0,
-                              onComplete: (_) {
-                                // 애니메이션이 종료되었을때 대댓글 입력창이 활성화 되지 않은 경우 대댓글 입력창 정보를 삭제함
-                                if (ref
-                                        .read(
-                                          shortFormCommentHeightControllerProvider(
-                                            newsId,
-                                          ),
-                                        )
-                                        .isReplyVisible ==
-                                    false) {
-                                  ref
-                                      .read(
-                                        shortFormCommentHeightControllerProvider(
-                                          newsId,
-                                        ).notifier,
-                                      )
-                                      .deleteReplyState();
-                                }
-                              },
                             )
                             .scaleXY(
                               begin: 0.0,

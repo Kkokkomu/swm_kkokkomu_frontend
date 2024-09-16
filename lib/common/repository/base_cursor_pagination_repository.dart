@@ -6,8 +6,8 @@ import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 
 abstract class IBaseCursorPaginationRepository<T extends IModelWithId> {
   Future<ResponseModel<CursorPagination<T>>> paginate(
-    CursorPaginationParams cursorPaginationParams, {
+    CursorPaginationParams cursorPaginationParams,
+    String apiPath, {
     AdditionalParams? additionalParams,
-    String apiPath = '',
   });
 }

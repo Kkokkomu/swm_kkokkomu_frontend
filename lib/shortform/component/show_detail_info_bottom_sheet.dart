@@ -6,19 +6,23 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
-import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
+import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/guest_user_shortform_provider.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_home_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 Future<dynamic> showDetailInfoBottomSheet({
   required BuildContext context,
+  required AutoDisposeStateNotifierProvider<LoggedInUserShortFormStateNotifier,
+          CursorPaginationBase>?
+      shortFormProviderWhenLoggedIn,
   required int newsId,
   required int newsIndex,
   required ShortFormNewsInfo newsInfo,
   required List<String> keywords,
+  required ShortFormReactionCountInfo prevReactionCountInfo,
+  required ReactionType? prevUserReactionType,
 }) =>
     showModalBottomSheet(
       useSafeArea: true,
@@ -96,23 +100,30 @@ Future<dynamic> showDetailInfoBottomSheet({
                             builder: (_, ref, __) {
                               final user = ref.watch(userInfoProvider);
 
-                              // 로그인 상태에 따라 숏폼 정보를 가져옴
-                              final shortFormModel = user is UserModel
-                                  ? ref.watch(loggedInUserShortFormProvider)
-                                  : ref.watch(guestUserShortFormProvider);
+                              ShortFormReactionCountInfo reactionCountInfo =
+                                  prevReactionCountInfo;
+                              ReactionType? userReactionType =
+                                  prevUserReactionType;
 
-                              // OffsetPagination<ShortFormModel>인 경우(정상적인 경우)에만 userReactionType을 가져옴
-                              final userReactionType = shortFormModel
-                                      is OffsetPagination<ShortFormModel>
-                                  ? shortFormModel.items[newsIndex].userReaction
-                                      .getReactionType()
-                                  : null;
+                              // 로그인 상태인 경우 감정표현이 변경될 수 있으므로
+                              // 숏폼 정보를 watch 하고 갱신
+                              if (user is UserModel &&
+                                  shortFormProviderWhenLoggedIn != null) {
+                                // 로그인 상태인 경우 숏폼 정보를 가져옴
+                                final shortFormModel =
+                                    ref.watch(shortFormProviderWhenLoggedIn);
 
-                              // OffsetPagination<ShortFormModel>인 경우(정상적인 경우)에만 reactionCountInfo를 가져옴
-                              final reactionCountInfo = shortFormModel
-                                      is OffsetPagination<ShortFormModel>
-                                  ? shortFormModel.items[newsIndex].reactionCnt
-                                  : ShortFormReactionCountInfo();
+                                if (shortFormModel
+                                    is CursorPagination<ShortFormModel>) {
+                                  // CursorPagination<ShortFormModel>인 경우(정상적인 경우)에만 userReactionType 및 reactionCountInfo를 가져옴
+                                  userReactionType = shortFormModel
+                                      .items[newsIndex].userReaction
+                                      .getReactionType();
+
+                                  reactionCountInfo = shortFormModel
+                                      .items[newsIndex].reactionCnt;
+                                }
+                              }
 
                               return Row(
                                 mainAxisAlignment:
@@ -126,7 +137,9 @@ Future<dynamic> showDetailInfoBottomSheet({
                                           onTap: () {
                                             // 로그인 상태가 아닌 경우 정보창 닫고 로그인 모달창 띄우기
                                             if (ref.read(userInfoProvider)
-                                                is! UserModel) {
+                                                    is! UserModel ||
+                                                shortFormProviderWhenLoggedIn ==
+                                                    null) {
                                               context.pop();
                                               showLoginModalBottomSheet(
                                                 context,
@@ -139,7 +152,7 @@ Future<dynamic> showDetailInfoBottomSheet({
                                             userReactionType == reactionType
                                                 ? ref
                                                     .read(
-                                                        loggedInUserShortFormProvider
+                                                        shortFormProviderWhenLoggedIn
                                                             .notifier)
                                                     .deleteReaction(
                                                       newsId: newsId,
@@ -149,7 +162,7 @@ Future<dynamic> showDetailInfoBottomSheet({
                                                     )
                                                 : ref
                                                     .read(
-                                                        loggedInUserShortFormProvider
+                                                        shortFormProviderWhenLoggedIn
                                                             .notifier)
                                                     .putPostReaction(
                                                       newsId: newsId,

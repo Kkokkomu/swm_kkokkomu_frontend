@@ -37,9 +37,9 @@ abstract class LoggedInUserShortFormReplyRepository
     'accessToken': true,
   })
   Future<ResponseModel<CursorPagination<ShortFormCommentModel>>> paginate(
-    @Queries() CursorPaginationParams cursorPaginationParams, {
+    @Queries() CursorPaginationParams cursorPaginationParams,
+    @Path() String apiPath, {
     @Queries() AdditionalParams? additionalParams,
-    @Path() String apiPath = '',
   });
 
   @POST('')

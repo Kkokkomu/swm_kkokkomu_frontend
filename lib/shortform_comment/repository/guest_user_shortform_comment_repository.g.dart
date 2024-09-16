@@ -21,9 +21,9 @@ class _GuestUserShortFormCommentRepository
 
   @override
   Future<ResponseModel<CursorPagination<ShortFormCommentModel>>> paginate(
-    CursorPaginationParams cursorPaginationParams, {
+    CursorPaginationParams cursorPaginationParams,
+    String apiPath, {
     AdditionalParams? additionalParams,
-    String apiPath = '',
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

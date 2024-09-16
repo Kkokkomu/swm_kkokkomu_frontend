@@ -74,6 +74,7 @@ enum NewsCategory {
       };
 }
 
+@JsonEnum(alwaysCreate: true)
 enum NewsCategoryInExploration {
   popular('인기 급상승'),
   politics('정치'),
@@ -88,6 +89,13 @@ enum NewsCategoryInExploration {
   final String label;
 
   const NewsCategoryInExploration(this.label);
+
+  static final _newsCategoryInExplorationNameMap =
+      _$NewsCategoryInExplorationEnumMap
+          .map((key, value) => MapEntry(value, key));
+
+  static NewsCategoryInExploration? fromName(String name) =>
+      _newsCategoryInExplorationNameMap[name];
 
   String get blueChipSvgPath => switch (this) {
         NewsCategoryInExploration.popular => Assets.icons.svg.chipPopular.path,
@@ -210,6 +218,11 @@ enum ReactionType {
         ReactionType.surprise => Assets.icons.svg.icSurpriseBlue.path,
         ReactionType.sad => Assets.icons.svg.icSadBlue.path,
       };
+}
+
+enum ShortFormScreenType {
+  home,
+  exploration,
 }
 
 // loadingStateProvider 에서 사용하는 요청 종류

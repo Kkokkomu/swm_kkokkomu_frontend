@@ -72,9 +72,6 @@ class LoggedInUserShortFormSettingStateNotifier
           )
         : setting;
 
-    // 변경된 설정을 적용
-    state = newSetting;
-
     // 변경된 정렬 설정을 SharedPreferences에 저장
     final prefs = await SharedPreferences.getInstance();
     await _saveSortType(prefs, newSetting.shortFormSortType);
@@ -90,7 +87,8 @@ class LoggedInUserShortFormSettingStateNotifier
       return false;
     }
 
-    // 서버에 저장에 성공했다면 true 반환
+    // 서버에 저장에 성공했다면 변경된 설정을 적용하고 true 반환
+    state = newSetting;
     return true;
   }
 

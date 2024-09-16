@@ -4,10 +4,10 @@ import 'package:retrofit/retrofit.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/dio/dio.dart';
 import 'package:swm_kkokkomu_frontend/common/model/additional_params.dart';
-import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
-import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_params.dart';
+import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
+import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
-import 'package:swm_kkokkomu_frontend/common/repository/base_offset_pagination_repository.dart';
+import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_response_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_news_id_body.dart';
@@ -30,17 +30,18 @@ final loggedInUserShortFormRepositoryProvider =
 
 @RestApi()
 abstract class LoggedInUserShortFormRepository
-    implements BaseOffsetPaginationRepository<ShortFormModel> {
+    implements IBaseCursorPaginationRepository<ShortFormModel> {
   factory LoggedInUserShortFormRepository(Dio dio, {String baseUrl}) =
       _LoggedInUserShortFormRepository;
 
   @override
-  @GET('/home/news/list')
+  @GET('{apiPath}')
   @Headers({
     'accessToken': true,
   })
-  Future<ResponseModel<OffsetPagination<ShortFormModel>>> paginate(
-    @Queries() OffsetPaginationParams offsetPaginationParams, {
+  Future<ResponseModel<CursorPagination<ShortFormModel>>> paginate(
+    @Queries() CursorPaginationParams cursorPaginationParams,
+    @Path() String apiPath, {
     @Queries() AdditionalParams? additionalParams,
   });
 

@@ -3,16 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/custom_better_player_controller_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/short_form_play_pause_button_visibility_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 
-final customBetterPlayerControllerProvider = StateNotifierProvider.autoDispose
-    .family<
+final customBetterPlayerControllerProvider =
+    StateNotifierProvider.autoDispose.family<
         CustomBetterPlayerControllerStateNotifier,
         CustomBetterPlayerControllerModelBase,
-        ({int newsId, String shortFormUrl})>(
+        ({
+          ShortFormScreenType shortFormScreenType,
+          int newsId,
+          String shortFormUrl,
+        })>(
   (ref, shortFormInfo) => CustomBetterPlayerControllerStateNotifier(
     ref: ref,
     shortFormInfo: shortFormInfo,
@@ -23,7 +28,11 @@ class CustomBetterPlayerControllerStateNotifier
     extends StateNotifier<CustomBetterPlayerControllerModelBase> {
   final Duration _seekBackTime = const Duration(seconds: 1);
   final Ref ref;
-  final ({int newsId, String shortFormUrl}) shortFormInfo;
+  final ({
+    ShortFormScreenType shortFormScreenType,
+    int newsId,
+    String shortFormUrl,
+  }) shortFormInfo;
   BetterPlayerController? _betterPlayerController;
   bool _autoPlay = true;
 
@@ -86,8 +95,10 @@ class CustomBetterPlayerControllerStateNotifier
       _betterPlayerController?.pause();
       ref
           .read(
-            shortFormPlayPauseButtonVisibilityProvider(shortFormInfo.newsId)
-                .notifier,
+            shortFormPlayPauseButtonVisibilityProvider((
+              shortFormScreenType: shortFormInfo.shortFormScreenType,
+              newsId: shortFormInfo.newsId,
+            )).notifier,
           )
           .state = (isButtonVisible: true, isPlaying: false);
       return;
@@ -97,8 +108,10 @@ class CustomBetterPlayerControllerStateNotifier
       _betterPlayerController?.play();
       ref
           .read(
-            shortFormPlayPauseButtonVisibilityProvider(shortFormInfo.newsId)
-                .notifier,
+            shortFormPlayPauseButtonVisibilityProvider((
+              shortFormScreenType: shortFormInfo.shortFormScreenType,
+              newsId: shortFormInfo.newsId,
+            )).notifier,
           )
           .state = (isButtonVisible: true, isPlaying: true);
       return;

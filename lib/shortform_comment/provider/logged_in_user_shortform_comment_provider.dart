@@ -28,10 +28,10 @@ final loggedInUserShortFormCommentProvider = StateNotifierProvider.family
 
     return LoggedInUserShortFormCommentStateNotifier(
       shortFormCommentRepository,
+      shortFormCommentSortType.name,
       ref: ref,
       newsId: newsId,
       additionalParams: ShortFormCommentAdditionalParams(newsId: newsId),
-      apiPath: shortFormCommentSortType.name,
     );
   },
 );
@@ -43,11 +43,11 @@ class LoggedInUserShortFormCommentStateNotifier
   final int newsId;
 
   LoggedInUserShortFormCommentStateNotifier(
-    super.repository, {
+    super.repository,
+    super.apiPath, {
     required this.ref,
     required this.newsId,
     super.additionalParams,
-    super.apiPath,
   });
 
   Future<({bool success, String? errorCode, String? errorMessage})> postComment(

@@ -6,6 +6,7 @@ import 'package:swm_kkokkomu_frontend/common/provider/go_router_navigator_key_pr
 import 'package:swm_kkokkomu_frontend/common/view/root_tab.dart';
 import 'package:swm_kkokkomu_frontend/common/view/splash_screen.dart';
 import 'package:swm_kkokkomu_frontend/exploration/view/exploration_screen.dart';
+import 'package:swm_kkokkomu_frontend/exploration/view/exploration_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_filter_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
@@ -54,6 +55,16 @@ class AuthProvider extends ChangeNotifier {
                   path: '/exploration',
                   name: ExplorationScreen.routeName,
                   builder: (_, __) => const ExplorationScreen(),
+                  routes: [
+                    GoRoute(
+                      // parentNavigatorKey: rootNavigationKey,
+                      path: 'shortform',
+                      name: ExplorationShortformScreen.routeName,
+                      builder: (_, state) => ExplorationShortformScreen(
+                        initialPageIndex: state.extra as int? ?? 0,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -7,14 +7,17 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/custom_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/detail_emoji_button_visibility_provider.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_home_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class EmojiButton extends ConsumerWidget {
+  final AutoDisposeStateNotifierProvider<LoggedInUserShortFormStateNotifier,
+      CursorPaginationBase>? shortFormProviderWhenLoggedIn;
   final int newsId;
   final int newsIndex;
   final ShortFormReactionCountInfo reactionCountInfo;
@@ -22,6 +25,7 @@ class EmojiButton extends ConsumerWidget {
 
   const EmojiButton({
     super.key,
+    required this.shortFormProviderWhenLoggedIn,
     required this.newsId,
     required this.newsIndex,
     required this.reactionCountInfo,
@@ -54,6 +58,8 @@ class EmojiButton extends ConsumerWidget {
                   children: [
                     for (ReactionType reactionType in ReactionType.values)
                       DetailEmojiButton(
+                        shortFormProviderWhenLoggedIn:
+                            shortFormProviderWhenLoggedIn,
                         newsId: newsId,
                         newsIndex: newsIndex,
                         reactionCountInfo: reactionCountInfo,
@@ -96,6 +102,8 @@ class EmojiButton extends ConsumerWidget {
 }
 
 class DetailEmojiButton extends ConsumerWidget {
+  final AutoDisposeStateNotifierProvider<LoggedInUserShortFormStateNotifier,
+      CursorPaginationBase>? shortFormProviderWhenLoggedIn;
   final int newsId;
   final int newsIndex;
   final ShortFormReactionCountInfo reactionCountInfo;
@@ -104,6 +112,7 @@ class DetailEmojiButton extends ConsumerWidget {
 
   const DetailEmojiButton({
     super.key,
+    required this.shortFormProviderWhenLoggedIn,
     required this.newsId,
     required this.newsIndex,
     required this.reactionCountInfo,
@@ -133,7 +142,8 @@ class DetailEmojiButton extends ConsumerWidget {
       labelColor: Colors.black,
       onTap: () {
         // 로그인 상태가 아닌 경우 이모지 버튼 닫고 로그인 모달창 띄우기
-        if (ref.read(userInfoProvider) is! UserModel) {
+        if (ref.read(userInfoProvider) is! UserModel ||
+            shortFormProviderWhenLoggedIn == null) {
           ref
               .read(detailEmojiButtonVisibilityProvider(newsId).notifier)
               .setDetailEmojiButtonVisibility(false);
@@ -144,12 +154,12 @@ class DetailEmojiButton extends ConsumerWidget {
         // 로그인 상태인 경우 반응 정보 업데이트
         // 이미 해당 이모지를 누른 상태인 경우 반응 삭제
         userReactionType == reactionType
-            ? ref.read(loggedInUserShortFormProvider.notifier).deleteReaction(
+            ? ref.read(shortFormProviderWhenLoggedIn!.notifier).deleteReaction(
                   newsId: newsId,
                   newsIndex: newsIndex,
                   reactionType: reactionType,
                 )
-            : ref.read(loggedInUserShortFormProvider.notifier).putPostReaction(
+            : ref.read(shortFormProviderWhenLoggedIn!.notifier).putPostReaction(
                   newsId: newsId,
                   newsIndex: newsIndex,
                   reactionType: reactionType,

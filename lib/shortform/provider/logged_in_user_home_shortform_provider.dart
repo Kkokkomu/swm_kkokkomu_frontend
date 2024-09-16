@@ -2,20 +2,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
-import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
-import 'package:swm_kkokkomu_frontend/common/provider/offset_pagination_provider.dart';
+import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_news_id_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/shortform_additional_params.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/home_shortform_additional_params.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/repository/logged_in_user_shortform_repository.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/provider/logged_in_user_shortform_setting_provider.dart';
 
-final loggedInUserShortFormProvider = StateNotifierProvider.autoDispose<
-    LoggedInUserShortFormStateNotifier, OffsetPaginationBase>(
+final loggedInUserHomeShortFormProvider = StateNotifierProvider.autoDispose<
+    LoggedInUserShortFormStateNotifier, CursorPaginationBase>(
   (ref) {
     final shortFormRepository =
         ref.watch(loggedInUserShortFormRepositoryProvider);
@@ -24,21 +24,22 @@ final loggedInUserShortFormProvider = StateNotifierProvider.autoDispose<
 
     return LoggedInUserShortFormStateNotifier(
       shortFormRepository,
+      '/home/news/list',
       ref: ref,
-      additionalParams: ShortFormAdditionalParams(
-        category: userShortFormSetting.categoriesToString(),
+      additionalParams: HomeShortFormAdditionalParams(
         filter: userShortFormSetting.shortFormSortType,
       ),
     );
   },
 );
 
-class LoggedInUserShortFormStateNotifier extends OffsetPaginationProvider<
+class LoggedInUserShortFormStateNotifier extends CursorPaginationProvider<
     ShortFormModel, LoggedInUserShortFormRepository> {
   final Ref ref;
 
   LoggedInUserShortFormStateNotifier(
-    super.repository, {
+    super.repository,
+    super.apiPath, {
     required this.ref,
     super.additionalParams,
   });
@@ -229,14 +230,14 @@ class LoggedInUserShortFormStateNotifier extends OffsetPaginationProvider<
   }
 
   // 숏폼 관련 요청이 유효한지 확인 후, 유효한 경우 previousState 반환
-  OffsetPagination<ShortFormModel>? _getValidPrevState({
+  CursorPagination<ShortFormModel>? _getValidPrevState({
     required int newsId,
   }) =>
-      // 이전 상태가 OffsetPagination(정상적으로 데이터가 불러와진 상태)이고 유저 정보가 UserModel(로그인 상태)이며
+      // 이전 상태가 CursorPagination(정상적으로 데이터가 불러와진 상태)이고 유저 정보가 UserModel(로그인 상태)이며
       // 뉴스 ID가 알 수 없는 값이 아닌 경우 유효한 상태로 간주
-      state is OffsetPagination<ShortFormModel> &&
+      state is CursorPagination<ShortFormModel> &&
               ref.read(userInfoProvider) is UserModel &&
               (newsId != Constants.unknownErrorId)
-          ? state as OffsetPagination<ShortFormModel>
+          ? state as CursorPagination<ShortFormModel>
           : null;
 }
