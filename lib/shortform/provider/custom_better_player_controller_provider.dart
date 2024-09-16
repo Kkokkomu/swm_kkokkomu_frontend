@@ -2,7 +2,6 @@ import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
-import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/custom_better_player_controller_model.dart';
@@ -56,7 +55,11 @@ class CustomBetterPlayerControllerStateNotifier
 
     _betterPlayerController = BetterPlayerController(
       BetterPlayerConfiguration(
-        playerVisibilityChangedBehavior: _onVisibilityChanged,
+        playerVisibilityChangedBehavior: (visibilityFraction) =>
+            _onVisibilityChanged(
+          visibilityFraction,
+          shortFormInfo.shortFormScreenType,
+        ),
         fit: BoxFit.fitHeight,
         aspectRatio: 1 / 10,
         looping: true,
@@ -118,7 +121,8 @@ class CustomBetterPlayerControllerStateNotifier
     }
   }
 
-  void _onVisibilityChanged(double visibleFraction) {
+  void _onVisibilityChanged(
+      double visibleFraction, ShortFormScreenType shortFormScreenType) {
     final isCommentVisible = ref
         .read(shortFormCommentHeightControllerProvider(shortFormInfo.newsId))
         .isShortFormCommentVisible;
@@ -152,10 +156,8 @@ class CustomBetterPlayerControllerStateNotifier
       final currentPosition =
           _betterPlayerController?.videoPlayerController?.value.position;
 
-      // 홈(숏폼) 탭이 아닌 다른 탭(탐색, 마이페이지)으로 이동한 경우 비디오를 정지만 하고 0초로 되돌리지 않음
-      if ((currentRoutePath.startsWith(CustomRoutePath.exploration) ||
-              currentRoutePath.startsWith(CustomRoutePath.myPage) ||
-              currentRoutePath.startsWith(CustomRoutePath.filter)) &&
+      // 보고 있던 숏폼 탭을 벗어나 다른 탭으로 이동한 경우 0초로 되돌리지 않음
+      if (currentRoutePath != shortFormScreenType.path &&
           currentPosition != null) {
         // 다시 숏폼 탭으로 돌아왔을 때 스무스한 재생을 위해 1초 전으로 이동
         _betterPlayerController?.seekTo(
@@ -164,7 +166,7 @@ class CustomBetterPlayerControllerStateNotifier
         return;
       }
 
-      // 숏폼 탭에서 다른 숏폼으로 넘어간 경우 비디오를 정지하고 0초로 되돌림
+      // 다른 숏폼으로 넘어간 경우 비디오를 정지하고 0초로 되돌림
       _betterPlayerController?.seekTo(Duration.zero);
     }
   }

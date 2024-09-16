@@ -221,8 +221,12 @@ enum ReactionType {
 }
 
 enum ShortFormScreenType {
-  home,
-  exploration,
+  home(CustomRoutePath.home),
+  exploration(CustomRoutePath.explorationShortForm);
+
+  final String path;
+
+  const ShortFormScreenType(this.path);
 }
 
 // loadingStateProvider 에서 사용하는 요청 종류
