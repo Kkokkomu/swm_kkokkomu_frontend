@@ -15,7 +15,7 @@ import 'package:swm_kkokkomu_frontend/shortform/component/single_shortform.dart'
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_home_shortform_provider.dart';
 
-class CursorPaginationShortFormView extends ConsumerWidget {
+class CursorPaginationShortFormView extends ConsumerStatefulWidget {
   final ShortFormScreenType shortFormScreenType;
   final AutoDisposeStateNotifierProvider<
       CursorPaginationProvider<ShortFormModel,
@@ -31,10 +31,27 @@ class CursorPaginationShortFormView extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(provider);
+  ConsumerState<CursorPaginationShortFormView> createState() =>
+      _CursorPaginationShortFormViewState();
+}
+
+class _CursorPaginationShortFormViewState
+    extends ConsumerState<CursorPaginationShortFormView> {
+  bool isFirstBuild = true;
+  int initialPage = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(widget.provider);
     final bottomNavigationBarState =
         ref.watch(bottomNavigationBarStateProvider);
+
+    if (isFirstBuild) {
+      initialPage = widget.initialPageIndex;
+      isFirstBuild = false;
+    } else {
+      initialPage = 0;
+    }
 
     // 완전 처음 로딩일때
     if (state is CursorPaginationLoading) {
@@ -46,7 +63,7 @@ class CursorPaginationShortFormView extends ConsumerWidget {
     // 에러
     if (state is CursorPaginationError) {
       return _CustomShortFormBase(
-        shortFormScreenType: shortFormScreenType,
+        shortFormScreenType: widget.shortFormScreenType,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -58,8 +75,9 @@ class CursorPaginationShortFormView extends ConsumerWidget {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () =>
-                  ref.read(provider.notifier).paginate(forceRefetch: true),
+              onPressed: () => ref
+                  .read(widget.provider.notifier)
+                  .paginate(forceRefetch: true),
               child: const Text(
                 '다시시도',
               ),
@@ -76,9 +94,10 @@ class CursorPaginationShortFormView extends ConsumerWidget {
     final paginationData = state as CursorPagination<ShortFormModel>;
 
     return RefreshIndicator(
-      onRefresh: () => ref.read(provider.notifier).paginate(forceRefetch: true),
+      onRefresh: () =>
+          ref.read(widget.provider.notifier).paginate(forceRefetch: true),
       child: PageView.builder(
-        controller: PageController(initialPage: initialPageIndex),
+        controller: PageController(initialPage: initialPage),
         allowImplicitScrolling: true,
         // 바텀 네비게이션바가 보이고 모달 배리어가 보이지 않을 때만 스크롤 가능하도록 설정
         // 댓글 창이 활성화 된 경우 -> 바텀 네비게이션바가 보이지 않음 -> 스크롤 불가능
@@ -95,7 +114,7 @@ class CursorPaginationShortFormView extends ConsumerWidget {
                   paginationData.items.length -
                       1 -
                       (Constants.cursorPaginationFetchCount * 0.2).toInt()) {
-            ref.read(provider.notifier).paginate(fetchMore: true);
+            ref.read(widget.provider.notifier).paginate(fetchMore: true);
           }
         },
         itemBuilder: (context, index) {
@@ -108,7 +127,7 @@ class CursorPaginationShortFormView extends ConsumerWidget {
 
             if (paginationData is CursorPaginationFetchingMoreError) {
               return _CustomShortFormBase(
-                shortFormScreenType: shortFormScreenType,
+                shortFormScreenType: widget.shortFormScreenType,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -121,8 +140,9 @@ class CursorPaginationShortFormView extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16.0),
                     ElevatedButton(
-                      onPressed: () =>
-                          ref.read(provider.notifier).paginate(fetchMore: true),
+                      onPressed: () => ref
+                          .read(widget.provider.notifier)
+                          .paginate(fetchMore: true),
                       child: const Text(
                         '다시시도',
                       ),
@@ -130,7 +150,7 @@ class CursorPaginationShortFormView extends ConsumerWidget {
                     const SizedBox(height: 16.0),
                     ElevatedButton(
                       onPressed: () => ref
-                          .read(provider.notifier)
+                          .read(widget.provider.notifier)
                           .paginate(forceRefetch: true),
                       child: const Text(
                         '전체 새로고침',
@@ -142,7 +162,7 @@ class CursorPaginationShortFormView extends ConsumerWidget {
             }
 
             return _CustomShortFormBase(
-              shortFormScreenType: shortFormScreenType,
+              shortFormScreenType: widget.shortFormScreenType,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -159,7 +179,7 @@ class CursorPaginationShortFormView extends ConsumerWidget {
                   ),
                   ElevatedButton(
                     onPressed: () => ref
-                        .read(provider.notifier)
+                        .read(widget.provider.notifier)
                         .paginate(forceRefetch: true),
                     child: const Text('새로고침'),
                   ),
@@ -180,7 +200,7 @@ class CursorPaginationShortFormView extends ConsumerWidget {
             debugPrint('newsId 또는 shortFormUrl이 null 값입니다.');
 
             return _CustomShortFormBase(
-              shortFormScreenType: shortFormScreenType,
+              shortFormScreenType: widget.shortFormScreenType,
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -198,13 +218,13 @@ class CursorPaginationShortFormView extends ConsumerWidget {
           }
 
           return SingleShortForm(
-            shortFormScreenType: shortFormScreenType,
+            shortFormScreenType: widget.shortFormScreenType,
             // 로그인된 사용자인 경우 provider를 넘겨줌
-            shortFormProviderWhenLoggedIn: provider
+            shortFormProviderWhenLoggedIn: widget.provider
                     is AutoDisposeStateNotifierProvider<
                         LoggedInUserShortFormStateNotifier,
                         CursorPaginationBase>
-                ? provider as AutoDisposeStateNotifierProvider<
+                ? widget.provider as AutoDisposeStateNotifierProvider<
                     LoggedInUserShortFormStateNotifier, CursorPaginationBase>
                 : null,
             newsId: newsInfo.id,
