@@ -24,6 +24,7 @@ class ShortFormFilterScreen extends ConsumerWidget {
     final screenSetting = ref.watch(filterScreenSettingProvider(prevSetting));
 
     return DefaultLayout(
+      statusBarBrightness: Brightness.dark,
       titleWidget: const Text('필터'),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

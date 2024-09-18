@@ -47,6 +47,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         }
       },
       child: DefaultLayout(
+        statusBarBrightness: Brightness.dark,
         titleWidget: const Text('기본 회원 정보 등록'),
         child: Padding(
           padding: const EdgeInsets.all(16.0),

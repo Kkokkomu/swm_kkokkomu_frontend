@@ -33,6 +33,7 @@ class _BlockedUserManagementScreenState
     final blockedUserList = ref.watch(loggedInUserBlockedUserListProvider);
 
     return DefaultLayout(
+      statusBarBrightness: Brightness.dark,
       titleWidget: const Text('차단 유저 관리'),
       child: Padding(
           padding: const EdgeInsets.all(16.0),

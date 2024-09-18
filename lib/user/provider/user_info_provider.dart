@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/secure_storage/secure_storage.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/user/model/post_register_body.dart';
@@ -91,16 +96,43 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
       return;
     }
 
+    // 자체 서버로부터 토큰을 받아온 경우 소셜 서버의 토큰은 더 이상 필요하지 않으므로 로그아웃 처리
+    if (socialLoginType == SocialLoginType.google) {
+      // 구글 로그인인 경우 구글 로그아웃
+      GoogleSignIn().signOut();
+    }
+
+    if (socialLoginType == SocialLoginType.kakao) {
+      // 카카오 로그인인 경우 카카오 로그아웃
+      UserApi.instance.logout();
+    }
+
     final accessToken = resp.data?.accessToken;
     final refreshToken = resp.data?.refreshToken;
 
     if (resp.success != true || accessToken == null) {
       // 자체 서버에서 인증 실패한 경우
-      // 에러 토스트 메시지 띄움
+      // 에러 메시지 띄움
       // 로그인에 실패했으므로 상태를 기존 상태로 원복
-      CustomToastMessage.showLoginError('로그인에 실패했습니다.');
+
+      if (resp.error?.code == CustomErrorCode.emailAlreadyExistsCode) {
+        // 이미 해당 이메일로 가입된 다른 소셜 계정이 있는 경우는 에러 토스트 메시지를 띄우지 않고 다이얼로그를 띄움
+        showInfoDialog(
+          context: ref
+              .read(routerProvider)
+              .configuration
+              .navigatorKey
+              .currentContext!,
+          content: resp.error?.message ?? '이미 해당 이메일로 가입된 다른 소셜 계정이 있습니다.',
+        );
+      } else {
+        // 다른 에러 코드인 경우는 에러 토스트 메시지를 띄움
+        CustomToastMessage.showLoginError('로그인에 실패했습니다.');
+      }
+
       state = prevState;
       debugPrint('자체 서버에서 인증 실패');
+
       return;
     }
 

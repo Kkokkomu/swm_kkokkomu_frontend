@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_font_weight.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/fonts.gen.dart';
 
 class CustomTextStyle {
   static const String fontFamily = FontFamily.pretendard;
-  static const Color textColor = Color(0xFF000000);
+  static const Color textColor = ColorName.gray700;
 
   static TextStyle head1({Color color = textColor}) => TextStyle(
         fontFamily: fontFamily,

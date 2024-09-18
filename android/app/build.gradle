@@ -22,6 +22,11 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def kakaoNativeAppKey = localProperties.getProperty('kakao.native.app.key')
+if (kakaoNativeAppKey == null) {
+    throw GradleExecption("kakao.native.app.key is not set in local.properties")
+}
+
 android {
     namespace "com.example.swm_kkokkomu_frontend"
     compileSdkVersion 34
@@ -50,6 +55,8 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+
+        manifestPlaceholders += [kakaoNativeAppKey: kakaoNativeAppKey]
     }
 
     buildTypes {

@@ -70,6 +70,7 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Scrollbar(
+          controller: scrollController,
           child: CustomScrollView(
             controller: scrollController,
             slivers: [

@@ -80,7 +80,13 @@ class LoginScreen extends ConsumerWidget {
                                   .image(width: 60.0),
                             ),
                           if (Platform.isIOS) const SizedBox(width: 24.0),
-                          Assets.icons.png.loginGoogle3x.image(width: 60.0),
+                          GestureDetector(
+                            onTap: () => ref
+                                .read(userInfoProvider.notifier)
+                                .login(SocialLoginType.google),
+                            child: Assets.icons.png.loginGoogle3x
+                                .image(width: 60.0),
+                          ),
                           const SizedBox(width: 24.0),
                           GestureDetector(
                             onTap: () => ref
@@ -92,17 +98,19 @@ class LoginScreen extends ConsumerWidget {
                         ],
                       ),
                 const SizedBox(height: 19.0),
-                GestureDetector(
-                  onTap: () => ref.read(userInfoProvider.notifier).guestLogin(),
-                  child: Text(
-                    '로그인 없이 둘러보기',
-                    style: CustomTextStyle.detail1Reg(
-                      color: ColorName.blue100,
-                      decoration: TextDecoration.underline,
-                      decorationColor: ColorName.blue100,
+                if (userInfo is! UserModelLoading)
+                  GestureDetector(
+                    onTap: () =>
+                        ref.read(userInfoProvider.notifier).guestLogin(),
+                    child: Text(
+                      '로그인 없이 둘러보기',
+                      style: CustomTextStyle.detail1Reg(
+                        color: ColorName.blue100,
+                        decoration: TextDecoration.underline,
+                        decorationColor: ColorName.blue100,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),

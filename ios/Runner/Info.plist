@@ -27,7 +27,10 @@
 				<string>Editor</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>kakao82ab68645a47b48542f81d8836db8214</string>
+				    <!-- 카카오 로그인 -->
+					<string>kakao$(KAKAO_NATIVE_APP_KEY)</string>
+					<!-- 구글 로그인 -->
+					<string>$(GOOGLE_OAUTH_CLIENT_ID)</string>
 				</array>
 			</dict>
 		</array>

@@ -34,17 +34,6 @@ class $AssetsIconsGen {
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
-
-  /// File path: assets/images/apple_login.png
-  AssetGenImage get appleLogin =>
-      const AssetGenImage('assets/images/apple_login.png');
-
-  /// File path: assets/images/kakao_login_large_wide.png
-  AssetGenImage get kakaoLoginLargeWide =>
-      const AssetGenImage('assets/images/kakao_login_large_wide.png');
-
-  /// List of all assets
-  List<AssetGenImage> get values => [appleLogin, kakaoLoginLargeWide];
 }
 
 class $AssetsIconsPngGen {
@@ -68,6 +57,10 @@ class $AssetsIconsPngGen {
 
 class $AssetsIconsSvgGen {
   const $AssetsIconsSvgGen();
+
+  /// File path: assets/icons/svg/btn_close.svg
+  SvgGenImage get btnClose =>
+      const SvgGenImage('assets/icons/svg/btn_close.svg');
 
   /// File path: assets/icons/svg/btn_delete.svg
   SvgGenImage get btnDelete =>
@@ -293,6 +286,10 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icWorldGray =>
       const SvgGenImage('assets/icons/svg/ic_world_gray.svg');
 
+  /// File path: assets/icons/svg/img_login_empty.svg
+  SvgGenImage get imgLoginEmpty =>
+      const SvgGenImage('assets/icons/svg/img_login_empty.svg');
+
   /// File path: assets/icons/svg/splash_logo.svg
   SvgGenImage get splashLogo =>
       const SvgGenImage('assets/icons/svg/splash_logo.svg');
@@ -303,6 +300,7 @@ class $AssetsIconsSvgGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        btnClose,
         btnDelete,
         chipEconomy,
         chipEntertain,
@@ -360,6 +358,7 @@ class $AssetsIconsSvgGen {
         icUnlike,
         icWorldBlue,
         icWorldGray,
+        imgLoginEmpty,
         splashLogo,
         splashTypoLogo
       ];

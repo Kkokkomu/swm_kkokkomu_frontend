@@ -66,7 +66,11 @@ class DefaultLayout extends StatelessWidget {
       value: SystemUiOverlayStyle(
         statusBarColor: statusBarColor,
         statusBarIconBrightness: statusBarBrightness,
-        statusBarBrightness: statusBarBrightness,
+        statusBarBrightness: statusBarBrightness == Brightness.dark
+            ? Brightness.light
+            : statusBarBrightness == Brightness.light
+                ? Brightness.dark
+                : null,
         systemNavigationBarColor: systemNavigationBarColor,
         systemNavigationBarIconBrightness: systemNavigationBarIconBrightness,
       ),
@@ -89,6 +93,17 @@ class DefaultLayout extends StatelessWidget {
       return null;
     } else {
       return AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: statusBarColor,
+          statusBarIconBrightness: statusBarBrightness,
+          statusBarBrightness: statusBarBrightness == Brightness.dark
+              ? Brightness.light
+              : statusBarBrightness == Brightness.light
+                  ? Brightness.dark
+                  : null,
+          systemNavigationBarColor: systemNavigationBarColor,
+          systemNavigationBarIconBrightness: systemNavigationBarIconBrightness,
+        ),
         scrolledUnderElevation: 0.0,
         backgroundColor: appBarBackGroundColor ?? ColorName.white000,
         elevation: 0,

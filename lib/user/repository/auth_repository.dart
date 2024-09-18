@@ -2,6 +2,7 @@ import 'package:dio/dio.dart' hide Headers;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -66,12 +67,13 @@ class AuthRepository extends __AuthServiceApi {
         authorizationHeader = await _getAppleIdentityToken();
         break;
 
+      case SocialLoginType.google:
+        authorizationHeader = await _getGoogleAccessToken();
+        break;
+
       case SocialLoginType.kakao:
         authorizationHeader = await _getKakaoAccessToken();
         break;
-
-      default:
-        return null;
     }
 
     if (authorizationHeader == null) {
@@ -102,6 +104,24 @@ class AuthRepository extends __AuthServiceApi {
     }
 
     return appleIdentityToken;
+  }
+
+  Future<String?> _getGoogleAccessToken() async {
+    String? googleAccessToken;
+    try {
+      googleAccessToken =
+          (await (await GoogleSignIn().signIn())?.authentication)?.accessToken;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    if (googleAccessToken != null) {
+      debugPrint('구글 로그인 성공');
+    } else {
+      debugPrint('구글 로그인 실패');
+    }
+
+    return googleAccessToken;
   }
 
   Future<String?> _getKakaoAccessToken() async {

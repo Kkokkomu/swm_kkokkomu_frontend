@@ -4,7 +4,7 @@ import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 
 part 'enums.g.dart';
 
-enum SocialLoginType { apple, kakao }
+enum SocialLoginType { apple, google, kakao }
 
 @JsonEnum(valueField: 'name')
 enum GenderType {
