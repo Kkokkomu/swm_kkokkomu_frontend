@@ -5,7 +5,7 @@ import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/cursor_pagination_shortform_view.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/pagination_shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/guest_user_home_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_home_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
@@ -21,8 +21,8 @@ class ShortFormScreen extends ConsumerWidget {
     final user = ref.watch(userInfoProvider);
 
     late final AutoDisposeStateNotifierProvider<
-        CursorPaginationProvider<ShortFormModel,
-            IBaseCursorPaginationRepository<ShortFormModel>>,
+        CursorPaginationProvider<PaginationShortFormModel,
+            IBaseCursorPaginationRepository<PaginationShortFormModel>>,
         CursorPaginationBase> provider;
 
     if (user is UserModel) {

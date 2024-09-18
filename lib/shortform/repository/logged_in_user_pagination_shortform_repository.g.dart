@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'guest_user_shortform_repository.dart';
+part of 'logged_in_user_pagination_shortform_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,9 @@ part of 'guest_user_shortform_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _GuestUserShortFormRepository implements GuestUserShortFormRepository {
-  _GuestUserShortFormRepository(
+class _LoggedInUserPaginationShortFormRepository
+    implements LoggedInUserPaginationShortFormRepository {
+  _LoggedInUserPaginationShortFormRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -19,7 +20,7 @@ class _GuestUserShortFormRepository implements GuestUserShortFormRepository {
   String? baseUrl;
 
   @override
-  Future<ResponseModel<CursorPagination<ShortFormModel>>> paginate(
+  Future<ResponseModel<CursorPagination<PaginationShortFormModel>>> paginate(
     CursorPaginationParams cursorPaginationParams,
     String apiPath, {
     AdditionalParams? additionalParams,
@@ -29,30 +30,33 @@ class _GuestUserShortFormRepository implements GuestUserShortFormRepository {
     queryParameters.addAll(cursorPaginationParams.toJson());
     queryParameters.addAll(additionalParams?.toJson() ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': true};
+    _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ResponseModel<CursorPagination<ShortFormModel>>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(_setStreamType<
+        ResponseModel<CursorPagination<PaginationShortFormModel>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '${apiPath}',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = ResponseModel<CursorPagination<ShortFormModel>>.fromJson(
+        .compose(
+          _dio.options,
+          '${apiPath}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value =
+        ResponseModel<CursorPagination<PaginationShortFormModel>>.fromJson(
       _result.data!,
-      (json) => CursorPagination<ShortFormModel>.fromJson(
+      (json) => CursorPagination<PaginationShortFormModel>.fromJson(
         json as Map<String, dynamic>,
-        (json) => ShortFormModel.fromJson(json as Map<String, dynamic>),
+        (json) =>
+            PaginationShortFormModel.fromJson(json as Map<String, dynamic>),
       ),
     );
     return value;

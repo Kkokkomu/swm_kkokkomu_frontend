@@ -8,15 +8,15 @@ import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_params.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/pagination_shortform_model.dart';
 
-part 'guest_user_shortform_repository.g.dart';
+part 'logged_in_user_pagination_shortform_repository.g.dart';
 
-final guestUserShortFormRepositoryProvider =
-    Provider<GuestUserShortFormRepository>((ref) {
+final loggedInUserPaginationShortFormRepositoryProvider =
+    Provider<LoggedInUserPaginationShortFormRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
-  final repository = GuestUserShortFormRepository(
+  final repository = LoggedInUserPaginationShortFormRepository(
     dio,
     baseUrl: Constants.baseUrl,
   );
@@ -25,14 +25,17 @@ final guestUserShortFormRepositoryProvider =
 });
 
 @RestApi()
-abstract class GuestUserShortFormRepository
-    implements IBaseCursorPaginationRepository<ShortFormModel> {
-  factory GuestUserShortFormRepository(Dio dio, {String baseUrl}) =
-      _GuestUserShortFormRepository;
+abstract class LoggedInUserPaginationShortFormRepository
+    implements IBaseCursorPaginationRepository<PaginationShortFormModel> {
+  factory LoggedInUserPaginationShortFormRepository(Dio dio, {String baseUrl}) =
+      _LoggedInUserPaginationShortFormRepository;
 
   @override
   @GET('{apiPath}')
-  Future<ResponseModel<CursorPagination<ShortFormModel>>> paginate(
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<CursorPagination<PaginationShortFormModel>>> paginate(
     @Queries() CursorPaginationParams cursorPaginationParams,
     @Path() String apiPath, {
     @Queries() AdditionalParams? additionalParams,

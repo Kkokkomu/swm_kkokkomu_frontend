@@ -14,7 +14,7 @@ import 'package:swm_kkokkomu_frontend/exploration/provider/exploration_category_
 import 'package:swm_kkokkomu_frontend/exploration/provider/exploration_screen_scroll_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/exploration/provider/guest_user_explore_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/exploration/provider/logged_in_user_explore_shortform_provider.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/pagination_shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
@@ -31,8 +31,8 @@ class ExplorationScreen extends ConsumerWidget {
         ref.watch(explorationScreenScrollControllerProvider);
 
     late final AutoDisposeStateNotifierProvider<
-        CursorPaginationProvider<ShortFormModel,
-            IBaseCursorPaginationRepository<ShortFormModel>>,
+        CursorPaginationProvider<PaginationShortFormModel,
+            IBaseCursorPaginationRepository<PaginationShortFormModel>>,
         CursorPaginationBase> provider;
 
     if (user is UserModel) {
@@ -85,7 +85,7 @@ class ExplorationScreen extends ConsumerWidget {
               height: 1.0,
             ),
             Expanded(
-              child: CursorPaginationSliverGridView<ShortFormModel>(
+              child: CursorPaginationSliverGridView<PaginationShortFormModel>(
                 scrollController: scrollController,
                 provider: provider,
                 itemBuilder: (_, index, model) => GestureDetector(

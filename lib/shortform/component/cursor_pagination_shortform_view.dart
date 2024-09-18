@@ -8,18 +8,15 @@ import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
-import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/custom_back_button.dart';
-import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/filter_button.dart';
-import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/search_button.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/custom_shortform_base.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/single_shortform.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_home_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/pagination_shortform_model.dart';
 
 class CursorPaginationShortFormView extends ConsumerStatefulWidget {
   final ShortFormScreenType shortFormScreenType;
   final AutoDisposeStateNotifierProvider<
-      CursorPaginationProvider<ShortFormModel,
-          IBaseCursorPaginationRepository<ShortFormModel>>,
+      CursorPaginationProvider<PaginationShortFormModel,
+          IBaseCursorPaginationRepository<PaginationShortFormModel>>,
       CursorPaginationBase> provider;
   final int initialPageIndex;
 
@@ -62,7 +59,7 @@ class _CursorPaginationShortFormViewState
 
     // 에러
     if (state is CursorPaginationError) {
-      return _CustomShortFormBase(
+      return CustomShortFormBase(
         shortFormScreenType: widget.shortFormScreenType,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -91,7 +88,7 @@ class _CursorPaginationShortFormViewState
     // CursorPaginationFetchingMore
     // CursorPaginationRefetching
 
-    final paginationData = state as CursorPagination<ShortFormModel>;
+    final paginationData = state as CursorPagination<PaginationShortFormModel>;
 
     return RefreshIndicator(
       onRefresh: () =>
@@ -126,7 +123,7 @@ class _CursorPaginationShortFormViewState
             }
 
             if (paginationData is CursorPaginationFetchingMoreError) {
-              return _CustomShortFormBase(
+              return CustomShortFormBase(
                 shortFormScreenType: widget.shortFormScreenType,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -161,7 +158,7 @@ class _CursorPaginationShortFormViewState
               );
             }
 
-            return _CustomShortFormBase(
+            return CustomShortFormBase(
               shortFormScreenType: widget.shortFormScreenType,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -191,15 +188,12 @@ class _CursorPaginationShortFormViewState
           final paginationItem = paginationData.items[index];
 
           final newsInfo = paginationItem.info.news;
-          final reactionCountInfo = paginationItem.reactionCnt;
-          final userReactionType =
-              paginationItem.userReaction.getReactionType();
 
           if (newsInfo.id == Constants.unknownErrorId ||
               newsInfo.shortformUrl == null) {
             debugPrint('newsId 또는 shortFormUrl이 null 값입니다.');
 
-            return _CustomShortFormBase(
+            return CustomShortFormBase(
               shortFormScreenType: widget.shortFormScreenType,
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -220,57 +214,11 @@ class _CursorPaginationShortFormViewState
           return SingleShortForm(
             shortFormScreenType: widget.shortFormScreenType,
             // 로그인된 사용자인 경우 provider를 넘겨줌
-            shortFormProviderWhenLoggedIn: widget.provider
-                    is AutoDisposeStateNotifierProvider<
-                        LoggedInUserShortFormStateNotifier,
-                        CursorPaginationBase>
-                ? widget.provider as AutoDisposeStateNotifierProvider<
-                    LoggedInUserShortFormStateNotifier, CursorPaginationBase>
-                : null,
             newsId: newsInfo.id,
-            newsIndex: index,
             shortFormUrl: newsInfo.shortformUrl!,
-            newsInfo: newsInfo,
-            keywords: paginationItem.info.keywords,
-            reactionCountInfo: reactionCountInfo,
-            userReactionType: userReactionType,
           );
         },
       ),
-    );
-  }
-}
-
-class _CustomShortFormBase extends StatelessWidget {
-  final ShortFormScreenType shortFormScreenType;
-  final Widget child;
-
-  const _CustomShortFormBase({
-    required this.shortFormScreenType,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        child,
-        SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // 홈 화면에서만 필터 버튼을 보여줌
-                shortFormScreenType == ShortFormScreenType.home
-                    ? const FilterButton()
-                    : const CustomBackButton(),
-                const SearchButton(),
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

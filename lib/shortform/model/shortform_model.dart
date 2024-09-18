@@ -3,14 +3,23 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
-import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
 
 part 'shortform_model.g.dart';
 
+sealed class ShortFormModelBase {}
+
+class ShortFormModelLoading extends ShortFormModelBase {
+  ShortFormModelLoading();
+}
+
+class ShortFormModelError extends ShortFormModelBase {
+  final String message;
+
+  ShortFormModelError(this.message);
+}
+
 @JsonSerializable()
-class ShortFormModel implements IModelWithId {
-  @override
-  final int id;
+class ShortFormModel extends ShortFormModelBase {
   final ShortFormInfo info;
   final ShortFormReactionCountInfo reactionCnt;
   final ShortFormUserReactionInfo userReaction;
@@ -21,8 +30,7 @@ class ShortFormModel implements IModelWithId {
     ShortFormUserReactionInfo? userReaction,
   })  : info = info ?? ShortFormInfo(),
         reactionCnt = reactionCnt ?? ShortFormReactionCountInfo(),
-        userReaction = userReaction ?? ShortFormUserReactionInfo(),
-        id = info?.news.id ?? Constants.unknownErrorId;
+        userReaction = userReaction ?? ShortFormUserReactionInfo();
 
   factory ShortFormModel.fromJson(Map<String, dynamic> json) =>
       _$ShortFormModelFromJson(json);

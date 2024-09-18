@@ -5,37 +5,22 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
-import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/shortform_report_dialog.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/show_detail_info_bottom_sheet.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_home_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/provider/logged_in_user_shortform_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/shortform_detail_info_box_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
-import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
-import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class MoreInfoButton extends ConsumerWidget {
-  final AutoDisposeStateNotifierProvider<LoggedInUserShortFormStateNotifier,
-      CursorPaginationBase>? shortFormProviderWhenLoggedIn;
+  final bool isLoggedInUser;
   final int newsId;
-  final int newsIndex;
-  final ShortFormNewsInfo newsInfo;
-  final List<String> keywords;
-  final ShortFormReactionCountInfo reactionCountInfo;
-  final ReactionType? userReactionType;
 
   const MoreInfoButton({
     super.key,
-    required this.shortFormProviderWhenLoggedIn,
+    required this.isLoggedInUser,
     required this.newsId,
-    required this.newsIndex,
-    required this.newsInfo,
-    required this.keywords,
-    required this.reactionCountInfo,
-    required this.userReactionType,
   });
 
   @override
@@ -71,13 +56,7 @@ class MoreInfoButton extends ConsumerWidget {
 
             await showDetailInfoBottomSheet(
               context: context,
-              shortFormProviderWhenLoggedIn: shortFormProviderWhenLoggedIn,
               newsId: newsId,
-              newsIndex: newsIndex,
-              newsInfo: newsInfo,
-              keywords: keywords,
-              prevReactionCountInfo: reactionCountInfo,
-              prevUserReactionType: userReactionType,
             );
 
             // 모달 창 닫히면
@@ -98,8 +77,7 @@ class MoreInfoButton extends ConsumerWidget {
 
           case ShortFormMoreInfoPopupType.nonInterested:
             // 로그인된 사용자가 아닌 경우 로그인 바텀시트를 띄워주고 리턴
-            if (ref.read(userInfoProvider) is! UserModel ||
-                shortFormProviderWhenLoggedIn == null) {
+            if (!isLoggedInUser) {
               showLoginModalBottomSheet(context);
               return;
             }
@@ -118,23 +96,11 @@ class MoreInfoButton extends ConsumerWidget {
 
             // 관심없음 처리 요청
             final resp = await ref
-                .read(shortFormProviderWhenLoggedIn!.notifier)
-                .setNotInterested(newsId: newsId);
+                .read(loggedInUserShortFormInfoProvider(newsId).notifier)
+                .setNotInterested();
 
             // 처리 실패 시 에러 메시지 출력
             if (resp.success == false) {
-              // 이미 관심없음 처리한 경우 에러 다이얼로그 출력
-              // TODO : 에러코드 확인 필요
-              if (resp.errorCode ==
-                      CustomErrorCode.alreadyReportedShortFormCode &&
-                  context.mounted) {
-                showInfoDialog(
-                  context: context,
-                  content: resp.errorMessage ?? '이미 관심없음 처리되었습니다.',
-                );
-                return;
-              }
-
               CustomToastMessage.showErrorToastMessage('관심없음 처리에 실패했습니다.');
               return;
             }
@@ -146,8 +112,7 @@ class MoreInfoButton extends ConsumerWidget {
 
           case ShortFormMoreInfoPopupType.report:
             // 로그인된 사용자가 아닌 경우 로그인 바텀시트를 띄워주고 리턴
-            if (ref.read(userInfoProvider) is! UserModel ||
-                shortFormProviderWhenLoggedIn == null) {
+            if (!isLoggedInUser) {
               showLoginModalBottomSheet(context);
               return;
             }
@@ -162,11 +127,8 @@ class MoreInfoButton extends ConsumerWidget {
 
             // 신고 요청
             final resp = await ref
-                .read(shortFormProviderWhenLoggedIn!.notifier)
-                .reportShortForm(
-                  newsId: newsId,
-                  reason: reportType,
-                );
+                .read(loggedInUserShortFormInfoProvider(newsId).notifier)
+                .reportShortForm(reason: reportType);
 
             // 신고 실패 시 에러 메시지 출력
             if (resp.success == false) {

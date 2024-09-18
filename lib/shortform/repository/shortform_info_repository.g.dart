@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'logged_in_user_shortform_repository.dart';
+part of 'shortform_info_repository.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,9 +8,8 @@ part of 'logged_in_user_shortform_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _LoggedInUserShortFormRepository
-    implements LoggedInUserShortFormRepository {
-  _LoggedInUserShortFormRepository(
+class _ShortFormInfoRepository implements ShortFormInfoRepository {
+  _ShortFormInfoRepository(
     this._dio, {
     this.baseUrl,
   });
@@ -20,28 +19,22 @@ class _LoggedInUserShortFormRepository
   String? baseUrl;
 
   @override
-  Future<ResponseModel<CursorPagination<ShortFormModel>>> paginate(
-    CursorPaginationParams cursorPaginationParams,
-    String apiPath, {
-    AdditionalParams? additionalParams,
-  }) async {
+  Future<ResponseModel<ShortFormModel?>> getNewsInfoForLoggedInUser(
+      {required int newsId}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    queryParameters.addAll(cursorPaginationParams.toJson());
-    queryParameters.addAll(additionalParams?.toJson() ?? <String, dynamic>{});
-    queryParameters.removeWhere((k, v) => v == null);
+    final queryParameters = <String, dynamic>{r'newsId': newsId};
     final _headers = <String, dynamic>{r'accessToken': true};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ResponseModel<CursorPagination<ShortFormModel>>>(Options(
+        _setStreamType<ResponseModel<ShortFormModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '${apiPath}',
+              '/search/news/info',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -50,12 +43,44 @@ class _LoggedInUserShortFormRepository
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ResponseModel<CursorPagination<ShortFormModel>>.fromJson(
+    final value = ResponseModel<ShortFormModel?>.fromJson(
       _result.data!,
-      (json) => CursorPagination<ShortFormModel>.fromJson(
-        json as Map<String, dynamic>,
-        (json) => ShortFormModel.fromJson(json as Map<String, dynamic>),
-      ),
+      (json) => json == null
+          ? null
+          : ShortFormModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<ResponseModel<ShortFormModel?>> getNewsInfoForGuestUser(
+      {required int newsId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'newsId': newsId};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseModel<ShortFormModel>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/search/news/info/guest',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ResponseModel<ShortFormModel?>.fromJson(
+      _result.data!,
+      (json) => json == null
+          ? null
+          : ShortFormModel.fromJson(json as Map<String, dynamic>),
     );
     return value;
   }
