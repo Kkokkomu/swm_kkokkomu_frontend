@@ -5,8 +5,12 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/custom_better_player_controller_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/post_news_id_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/short_form_play_pause_button_visibility_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/repository/shortform_logging_repository.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 final customBetterPlayerControllerProvider =
     StateNotifierProvider.autoDispose.family<
@@ -34,6 +38,7 @@ class CustomBetterPlayerControllerStateNotifier
   }) shortFormInfo;
   BetterPlayerController? _betterPlayerController;
   bool _autoPlay = true;
+  bool isViewCntTriggered = false;
 
   CustomBetterPlayerControllerStateNotifier({
     required this.ref,
@@ -128,11 +133,15 @@ class CustomBetterPlayerControllerStateNotifier
         .isShortFormCommentVisible;
 
     // 비디오가 화면에 완전히 보이는 경우 자동 재생
-    if (visibleFraction == 1.0 &&
-        _betterPlayerController?.isPlaying() == false &&
-        _autoPlay) {
+    if (visibleFraction == 1.0 && _autoPlay) {
       _autoPlay = false;
       _betterPlayerController?.play();
+
+      // 조회수 증가 트리거
+      if (!isViewCntTriggered) {
+        isViewCntTriggered = true;
+        _triggerViewCnt();
+      }
       return;
     }
 
@@ -168,6 +177,26 @@ class CustomBetterPlayerControllerStateNotifier
 
       // 다른 숏폼으로 넘어간 경우 비디오를 정지하고 0초로 되돌림
       _betterPlayerController?.seekTo(Duration.zero);
+      // 다시 재생할 때 조회수 증가 트리거를 위해 플래그 초기화
+      isViewCntTriggered = false;
+    }
+  }
+
+  // 조회수 증가 트리거
+  void _triggerViewCnt() {
+    final userInfo = ref.read(userInfoProvider);
+
+    // 로그인 상태에 따라 다른 API 호출
+    if (userInfo is UserModel) {
+      // 로그인 유저 API 호출
+      ref.read(shortFormLoggingRepositoryProvider).logViewCntByLoggedInUser(
+            body: PostNewsIdBody(newsId: shortFormInfo.newsId),
+          );
+    } else {
+      // 비로그인 유저 API 호출
+      ref.read(shortFormLoggingRepositoryProvider).logViewCntByGuestUser(
+            body: PostNewsIdBody(newsId: shortFormInfo.newsId),
+          );
     }
   }
 }

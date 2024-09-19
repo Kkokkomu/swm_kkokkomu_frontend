@@ -30,4 +30,17 @@ abstract class ShortFormLoggingRepository {
   Future<ResponseModel<ShortFormNewsInfo?>> logNewsShare({
     @Body() required PostNewsIdBody body,
   });
+
+  @POST('/view')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<String?>> logViewCntByLoggedInUser({
+    @Body() required PostNewsIdBody body,
+  });
+
+  @POST('/view/guest')
+  Future<ResponseModel<String?>> logViewCntByGuestUser({
+    @Body() required PostNewsIdBody body,
+  });
 }
