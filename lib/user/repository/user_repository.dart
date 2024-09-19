@@ -4,6 +4,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/dio/dio.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
+import 'package:swm_kkokkomu_frontend/user/model/detail_user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 
 part 'user_repository.g.dart';
@@ -22,6 +23,12 @@ final userRepositoryProvider = Provider<UserRepository>(
 @RestApi()
 abstract class UserRepository {
   factory UserRepository(Dio dio, {String baseUrl}) = _UserRepository;
+
+  @GET('')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<DetailUserModel?>> getDetailUserInfo();
 
   @GET('/mypage')
   @Headers({

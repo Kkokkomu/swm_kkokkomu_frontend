@@ -58,6 +58,9 @@ class $AssetsIconsPngGen {
 class $AssetsIconsSvgGen {
   const $AssetsIconsSvgGen();
 
+  /// File path: assets/icons/svg/btn_back.svg
+  SvgGenImage get btnBack => const SvgGenImage('assets/icons/svg/btn_back.svg');
+
   /// File path: assets/icons/svg/btn_close.svg
   SvgGenImage get btnClose =>
       const SvgGenImage('assets/icons/svg/btn_close.svg');
@@ -65,6 +68,26 @@ class $AssetsIconsSvgGen {
   /// File path: assets/icons/svg/btn_delete.svg
   SvgGenImage get btnDelete =>
       const SvgGenImage('assets/icons/svg/btn_delete.svg');
+
+  /// File path: assets/icons/svg/btn_enter.svg
+  SvgGenImage get btnEnter =>
+      const SvgGenImage('assets/icons/svg/btn_enter.svg');
+
+  /// File path: assets/icons/svg/btn_notice_default.svg
+  SvgGenImage get btnNoticeDefault =>
+      const SvgGenImage('assets/icons/svg/btn_notice_default.svg');
+
+  /// File path: assets/icons/svg/btn_notice_new.svg
+  SvgGenImage get btnNoticeNew =>
+      const SvgGenImage('assets/icons/svg/btn_notice_new.svg');
+
+  /// File path: assets/icons/svg/btn_profile_edit.svg
+  SvgGenImage get btnProfileEdit =>
+      const SvgGenImage('assets/icons/svg/btn_profile_edit.svg');
+
+  /// File path: assets/icons/svg/btn_setting.svg
+  SvgGenImage get btnSetting =>
+      const SvgGenImage('assets/icons/svg/btn_setting.svg');
 
   /// File path: assets/icons/svg/chip_economy.svg
   SvgGenImage get chipEconomy =>
@@ -300,8 +323,14 @@ class $AssetsIconsSvgGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        btnBack,
         btnClose,
         btnDelete,
+        btnEnter,
+        btnNoticeDefault,
+        btnNoticeNew,
+        btnProfileEdit,
+        btnSetting,
         chipEconomy,
         chipEntertain,
         chipIt,

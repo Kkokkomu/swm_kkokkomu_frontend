@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
+import 'package:swm_kkokkomu_frontend/user/component/app_info_menu_card.dart';
+import 'package:swm_kkokkomu_frontend/user/component/custom_menu_card.dart';
 
 class GuestUserMyPage extends StatelessWidget {
   const GuestUserMyPage({super.key});
@@ -10,9 +12,10 @@ class GuestUserMyPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton(
-            onPressed: () => showLoginModalBottomSheet(context),
-            child: const Text('로그인'),
+          const AppInfoMenuCard(),
+          CustomMenuCard(
+            content: '로그인',
+            onTap: () => showLoginModalBottomSheet(context),
           ),
         ],
       ),

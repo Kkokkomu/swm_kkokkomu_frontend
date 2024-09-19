@@ -8,13 +8,14 @@ enum SocialLoginType { apple, google, kakao }
 
 @JsonEnum(valueField: 'name')
 enum GenderType {
-  man('MAN'),
-  woman('WOMAN'),
-  none('NONE');
+  man('MAN', '남성'),
+  woman('WOMAN', '여성'),
+  none('NONE', '선택안함');
 
   final String name;
+  final String label;
 
-  const GenderType(this.name);
+  const GenderType(this.name, this.label);
 }
 
 @JsonEnum(alwaysCreate: true, valueField: 'name')

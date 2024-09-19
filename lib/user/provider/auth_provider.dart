@@ -14,6 +14,7 @@ import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/view/blocked_user_management_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/login_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
+import 'package:swm_kkokkomu_frontend/user/view/profile_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/register_screen.dart';
 
 final authProvider = ChangeNotifierProvider<AuthProvider>(
@@ -97,6 +98,12 @@ class AuthProvider extends ChangeNotifier {
                       path: 'manage-blocked-users',
                       name: BlockedUserManagementScreen.routeName,
                       builder: (_, __) => const BlockedUserManagementScreen(),
+                    ),
+                    GoRoute(
+                      parentNavigatorKey: rootNavigationKey,
+                      path: 'profile',
+                      name: ProfileScreen.routeName,
+                      builder: (_, __) => const ProfileScreen(),
                     ),
                   ],
                 ),

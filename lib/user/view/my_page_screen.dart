@@ -15,7 +15,7 @@ class MyPageScreen extends ConsumerWidget {
     final userInfo = ref.watch(userInfoProvider);
 
     if (userInfo is UserModel) {
-      return const LoggedInUserMyPage();
+      return LoggedInUserMyPage(userInfo: userInfo);
     }
 
     return const GuestUserMyPage();

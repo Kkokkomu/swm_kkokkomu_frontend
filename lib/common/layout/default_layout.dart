@@ -21,7 +21,7 @@ class DefaultLayout extends StatelessWidget {
   final bool drawerEnableOpenDragGesture;
   final double? appBarHeight;
   final DeviceOrientation deviceOrientation;
-  final PreferredSizeWidget? bottom;
+  final PreferredSizeWidget? appBarBottom;
   final GlobalKey<ScaffoldState>? scaffoldKey;
   final bool? resizeToAvoidBottomInset;
   final Color? statusBarColor;
@@ -47,7 +47,7 @@ class DefaultLayout extends StatelessWidget {
     this.floatingActionButton,
     this.drawer,
     this.appBarHeight,
-    this.bottom,
+    this.appBarBottom,
     this.drawerEnableOpenDragGesture = false,
     this.deviceOrientation = DeviceOrientation.portraitUp,
     this.resizeToAvoidBottomInset,
@@ -116,8 +116,8 @@ class DefaultLayout extends StatelessWidget {
         actions: titleActions,
         titleSpacing: titleSpacing,
         title: titleWidget,
-        foregroundColor: appBarForegroundColor ?? Colors.black,
-        bottom: bottom,
+        foregroundColor: appBarForegroundColor ?? ColorName.gray700,
+        bottom: appBarBottom,
       );
     }
   }
