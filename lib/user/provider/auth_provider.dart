@@ -11,6 +11,7 @@ import 'package:swm_kkokkomu_frontend/shortform/view/shortform_filter_screen.dar
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
+import 'package:swm_kkokkomu_frontend/user/view/app_info_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/blocked_user_management_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/login_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
@@ -104,6 +105,12 @@ class AuthProvider extends ChangeNotifier {
                       path: 'profile',
                       name: ProfileScreen.routeName,
                       builder: (_, __) => const ProfileScreen(),
+                    ),
+                    GoRoute(
+                      parentNavigatorKey: rootNavigationKey,
+                      path: 'info',
+                      name: AppInfoScreen.routeName,
+                      builder: (_, __) => const AppInfoScreen(),
                     ),
                   ],
                 ),
