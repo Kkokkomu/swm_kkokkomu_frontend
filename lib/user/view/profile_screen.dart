@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_grabber.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
@@ -64,43 +67,45 @@ class ProfileScreen extends ConsumerWidget {
             children: [
               const SizedBox(height: 32.0),
               Center(
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12.0),
-                      child: SizedBox(
-                        width: 92.0,
-                        height: 92.0,
-                        child: Image.network(
-                          fit: BoxFit.cover,
-                          cacheHeight:
-                              (92.0 * MediaQuery.of(context).devicePixelRatio)
-                                  .round(),
-                          detailUserInfo.profileUrl ?? '',
-                          loadingBuilder: (_, child, loadingProgress) =>
-                              loadingProgress == null
-                                  ? child
-                                  : Skeletonizer(
-                                      child: Container(
-                                        color: ColorName.gray50,
-                                        width: 92.0,
-                                        height: 92.0,
-                                      ),
-                                    ),
-                          errorBuilder: (_, __, ___) => Container(
-                            color: ColorName.gray50,
-                            child: const Icon(Icons.error),
+                child: GestureDetector(
+                  onTap: () => showProfileImgSettingBottomSheet(context),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: SizedBox(
+                          width: 92.0,
+                          height: 92.0,
+                          child: CachedNetworkImage(
+                            imageUrl: detailUserInfo.profileUrl != null
+                                ? '${detailUserInfo.profileUrl}?editedAt=${detailUserInfo.editedAt}'
+                                : '',
+                            fit: BoxFit.cover,
+                            memCacheHeight:
+                                (92.0 * MediaQuery.of(context).devicePixelRatio)
+                                    .round(),
+                            placeholder: (_, __) => Skeletonizer(
+                              child: Container(
+                                color: ColorName.gray50,
+                                width: 92.0,
+                                height: 92.0,
+                              ),
+                            ),
+                            errorWidget: (_, __, ___) => Container(
+                              color: ColorName.gray50,
+                              child: const Icon(Icons.error),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: -8.0,
-                      right: -8.0,
-                      child: Assets.icons.svg.btnProfileEdit.svg(),
-                    ),
-                  ],
+                      Positioned(
+                        bottom: -8.0,
+                        right: -8.0,
+                        child: Assets.icons.svg.btnProfileEdit.svg(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 32.0),
@@ -157,4 +162,124 @@ class ProfileScreen extends ConsumerWidget {
       },
     );
   }
+}
+
+Future<dynamic> showProfileImgSettingBottomSheet(BuildContext context) {
+  return showModalBottomSheet(
+    isScrollControlled: true,
+    context: context,
+    builder: (_) => Container(
+      height: 238.0,
+      decoration: const BoxDecoration(
+        color: ColorName.white000,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12.0),
+          topRight: Radius.circular(12.0),
+        ),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 5.5),
+          const CustomGrabber(),
+          const SizedBox(height: 4.0),
+          Row(
+            children: [
+              const SizedBox(width: 18.0),
+              Text(
+                '프로필 변경',
+                style: CustomTextStyle.head3(),
+              ),
+              const Spacer(),
+              GestureDetector(
+                onTap: () => context.pop(),
+                child: Assets.icons.svg.btnClose.svg(),
+              ),
+              const SizedBox(width: 4.0),
+            ],
+          ),
+          const SizedBox(height: 14.0),
+          Consumer(
+            builder: (_, ref, __) => Column(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    ref
+                        .read(detailUserInfoProvider.notifier)
+                        .updateUserProfileImg(ImageSource.gallery);
+
+                    if (context.mounted) context.pop();
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: SizedBox(
+                    height: 48.0,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(width: 18.0),
+                          Assets.icons.svg.icPhoto.svg(),
+                          const SizedBox(width: 12.0),
+                          Text(
+                            '라이브러리에서 선택하기',
+                            style: CustomTextStyle.body1Medi(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    ref
+                        .read(detailUserInfoProvider.notifier)
+                        .updateUserProfileImg(ImageSource.camera);
+
+                    if (context.mounted) context.pop();
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: SizedBox(
+                    height: 48.0,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(width: 18.0),
+                          Assets.icons.svg.icCamera.svg(),
+                          const SizedBox(width: 12.0),
+                          Text(
+                            '사진 찍기',
+                            style: CustomTextStyle.body1Medi(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 48.0,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(width: 18.0),
+                        Assets.icons.svg.icFolder.svg(),
+                        const SizedBox(width: 12.0),
+                        Text(
+                          '기본 이미지로 설정하기',
+                          style: CustomTextStyle.body1Medi(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

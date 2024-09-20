@@ -139,6 +139,10 @@ class $AssetsIconsSvgGen {
   /// File path: assets/icons/svg/ic_block.svg
   SvgGenImage get icBlock => const SvgGenImage('assets/icons/svg/ic_block.svg');
 
+  /// File path: assets/icons/svg/ic_camera.svg
+  SvgGenImage get icCamera =>
+      const SvgGenImage('assets/icons/svg/ic_camera.svg');
+
   /// File path: assets/icons/svg/ic_check_disabled.svg
   SvgGenImage get icCheckDisabled =>
       const SvgGenImage('assets/icons/svg/ic_check_disabled.svg');
@@ -170,6 +174,10 @@ class $AssetsIconsSvgGen {
   /// File path: assets/icons/svg/ic_entertain_gray.svg
   SvgGenImage get icEntertainGray =>
       const SvgGenImage('assets/icons/svg/ic_entertain_gray.svg');
+
+  /// File path: assets/icons/svg/ic_folder.svg
+  SvgGenImage get icFolder =>
+      const SvgGenImage('assets/icons/svg/ic_folder.svg');
 
   /// File path: assets/icons/svg/ic_good_blue.svg
   SvgGenImage get icGoodBlue =>
@@ -226,6 +234,9 @@ class $AssetsIconsSvgGen {
   /// File path: assets/icons/svg/ic_navi_search_enabled.svg
   SvgGenImage get icNaviSearchEnabled =>
       const SvgGenImage('assets/icons/svg/ic_navi_search_enabled.svg');
+
+  /// File path: assets/icons/svg/ic_photo.svg
+  SvgGenImage get icPhoto => const SvgGenImage('assets/icons/svg/ic_photo.svg');
 
   /// File path: assets/icons/svg/ic_politics_blue.svg
   SvgGenImage get icPoliticsBlue =>
@@ -344,6 +355,7 @@ class $AssetsIconsSvgGen {
         icAngryGray,
         icAngryWhite,
         icBlock,
+        icCamera,
         icCheckDisabled,
         icCheckEnabled,
         icCheckboxDisabled,
@@ -352,6 +364,7 @@ class $AssetsIconsSvgGen {
         icEconomyGray,
         icEntertainBlue,
         icEntertainGray,
+        icFolder,
         icGoodBlue,
         icGoodGray,
         icGoodWhite,
@@ -366,6 +379,7 @@ class $AssetsIconsSvgGen {
         icNaviMyEnabled,
         icNaviSearchDisabled,
         icNaviSearchEnabled,
+        icPhoto,
         icPoliticsBlue,
         icPoliticsGray,
         icPopularMini,

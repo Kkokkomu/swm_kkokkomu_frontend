@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 
@@ -16,14 +17,14 @@ class DetailUserModelError extends DetailUserModelBase {
 
 @JsonSerializable()
 class DetailUserModel extends DetailUserModelBase {
-  int id;
-  String? profileUrl;
-  String nickname;
-  String email;
-  GenderType sex;
-  String birthday;
-  String createdAt;
-  String editedAt;
+  final int id;
+  final String? profileUrl;
+  final String nickname;
+  final String email;
+  final GenderType sex;
+  final String birthday;
+  final String createdAt;
+  final String editedAt;
 
   DetailUserModel({
     int? id,
