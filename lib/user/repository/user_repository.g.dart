@@ -94,6 +94,40 @@ class _UserRepository implements UserRepository {
   }
 
   @override
+  Future<ResponseModel<DetailUserModel?>>
+      updateUserProfileImgToDefault() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': true};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseModel<DetailUserModel>>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/img/default',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ResponseModel<DetailUserModel?>.fromJson(
+      _result.data!,
+      (json) => json == null
+          ? null
+          : DetailUserModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
   Future<ResponseModel<DetailUserModel?>> updateUserPersonalInfo(
       {required PutUserProfileBody personalInfo}) async {
     const _extra = <String, dynamic>{};

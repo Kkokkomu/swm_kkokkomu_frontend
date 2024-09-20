@@ -25,6 +25,7 @@ class DetailUserModel extends DetailUserModelBase {
   final String birthday;
   final String createdAt;
   final String editedAt;
+  final String profileEditedAt;
 
   DetailUserModel({
     int? id,
@@ -35,6 +36,7 @@ class DetailUserModel extends DetailUserModelBase {
     String? birthday,
     String? createdAt,
     String? editedAt,
+    String? profileEditedAt,
   })  : id = id ?? Constants.unknownErrorId,
         profileUrl = profileUrl ?? Constants.defaultProfileImageUrl,
         nickname = nickname ?? Constants.unknownErrorString,
@@ -42,7 +44,9 @@ class DetailUserModel extends DetailUserModelBase {
         sex = sex ?? GenderType.none,
         birthday = birthday ?? Constants.unknownErrorString,
         createdAt = createdAt ?? Constants.unknownErrorString,
-        editedAt = editedAt ?? Constants.unknownErrorString;
+        editedAt = editedAt ?? Constants.unknownErrorString,
+        profileEditedAt =
+            profileEditedAt ?? DateTime.now().millisecondsSinceEpoch.toString();
 
   factory DetailUserModel.fromJson(Map<String, dynamic> json) =>
       _$DetailUserModelFromJson(json);

@@ -51,17 +51,22 @@ class ExplorationScreen extends ConsumerWidget {
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Row(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      final scaffoldKey = ref.read(rootTabScaffoldKeyProvider);
-                      if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
-                        scaffoldKey.currentState?.closeDrawer();
-                        return;
-                      }
-                      scaffoldKey.currentState?.openDrawer();
-                    },
-                    child: ExplorationCategoryButton(
-                      category: category,
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12.0),
+                      onTap: () {
+                        final scaffoldKey =
+                            ref.read(rootTabScaffoldKeyProvider);
+                        if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
+                          scaffoldKey.currentState?.closeDrawer();
+                          return;
+                        }
+                        scaffoldKey.currentState?.openDrawer();
+                      },
+                      child: ExplorationCategoryButton(
+                        category: category,
+                      ),
                     ),
                   ),
                   const Spacer(),

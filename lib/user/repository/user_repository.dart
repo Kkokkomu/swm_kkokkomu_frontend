@@ -42,6 +42,12 @@ abstract class UserRepository {
     @Part(name: 'image') required File image,
   });
 
+  @PUT('/img/default')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<DetailUserModel?>> updateUserProfileImgToDefault();
+
   @PUT('')
   @Headers({
     'accessToken': true,

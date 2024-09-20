@@ -16,6 +16,7 @@ DetailUserModel _$DetailUserModelFromJson(Map<String, dynamic> json) =>
       birthday: json['birthday'] as String?,
       createdAt: json['createdAt'] as String?,
       editedAt: json['editedAt'] as String?,
+      profileEditedAt: json['profileEditedAt'] as String?,
     );
 
 Map<String, dynamic> _$DetailUserModelToJson(DetailUserModel instance) =>
@@ -28,6 +29,7 @@ Map<String, dynamic> _$DetailUserModelToJson(DetailUserModel instance) =>
       'birthday': instance.birthday,
       'createdAt': instance.createdAt,
       'editedAt': instance.editedAt,
+      'profileEditedAt': instance.profileEditedAt,
     };
 
 const _$GenderTypeEnumMap = {

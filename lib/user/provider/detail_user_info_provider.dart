@@ -92,6 +92,36 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
     return true;
   }
 
+  Future<bool> updateUserProfileImgToDefault() async {
+    final prevState = _getValidPrevState();
+
+    // 이전 상태가 유효하지 않다면 실패 반환
+    if (prevState == null) {
+      CustomToastMessage.showErrorToastMessage('프로필 사진 변경에 실패했습니다.');
+      return false;
+    }
+
+    // 로딩 상태로 변경
+    state = DetailUserModelLoading();
+
+    // 서버에 프로필 사진 수정 요청
+    final resp = await userRepository.updateUserProfileImgToDefault();
+
+    final respProfile = resp.data;
+
+    // 정상적인 응답이 아니라면 실패 반환
+    if (resp.success != true || respProfile == null) {
+      CustomToastMessage.showErrorToastMessage('프로필 사진 변경에 실패했습니다.');
+      state = prevState;
+      return false;
+    }
+
+    // 정상적인 응답이라면 상태 반영
+    state = respProfile;
+    CustomToastMessage.showSuccessToastMessage('프로필 사진이 변경되었습니다.');
+    return true;
+  }
+
   Future<bool> updateUserPersonalInfo({
     String? nickname,
     String? birthday,

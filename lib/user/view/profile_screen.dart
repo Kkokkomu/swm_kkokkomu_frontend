@@ -79,7 +79,7 @@ class ProfileScreen extends ConsumerWidget {
                           height: 92.0,
                           child: CachedNetworkImage(
                             imageUrl: detailUserInfo.profileUrl != null
-                                ? '${detailUserInfo.profileUrl}?editedAt=${detailUserInfo.editedAt}'
+                                ? '${detailUserInfo.profileUrl}?profileEditedAt=${detailUserInfo.profileEditedAt}'
                                 : '',
                             fit: BoxFit.cover,
                             memCacheHeight:
@@ -169,7 +169,7 @@ Future<dynamic> showProfileImgSettingBottomSheet(BuildContext context) {
     isScrollControlled: true,
     context: context,
     builder: (_) => Container(
-      height: 238.0,
+      height: 238.0 + MediaQuery.of(context).padding.bottom,
       decoration: const BoxDecoration(
         color: ColorName.white000,
         borderRadius: BorderRadius.only(
@@ -201,77 +201,93 @@ Future<dynamic> showProfileImgSettingBottomSheet(BuildContext context) {
           Consumer(
             builder: (_, ref, __) => Column(
               children: [
-                GestureDetector(
-                  onTap: () async {
-                    ref
-                        .read(detailUserInfoProvider.notifier)
-                        .updateUserProfileImg(ImageSource.gallery);
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () async {
+                      ref
+                          .read(detailUserInfoProvider.notifier)
+                          .updateUserProfileImg(ImageSource.gallery);
 
-                    if (context.mounted) context.pop();
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: SizedBox(
-                    height: 48.0,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(width: 18.0),
-                          Assets.icons.svg.icPhoto.svg(),
-                          const SizedBox(width: 12.0),
-                          Text(
-                            '라이브러리에서 선택하기',
-                            style: CustomTextStyle.body1Medi(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    ref
-                        .read(detailUserInfoProvider.notifier)
-                        .updateUserProfileImg(ImageSource.camera);
-
-                    if (context.mounted) context.pop();
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: SizedBox(
-                    height: 48.0,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(width: 18.0),
-                          Assets.icons.svg.icCamera.svg(),
-                          const SizedBox(width: 12.0),
-                          Text(
-                            '사진 찍기',
-                            style: CustomTextStyle.body1Medi(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 48.0,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(width: 18.0),
-                        Assets.icons.svg.icFolder.svg(),
-                        const SizedBox(width: 12.0),
-                        Text(
-                          '기본 이미지로 설정하기',
-                          style: CustomTextStyle.body1Medi(),
+                      if (context.mounted) context.pop();
+                    },
+                    child: SizedBox(
+                      height: 48.0,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(width: 18.0),
+                            Assets.icons.svg.icPhoto.svg(),
+                            const SizedBox(width: 12.0),
+                            Text(
+                              '라이브러리에서 선택하기',
+                              style: CustomTextStyle.body1Medi(),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    ),
+                  ),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () async {
+                      ref
+                          .read(detailUserInfoProvider.notifier)
+                          .updateUserProfileImg(ImageSource.camera);
+
+                      if (context.mounted) context.pop();
+                    },
+                    child: SizedBox(
+                      height: 48.0,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(width: 18.0),
+                            Assets.icons.svg.icCamera.svg(),
+                            const SizedBox(width: 12.0),
+                            Text(
+                              '사진 찍기',
+                              style: CustomTextStyle.body1Medi(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () async {
+                      ref
+                          .read(detailUserInfoProvider.notifier)
+                          .updateUserProfileImgToDefault();
+
+                      if (context.mounted) context.pop();
+                    },
+                    child: SizedBox(
+                      height: 48.0,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(width: 18.0),
+                            Assets.icons.svg.icFolder.svg(),
+                            const SizedBox(width: 12.0),
+                            Text(
+                              '기본 이미지로 설정하기',
+                              style: CustomTextStyle.body1Medi(),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),

@@ -10,9 +10,9 @@ class AppInfoMenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return CustomMenuCard(
+      content: '앱 정보',
       onTap: () => context.go(CustomRoutePath.appInfo),
-      child: const CustomMenuCard(content: '앱 정보'),
     );
   }
 }

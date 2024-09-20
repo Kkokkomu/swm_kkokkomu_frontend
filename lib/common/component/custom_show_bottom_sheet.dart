@@ -29,7 +29,7 @@ Future<dynamic> showLoginModalBottomSheet(BuildContext context) {
         final userInfo = ref.watch(userInfoProvider);
 
         return Container(
-          height: 410.0,
+          height: 444.0,
           decoration: const BoxDecoration(
             color: ColorName.white000,
             borderRadius: BorderRadius.only(

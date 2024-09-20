@@ -26,7 +26,8 @@ class LoggedInUserMyPage extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              GestureDetector(
+              InkWell(
+                customBorder: const CircleBorder(),
                 onTap: () => context.go(CustomRoutePath.profile),
                 child: Assets.icons.svg.btnSetting.svg(),
               ),
