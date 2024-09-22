@@ -26,11 +26,15 @@ class AppInfoScreen extends ConsumerWidget {
         style: CustomTextStyle.head4(),
       ),
       centerTitle: true,
-      titleLeading: GestureDetector(
-        onTap: () => context.pop(),
-        child: Assets.icons.svg.btnBack.svg(),
+      titleLeading: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: () => context.pop(),
+          child: Assets.icons.svg.btnBack.svg(),
+        ),
       ),
-      titleLeadingWidth: 44.0,
+      titleLeadingWidth: 48.0,
       appBarBottom: PreferredSize(
         preferredSize: const Size.fromHeight(0),
         child: Container(

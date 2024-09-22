@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/model/hided_user_model.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/model/post_hide_user_model.dart';
 import 'package:swm_kkokkomu_frontend/user_setting/repository/logged_in_user_blocked_user_list_repository.dart';
@@ -10,6 +11,7 @@ final loggedInUserBlockedUserListProvider = StateNotifierProvider.autoDispose<
         ref.watch(loggedInUserBlockedUserListRepositoryProvider);
 
     return LoggedInUserBlockedUserListStateNotifier(
+      ref: ref,
       loggedInUserBlockedUserListRepository:
           loggedInUserBlockedUserListRepository,
     );
@@ -18,12 +20,26 @@ final loggedInUserBlockedUserListProvider = StateNotifierProvider.autoDispose<
 
 class LoggedInUserBlockedUserListStateNotifier
     extends StateNotifier<HidedUserModelBase> {
+  final Ref ref;
   final LoggedInUserBlockedUserListRepository
       loggedInUserBlockedUserListRepository;
+  bool isUnHided = false;
 
   LoggedInUserBlockedUserListStateNotifier({
+    required this.ref,
     required this.loggedInUserBlockedUserListRepository,
   }) : super(HidedUserModelLoading());
+
+  @override
+  void dispose() {
+    // 만약 유저를 한명이라도 차단 해제 했다면, 댓글창 상태를 초기화하여
+    // 차단된 유저의 댓글이 다시 보이도록 함
+    if (isUnHided) {
+      ref.invalidate(shortFormCommentHeightControllerProvider);
+    }
+
+    super.dispose();
+  }
 
   Future<void> getHidedUserList() async {
     state = HidedUserModelLoading();
@@ -85,6 +101,7 @@ class LoggedInUserBlockedUserListStateNotifier
       );
     }
 
+    isUnHided = true;
     return true;
   }
 }

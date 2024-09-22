@@ -6,7 +6,7 @@ part 'enums.g.dart';
 
 enum SocialLoginType { apple, google, kakao }
 
-@JsonEnum(valueField: 'name')
+@JsonEnum(alwaysCreate: true, valueField: 'name')
 enum GenderType {
   man('MAN', '남성'),
   woman('WOMAN', '여성'),
@@ -16,6 +16,11 @@ enum GenderType {
   final String label;
 
   const GenderType(this.name, this.label);
+
+  static final _genderTypeLabelMap =
+      _$GenderTypeEnumMap.map((key, value) => MapEntry(key.label, key));
+
+  static GenderType? fromLabel(String name) => _genderTypeLabelMap[name];
 }
 
 @JsonEnum(alwaysCreate: true, valueField: 'name')

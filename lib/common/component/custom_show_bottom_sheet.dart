@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_close_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_grabber.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
@@ -41,11 +42,11 @@ Future<dynamic> showLoginModalBottomSheet(BuildContext context) {
             children: [
               const SizedBox(height: 5.5),
               const CustomGrabber(),
-              Align(
+              const Align(
                 alignment: Alignment.topRight,
-                child: GestureDetector(
-                  onTap: () => context.pop(),
-                  child: Assets.icons.svg.btnClose.svg(),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 4.0),
+                  child: CustomCloseButton(),
                 ),
               ),
               Assets.icons.svg.imgLoginEmpty.svg(),

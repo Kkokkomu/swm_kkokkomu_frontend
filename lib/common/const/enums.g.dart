@@ -6,6 +6,12 @@ part of 'enums.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+const _$GenderTypeEnumMap = {
+  GenderType.man: 'MAN',
+  GenderType.woman: 'WOMAN',
+  GenderType.none: 'NONE',
+};
+
 const _$ShortFormSortTypeEnumMap = {
   ShortFormSortType.recommend: 'RECOMMEND',
   ShortFormSortType.latest: 'LATEST',

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
+import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/detail_user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/model/put_user_profile_body.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
@@ -87,7 +88,12 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
     }
 
     // 정상적인 응답이라면 상태 반영
+    // detailUserInfo와 userInfo 모두 업데이트
+    // 댓글창 초기화를 통해 댓글 프로필에도 업데이트 반영
+    ref.read(userInfoProvider.notifier).updateUserInfo(respProfile);
+    ref.invalidate(shortFormCommentHeightControllerProvider);
     state = respProfile;
+
     CustomToastMessage.showSuccessToastMessage('프로필 사진이 변경되었습니다.');
     return true;
   }
@@ -117,7 +123,12 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
     }
 
     // 정상적인 응답이라면 상태 반영
+    // detailUserInfo와 userInfo 모두 업데이트
+    // 댓글창 초기화를 통해 댓글 프로필에도 업데이트 반영
+    ref.read(userInfoProvider.notifier).updateUserInfo(respProfile);
+    ref.invalidate(shortFormCommentHeightControllerProvider);
     state = respProfile;
+
     CustomToastMessage.showSuccessToastMessage('프로필 사진이 변경되었습니다.');
     return true;
   }
@@ -134,6 +145,9 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
       return false;
     }
 
+    // 로딩 상태로 변경
+    state = DetailUserModelLoading();
+
     // 서버에 유저 정보 수정 요청
     final resp = await userRepository.updateUserPersonalInfo(
       personalInfo: PutUserProfileBody(
@@ -147,10 +161,15 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
 
     // 정상적인 응답이 아니라면 실패 반환
     if (resp.success != true || respProfile == null) {
+      state = prevState;
       return false;
     }
 
     // 정상적인 응답이라면 상태 반영
+    // detailUserInfo와 userInfo 모두 업데이트
+    // 댓글창 초기화를 통해 댓글 프로필에도 업데이트 반영
+    ref.read(userInfoProvider.notifier).updateUserInfo(respProfile);
+    ref.invalidate(shortFormCommentHeightControllerProvider);
     state = respProfile;
     return true;
   }

@@ -10,6 +10,7 @@ import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_stat
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/secure_storage/secure_storage.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
+import 'package:swm_kkokkomu_frontend/user/model/detail_user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/model/post_register_body.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/repository/auth_repository.dart';
@@ -257,6 +258,30 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
       deviceId: await storage.read(key: SecureStorageKeys.deviceIdKey) ??
           await _createAndSaveDeviceId(),
     );
+  }
+
+  bool updateUserInfo(DetailUserModel detailUserInfo) {
+    // 상태가 UserModel이 아닌 경우는 로직상 에러 (잘못된 상태에서 호출한 경우)
+    if (state is! UserModel) {
+      return false;
+    }
+
+    final prevState = state as UserModel;
+
+    // 이전 상태와 변경할 유저 정보가 같은 경우는 변경할 필요가 없음
+    if (prevState.nickname == detailUserInfo.nickname &&
+        prevState.email == detailUserInfo.email &&
+        prevState.profileImg == detailUserInfo.profileUrl) {
+      return true;
+    }
+
+    state = prevState.copyWith(
+      nickname: detailUserInfo.nickname,
+      email: detailUserInfo.email,
+      profileImg: detailUserInfo.profileUrl,
+    );
+
+    return true;
   }
 
   Future<void> _fetchUserInfoWithToken(UserModelBase prevState) async {

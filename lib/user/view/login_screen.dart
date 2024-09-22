@@ -97,10 +97,10 @@ class LoginScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
-                const SizedBox(height: 19.0),
+                const SizedBox(height: 5.0),
                 if (userInfo is! UserModelLoading)
-                  GestureDetector(
-                    onTap: () =>
+                  TextButton(
+                    onPressed: () =>
                         ref.read(userInfoProvider.notifier).guestLogin(),
                     child: Text(
                       '로그인 없이 둘러보기',

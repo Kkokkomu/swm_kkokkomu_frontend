@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   final String labelText;
   final String? hintText;
   final String? initialValue;
-  final IconData? prefixIcon;
+  final Widget? prefixIcon;
   final TextInputType? keyboardType;
   final bool obscureText;
   final FormFieldValidator<String>? validator;
@@ -12,6 +14,14 @@ class CustomTextFormField extends StatelessWidget {
   final void Function(String?)? onSaved;
   final TextEditingController? controller;
   final AutovalidateMode? autovalidateMode;
+  final Widget? helper;
+  final Widget? errorMessage;
+  final int? maxLength;
+  final Widget? suffixIcon;
+  final FocusNode? focusNode;
+  final bool readOnly;
+  final void Function()? onTap;
+  final bool autofocus;
 
   const CustomTextFormField({
     super.key,
@@ -26,42 +36,119 @@ class CustomTextFormField extends StatelessWidget {
     this.onSaved,
     this.controller,
     this.autovalidateMode,
+    this.helper,
+    this.errorMessage,
+    this.maxLength,
+    this.suffixIcon,
+    this.focusNode,
+    this.readOnly = false,
+    this.onTap,
+    this.autofocus = false,
   });
+
+  @override
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  bool isFocused = false;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(labelText),
-        const SizedBox(
-          height: 8.0,
+        Text(
+          widget.labelText,
+          style: CustomTextStyle.body1Bold(),
         ),
-        TextFormField(
-          controller: controller,
-          autovalidateMode: autovalidateMode,
-          keyboardType: keyboardType,
-          obscureText: obscureText,
-          validator: validator,
-          initialValue: initialValue,
-          onChanged: onChanged,
-          onSaved: onSaved,
-          decoration: InputDecoration(
-            hintText: hintText,
-            prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0),
-              borderSide: const BorderSide(color: Colors.blueAccent),
+        const SizedBox(height: 8.0),
+        Focus(
+          onFocusChange: (bool hasFocus) =>
+              setState(() => isFocused = hasFocus),
+          child: TextFormField(
+            onTap: widget.onTap,
+            readOnly: widget.readOnly,
+            focusNode: widget.focusNode,
+            controller: widget.controller,
+            autovalidateMode: widget.autovalidateMode,
+            keyboardType: widget.keyboardType,
+            obscureText: widget.obscureText,
+            validator: widget.validator,
+            initialValue: widget.initialValue,
+            onChanged: widget.onChanged,
+            onSaved: widget.onSaved,
+            cursorColor: ColorName.blue500,
+            cursorErrorColor: ColorName.error500,
+            style: CustomTextStyle.detail1Reg(
+              color: ColorName.gray600,
+              decorationThickness: 0.0,
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0),
-              borderSide: const BorderSide(color: Colors.blue),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.0),
-              borderSide: const BorderSide(color: Colors.grey),
+            autofocus: widget.autofocus,
+            maxLength: widget.maxLength,
+            decoration: InputDecoration(
+              suffixIcon: isFocused ? widget.suffixIcon : null,
+              suffixIconConstraints:
+                  widget.suffixIcon != null ? const BoxConstraints() : null,
+              counterText: '',
+              errorText: widget.errorMessage != null ? '' : null,
+              isDense: true,
+              contentPadding: const EdgeInsets.all(12.0),
+              filled: true,
+              fillColor: ColorName.gray50,
+              hintText: widget.hintText,
+              hintStyle: CustomTextStyle.detail1Reg(color: ColorName.gray200),
+              prefixIcon: widget.prefixIcon,
+              errorStyle: const TextStyle(
+                color: Colors.transparent,
+                fontSize: 0.0,
+                height: 0.01,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4.0),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4.0),
+                borderSide: const BorderSide(
+                  color: ColorName.blue500,
+                  width: 1.0,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4.0),
+                borderSide: BorderSide.none,
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4.0),
+                borderSide: const BorderSide(
+                  color: ColorName.error500,
+                  width: 1.0,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4.0),
+                borderSide: const BorderSide(
+                  color: ColorName.error500,
+                  width: 1.0,
+                ),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4.0),
+                borderSide: BorderSide.none,
+              ),
             ),
           ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            widget.helper ?? const SizedBox(),
+            Expanded(
+              child: widget.errorMessage ?? const SizedBox(),
+            ),
+          ],
         ),
       ],
     );

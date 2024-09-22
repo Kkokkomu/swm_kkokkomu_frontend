@@ -1,10 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_close_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_grabber.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
@@ -29,15 +30,19 @@ class ProfileScreen extends ConsumerWidget {
         style: CustomTextStyle.head4(),
       ),
       centerTitle: true,
-      titleLeading: GestureDetector(
-        onTap: () => context.pop(),
-        child: Assets.icons.svg.btnBack.svg(),
+      titleLeading: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: () => context.pop(),
+          child: Assets.icons.svg.btnBack.svg(),
+        ),
       ),
-      titleLeadingWidth: 44.0,
+      titleLeadingWidth: 48.0,
       titleActions: detailUserInfo is DetailUserModel
           ? [
               TextButton(
-                onPressed: () {},
+                onPressed: () => context.go(CustomRoutePath.editPersonalInfo),
                 child: Text(
                   '수정',
                   style: CustomTextStyle.body2Bold(color: ColorName.blue500),
@@ -77,22 +82,25 @@ class ProfileScreen extends ConsumerWidget {
                         child: SizedBox(
                           width: 92.0,
                           height: 92.0,
-                          child: CachedNetworkImage(
-                            imageUrl: detailUserInfo.profileUrl != null
+                          child: Image.network(
+                            detailUserInfo.profileUrl != null
                                 ? '${detailUserInfo.profileUrl}?profileEditedAt=${detailUserInfo.profileEditedAt}'
                                 : '',
                             fit: BoxFit.cover,
-                            memCacheHeight:
+                            cacheHeight:
                                 (92.0 * MediaQuery.of(context).devicePixelRatio)
                                     .round(),
-                            placeholder: (_, __) => Skeletonizer(
-                              child: Container(
-                                color: ColorName.gray50,
-                                width: 92.0,
-                                height: 92.0,
-                              ),
-                            ),
-                            errorWidget: (_, __, ___) => Container(
+                            loadingBuilder: (_, child, loadingProgress) =>
+                                loadingProgress == null
+                                    ? child
+                                    : Skeletonizer(
+                                        child: Container(
+                                          color: ColorName.gray50,
+                                          width: 92.0,
+                                          height: 92.0,
+                                        ),
+                                      ),
+                            errorBuilder: (_, __, ___) => Container(
                               color: ColorName.gray50,
                               child: const Icon(Icons.error),
                             ),
@@ -190,10 +198,7 @@ Future<dynamic> showProfileImgSettingBottomSheet(BuildContext context) {
                 style: CustomTextStyle.head3(),
               ),
               const Spacer(),
-              GestureDetector(
-                onTap: () => context.pop(),
-                child: Assets.icons.svg.btnClose.svg(),
-              ),
+              const CustomCloseButton(),
               const SizedBox(width: 4.0),
             ],
           ),

@@ -8,6 +8,7 @@ class CustomRoutePath {
   static const String blockedUserManagement = '/mypage/manage-blocked-users';
   static const String appInfo = '/mypage/info';
   static const String profile = '/mypage/profile';
+  static const String editPersonalInfo = '/mypage/profile/edit-personal-info';
   static const String filter = '/filter';
   static const String explorationShortForm = '/exploration/shortform';
 }

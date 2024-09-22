@@ -1,5 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 
@@ -56,6 +58,24 @@ class UserModel extends UserModelBase {
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
+
+  UserModel copyWith({
+    int? id,
+    String? nickname,
+    String? email,
+    bool? isPremium,
+    String? premiumEndDate,
+    String? profileImg,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      nickname: nickname ?? this.nickname,
+      email: email ?? this.email,
+      isPremium: isPremium ?? this.isPremium,
+      premiumEndDate: premiumEndDate ?? this.premiumEndDate,
+      profileImg: profileImg ?? this.profileImg,
+    );
+  }
 }
 
 class UnregisteredUserModel extends UserModelBase {

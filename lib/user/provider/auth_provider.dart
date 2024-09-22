@@ -13,6 +13,7 @@ import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/view/app_info_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/blocked_user_management_screen.dart';
+import 'package:swm_kkokkomu_frontend/user/view/edit_personal_info_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/login_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/profile_screen.dart';
@@ -59,7 +60,6 @@ class AuthProvider extends ChangeNotifier {
                   builder: (_, __) => const ExplorationScreen(),
                   routes: [
                     GoRoute(
-                      // parentNavigatorKey: rootNavigationKey,
                       path: 'shortform',
                       name: ExplorationShortformScreen.routeName,
                       builder: (_, state) => ExplorationShortformScreen(
@@ -105,6 +105,14 @@ class AuthProvider extends ChangeNotifier {
                       path: 'profile',
                       name: ProfileScreen.routeName,
                       builder: (_, __) => const ProfileScreen(),
+                      routes: [
+                        GoRoute(
+                          parentNavigatorKey: rootNavigationKey,
+                          path: 'edit-personal-info',
+                          name: EditPersonalInfoScreen.routeName,
+                          builder: (_, __) => const EditPersonalInfoScreen(),
+                        ),
+                      ],
                     ),
                     GoRoute(
                       parentNavigatorKey: rootNavigationKey,

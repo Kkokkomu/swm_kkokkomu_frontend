@@ -123,6 +123,7 @@ class CustomTextStyle {
     Color color = textColor,
     TextDecoration? decoration,
     Color? decorationColor,
+    double? decorationThickness,
   }) =>
       TextStyle(
         fontFamily: fontFamily,
@@ -132,6 +133,7 @@ class CustomTextStyle {
         height: 1.4,
         decoration: decoration,
         decorationColor: decorationColor,
+        decorationThickness: decorationThickness,
       );
 
   static TextStyle detail2Bold({Color color = textColor}) => TextStyle(
