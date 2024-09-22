@@ -8,7 +8,7 @@ import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
-import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
+import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/nick_name_validation_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/component/show_select_birthday_bottom_sheet.dart';
@@ -40,31 +40,11 @@ class _EditPersonalInfoScreenState
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: DefaultLayout(
+      child: DefaultLayoutWithDefaultAppBar(
         resizeToAvoidBottomInset: true,
         statusBarBrightness: Brightness.dark,
-        appBarHeight: 48.0,
-        titleWidget: Text(
-          '내 정보 수정',
-          style: CustomTextStyle.head4(),
-        ),
-        centerTitle: true,
-        titleLeading: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2.0),
-          child: InkWell(
-            customBorder: const CircleBorder(),
-            onTap: () => context.pop(),
-            child: Assets.icons.svg.btnBack.svg(),
-          ),
-        ),
-        titleLeadingWidth: 48.0,
-        appBarBottom: PreferredSize(
-          preferredSize: const Size.fromHeight(0),
-          child: Container(
-            color: ColorName.gray100,
-            height: 0.5,
-          ),
-        ),
+        title: '내 정보 수정',
+        onBackButtonPressed: () => context.pop(),
         child: switch (detailUserInfo) {
           DetailUserModelLoading() => const Center(
               child: CircularProgressIndicator(),

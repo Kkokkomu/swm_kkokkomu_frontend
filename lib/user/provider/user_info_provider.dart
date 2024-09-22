@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
@@ -172,7 +173,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
   Future<void> register({
     required String nickname,
     required GenderType sex,
-    required String birthday,
+    required DateTime birthday,
     String? recommendCode,
   }) async {
     final prevState = state;
@@ -194,7 +195,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
         provider: unRegisteredUserState.socialLoginType.name.toUpperCase(),
         nickname: nickname,
         sex: sex,
-        birthday: birthday,
+        birthday: DateFormat('yyyy-MM-dd').format(birthday),
         recommendCode: recommendCode,
       ),
     );

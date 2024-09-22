@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
-import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
-import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
+import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/app_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/component/custom_menu_card.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,30 +17,10 @@ class AppInfoScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appInfo = ref.watch(appInfoProvider);
 
-    return DefaultLayout(
+    return DefaultLayoutWithDefaultAppBar(
       statusBarBrightness: Brightness.dark,
-      appBarHeight: 48.0,
-      titleWidget: Text(
-        '앱 정보',
-        style: CustomTextStyle.head4(),
-      ),
-      centerTitle: true,
-      titleLeading: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2.0),
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: () => context.pop(),
-          child: Assets.icons.svg.btnBack.svg(),
-        ),
-      ),
-      titleLeadingWidth: 48.0,
-      appBarBottom: PreferredSize(
-        preferredSize: const Size.fromHeight(0),
-        child: Container(
-          color: ColorName.gray100,
-          height: 0.5,
-        ),
-      ),
+      title: '앱 정보',
+      onBackButtonPressed: () => context.pop(),
       child: Column(
         children: [
           Container(

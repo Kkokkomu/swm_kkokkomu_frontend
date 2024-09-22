@@ -1,12 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
-import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
-import 'package:swm_kkokkomu_frontend/common/utils/data_utils.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
+import 'package:swm_kkokkomu_frontend/user/component/show_select_birthday_bottom_sheet.dart';
+import 'package:swm_kkokkomu_frontend/user/component/show_select_gender_bottom_sheet.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/nick_name_validation_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -19,15 +24,21 @@ class RegisterScreen extends ConsumerStatefulWidget {
 }
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
-  final _nickNameFormKey = GlobalKey<FormState>();
-  String _nickName = '';
-  DateTime _tempSavedDate = DateTime.now();
-  DateTime _selectedBirthdayDate = DateTime.now();
-  String _birthday = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  GenderType _gender = GenderType.none;
+  final formKey = GlobalKey<FormState>();
+  final nicknameController = TextEditingController();
+  final birthdayController = TextEditingController();
+  final genderController = TextEditingController();
+  DateTime? birthday;
+  GenderType? gender;
+  bool isValid = false;
 
   @override
   Widget build(BuildContext context) {
+    final nickNameValidation =
+        ref.watch(nickNameValidationProvider(formKey).select((value) => value));
+
+    isValid = nickNameValidation.isValid && birthday != null && gender != null;
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
@@ -37,7 +48,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
         final resp = await showConfirmationDialog(
           context: context,
-          content: '회원 등록을 취소하시겠습니까?',
+          content: '회원 등록을 취소하시겠어요?',
+          details: '입력한 정보는 저장되지 않아요',
           confirmText: '등록 취소',
           cancelText: '계속하기',
         );
@@ -46,136 +58,209 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           ref.read(userInfoProvider.notifier).cancelRegister();
         }
       },
-      child: DefaultLayout(
-        statusBarBrightness: Brightness.dark,
-        titleWidget: const Text('기본 회원 정보 등록'),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Form(
-                key: _nickNameFormKey,
-                child: CustomTextFormField(
-                  labelText: '닉네임',
-                  validator: DataUtils.validateNickname,
-                  autovalidateMode: AutovalidateMode.always,
-                  onSaved: (value) {
-                    _nickName = value ?? '';
-                  },
-                ),
-              ),
-              const SizedBox(height: 32.0),
-              Text(
-                _birthday,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Container(
-                      color: Colors.white,
-                      height: 300,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 200,
-                            child: CupertinoDatePicker(
-                              mode: CupertinoDatePickerMode.date,
-                              initialDateTime: _selectedBirthdayDate,
-                              minimumYear: 1900,
-                              maximumYear: DateTime.now().year,
-                              onDateTimeChanged: (DateTime newDateTime) {
-                                _tempSavedDate = newDateTime;
-                              },
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: DefaultLayoutWithDefaultAppBar(
+          resizeToAvoidBottomInset: true,
+          statusBarBrightness: Brightness.dark,
+          title: '프로필 설정',
+          onBackButtonPressed: () async {
+            final resp = await showConfirmationDialog(
+              context: context,
+              content: '회원 등록을 취소하시겠어요?',
+              details: '입력한 정보는 저장되지 않아요',
+              confirmText: '등록 취소',
+              cancelText: '계속하기',
+            );
+
+            if (resp == true) {
+              ref.read(userInfoProvider.notifier).cancelRegister();
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 0.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 24.0),
+                        CustomTextFormField(
+                          controller: nicknameController,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              ref
+                                  .read(nickNameValidationProvider(formKey)
+                                      .notifier)
+                                  .setValidation(value);
+                            });
+
+                            if (ref
+                                .read(nickNameValidationProvider(formKey)
+                                    .notifier)
+                                .validateNickName(value)) {
+                              return null;
+                            } else {
+                              return '';
+                            }
+                          },
+                          labelText: '닉네임',
+                          hintText: '닉네임을 입력해주세요',
+                          maxLength: 10,
+                          suffixIcon: GestureDetector(
+                            onTap: () => nicknameController.clear(),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: Assets.icons.svg.btnDelete.svg(),
                             ),
                           ),
-                          CupertinoButton(
-                            child: const Text('확인'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                _selectedBirthdayDate = _tempSavedDate;
-                                _birthday = DateFormat('yyyy-MM-dd')
-                                    .format(_selectedBirthdayDate);
-                              });
-                            },
+                          helper: Text.rich(
+                            TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  child: nickNameValidation
+                                          .isMoreOrEqualThanTwoCharacters
+                                      ? Assets.icons.svg.icCheckEnabled.svg()
+                                      : Assets.icons.svg.icCheckDisabled.svg(),
+                                  alignment: PlaceholderAlignment.middle,
+                                ),
+                                TextSpan(
+                                  text: '2자 이상\n',
+                                  style: CustomTextStyle.detail3Reg(
+                                    color: nickNameValidation
+                                            .isMoreOrEqualThanTwoCharacters
+                                        ? ColorName.blue500
+                                        : ColorName.gray300,
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: nickNameValidation
+                                          .isAlphaOrNumericOrKorean
+                                      ? Assets.icons.svg.icCheckEnabled.svg()
+                                      : Assets.icons.svg.icCheckDisabled.svg(),
+                                  alignment: PlaceholderAlignment.middle,
+                                ),
+                                TextSpan(
+                                  text: '영어, 완성형 한글, 숫자만',
+                                  style: CustomTextStyle.detail3Reg(
+                                    color: nickNameValidation
+                                            .isAlphaOrNumericOrKorean
+                                        ? ColorName.blue500
+                                        : ColorName.gray300,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                child: const Text('생일선택'),
-              ),
-              const SizedBox(height: 32.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    '성별',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Radio<GenderType>(
-                        value: GenderType.man,
-                        groupValue: _gender,
-                        onChanged: (value) {
-                          setState(() {
-                            _gender = value ?? GenderType.man;
-                          });
-                        },
-                      ),
-                      const Text('남성'),
-                      Radio<GenderType>(
-                        value: GenderType.woman,
-                        groupValue: _gender,
-                        onChanged: (value) {
-                          setState(() {
-                            _gender = value ?? GenderType.woman;
-                          });
-                        },
-                      ),
-                      const Text('여성'),
-                      Radio<GenderType>(
-                        value: GenderType.none,
-                        groupValue: _gender,
-                        onChanged: (value) {
-                          setState(() {
-                            _gender = value ?? GenderType.none;
-                          });
-                        },
-                      ),
-                      const Text('선택안함'),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (!_nickNameFormKey.currentState!.validate()) {
-                          return;
-                        }
-                        _nickNameFormKey.currentState!.save();
-
-                        ref.read(userInfoProvider.notifier).register(
-                              nickname: _nickName,
-                              sex: _gender,
-                              birthday: _birthday,
+                          errorMessage: nickNameValidation.errorMessage == null
+                              ? null
+                              : Text.rich(
+                                  textAlign: TextAlign.end,
+                                  TextSpan(
+                                    children: [
+                                      const WidgetSpan(
+                                        child: SizedBox(height: 24.0),
+                                        alignment: PlaceholderAlignment.middle,
+                                      ),
+                                      TextSpan(
+                                        text: nickNameValidation.errorMessage,
+                                        style: CustomTextStyle.detail3Reg(
+                                          color: ColorName.error500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                        ),
+                        const SizedBox(height: 32.0),
+                        CustomTextFormField(
+                          onTap: () async {
+                            final selectedDate =
+                                await showSelectBirthDayBottomSheet(
+                              context: context,
+                              initialDateTime: DateFormat('yyyy-MM-dd')
+                                      .tryParse(birthdayController.text) ??
+                                  DateTime.now(),
                             );
-                      },
-                      child: const Text('다음'),
+
+                            if (selectedDate != null) {
+                              birthdayController.text =
+                                  DateFormat('yyyy-MM-dd').format(selectedDate);
+                              setState(() {
+                                birthday = selectedDate;
+                              });
+                            }
+                          },
+                          controller: birthdayController,
+                          readOnly: true,
+                          labelText: '생년월일',
+                          hintText: '생년월일을 선택해주세요',
+                        ),
+                        const SizedBox(height: 32.0),
+                        CustomTextFormField(
+                          onTap: () async {
+                            final selectedGender =
+                                await showSelectGenderBottomSheet(
+                              context: context,
+                              initialGender:
+                                  GenderType.fromLabel(genderController.text) ??
+                                      GenderType.none,
+                            );
+
+                            if (selectedGender != null) {
+                              genderController.text = selectedGender.label;
+                              setState(() {
+                                gender = selectedGender;
+                              });
+                            }
+                          },
+                          controller: genderController,
+                          readOnly: true,
+                          labelText: '성별',
+                          hintText: '성별을 선택해주세요',
+                        ),
+                        const SizedBox(height: 24.0),
+                        Container(
+                          width: double.infinity,
+                          height: 0.5,
+                          color: ColorName.gray200,
+                        ),
+                        const SizedBox(height: 18.0),
+                        Text(
+                          '생일과 성별은 맞춤 추천 알고리즘에만 사용되고\n다른 사용자에게 노출되지 않아요',
+                          style: CustomTextStyle.detail1Reg(
+                            color: ColorName.gray300,
+                          ),
+                        ),
+                        const SizedBox(height: 35.0),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: GestureDetector(
+                    onTap: isValid
+                        ? () => ref.read(userInfoProvider.notifier).register(
+                              nickname: nicknameController.text,
+                              sex: gender!,
+                              birthday: birthday!,
+                            )
+                        : null,
+                    child: CustomSelectButton(
+                      content: '다음',
+                      backgroundColor:
+                          isValid ? ColorName.gray600 : ColorName.gray100,
+                      textColor:
+                          isValid ? ColorName.white000 : ColorName.gray200,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
