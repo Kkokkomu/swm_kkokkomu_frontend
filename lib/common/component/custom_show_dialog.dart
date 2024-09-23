@@ -107,26 +107,62 @@ Future<void> showAppExitDialog(BuildContext context) async {
 Future<void> showInfoDialog({
   required BuildContext context,
   required String content,
+  String? details,
 }) {
   return showDialog<void>(
     context: context,
     barrierDismissible: false,
-    builder: (context) => AlertDialog(
-      surfaceTintColor: Colors.white,
-      backgroundColor: Colors.white,
-      content: Text(
-        content,
-        style: const TextStyle(fontSize: 16.0),
+    builder: (_) => AlertDialog(
+      surfaceTintColor: ColorName.white000,
+      backgroundColor: ColorName.white000,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
       ),
-      actions: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.black,
+      content: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: SizedBox(
+          width: MediaQuery.sizeOf(context).width * 0.72,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 32.0),
+              Text(
+                content,
+                textAlign: TextAlign.center,
+                style: CustomTextStyle.body1Bold(),
+              ),
+              const SizedBox(height: 18.0),
+              if (details != null)
+                Text(
+                  details,
+                  textAlign: TextAlign.center,
+                  style: CustomTextStyle.detail1Reg(color: ColorName.gray300),
+                ),
+              const SizedBox(height: 24.0),
+              GestureDetector(
+                onTap: () => context.pop(),
+                child: Container(
+                  height: 52.0,
+                  color: ColorName.gray600,
+                  child: Center(
+                    child: Text(
+                      '확인',
+                      style: CustomTextStyle.body1Bold(
+                        color: ColorName.white000,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          onPressed: () => context.pop(),
-          child: const Text('확인'),
         ),
-      ],
+      ),
+      insetPadding: EdgeInsets.zero,
+      iconPadding: EdgeInsets.zero,
+      titlePadding: EdgeInsets.zero,
+      actionsPadding: EdgeInsets.zero,
+      contentPadding: EdgeInsets.zero,
     ),
   );
 }

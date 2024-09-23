@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
@@ -245,11 +246,38 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                     child: GestureDetector(
                       onTap: isValid
-                          ? () => ref.read(userInfoProvider.notifier).register(
-                                nickname: nicknameController.text,
-                                sex: gender!,
-                                birthday: birthday!,
-                              )
+                          ? () async {
+                              // 회원 등록 요청
+                              final resp = await ref
+                                  .read(userInfoProvider.notifier)
+                                  .register(
+                                    nickname: nicknameController.text,
+                                    sex: gender!,
+                                    birthday: birthday!,
+                                  );
+
+                              // 중복된 닉네임인 경우 다이얼로그 표시
+                              // 다른 에러인 경우 provider 내에서 UserModelError로 처리되어 로그인 화면으로 이동됨
+                              if (!resp.success &&
+                                  resp.errorCode ==
+                                      CustomErrorCode
+                                          .nicknameAlreadyExistsCode &&
+                                  context.mounted) {
+                                // 닉네임 중복시 에러 다이얼로그
+                                showInfoDialog(
+                                  context: context,
+                                  content: '이미 존재하는 닉네임이에요',
+                                  details: '다른 닉네임을 사용해주세요',
+                                );
+
+                                ref
+                                    .read(nickNameValidationProvider(formKey)
+                                        .notifier)
+                                    .setAlreadyExistNickName(
+                                      nicknameController.text,
+                                    );
+                              }
+                            }
                           : null,
                       child: CustomSelectButton(
                         content: '다음',

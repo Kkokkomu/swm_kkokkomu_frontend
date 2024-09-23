@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/model/provider_response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/detail_user_model.dart';
@@ -133,7 +135,7 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
     return true;
   }
 
-  Future<bool> updateUserPersonalInfo({
+  Future<ProviderResponseModel> updateUserPersonalInfo({
     String? nickname,
     String? birthday,
     GenderType? sex,
@@ -142,7 +144,11 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
 
     // 이전 상태가 유효하지 않다면 실패 반환
     if (prevState == null) {
-      return false;
+      return ProviderResponseModel(
+        success: false,
+        errorCode: CustomErrorCode.unknownCode,
+        errorMessage: '정보 수정에 실패했어요',
+      );
     }
 
     // 로딩 상태로 변경
@@ -162,7 +168,11 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
     // 정상적인 응답이 아니라면 실패 반환
     if (resp.success != true || respProfile == null) {
       state = prevState;
-      return false;
+      return ProviderResponseModel(
+        success: false,
+        errorCode: resp.error?.code ?? CustomErrorCode.unknownCode,
+        errorMessage: resp.error?.message ?? '정보 수정에 실패했어요',
+      );
     }
 
     // 정상적인 응답이라면 상태 반영
@@ -171,7 +181,11 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
     ref.read(userInfoProvider.notifier).updateUserInfo(respProfile);
     ref.invalidate(shortFormCommentHeightControllerProvider);
     state = respProfile;
-    return true;
+    return ProviderResponseModel(
+      success: true,
+      errorCode: null,
+      errorMessage: null,
+    );
   }
 
   /// 현재 상태가 유효한지 확인 후, 유효한 경우 prevState 반환

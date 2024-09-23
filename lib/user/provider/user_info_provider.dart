@@ -8,6 +8,7 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/model/provider_response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/secure_storage/secure_storage.dart';
@@ -170,7 +171,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
     );
   }
 
-  Future<void> register({
+  Future<ProviderResponseModel> register({
     required String nickname,
     required GenderType sex,
     required DateTime birthday,
@@ -178,21 +179,23 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
   }) async {
     final prevState = state;
 
-    if (state is! UnregisteredUserModel) {
+    if (prevState is! UnregisteredUserModel) {
       // 등록을 시도하는데 UnregisteredUserModel이 아닌 경우는 로직상 에러
       // 등록에 실패했으므로 에러 토스트 메시지를 띄움
       // 등록화면에서 로그인 화면으로 이동시켜야 하므로 상태를 에러 상태로 변경
-      CustomToastMessage.showLoginError('등록에 실패했습니다.');
-      state = UserModelError(message: '등록에 실패했습니다.');
-      return;
+      CustomToastMessage.showLoginError('등록에 실패했어요');
+      state = UserModelError(message: '등록에 실패했어요');
+      return ProviderResponseModel(
+        success: false,
+        errorCode: CustomErrorCode.unknownCode,
+        errorMessage: '등록에 실패했어요',
+      );
     }
 
-    final unRegisteredUserState = state as UnregisteredUserModel;
-
     final resp = await authRepository.register(
-      authorizationHeader: 'Bearer ${unRegisteredUserState.accessToken}',
+      authorizationHeader: 'Bearer ${prevState.accessToken}',
       requiredBody: PostRegisterBody(
-        provider: unRegisteredUserState.socialLoginType.name.toUpperCase(),
+        provider: prevState.socialLoginType.name.toUpperCase(),
         nickname: nickname,
         sex: sex,
         birthday: DateFormat('yyyy-MM-dd').format(birthday),
@@ -205,11 +208,24 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
 
     // 등록에 실패한 경우
     if (resp.success != true || accessToken == null || refreshToken == null) {
-      // 등록에 실패했으므로 에러 토스트 메시지를 띄움
+      // 닉네임이 중복인 경우 UserModelError로 변경하지 않고 에러 코드와 메세지를 반환
+      if (resp.error?.code == CustomErrorCode.nicknameAlreadyExistsCode) {
+        return ProviderResponseModel(
+          success: false,
+          errorCode: CustomErrorCode.nicknameAlreadyExistsCode,
+          errorMessage: resp.error?.message ?? '이미 존재하는 닉네임이에요',
+        );
+      }
+
+      // 그 외 오류에 의해서 등록에 실패한 경우 에러 토스트 메시지를 띄움
       // 등록화면에서 로그인 화면으로 이동시켜야 하므로 상태를 에러 상태로 변경
-      CustomToastMessage.showLoginError('등록에 실패했습니다.');
-      state = UserModelError(message: '등록에 실패했습니다.');
-      return;
+      CustomToastMessage.showLoginError('등록에 실패했어요');
+      state = UserModelError(message: '등록에 실패했어요');
+      return ProviderResponseModel(
+        success: false,
+        errorCode: resp.error?.code ?? CustomErrorCode.unknownCode,
+        errorMessage: resp.error?.message ?? '등록에 실패했어요',
+      );
     }
 
     // 등록에 성공한 경우 토큰 2개를 받아옴
@@ -220,7 +236,13 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
         key: SecureStorageKeys.refreshTokenKey, value: refreshToken);
 
     // 등록에 성공한 경우 받아온 토큰으로 유저 정보를 가져옴
-    await _fetchUserInfoWithToken(prevState);
+    _fetchUserInfoWithToken(prevState);
+
+    return ProviderResponseModel(
+      success: true,
+      errorCode: null,
+      errorMessage: null,
+    );
   }
 
   void cancelRegister() {

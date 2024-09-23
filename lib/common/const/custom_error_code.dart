@@ -13,4 +13,7 @@ class CustomErrorCode {
 
   // 이미 해당 이메일로 가입된 계정이 있는 경우
   static const String emailAlreadyExistsCode = '40015';
+
+  // 닉네임이 중복된 경우
+  static const String nicknameAlreadyExistsCode = '40007';
 }

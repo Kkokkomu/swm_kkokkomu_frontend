@@ -9,6 +9,8 @@ final nickNameValidationProvider = StateNotifierProvider.family
 
 class NickNameValidationStateNotifier
     extends StateNotifier<NickNameValidationModel> {
+  final Set<String> _alreadyExistNickName = <String>{};
+
   NickNameValidationStateNotifier()
       : super(
           NickNameValidationModel(
@@ -24,7 +26,6 @@ class NickNameValidationStateNotifier
       isMoreOrEqualThanTwoCharacters: true,
       isLessOrEqualThanTenCharacters: true,
       isAlphaOrNumericOrKorean: true,
-      errorMessage: null,
     );
 
     // 닉네임이 비어있는 경우 모두 false로 설정 후 리턴
@@ -58,6 +59,10 @@ class NickNameValidationStateNotifier
       );
     }
 
+    if (_alreadyExistNickName.contains(nickName)) {
+      nextState = nextState.copyWith(errorMessage: '이미 존재하는 닉네임이에요');
+    }
+
     // 최종 상태 설정
     state = nextState;
   }
@@ -83,5 +88,10 @@ class NickNameValidationStateNotifier
     }
 
     return true;
+  }
+
+  void setAlreadyExistNickName(String nickname) {
+    _alreadyExistNickName.add(nickname);
+    state = state.copyWith(errorMessage: '이미 존재하는 닉네임이에요');
   }
 }
