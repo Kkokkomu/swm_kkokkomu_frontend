@@ -66,6 +66,19 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "app"
+
+    productFlavors {
+        dev {
+            dimension "app"
+            applicationIdSuffix ".dev"
+        }
+
+        prod {
+            dimension "app"
+        }
+    }
 }
 
 flutter {
