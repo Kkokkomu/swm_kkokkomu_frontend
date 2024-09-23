@@ -39,8 +39,8 @@ class SplashScreen extends ConsumerWidget {
         if (next is AppInfoModelError) {
           showForceCheckDialog(
             context: context,
-            content: '앱이 점검중이에요',
-            details: '잠시 후 다시 접속해주세요',
+            content: '앱이 점검중이거나 업데이트가 필요해요',
+            details: '업데이트를 확인해주세요',
             checkMessage: '종료',
             onCheck: () => SystemNavigator.pop(),
           );
