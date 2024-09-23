@@ -240,22 +240,24 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: GestureDetector(
-                    onTap: isValid
-                        ? () => ref.read(userInfoProvider.notifier).register(
-                              nickname: nicknameController.text,
-                              sex: gender!,
-                              birthday: birthday!,
-                            )
-                        : null,
-                    child: CustomSelectButton(
-                      content: '다음',
-                      backgroundColor:
-                          isValid ? ColorName.gray600 : ColorName.gray100,
-                      textColor:
-                          isValid ? ColorName.white000 : ColorName.gray200,
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: GestureDetector(
+                      onTap: isValid
+                          ? () => ref.read(userInfoProvider.notifier).register(
+                                nickname: nicknameController.text,
+                                sex: gender!,
+                                birthday: birthday!,
+                              )
+                          : null,
+                      child: CustomSelectButton(
+                        content: '다음',
+                        backgroundColor:
+                            isValid ? ColorName.gray600 : ColorName.gray100,
+                        textColor:
+                            isValid ? ColorName.white000 : ColorName.gray200,
+                      ),
                     ),
                   ),
                 ),

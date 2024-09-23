@@ -237,45 +237,47 @@ class _EditPersonalInfoScreenState
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        child: GestureDetector(
-                          onTap: nickNameValidation.isValid
-                              ? () async {
-                                  // 내 정보 수정 요청
-                                  final resp = await ref
-                                      .read(detailUserInfoProvider.notifier)
-                                      .updateUserPersonalInfo(
-                                        nickname: nicknameController.text,
-                                        birthday: birthdayController.text,
-                                        sex: GenderType.fromLabel(
-                                          genderController.text,
-                                        ),
+                      SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: GestureDetector(
+                            onTap: nickNameValidation.isValid
+                                ? () async {
+                                    // 내 정보 수정 요청
+                                    final resp = await ref
+                                        .read(detailUserInfoProvider.notifier)
+                                        .updateUserPersonalInfo(
+                                          nickname: nicknameController.text,
+                                          birthday: birthdayController.text,
+                                          sex: GenderType.fromLabel(
+                                            genderController.text,
+                                          ),
+                                        );
+
+                                    // 내 정보 수정 실패
+                                    if (!resp) {
+                                      CustomToastMessage.showErrorToastMessage(
+                                        '내 정보 수정에 실패했습니다',
                                       );
+                                      return;
+                                    }
 
-                                  // 내 정보 수정 실패
-                                  if (!resp) {
-                                    CustomToastMessage.showErrorToastMessage(
-                                      '내 정보 수정에 실패했습니다',
+                                    // 내 정보 수정 성공
+                                    CustomToastMessage.showSuccessToastMessage(
+                                      '내 정보가 수정되었습니다',
                                     );
-                                    return;
+                                    if (context.mounted) context.pop();
                                   }
-
-                                  // 내 정보 수정 성공
-                                  CustomToastMessage.showSuccessToastMessage(
-                                    '내 정보가 수정되었습니다',
-                                  );
-                                  if (context.mounted) context.pop();
-                                }
-                              : null,
-                          child: CustomSelectButton(
-                            content: '저장',
-                            backgroundColor: nickNameValidation.isValid
-                                ? ColorName.gray600
-                                : ColorName.gray100,
-                            textColor: nickNameValidation.isValid
-                                ? ColorName.white000
-                                : ColorName.gray200,
+                                : null,
+                            child: CustomSelectButton(
+                              content: '저장',
+                              backgroundColor: nickNameValidation.isValid
+                                  ? ColorName.gray600
+                                  : ColorName.gray100,
+                              textColor: nickNameValidation.isValid
+                                  ? ColorName.white000
+                                  : ColorName.gray200,
+                            ),
                           ),
                         ),
                       ),
