@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
-import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 // import 'package:swm_kkokkomu_frontend/common/model/provider_logger_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 
 void main() async {
-  // 제일 먼저 env 파일 로드
-  await dotenv.load(fileName: Assets.config.aEnv);
-
   // 앱 최초 실행 시 secure storage 초기화
   final prefs = await SharedPreferences.getInstance();
   if (prefs.getBool(SharedPreferencesKeys.isFirstRun) ?? true) {
@@ -80,7 +75,7 @@ class _App extends ConsumerWidget {
         Locale('ko', ''),
       ],
       routerConfig: router,
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: Constants.flavor == 'dev',
     );
   }
 }

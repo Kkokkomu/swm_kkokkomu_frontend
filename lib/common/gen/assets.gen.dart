@@ -18,8 +18,11 @@ class $AssetsConfigGen {
   /// File path: assets/config/.env
   String get aEnv => 'assets/config/.env';
 
+  /// File path: assets/config/.env.dev
+  String get aEnvDev => 'assets/config/.env.dev';
+
   /// List of all assets
-  List<String> get values => [aEnv];
+  List<String> get values => [aEnv, aEnvDev];
 }
 
 class $AssetsIconsGen {

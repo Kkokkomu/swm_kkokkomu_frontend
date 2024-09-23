@@ -19,6 +19,7 @@ class Constants {
   static final String baseUrl = dotenv.env['BASE_URL'] ?? '';
   static final String? defaultProfileImageUrl =
       dotenv.env['DEFAULT_PROFILE_IMAGE_URL'];
+  static final String? flavor = dotenv.env['FLAVOR'];
 
   // BottomNavigationBar 높이
   static const double bottomNavigationBarHeight = 60.0;
