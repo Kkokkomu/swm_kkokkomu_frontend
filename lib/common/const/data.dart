@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -20,6 +22,9 @@ class Constants {
   static final String? defaultProfileImageUrl =
       dotenv.env['DEFAULT_PROFILE_IMAGE_URL'];
   static final String? flavor = dotenv.env['FLAVOR'];
+  static final String appInfoUrl = Platform.isIOS
+      ? dotenv.env['IOS_APP_INFO_URL'] ?? ''
+      : dotenv.env['ANDROID_APP_INFO_URL'] ?? '';
 
   // BottomNavigationBar 높이
   static const double bottomNavigationBarHeight = 60.0;

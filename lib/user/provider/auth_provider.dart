@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
+import 'package:swm_kkokkomu_frontend/common/model/app_info_model.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/app_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router_navigator_key_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/view/root_tab.dart';
 import 'package:swm_kkokkomu_frontend/common/view/splash_screen.dart';
@@ -38,6 +40,15 @@ class AuthProvider extends ChangeNotifier {
   }) {
     ref.listen<UserModelBase?>(
       userInfoProvider,
+      (previous, next) {
+        if (previous != next) {
+          notifyListeners();
+        }
+      },
+    );
+
+    ref.listen<AppInfoModelBase>(
+      appInfoProvider,
       (previous, next) {
         if (previous != next) {
           notifyListeners();
@@ -148,6 +159,15 @@ class AuthProvider extends ChangeNotifier {
   }
 
   String? redirectLogic(BuildContext _, GoRouterState state) {
+    // 강제 업데이트 여부 확인
+    final appInfo = ref.read(appInfoProvider);
+
+    // AppInfoModel이 아닌 경우 null 반환
+    // 즉, splash screen을 계속 유지
+    if (appInfo is! AppInfoModel) {
+      return null;
+    }
+
     final UserModelBase user = ref.read(userInfoProvider);
 
     // SplashScreen인지 여부

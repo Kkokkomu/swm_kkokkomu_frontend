@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
+import 'package:swm_kkokkomu_frontend/common/model/app_info_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/app_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/component/custom_menu_card.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -44,11 +45,9 @@ class AppInfoScreen extends ConsumerWidget {
                   ),
                   const Spacer(),
                   Text(
-                    appInfo.when(
-                      data: (data) => 'v${data.version}',
-                      loading: () => '',
-                      error: (_, __) => '',
-                    ),
+                    appInfo is AppInfoModel
+                        ? 'v${appInfo.currentAppInfo.version}'
+                        : '',
                     style: CustomTextStyle.detail1Reg(color: ColorName.blue500),
                   ),
                   const SizedBox(width: 18.0)
