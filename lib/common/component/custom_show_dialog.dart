@@ -27,17 +27,23 @@ Future<bool?> showConfirmationDialog({
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 32.0),
-              Text(
-                content,
-                textAlign: TextAlign.center,
-                style: CustomTextStyle.body1Bold(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Text(
+                  content,
+                  textAlign: TextAlign.center,
+                  style: CustomTextStyle.body1Bold(),
+                ),
               ),
               const SizedBox(height: 18.0),
               if (details != null)
-                Text(
-                  details,
-                  textAlign: TextAlign.center,
-                  style: CustomTextStyle.detail1Reg(color: ColorName.gray300),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Text(
+                    details,
+                    textAlign: TextAlign.center,
+                    style: CustomTextStyle.detail1Reg(color: ColorName.gray300),
+                  ),
                 ),
               const SizedBox(height: 24.0),
               Row(
@@ -127,17 +133,23 @@ Future<void> showInfoDialog({
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 32.0),
-              Text(
-                content,
-                textAlign: TextAlign.center,
-                style: CustomTextStyle.body1Bold(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Text(
+                  content,
+                  textAlign: TextAlign.center,
+                  style: CustomTextStyle.body1Bold(),
+                ),
               ),
               const SizedBox(height: 18.0),
               if (details != null)
-                Text(
-                  details,
-                  textAlign: TextAlign.center,
-                  style: CustomTextStyle.detail1Reg(color: ColorName.gray300),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Text(
+                    details,
+                    textAlign: TextAlign.center,
+                    style: CustomTextStyle.detail1Reg(color: ColorName.gray300),
+                  ),
                 ),
               const SizedBox(height: 24.0),
               GestureDetector(
@@ -194,17 +206,24 @@ Future<void> showForceCheckDialog({
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 32.0),
-                Text(
-                  content,
-                  textAlign: TextAlign.center,
-                  style: CustomTextStyle.body1Bold(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Text(
+                    content,
+                    textAlign: TextAlign.center,
+                    style: CustomTextStyle.body1Bold(),
+                  ),
                 ),
                 const SizedBox(height: 18.0),
                 if (details != null)
-                  Text(
-                    details,
-                    textAlign: TextAlign.center,
-                    style: CustomTextStyle.detail1Reg(color: ColorName.gray300),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: Text(
+                      details,
+                      textAlign: TextAlign.center,
+                      style:
+                          CustomTextStyle.detail1Reg(color: ColorName.gray300),
+                    ),
                   ),
                 const SizedBox(height: 24.0),
                 GestureDetector(

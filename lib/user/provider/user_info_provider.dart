@@ -127,7 +127,8 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
               .configuration
               .navigatorKey
               .currentContext!,
-          content: resp.error?.message ?? '이미 해당 이메일로 가입된 다른 소셜 계정이 있습니다.',
+          content: '이미 해당 이메일로 가입된\n다른 소셜 계정이 있어요',
+          details: '다른 소셜 계정을 사용해주세요',
         );
       } else {
         // 다른 에러 코드인 경우는 에러 토스트 메시지를 띄움
