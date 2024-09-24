@@ -6,12 +6,16 @@ class SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomFloatingButton(
-      icon: const Icon(
-        Icons.search,
-        color: Colors.white,
+    // TODO : 구현 필요
+    return Visibility(
+      visible: false,
+      child: CustomFloatingButton(
+        icon: const Icon(
+          Icons.search,
+          color: Colors.white,
+        ),
+        onTap: () {},
       ),
-      onTap: () {},
     );
   }
 }

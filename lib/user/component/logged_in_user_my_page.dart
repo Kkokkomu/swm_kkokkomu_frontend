@@ -31,7 +31,11 @@ class LoggedInUserMyPage extends ConsumerWidget {
                 onTap: () => context.go(CustomRoutePath.profile),
                 child: Assets.icons.svg.btnSetting.svg(),
               ),
-              Assets.icons.svg.btnNoticeDefault.svg(),
+              // TODO : 구현 필요
+              Visibility(
+                visible: false,
+                child: Assets.icons.svg.btnNoticeDefault.svg(),
+              ),
               const SizedBox(width: 4.0),
             ],
           ),

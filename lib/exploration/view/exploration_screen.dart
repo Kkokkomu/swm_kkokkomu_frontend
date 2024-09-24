@@ -70,17 +70,25 @@ class ExplorationScreen extends ConsumerWidget {
                     ),
                   ),
                   const Spacer(),
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      // Handle search icon press
-                    },
+                  // TODO : 구현 필요
+                  Visibility(
+                    visible: false,
+                    child: IconButton(
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        // Handle search icon press
+                      },
+                    ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.notifications_none),
-                    onPressed: () {
-                      // Handle more icon press
-                    },
+                  // TODO : 구현 필요
+                  Visibility(
+                    visible: false,
+                    child: IconButton(
+                      icon: const Icon(Icons.notifications_none),
+                      onPressed: () {
+                        // Handle more icon press
+                      },
+                    ),
                   ),
                 ],
               ),
