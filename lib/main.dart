@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -10,7 +11,7 @@ import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 // import 'package:swm_kkokkomu_frontend/common/model/provider_logger_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 
-void main() async {
+void main(name, options) async {
   // 앱 최초 실행 시 secure storage 초기화
   final prefs = await SharedPreferences.getInstance();
   if (prefs.getBool(SharedPreferencesKeys.isFirstRun) ?? true) {
@@ -21,6 +22,12 @@ void main() async {
 
   // 웹 환경에서 카카오 로그인을 정상적으로 완료하려면 runApp() 호출 전 아래 메서드 호출 필요
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Firebase 초기화
+  await Firebase.initializeApp(
+    name: name,
+    options: options,
+  );
 
   // runApp() 호출 전 Flutter SDK 초기화
   KakaoSdk.init(
