@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -52,6 +53,11 @@ void main(name, options) async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
+
+  // debug 모드일 때만 debugPrint로 로그 출력
+  if (!kDebugMode) {
+    debugPrint = (String? message, {int? wrapWidth}) {};
+  }
 
   runApp(
     const ProviderScope(
