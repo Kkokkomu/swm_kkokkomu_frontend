@@ -4,6 +4,7 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_send_button.dart';
 
 Future<dynamic> showShortFormCommentInputBottomSheet({
@@ -18,6 +19,7 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
+    backgroundColor: ColorName.white000,
     builder: (BuildContext _) {
       return PopScope(
         // 댓글 수정인 경우 뒤로가기를 통해 취소시 다이얼로그를 띄워 한번 더 확인
