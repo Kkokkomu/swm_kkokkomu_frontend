@@ -1,4 +1,4 @@
-package com.example.swm_kkokkomu_frontend
+package com.newsnack.swm
 
 import io.flutter.embedding.android.FlutterActivity
 
