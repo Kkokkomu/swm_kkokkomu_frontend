@@ -61,4 +61,10 @@ abstract class UserRepository {
     'accessToken': true,
   })
   Future<ResponseModel<UserModel?>> getUserInfo();
+
+  @DELETE('/exit')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<String?>> deleteAccount();
 }

@@ -130,6 +130,17 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
           content: '이미 해당 이메일로 가입된\n다른 소셜 계정이 있어요',
           details: '다른 소셜 계정을 사용해주세요',
         );
+      } else if (resp.error?.code == CustomErrorCode.userDeletedCode) {
+        // 탈퇴한 유저가 로그인 시도한 경우
+        showInfoDialog(
+          context: ref
+              .read(routerProvider)
+              .configuration
+              .navigatorKey
+              .currentContext!,
+          content: '이미 탈퇴 처리된 계정이에요',
+          details: '다른 이메일로 가입해주세요',
+        );
       } else {
         // 다른 에러 코드인 경우는 에러 토스트 메시지를 띄움
         CustomToastMessage.showLoginError('로그인에 실패했습니다.');
@@ -283,6 +294,25 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
           await _createAndSaveDeviceId(),
     );
   }
+
+  Future<bool> deleteAccount() async {
+    final resp = await userRepository.deleteAccount();
+
+    if (resp.success != true) {
+      return false;
+    }
+
+    await Future.wait(
+      [
+        storage.delete(key: SecureStorageKeys.refreshTokenKey),
+        storage.delete(key: SecureStorageKeys.accessTokenKey),
+      ],
+    );
+
+    return true;
+  }
+
+  void setUserModelToInitial() => state = InitialUserModel();
 
   bool updateUserInfo(DetailUserModel detailUserInfo) {
     // 상태가 UserModel이 아닌 경우는 로직상 에러 (잘못된 상태에서 호출한 경우)

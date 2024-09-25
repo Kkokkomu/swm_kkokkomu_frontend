@@ -16,4 +16,7 @@ class CustomErrorCode {
 
   // 닉네임이 중복된 경우
   static const String nicknameAlreadyExistsCode = '40007';
+
+  // 탈퇴한 사용자가 로그인 시도하는 경우
+  static const String userDeletedCode = '40014';
 }

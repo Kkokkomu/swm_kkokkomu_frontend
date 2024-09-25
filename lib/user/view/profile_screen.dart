@@ -48,104 +48,133 @@ class ProfileScreen extends ConsumerWidget {
               style: CustomTextStyle.body2Reg(),
             ),
           ),
-        DetailUserModel() => Column(
-            children: [
-              const SizedBox(height: 32.0),
-              Center(
-                child: GestureDetector(
-                  onTap: () => showProfileImgSettingBottomSheet(context),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: SizedBox(
-                          width: 92.0,
-                          height: 92.0,
-                          child: Image.network(
-                            detailUserInfo.profileUrl != null
-                                ? '${detailUserInfo.profileUrl}?profileEditedAt=${detailUserInfo.profileEditedAt}'
-                                : '',
-                            fit: BoxFit.cover,
-                            cacheHeight:
-                                (92.0 * MediaQuery.of(context).devicePixelRatio)
-                                    .round(),
-                            loadingBuilder: (_, child, loadingProgress) =>
-                                loadingProgress == null
-                                    ? child
-                                    : Skeletonizer(
-                                        child: Container(
-                                          color: ColorName.gray50,
-                                          width: 92.0,
-                                          height: 92.0,
+        DetailUserModel() => SafeArea(
+            child: Column(
+              children: [
+                const SizedBox(height: 32.0),
+                Center(
+                  child: GestureDetector(
+                    onTap: () => showProfileImgSettingBottomSheet(context),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: SizedBox(
+                            width: 92.0,
+                            height: 92.0,
+                            child: Image.network(
+                              detailUserInfo.profileUrl != null
+                                  ? '${detailUserInfo.profileUrl}?profileEditedAt=${detailUserInfo.profileEditedAt}'
+                                  : '',
+                              fit: BoxFit.cover,
+                              cacheHeight: (92.0 *
+                                      MediaQuery.of(context).devicePixelRatio)
+                                  .round(),
+                              loadingBuilder: (_, child, loadingProgress) =>
+                                  loadingProgress == null
+                                      ? child
+                                      : Skeletonizer(
+                                          child: Container(
+                                            color: ColorName.gray50,
+                                            width: 92.0,
+                                            height: 92.0,
+                                          ),
                                         ),
-                                      ),
-                            errorBuilder: (_, __, ___) => Container(
-                              color: ColorName.gray50,
-                              child: const Icon(Icons.error),
+                              errorBuilder: (_, __, ___) => Container(
+                                color: ColorName.gray50,
+                                child: const Icon(Icons.error),
+                              ),
                             ),
                           ),
                         ),
+                        Positioned(
+                          bottom: -8.0,
+                          right: -8.0,
+                          child: Assets.icons.svg.btnProfileEdit.svg(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            '닉네임',
+                            style: CustomTextStyle.body1Bold(),
+                          ),
+                          const Spacer(),
+                          Text(
+                            detailUserInfo.nickname,
+                            style: CustomTextStyle.body1Reg(),
+                          ),
+                        ],
                       ),
-                      Positioned(
-                        bottom: -8.0,
-                        right: -8.0,
-                        child: Assets.icons.svg.btnProfileEdit.svg(),
+                      const SizedBox(height: 27.0),
+                      Row(
+                        children: [
+                          Text(
+                            '생년월일',
+                            style: CustomTextStyle.body1Bold(),
+                          ),
+                          const Spacer(),
+                          Text(
+                            detailUserInfo.birthday,
+                            style: CustomTextStyle.body1Reg(),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 27.0),
+                      Row(
+                        children: [
+                          Text(
+                            '성별',
+                            style: CustomTextStyle.body1Bold(),
+                          ),
+                          const Spacer(),
+                          Text(
+                            detailUserInfo.sex.label,
+                            style: CustomTextStyle.body1Reg(),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 32.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: Column(
-                  children: [
-                    Row(
+                const Spacer(),
+                GestureDetector(
+                  onTap: () => context.go(CustomRoutePath.accountDeletion),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: ColorName.gray200,
+                          width: 0.5,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          '닉네임',
-                          style: CustomTextStyle.body1Bold(),
+                          '탈퇴하기',
+                          style: CustomTextStyle.detail2Reg(
+                              color: ColorName.gray200),
                         ),
-                        const Spacer(),
-                        Text(
-                          detailUserInfo.nickname,
-                          style: CustomTextStyle.body1Reg(),
-                        ),
+                        Assets.icons.svg.icUnsubscribe.svg(),
                       ],
                     ),
-                    const SizedBox(height: 27.0),
-                    Row(
-                      children: [
-                        Text(
-                          '생년월일',
-                          style: CustomTextStyle.body1Bold(),
-                        ),
-                        const Spacer(),
-                        Text(
-                          detailUserInfo.birthday,
-                          style: CustomTextStyle.body1Reg(),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 27.0),
-                    Row(
-                      children: [
-                        Text(
-                          '성별',
-                          style: CustomTextStyle.body1Bold(),
-                        ),
-                        const Spacer(),
-                        Text(
-                          detailUserInfo.sex.label,
-                          style: CustomTextStyle.body1Reg(),
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 18.0),
+              ],
+            ),
           ),
       },
     );

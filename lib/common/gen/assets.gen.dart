@@ -315,6 +315,10 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icUnlike =>
       const SvgGenImage('assets/icons/svg/ic_unlike.svg');
 
+  /// File path: assets/icons/svg/ic_unsubscribe.svg
+  SvgGenImage get icUnsubscribe =>
+      const SvgGenImage('assets/icons/svg/ic_unsubscribe.svg');
+
   /// File path: assets/icons/svg/ic_world_blue.svg
   SvgGenImage get icWorldBlue =>
       const SvgGenImage('assets/icons/svg/ic_world_blue.svg');
@@ -402,6 +406,7 @@ class $AssetsIconsSvgGen {
         icSurpriseGray,
         icSurpriseWhite,
         icUnlike,
+        icUnsubscribe,
         icWorldBlue,
         icWorldGray,
         imgLoginEmpty,

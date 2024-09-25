@@ -13,6 +13,7 @@ import 'package:swm_kkokkomu_frontend/shortform/view/shortform_filter_screen.dar
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
+import 'package:swm_kkokkomu_frontend/user/view/account_deletion_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/app_info_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/blocked_user_management_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/edit_personal_info_screen.dart';
@@ -122,6 +123,12 @@ class AuthProvider extends ChangeNotifier {
                           path: 'edit-personal-info',
                           name: EditPersonalInfoScreen.routeName,
                           builder: (_, __) => const EditPersonalInfoScreen(),
+                        ),
+                        GoRoute(
+                          parentNavigatorKey: rootNavigationKey,
+                          path: 'account-deletion',
+                          name: AccountDeletionScreen.routeName,
+                          builder: (_, __) => const AccountDeletionScreen(),
                         ),
                       ],
                     ),
