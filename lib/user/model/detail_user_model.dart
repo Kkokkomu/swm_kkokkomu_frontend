@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/utils/custom_date_utils.dart';
 
 part 'detail_user_model.g.dart';
 
@@ -22,7 +23,11 @@ class DetailUserModel extends DetailUserModelBase {
   final String nickname;
   final String email;
   final GenderType sex;
-  final String birthday;
+  @JsonKey(
+    fromJson: CustomDateUtils.parseDateTime,
+    toJson: CustomDateUtils.formatDateTime,
+  )
+  final DateTime birthday;
   final String createdAt;
   final String editedAt;
   final String profileEditedAt;
@@ -33,7 +38,7 @@ class DetailUserModel extends DetailUserModelBase {
     String? nickname,
     String? email,
     GenderType? sex,
-    String? birthday,
+    required this.birthday,
     String? createdAt,
     String? editedAt,
     String? profileEditedAt,
@@ -42,7 +47,6 @@ class DetailUserModel extends DetailUserModelBase {
         nickname = nickname ?? Constants.unknownErrorString,
         email = email ?? Constants.unknownErrorString,
         sex = sex ?? GenderType.none,
-        birthday = birthday ?? Constants.unknownErrorString,
         createdAt = createdAt ?? Constants.unknownErrorString,
         editedAt = editedAt ?? Constants.unknownErrorString,
         profileEditedAt =

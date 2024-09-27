@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
@@ -210,7 +209,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
         provider: prevState.socialLoginType.name.toUpperCase(),
         nickname: nickname,
         sex: sex,
-        birthday: DateFormat('yyyy-MM-dd').format(birthday),
+        birthday: birthday,
         recommendCode: recommendCode,
       ),
     );

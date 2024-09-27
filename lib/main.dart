@@ -86,6 +86,11 @@ class _App extends ConsumerWidget {
           selectionColor: ColorName.blue200,
           selectionHandleColor: ColorName.blue500,
         ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            overlayColor: ColorName.gray300,
+          ),
+        ),
       ),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

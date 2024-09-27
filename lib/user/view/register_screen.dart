@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
@@ -10,7 +9,7 @@ import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
-import 'package:swm_kkokkomu_frontend/user/component/show_select_birthday_bottom_sheet.dart';
+import 'package:swm_kkokkomu_frontend/user/component/show_select_birth_year_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/user/component/show_select_gender_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/nick_name_validation_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
@@ -180,16 +179,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         CustomTextFormField(
                           onTap: () async {
                             final selectedDate =
-                                await showSelectBirthDayBottomSheet(
+                                await showSelectBirthYearBottomSheet(
                               context: context,
-                              initialDateTime: DateFormat('yyyy-MM-dd')
-                                      .tryParse(birthdayController.text) ??
-                                  DateTime.now(),
+                              initialDateTime: birthday ?? DateTime.now(),
                             );
 
                             if (selectedDate != null) {
-                              birthdayController.text =
-                                  DateFormat('yyyy-MM-dd').format(selectedDate);
+                              birthdayController.text = '${selectedDate.year}년';
                               setState(() {
                                 birthday = selectedDate;
                               });
@@ -197,8 +193,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           },
                           controller: birthdayController,
                           readOnly: true,
-                          labelText: '생년월일',
-                          hintText: '생년월일을 선택해주세요',
+                          labelText: '출생연도',
+                          hintText: '출생연도를 선택해주세요',
                         ),
                         const SizedBox(height: 32.0),
                         CustomTextFormField(

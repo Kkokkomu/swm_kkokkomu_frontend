@@ -6,10 +6,11 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
-Future<DateTime?> showSelectBirthDayBottomSheet({
+Future<DateTime?> showSelectBirthYearBottomSheet({
   required BuildContext context,
   required DateTime initialDateTime,
 }) {
+  final int currentYear = DateTime.now().year;
   DateTime tempSavedDate = initialDateTime;
 
   return showModalBottomSheet(
@@ -49,15 +50,24 @@ Future<DateTime?> showSelectBirthDayBottomSheet({
                         dateTimePickerTextStyle: CustomTextStyle.head4(),
                       ),
                     ),
-                    child: CupertinoDatePicker(
-                      mode: CupertinoDatePickerMode.date,
-                      itemExtent: 35.0,
-                      initialDateTime: initialDateTime,
-                      minimumYear: 1900,
-                      maximumYear: DateTime.now().year,
-                      onDateTimeChanged: (DateTime newDateTime) {
-                        tempSavedDate = newDateTime;
-                      },
+                    child: CupertinoPicker.builder(
+                      scrollController: FixedExtentScrollController(
+                        initialItem: currentYear - initialDateTime.year,
+                      ),
+                      childCount: currentYear - 1900 + 1,
+                      itemBuilder: (context, index) => Center(
+                        child: Text(
+                          '${currentYear - index}년',
+                          style: CustomTextStyle.head4(),
+                        ),
+                      ),
+                      selectionOverlay: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 2.5),
+                        child: CupertinoPickerDefaultSelectionOverlay(),
+                      ),
+                      itemExtent: 40.0,
+                      onSelectedItemChanged: (int index) =>
+                          tempSavedDate = DateTime(currentYear - index),
                     ),
                   ),
                 ),

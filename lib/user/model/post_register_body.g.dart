@@ -11,7 +11,7 @@ PostRegisterBody _$PostRegisterBodyFromJson(Map<String, dynamic> json) =>
       provider: json['provider'] as String,
       nickname: json['nickname'] as String,
       sex: $enumDecode(_$GenderTypeEnumMap, json['sex']),
-      birthday: json['birthday'] as String,
+      birthday: CustomDateUtils.parseDateTime(json['birthday'] as String?),
       recommendCode: json['recommendCode'] as String?,
     );
 
@@ -20,7 +20,7 @@ Map<String, dynamic> _$PostRegisterBodyToJson(PostRegisterBody instance) {
     'provider': instance.provider,
     'nickname': instance.nickname,
     'sex': _$GenderTypeEnumMap[instance.sex]!,
-    'birthday': instance.birthday,
+    'birthday': CustomDateUtils.formatDateTime(instance.birthday),
   };
 
   void writeNotNull(String key, dynamic value) {

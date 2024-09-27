@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
@@ -13,7 +12,7 @@ import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/nick_name_validation_provider.dart';
-import 'package:swm_kkokkomu_frontend/user/component/show_select_birthday_bottom_sheet.dart';
+import 'package:swm_kkokkomu_frontend/user/component/show_select_birth_year_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/user/component/show_select_gender_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/user/model/detail_user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/detail_user_info_provider.dart';
@@ -35,6 +34,7 @@ class _EditPersonalInfoScreenState
   final birthdayController = TextEditingController();
   final genderController = TextEditingController();
   bool isInitialized = false;
+  DateTime birthYearDateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,9 @@ class _EditPersonalInfoScreenState
 
     if (!isInitialized && detailUserInfo is DetailUserModel) {
       isInitialized = true;
+      birthYearDateTime = detailUserInfo.birthday;
       nicknameController.text = detailUserInfo.nickname;
-      birthdayController.text = detailUserInfo.birthday;
+      birthdayController.text = '${birthYearDateTime.year}년';
       genderController.text = detailUserInfo.sex.label;
     }
 
@@ -111,17 +112,21 @@ class _EditPersonalInfoScreenState
                                 children: [
                                   WidgetSpan(
                                     child: nickNameValidation
-                                            .isMoreOrEqualThanTwoCharacters
+                                                .isMoreOrEqualThanTwoCharacters &&
+                                            nickNameValidation
+                                                .isLessOrEqualThanTenCharacters
                                         ? Assets.icons.svg.icCheckEnabled.svg()
                                         : Assets.icons.svg.icCheckDisabled
                                             .svg(),
                                     alignment: PlaceholderAlignment.middle,
                                   ),
                                   TextSpan(
-                                    text: '2자 이상\n',
+                                    text: '2자 ~ 10자\n',
                                     style: CustomTextStyle.detail3Reg(
                                       color: nickNameValidation
-                                              .isMoreOrEqualThanTwoCharacters
+                                                  .isMoreOrEqualThanTwoCharacters &&
+                                              nickNameValidation
+                                                  .isLessOrEqualThanTenCharacters
                                           ? ColorName.blue500
                                           : ColorName.gray300,
                                     ),
@@ -172,23 +177,21 @@ class _EditPersonalInfoScreenState
                           CustomTextFormField(
                             onTap: () async {
                               final selectedDate =
-                                  await showSelectBirthDayBottomSheet(
+                                  await showSelectBirthYearBottomSheet(
                                 context: context,
-                                initialDateTime: DateFormat('yyyy-MM-dd')
-                                        .tryParse(birthdayController.text) ??
-                                    DateTime.now(),
+                                initialDateTime: birthYearDateTime,
                               );
 
                               if (selectedDate != null) {
+                                birthYearDateTime = selectedDate;
                                 birthdayController.text =
-                                    DateFormat('yyyy-MM-dd')
-                                        .format(selectedDate);
+                                    '${birthYearDateTime.year}년';
                               }
                             },
                             controller: birthdayController,
                             readOnly: true,
-                            labelText: '생년월일',
-                            hintText: '생년월일을 선택해주세요',
+                            labelText: '출생연도',
+                            hintText: '출생연도를 선택해주세요',
                           ),
                           const SizedBox(height: 32.0),
                           CustomTextFormField(
@@ -239,7 +242,7 @@ class _EditPersonalInfoScreenState
                                     .read(detailUserInfoProvider.notifier)
                                     .updateUserPersonalInfo(
                                       nickname: nicknameController.text,
-                                      birthday: birthdayController.text,
+                                      birthday: birthYearDateTime,
                                       sex: GenderType.fromLabel(
                                         genderController.text,
                                       ),

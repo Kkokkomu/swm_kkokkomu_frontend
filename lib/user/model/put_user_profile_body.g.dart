@@ -9,14 +9,14 @@ part of 'put_user_profile_body.dart';
 PutUserProfileBody _$PutUserProfileBodyFromJson(Map<String, dynamic> json) =>
     PutUserProfileBody(
       nickname: json['nickname'] as String,
-      birthday: json['birthday'] as String,
+      birthday: CustomDateUtils.parseDateTime(json['birthday'] as String?),
       sex: $enumDecode(_$GenderTypeEnumMap, json['sex']),
     );
 
 Map<String, dynamic> _$PutUserProfileBodyToJson(PutUserProfileBody instance) =>
     <String, dynamic>{
       'nickname': instance.nickname,
-      'birthday': instance.birthday,
+      'birthday': CustomDateUtils.formatDateTime(instance.birthday),
       'sex': _$GenderTypeEnumMap[instance.sex]!,
     };
 

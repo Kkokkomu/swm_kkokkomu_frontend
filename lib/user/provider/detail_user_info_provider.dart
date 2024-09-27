@@ -137,7 +137,7 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
 
   Future<ProviderResponseModel> updateUserPersonalInfo({
     String? nickname,
-    String? birthday,
+    DateTime? birthday,
     GenderType? sex,
   }) async {
     final prevState = _getValidPrevState();

@@ -52,6 +52,7 @@ class CustomTextFormField extends StatefulWidget {
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
   bool isFocused = false;
+  bool? isError;
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +75,23 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             autovalidateMode: widget.autovalidateMode,
             keyboardType: widget.keyboardType,
             obscureText: widget.obscureText,
-            validator: widget.validator,
+            validator: widget.validator != null
+                ? (value) {
+                    final resp = widget.validator!(value);
+                    isError = resp != null;
+                    return resp;
+                  }
+                : null,
             initialValue: widget.initialValue,
-            onChanged: widget.onChanged,
+            onChanged: (value) {
+              if (widget.onChanged != null) {
+                widget.onChanged!(value);
+              }
+              // 글자 수 표시를 위해 setState() 호출
+              if (widget.maxLength != null) {
+                setState(() {});
+              }
+            },
             onSaved: widget.onSaved,
             cursorColor: ColorName.blue500,
             cursorErrorColor: ColorName.error500,
@@ -146,7 +161,31 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           children: [
             widget.helper ?? const SizedBox(),
             Expanded(
-              child: widget.errorMessage ?? const SizedBox(),
+              child: widget.errorMessage ??
+                  (widget.maxLength != null
+                      ? Text.rich(
+                          textAlign: TextAlign.end,
+                          TextSpan(
+                            children: [
+                              const WidgetSpan(
+                                child: SizedBox(height: 24.0),
+                                alignment: PlaceholderAlignment.middle,
+                              ),
+                              TextSpan(
+                                text:
+                                    '${widget.controller?.text.length ?? 0}/${widget.maxLength}',
+                                style: CustomTextStyle.detail3Reg(
+                                  color: isError == null
+                                      ? ColorName.gray300
+                                      : isError!
+                                          ? ColorName.error500
+                                          : ColorName.blue500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : const SizedBox()),
             ),
           ],
         ),

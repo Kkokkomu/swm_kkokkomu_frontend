@@ -69,6 +69,8 @@ class ShortFormCommentCard extends ConsumerWidget {
               fit: BoxFit.cover,
               height: 36.0,
               width: 36.0,
+              cacheWidth:
+                  (36.0 * MediaQuery.of(context).devicePixelRatio).round(),
             ),
           ),
         ),

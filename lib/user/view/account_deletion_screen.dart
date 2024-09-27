@@ -28,99 +28,149 @@ class _AccountDeletionScreenState extends ConsumerState<AccountDeletionScreen> {
       title: '회원탈퇴',
       onBackButtonPressed: () => context.pop(),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(18.0, 48.0, 18.0, 12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('정말로 탈퇴하시겠어요?', style: CustomTextStyle.head2()),
-              const SizedBox(height: 28.0),
-              Text(
-                '탈퇴 후에는 서비스 이용에 대한\n모든 권리가 소멸됩니다.',
-                style: CustomTextStyle.head4(color: ColorName.gray300),
-              ),
-              const SizedBox(height: 28.0),
-              Text(
-                '탈퇴 신청 후, 30일 이후에\n계정 삭제가 완료되며\n복구 및 동일 이메일로 재가입이 불가능합니다.',
-                style: CustomTextStyle.head4(color: ColorName.gray300),
-              ),
-              const SizedBox(height: 24.0),
-              Text(
-                '작성한 댓글은 삭제되지 않으며\n해당 댓글의 닉네임이 "(알수없음)" 으로\n표시됩니다.',
-                style: CustomTextStyle.head4(color: ColorName.gray300),
-              ),
-              const Spacer(),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => setState(() => isAgreed = !isAgreed),
-                    child: isAgreed
-                        ? Assets.icons.svg.icCheckboxEnabled.svg()
-                        : Assets.icons.svg.icCheckboxDisabled.svg(),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: Text(
-                      '안내사항을 모두 확인하였으며, 이에 동의합니다.',
-                      style:
-                          CustomTextStyle.body2Medi(color: ColorName.gray500),
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(18.0, 48.0, 18.0, 12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('정말로 탈퇴하시겠어요?', style: CustomTextStyle.head2()),
+                    const SizedBox(height: 28.0),
+                    Wrap(
+                      children: [
+                        Text(
+                          '탈퇴 후에는 서비스 이용에 대한 ',
+                          style:
+                              CustomTextStyle.head4(color: ColorName.gray300),
+                        ),
+                        Text(
+                          '모든 권리가 소멸됩니다.',
+                          style:
+                              CustomTextStyle.head4(color: ColorName.gray300),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 53.0),
-              Row(
-                children: [
-                  Flexible(
-                    child: GestureDetector(
-                      onTap: () => context.pop(),
-                      child: const CustomSelectButton(
-                        content: '돌아가기',
-                      ),
+                    const SizedBox(height: 28.0),
+                    Wrap(
+                      children: [
+                        Text(
+                          '탈퇴 신청 후, 30일 이후에 ',
+                          style:
+                              CustomTextStyle.head4(color: ColorName.gray300),
+                        ),
+                        Text(
+                          '계정 삭제가 완료되며 ',
+                          style:
+                              CustomTextStyle.head4(color: ColorName.gray300),
+                        ),
+                        Text(
+                          '복구 및 동일 이메일로 재가입이 불가능합니다.',
+                          style:
+                              CustomTextStyle.head4(color: ColorName.gray300),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(width: 7.0),
-                  Flexible(
-                    child: GestureDetector(
-                      onTap: isAgreed
-                          ? () async {
-                              final resp = await ref
-                                  .read(userInfoProvider.notifier)
-                                  .deleteAccount();
+                    const SizedBox(height: 24.0),
+                    Wrap(
+                      children: [
+                        Text(
+                          '작성한 댓글은 삭제되지 않으며 ',
+                          style:
+                              CustomTextStyle.head4(color: ColorName.gray300),
+                        ),
+                        Text(
+                          '해당 댓글의 닉네임이 "(알수없음)" 으로 ',
+                          style:
+                              CustomTextStyle.head4(color: ColorName.gray300),
+                        ),
+                        Text(
+                          '표시됩니다.',
+                          style:
+                              CustomTextStyle.head4(color: ColorName.gray300),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    const SizedBox(height: 24.0),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => setState(() => isAgreed = !isAgreed),
+                          child: isAgreed
+                              ? Assets.icons.svg.icCheckboxEnabled.svg()
+                              : Assets.icons.svg.icCheckboxDisabled.svg(),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: Text(
+                            '안내사항을 모두 확인하였으며, 이에 동의합니다.',
+                            style: CustomTextStyle.body2Medi(
+                              color: ColorName.gray500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 53.0),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: GestureDetector(
+                            onTap: () => context.pop(),
+                            child: const CustomSelectButton(
+                              content: '돌아가기',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 7.0),
+                        Flexible(
+                          child: GestureDetector(
+                            onTap: isAgreed
+                                ? () async {
+                                    final resp = await ref
+                                        .read(userInfoProvider.notifier)
+                                        .deleteAccount();
 
-                              if (context.mounted) {
-                                if (resp == false) {
-                                  showInfoDialog(
-                                    context: context,
-                                    content: '회원탈퇴에 실패했어요',
-                                    details: '잠시 후 다시 시도해주세요',
-                                  );
-                                  return;
-                                }
+                                    if (context.mounted) {
+                                      if (resp == false) {
+                                        showInfoDialog(
+                                          context: context,
+                                          content: '회원탈퇴에 실패했어요',
+                                          details: '잠시 후 다시 시도해주세요',
+                                        );
+                                        return;
+                                      }
 
-                                showForceCheckDialog(
-                                  context: context,
-                                  content: '회원탈퇴가 완료되었어요',
-                                  details: '그동안 이용해주셔서 감사합니다',
-                                  checkMessage: '확인',
-                                  onCheck: () => ref
-                                      .read(userInfoProvider.notifier)
-                                      .setUserModelToInitial(),
-                                );
-                              }
-                            }
-                          : null,
-                      child: CustomSelectButton(
-                        content: '탈퇴하기',
-                        textColor: isAgreed ? null : ColorName.gray200,
-                        backgroundColor: isAgreed ? null : ColorName.gray100,
-                      ),
+                                      showForceCheckDialog(
+                                        context: context,
+                                        content: '회원탈퇴가 완료되었어요',
+                                        details: '그동안 이용해주셔서 감사합니다',
+                                        checkMessage: '확인',
+                                        onCheck: () => ref
+                                            .read(userInfoProvider.notifier)
+                                            .setUserModelToInitial(),
+                                      );
+                                    }
+                                  }
+                                : null,
+                            child: CustomSelectButton(
+                              content: '탈퇴하기',
+                              textColor: isAgreed ? null : ColorName.gray200,
+                              backgroundColor:
+                                  isAgreed ? null : ColorName.gray100,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -68,7 +68,7 @@ class ProfileScreen extends ConsumerWidget {
                                   ? '${detailUserInfo.profileUrl}?profileEditedAt=${detailUserInfo.profileEditedAt}'
                                   : '',
                               fit: BoxFit.cover,
-                              cacheHeight: (92.0 *
+                              cacheWidth: (92.0 *
                                       MediaQuery.of(context).devicePixelRatio)
                                   .round(),
                               loadingBuilder: (_, child, loadingProgress) =>
@@ -119,12 +119,12 @@ class ProfileScreen extends ConsumerWidget {
                       Row(
                         children: [
                           Text(
-                            '생년월일',
+                            '출생연도',
                             style: CustomTextStyle.body1Bold(),
                           ),
                           const Spacer(),
                           Text(
-                            detailUserInfo.birthday,
+                            '${detailUserInfo.birthday.year}년',
                             style: CustomTextStyle.body1Reg(),
                           ),
                         ],
@@ -147,9 +147,11 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                 ),
                 const Spacer(),
-                GestureDetector(
+                InkWell(
+                  borderRadius: BorderRadius.circular(8.0),
                   onTap: () => context.go(CustomRoutePath.accountDeletion),
                   child: Container(
+                    margin: const EdgeInsets.all(8.0),
                     decoration: const BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
@@ -165,14 +167,15 @@ class ProfileScreen extends ConsumerWidget {
                         Text(
                           '탈퇴하기',
                           style: CustomTextStyle.detail2Reg(
-                              color: ColorName.gray200),
+                            color: ColorName.gray200,
+                          ),
                         ),
                         Assets.icons.svg.icUnsubscribe.svg(),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 18.0),
+                const SizedBox(height: 10.0),
               ],
             ),
           ),

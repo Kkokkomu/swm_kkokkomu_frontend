@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/user/component/app_info_menu_card.dart';
 import 'package:swm_kkokkomu_frontend/user/component/custom_menu_card.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
@@ -60,8 +62,13 @@ class LoggedInUserMyPage extends ConsumerWidget {
                     color: const Color(0xFF6E7291),
                   ),
                 ),
+                const SizedBox(height: 19.0),
               ],
             ),
+          ),
+          Container(
+            color: ColorName.gray50,
+            height: 8.0,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +83,18 @@ class LoggedInUserMyPage extends ConsumerWidget {
               CustomMenuCard(
                 content: '로그아웃',
                 isEnterIcon: false,
-                onTap: () => ref.read(userInfoProvider.notifier).logout(),
+                onTap: () async {
+                  final resp = await showConfirmationDialog(
+                    context: context,
+                    content: '로그아웃 하시겠어요?',
+                    confirmText: '로그아웃',
+                    cancelText: '취소',
+                  );
+
+                  if (resp == true) {
+                    ref.read(userInfoProvider.notifier).logout();
+                  }
+                },
               ),
             ],
           ),
