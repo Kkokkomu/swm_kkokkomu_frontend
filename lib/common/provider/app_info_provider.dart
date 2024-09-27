@@ -21,11 +21,9 @@ class AppInfoStateNotifier extends StateNotifier<AppInfoModelBase> {
 
   AppInfoStateNotifier({
     required this.appInfoRepository,
-  }) : super(AppInfoModelLoading()) {
-    _getAppInfo();
-  }
+  }) : super(AppInfoModelLoading());
 
-  void _getAppInfo() async {
+  Future<AppInfoModelBase> getAppInfo() async {
     try {
       final currentAppInfo = await PackageInfo.fromPlatform();
       final latestAppInfo = await appInfoRepository.getLatestAppInfo();
@@ -39,7 +37,7 @@ class AppInfoStateNotifier extends StateNotifier<AppInfoModelBase> {
           latestAppInfo: latestAppInfo,
           storeUrl: latestAppInfo.url,
         );
-        return;
+        return state;
       }
 
       // 강제 업데이트가 필요 없는 경우
@@ -47,10 +45,12 @@ class AppInfoStateNotifier extends StateNotifier<AppInfoModelBase> {
         currentAppInfo: currentAppInfo,
         latestAppInfo: latestAppInfo,
       );
+      return state;
     } catch (e) {
       debugPrint(e.toString());
       // 에러가 발생한 경우
       state = AppInfoModelError(e.toString());
+      return state;
     }
   }
 }

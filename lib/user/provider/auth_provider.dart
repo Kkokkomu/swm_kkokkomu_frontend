@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
-import 'package:swm_kkokkomu_frontend/common/model/app_info_model.dart';
-import 'package:swm_kkokkomu_frontend/common/provider/app_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router_navigator_key_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/view/root_tab.dart';
 import 'package:swm_kkokkomu_frontend/common/view/splash_screen.dart';
@@ -41,15 +39,6 @@ class AuthProvider extends ChangeNotifier {
   }) {
     ref.listen<UserModelBase?>(
       userInfoProvider,
-      (previous, next) {
-        if (previous != next) {
-          notifyListeners();
-        }
-      },
-    );
-
-    ref.listen<AppInfoModelBase>(
-      appInfoProvider,
       (previous, next) {
         if (previous != next) {
           notifyListeners();
@@ -166,19 +155,14 @@ class AuthProvider extends ChangeNotifier {
   }
 
   String? redirectLogic(BuildContext _, GoRouterState state) {
-    // 강제 업데이트 여부 확인
-    final appInfo = ref.read(appInfoProvider);
-
-    // AppInfoModel이 아닌 경우 null 반환
-    // 즉, splash screen을 계속 유지
-    if (appInfo is! AppInfoModel) {
+    // 스플래시 화면인 경우 리다이렉트 로직 실행하지 않음
+    // 스플래시 화면에서 자체 로직을 실행하도록 함
+    if (state.fullPath == CustomRoutePath.splash) {
       return null;
     }
 
     final UserModelBase user = ref.read(userInfoProvider);
 
-    // SplashScreen인지 여부
-    final isSplashScreen = state.fullPath == CustomRoutePath.splash;
     // 로그인 페이지인지 여부
     final isLoggingIn = state.fullPath == CustomRoutePath.login;
 
@@ -205,21 +189,18 @@ class AuthProvider extends ChangeNotifier {
 
     // UserModel
     // 사용자 정보가 있는 상태면
-    // 로그인 중이거나 현재 위치가 SplashScreen이거나 RegisterScreen이면
+    // 로그인 중이거나 현재 위치가 RegisterScreen이면
     // 홈(숏폼화면)으로 이동
     if (user is UserModel) {
-      return isLoggingIn ||
-              isSplashScreen ||
-              state.fullPath == CustomRoutePath.register
+      return isLoggingIn || state.fullPath == CustomRoutePath.register
           ? CustomRoutePath.home
           : null;
     }
 
     // GuestUserModel
-    // 게스트 유저 정보가 있는 상태면
-    // 로그인 중이거나 현재 위치가 SplashScreen이면
+    // 게스트 유저 정보가 있는 상태고 현재 로그인 화면이라면
     // 홈(숏폼화면)으로 이동
-    if (user is GuestUserModel && (isLoggingIn || isSplashScreen)) {
+    if (user is GuestUserModel && isLoggingIn) {
       return CustomRoutePath.home;
     }
 
