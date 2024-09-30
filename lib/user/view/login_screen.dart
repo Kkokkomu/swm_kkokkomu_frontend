@@ -33,6 +33,8 @@ class LoginScreen extends ConsumerWidget {
       },
       child: DefaultLayout(
         statusBarBrightness: Brightness.light,
+        systemNavigationBarColor: ColorName.splashGradationEnd,
+        systemNavigationBarIconBrightness: Brightness.light,
         child: Container(
           width: double.infinity,
           decoration: const BoxDecoration(

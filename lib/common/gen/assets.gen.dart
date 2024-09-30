@@ -226,6 +226,30 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icLifeGray =>
       const SvgGenImage('assets/icons/svg/ic_life_gray.svg');
 
+  /// File path: assets/icons/svg/ic_lightnavi_home_disabled.svg
+  SvgGenImage get icLightnaviHomeDisabled =>
+      const SvgGenImage('assets/icons/svg/ic_lightnavi_home_disabled.svg');
+
+  /// File path: assets/icons/svg/ic_lightnavi_home_enabled.svg
+  SvgGenImage get icLightnaviHomeEnabled =>
+      const SvgGenImage('assets/icons/svg/ic_lightnavi_home_enabled.svg');
+
+  /// File path: assets/icons/svg/ic_lightnavi_my_disabled.svg
+  SvgGenImage get icLightnaviMyDisabled =>
+      const SvgGenImage('assets/icons/svg/ic_lightnavi_my_disabled.svg');
+
+  /// File path: assets/icons/svg/ic_lightnavi_my_enabled.svg
+  SvgGenImage get icLightnaviMyEnabled =>
+      const SvgGenImage('assets/icons/svg/ic_lightnavi_my_enabled.svg');
+
+  /// File path: assets/icons/svg/ic_lightnavi_search_disabled.svg
+  SvgGenImage get icLightnaviSearchDisabled =>
+      const SvgGenImage('assets/icons/svg/ic_lightnavi_search_disabled.svg');
+
+  /// File path: assets/icons/svg/ic_lightnavi_search_enabled.svg
+  SvgGenImage get icLightnaviSearchEnabled =>
+      const SvgGenImage('assets/icons/svg/ic_lightnavi_search_enabled.svg');
+
   /// File path: assets/icons/svg/ic_navi_home_disabled.svg
   SvgGenImage get icNaviHomeDisabled =>
       const SvgGenImage('assets/icons/svg/ic_navi_home_disabled.svg');
@@ -392,6 +416,12 @@ class $AssetsIconsSvgGen {
         icItGray,
         icLifeBlue,
         icLifeGray,
+        icLightnaviHomeDisabled,
+        icLightnaviHomeEnabled,
+        icLightnaviMyDisabled,
+        icLightnaviMyEnabled,
+        icLightnaviSearchDisabled,
+        icLightnaviSearchEnabled,
         icNaviHomeDisabled,
         icNaviHomeEnabled,
         icNaviMyDisabled,

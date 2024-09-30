@@ -30,7 +30,7 @@ class Constants {
       : dotenv.env['ANDROID_APP_INFO_URL'] ?? '';
 
   // BottomNavigationBar 높이
-  static const double bottomNavigationBarHeight = 60.0;
+  static const double bottomNavigationBarHeight = 59.0;
   // SafeArea 를 고려한 BottomNavigationBar 높이
   // 반드시 main.dart 에서 SafeArea 높이를 사용하여 수정 후 사용해야함
   static double bottomNavigationBarHeightWithSafeArea =

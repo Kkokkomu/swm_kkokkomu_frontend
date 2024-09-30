@@ -31,9 +31,12 @@ class ShortFormScreen extends ConsumerWidget {
       provider = guestUserHomeShortFormProvider;
     }
 
-    return CursorPaginationShortFormView(
-      shortFormScreenType: ShortFormScreenType.home,
-      provider: provider,
+    return Container(
+      color: Colors.black,
+      child: CursorPaginationShortFormView(
+        shortFormScreenType: ShortFormScreenType.home,
+        provider: provider,
+      ),
     );
   }
 }

@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
@@ -54,6 +56,10 @@ class RootTab extends ConsumerWidget {
         // 나머지는 라이트 모드이므로 상태바 아이콘을 어둡게 처리
         statusBarBrightness:
             isShortFormScreen ? Brightness.light : Brightness.dark,
+        systemNavigationBarColor:
+            isShortFormScreen ? ColorName.gray600 : ColorName.white000,
+        systemNavigationBarIconBrightness:
+            isShortFormScreen ? Brightness.light : Brightness.dark,
         scaffoldKey: scaffoldKey,
         resizeToAvoidBottomInset: false,
         drawer: navigationShell.currentIndex == 0
@@ -61,6 +67,7 @@ class RootTab extends ConsumerWidget {
             : null,
         bottomNavigationBar: CustomBottomNavigationBar(
           navigationShell: navigationShell,
+          isShortFormScreen: isShortFormScreen,
         ),
         // 숏폼 화면은 다크 모드이므로 배경색을 어둡게 처리
         backgroundColor: isShortFormScreen ? Colors.black : ColorName.white000,
@@ -72,10 +79,12 @@ class RootTab extends ConsumerWidget {
 
 class CustomBottomNavigationBar extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
+  final bool isShortFormScreen;
 
   const CustomBottomNavigationBar({
     super.key,
     required this.navigationShell,
+    required this.isShortFormScreen,
   });
 
   @override
@@ -85,14 +94,6 @@ class CustomBottomNavigationBar extends ConsumerStatefulWidget {
 
 class _CustomBottomNavigationBarState
     extends ConsumerState<CustomBottomNavigationBar> {
-  late final bool isHomeScreen;
-
-  @override
-  void initState() {
-    super.initState();
-    isHomeScreen = widget.navigationShell.currentIndex == 1;
-  }
-
   void refreshCurrentTab(RootTabBottomNavigationBarType tabType) {
     final user = ref.read(userInfoProvider);
 
@@ -136,61 +137,119 @@ class _CustomBottomNavigationBarState
     final bottomNavigationBarState =
         ref.watch(bottomNavigationBarStateProvider);
 
-    // 홈(숏폼) 화면에서 감정표현 모달이 열려있을 때 시스템 바텀 네비게이션 바를 어둡게 처리 (안드로이드)
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          systemNavigationBarColor:
-              isHomeScreen && bottomNavigationBarState.isModalBarrierVisible
-                  ? Constants.modalBarrierColor
-                  : Colors.transparent,
-        ),
+    // 숏폼 화면에서 감정표현 모달이 상태에 따라
+    // 시스템 바텀 네비게이션 바 색상을 변경 (안드로이드)
+    if (widget.isShortFormScreen) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              systemNavigationBarColor:
+                  bottomNavigationBarState.isModalBarrierVisible
+                      ? Constants.modalBarrierColor
+                      : ColorName.gray600,
+            ),
+          );
+        },
       );
-    });
+    }
 
     return SizedBox(
-      // 홈(숏폼) 화면에서 댓글 창이 활성화 되어있을 때 바텀 네비게이션 바를 숨김
-      height:
-          !isHomeScreen || bottomNavigationBarState.isBottomNavigationBarVisible
-              ? Constants.bottomNavigationBarHeightWithSafeArea
-              : 0.0,
+      // 숏폼 화면에서 댓글 창이 활성화 되어있을 때 바텀 네비게이션 바를 숨김
+      height: !widget.isShortFormScreen ||
+              bottomNavigationBarState.isBottomNavigationBarVisible
+          ? Constants.bottomNavigationBarHeightWithSafeArea
+          : 0.0,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          BottomNavigationBar(
-            selectedFontSize: 12,
-            unselectedFontSize: 12,
-            type: BottomNavigationBarType.fixed,
-            onTap: (int index) {
-              // 현재 탭을 누르면 현재 탭 새로고침
-              if (index == widget.navigationShell.currentIndex) {
-                // 새로고침 로직 작동
-                refreshCurrentTab(RootTabBottomNavigationBarType.values[index]);
-                // 현재 탭에 여러 페이지가 nested 되어 있을 경우 초기 페이지로 이동
-                widget.navigationShell.goBranch(index, initialLocation: true);
-                return;
-              }
-              // 다른 탭을 누르면 해당 탭으로 이동
-              widget.navigationShell.goBranch(index);
-            },
-            currentIndex: widget.navigationShell.currentIndex,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.explore),
-                label: 'Explore',
+          Theme(
+            data: ThemeData(
+              splashColor: Colors.transparent,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: widget.isShortFormScreen
+                        ? ColorName.gray500
+                        : ColorName.gray100,
+                    width: 0.5,
+                  ),
+                ),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.electric_bolt),
-                label: 'ShortForm',
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                onTap: (int index) {
+                  // 현재 탭을 누르면 현재 탭 새로고침
+                  if (index == widget.navigationShell.currentIndex) {
+                    // 새로고침 로직 작동
+                    refreshCurrentTab(
+                        RootTabBottomNavigationBarType.values[index]);
+                    // 현재 탭에 여러 페이지가 nested 되어 있을 경우 초기 페이지로 이동
+                    widget.navigationShell
+                        .goBranch(index, initialLocation: true);
+                    return;
+                  }
+                  // 다른 탭을 누르면 해당 탭으로 이동
+                  widget.navigationShell.goBranch(index);
+                },
+                currentIndex: widget.navigationShell.currentIndex,
+                unselectedLabelStyle: CustomTextStyle.detail2Reg(
+                  color: widget.isShortFormScreen
+                      ? ColorName.gray300
+                      : ColorName.gray200,
+                ),
+                unselectedItemColor: widget.isShortFormScreen
+                    ? ColorName.gray300
+                    : ColorName.gray200,
+                selectedLabelStyle: CustomTextStyle.detail2Reg(
+                  color: widget.isShortFormScreen
+                      ? ColorName.white000
+                      : ColorName.gray600,
+                ),
+                selectedItemColor: widget.isShortFormScreen
+                    ? ColorName.white000
+                    : ColorName.gray600,
+                backgroundColor: widget.isShortFormScreen
+                    ? ColorName.gray600
+                    : ColorName.white000,
+                elevation: 0.0,
+                items: [
+                  BottomNavigationBarItem(
+                    activeIcon: widget.isShortFormScreen
+                        ? Assets.icons.svg.icNaviSearchEnabled.svg()
+                        : Assets.icons.svg.icLightnaviSearchEnabled.svg(),
+                    icon: widget.isShortFormScreen
+                        ? Assets.icons.svg.icNaviSearchDisabled.svg()
+                        : Assets.icons.svg.icLightnaviSearchDisabled.svg(),
+                    label: '탐색',
+                  ),
+                  BottomNavigationBarItem(
+                    activeIcon: widget.isShortFormScreen
+                        ? Assets.icons.svg.icNaviHomeEnabled.svg()
+                        : Assets.icons.svg.icLightnaviHomeEnabled.svg(),
+                    icon: widget.isShortFormScreen
+                        ? Assets.icons.svg.icNaviHomeDisabled.svg()
+                        : Assets.icons.svg.icLightnaviHomeDisabled.svg(),
+                    label: '홈',
+                  ),
+                  BottomNavigationBarItem(
+                    activeIcon: widget.isShortFormScreen
+                        ? Assets.icons.svg.icNaviMyEnabled.svg()
+                        : Assets.icons.svg.icLightnaviMyEnabled.svg(),
+                    icon: widget.isShortFormScreen
+                        ? Assets.icons.svg.icNaviMyDisabled.svg()
+                        : Assets.icons.svg.icLightnaviMyDisabled.svg(),
+                    label: '마이',
+                  ),
+                ],
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'My Page',
-              ),
-            ],
+            ),
           ),
-          // 홈(숏폼) 화면에서 감정표현 모달이 열려있을 때 바텀 네비게이션 바를 어둡게 처리
-          if (isHomeScreen && bottomNavigationBarState.isModalBarrierVisible)
+          // 숏폼 화면에서 감정표현 모달이 열려있을 때 바텀 네비게이션 바를 어둡게 처리
+          if (widget.isShortFormScreen &&
+              bottomNavigationBarState.isModalBarrierVisible)
             const ModalBarrier(
               color: Constants.modalBarrierColor,
               dismissible: false,

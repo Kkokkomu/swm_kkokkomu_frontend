@@ -25,6 +25,8 @@ class ShortFormFilterScreen extends ConsumerWidget {
 
     return DefaultLayout(
       statusBarBrightness: Brightness.dark,
+      systemNavigationBarColor: ColorName.white000,
+      systemNavigationBarIconBrightness: Brightness.dark,
       titleWidget: const Text('필터'),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

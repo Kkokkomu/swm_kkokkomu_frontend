@@ -40,6 +40,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Widget build(BuildContext context) {
     return DefaultLayout(
       statusBarBrightness: Brightness.light,
+      systemNavigationBarColor: ColorName.splashGradationEnd,
+      systemNavigationBarIconBrightness: Brightness.light,
       child: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
