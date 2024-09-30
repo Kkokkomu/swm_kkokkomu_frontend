@@ -1,6 +1,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
+// import 'package:swm_kkokkomu_frontend/common/component/custom_refresh_indicator.dart';
 // import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 // import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 // import 'package:swm_kkokkomu_frontend/common/model/offset_pagination_model.dart';
@@ -60,7 +61,7 @@
 
 //     final paginationData = state as OffsetPagination<T>;
 
-//     return RefreshIndicator(
+//     return CustomRefreshIndicator(
 //       onRefresh: () => ref.read(provider.notifier).paginate(forceRefetch: true),
 //       child: PageView.builder(
 //         allowImplicitScrolling: true,

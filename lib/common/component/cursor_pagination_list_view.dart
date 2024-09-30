@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_refresh_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
@@ -62,7 +63,7 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: RefreshIndicator(
+      child: CustomRefreshIndicator(
         onRefresh: () =>
             ref.read(provider(id).notifier).paginate(forceRefetch: true),
         child: Scrollbar(
