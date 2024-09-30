@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -104,7 +105,8 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
       GoogleSignIn().signOut();
     }
 
-    if (Constants.flavor == 'prod' &&
+    if (Constants.flavor == Constants.prod &&
+        kReleaseMode &&
         socialLoginType == SocialLoginType.kakao) {
       // 카카오 로그인인 경우 카카오 로그아웃
       UserApi.instance.logout();

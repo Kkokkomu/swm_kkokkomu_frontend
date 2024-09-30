@@ -128,7 +128,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                   alignment: PlaceholderAlignment.middle,
                                 ),
                                 TextSpan(
-                                  text: '2자 이상\n',
+                                  text: '2자 ~ 10자\n',
                                   style: CustomTextStyle.detail3Reg(
                                     color: nickNameValidation
                                             .isMoreOrEqualThanTwoCharacters

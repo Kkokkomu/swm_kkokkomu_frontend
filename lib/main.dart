@@ -32,12 +32,16 @@ void main(name, options) async {
     options: options,
   );
 
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  // Firebase Crashlytics 초기화
+  // prod 환경, 릴리즈 모드일때만 Crashlytics 사용
+  if (Constants.flavor == Constants.prod && kReleaseMode) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
 
   // runApp() 호출 전 Flutter SDK 초기화
   KakaoSdk.init(
@@ -102,7 +106,7 @@ class _App extends ConsumerWidget {
         Locale('ko', ''),
       ],
       routerConfig: router,
-      debugShowCheckedModeBanner: Constants.flavor == 'dev',
+      debugShowCheckedModeBanner: Constants.flavor == Constants.dev,
     );
   }
 }
