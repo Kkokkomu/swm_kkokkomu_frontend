@@ -51,6 +51,9 @@ class Constants {
   static const String unknownErrorString = 'N/A';
   // 에러 발생시 이동할 관련기사 url
   static const String relatedUrlOnError = 'https://www.naver.com';
+
+  // 출생연도를 선택안했을 때 사용하는 값 (1800년)
+  static const int birthYearNotSelected = 1800;
 }
 
 class AnimationDuration {

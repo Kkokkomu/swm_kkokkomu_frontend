@@ -5,6 +5,7 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
@@ -195,6 +196,31 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           readOnly: true,
                           labelText: '출생연도',
                           hintText: '출생연도를 선택해주세요',
+                        ),
+                        const SizedBox(height: 8.0),
+                        InkWell(
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          onTap: () {
+                            birthdayController.text = '선택안함';
+                            setState(() {
+                              birthday =
+                                  DateTime(Constants.birthYearNotSelected);
+                            });
+                          },
+                          child: Ink(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: const BoxDecoration(
+                              color: ColorName.gray100,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                            ),
+                            child: Text(
+                              '선택안함',
+                              style: CustomTextStyle.detail1Reg(),
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 32.0),
                         CustomTextFormField(

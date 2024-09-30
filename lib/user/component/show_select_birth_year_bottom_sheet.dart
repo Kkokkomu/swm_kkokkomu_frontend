@@ -4,14 +4,19 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_grabber.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
 Future<DateTime?> showSelectBirthYearBottomSheet({
   required BuildContext context,
   required DateTime initialDateTime,
 }) {
+  final DateTime adjustedInitialDateTime =
+      initialDateTime.year == Constants.birthYearNotSelected
+          ? DateTime(DateTime.now().year)
+          : initialDateTime;
   final int currentYear = DateTime.now().year;
-  DateTime tempSavedDate = initialDateTime;
+  DateTime tempSavedDate = adjustedInitialDateTime;
 
   return showModalBottomSheet(
     isScrollControlled: true,
@@ -52,7 +57,7 @@ Future<DateTime?> showSelectBirthYearBottomSheet({
                     ),
                     child: CupertinoPicker.builder(
                       scrollController: FixedExtentScrollController(
-                        initialItem: currentYear - initialDateTime.year,
+                        initialItem: currentYear - adjustedInitialDateTime.year,
                       ),
                       childCount: currentYear - 1900 + 1,
                       itemBuilder: (context, index) => Center(

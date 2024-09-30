@@ -7,6 +7,7 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_close_button.dart'
 import 'package:swm_kkokkomu_frontend/common/component/custom_grabber.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
@@ -124,7 +125,10 @@ class ProfileScreen extends ConsumerWidget {
                           ),
                           const Spacer(),
                           Text(
-                            '${detailUserInfo.birthday.year}년',
+                            detailUserInfo.birthday.year ==
+                                    Constants.birthYearNotSelected
+                                ? '선택안함'
+                                : '${detailUserInfo.birthday.year}년',
                             style: CustomTextStyle.body1Reg(),
                           ),
                         ],
