@@ -40,6 +40,7 @@ class Constants {
   static const double shortFormFloatingButtonSize = 36.0;
 
   static const Color modalBarrierColor = Colors.black54;
+  static const Color bottomNavigationBarModalBarrierColor = Color(0xFF0C0C10);
 
   static const int cursorPaginationFetchCount = 20;
   static const int offsetPaginationFetchCount = 10;

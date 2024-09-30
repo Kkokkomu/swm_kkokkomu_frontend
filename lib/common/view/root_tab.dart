@@ -51,26 +51,41 @@ class RootTab extends ConsumerWidget {
         // 드로어가 열려있지 않은 경우 앱 종료 다이얼로그를 띄움
         showAppExitDialog(context);
       },
-      child: DefaultLayout(
-        // 숏폼 화면은 다크 모드이므로 상태바 아이콘을 밝게 처리
-        // 나머지는 라이트 모드이므로 상태바 아이콘을 어둡게 처리
-        statusBarBrightness:
-            isShortFormScreen ? Brightness.light : Brightness.dark,
-        systemNavigationBarColor:
-            isShortFormScreen ? ColorName.gray600 : ColorName.white000,
-        systemNavigationBarIconBrightness:
-            isShortFormScreen ? Brightness.light : Brightness.dark,
-        scaffoldKey: scaffoldKey,
-        resizeToAvoidBottomInset: false,
-        drawer: navigationShell.currentIndex == 0
-            ? const ExplorationScreenDrawer()
-            : null,
-        bottomNavigationBar: CustomBottomNavigationBar(
-          navigationShell: navigationShell,
-          isShortFormScreen: isShortFormScreen,
-        ),
-        // 숏폼 화면은 다크 모드이므로 배경색을 어둡게 처리
-        backgroundColor: isShortFormScreen ? Colors.black : ColorName.white000,
+      child: Consumer(
+        builder: (_, ref, child) {
+          final bottomNavigationBarState =
+              ref.watch(bottomNavigationBarStateProvider);
+
+          return DefaultLayout(
+            // 숏폼 화면은 다크 모드이므로 상태바 아이콘을 밝게 처리
+            // 나머지는 라이트 모드이므로 상태바 아이콘을 어둡게 처리
+            statusBarBrightness:
+                isShortFormScreen ? Brightness.light : Brightness.dark,
+            systemNavigationBarColor: isShortFormScreen &&
+                    bottomNavigationBarState.isBottomNavigationBarVisible
+                ? bottomNavigationBarState.isModalBarrierVisible
+                    ? Constants.bottomNavigationBarModalBarrierColor
+                    : ColorName.gray600
+                : ColorName.white000,
+            systemNavigationBarIconBrightness: isShortFormScreen &&
+                    bottomNavigationBarState.isBottomNavigationBarVisible
+                ? Brightness.light
+                : Brightness.dark,
+            scaffoldKey: scaffoldKey,
+            resizeToAvoidBottomInset: false,
+            drawer: navigationShell.currentIndex == 0
+                ? const ExplorationScreenDrawer()
+                : null,
+            bottomNavigationBar: CustomBottomNavigationBar(
+              navigationShell: navigationShell,
+              isShortFormScreen: isShortFormScreen,
+            ),
+            // 숏폼 화면은 다크 모드이므로 배경색을 어둡게 처리
+            backgroundColor:
+                isShortFormScreen ? Colors.black : ColorName.white000,
+            child: child!,
+          );
+        },
         child: navigationShell,
       ),
     );
@@ -136,23 +151,6 @@ class _CustomBottomNavigationBarState
   Widget build(BuildContext context) {
     final bottomNavigationBarState =
         ref.watch(bottomNavigationBarStateProvider);
-
-    // 숏폼 화면에서 감정표현 모달이 상태에 따라
-    // 시스템 바텀 네비게이션 바 색상을 변경 (안드로이드)
-    if (widget.isShortFormScreen) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) {
-          SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(
-              systemNavigationBarColor:
-                  bottomNavigationBarState.isModalBarrierVisible
-                      ? Constants.modalBarrierColor
-                      : ColorName.gray600,
-            ),
-          );
-        },
-      );
-    }
 
     return SizedBox(
       // 숏폼 화면에서 댓글 창이 활성화 되어있을 때 바텀 네비게이션 바를 숨김
