@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/custom_floating_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_news_id_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform/repository/shortform_logging_repository.dart';
@@ -18,10 +19,9 @@ class ShareButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomFloatingButton(
-      icon: const Icon(
-        Icons.share,
-        color: Colors.white,
-      ),
+      width: 64.0,
+      height: 64.0,
+      icon: Assets.icons.svg.icShare.svg(),
       label: '공유',
       onTap: () async {
         final resp = await Share.shareUri(

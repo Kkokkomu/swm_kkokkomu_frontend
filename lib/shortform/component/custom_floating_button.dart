@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
 class CustomFloatingButton extends StatelessWidget {
@@ -7,6 +7,10 @@ class CustomFloatingButton extends StatelessWidget {
   final String? label;
   final Color labelColor;
   final void Function()? onTap;
+  final bool shadowEnabled;
+  final double? width;
+  final double? height;
+  final bool isInkWell;
 
   const CustomFloatingButton({
     super.key,
@@ -14,30 +18,53 @@ class CustomFloatingButton extends StatelessWidget {
     this.label,
     this.labelColor = ColorName.white000,
     required this.onTap,
+    this.shadowEnabled = true,
+    this.width,
+    this.height,
+    this.isInkWell = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: SizedBox(
-            width: Constants.shortFormFloatingButtonSize,
-            height: Constants.shortFormFloatingButtonSize,
-            child: FittedBox(child: icon),
-          ),
-        ),
-        if (label != null)
-          Text(
-            label!,
-            style: TextStyle(
-              fontSize: 12.0,
-              color: labelColor,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        splashColor: isInkWell ? null : Colors.transparent,
+        highlightColor: isInkWell ? null : Colors.transparent,
+        hoverColor: isInkWell ? null : Colors.transparent,
+        customBorder: const CircleBorder(),
+        child: Container(
+          width: width,
+          height: height,
+          decoration: shadowEnabled
+              ? BoxDecoration(
+                  // 하얀 배경에서도 아이콘이 잘 보일 수 있도록 그림자 추가
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 8.0,
+                    ),
+                  ],
+                )
+              : null,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                icon,
+                if (label != null)
+                  Text(
+                    label!,
+                    style: CustomTextStyle.detail3Reg(color: labelColor),
+                  ),
+              ],
             ),
           ),
-      ],
+        ),
+      ),
     );
   }
 }

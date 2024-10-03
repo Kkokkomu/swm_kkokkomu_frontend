@@ -29,63 +29,59 @@ class EmojiButton extends ConsumerWidget {
     final isDetailEmojiButtonVisible =
         ref.watch(detailEmojiButtonVisibilityProvider(newsId));
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(24.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                width: 220,
-                decoration: BoxDecoration(
-                  color: ColorName.white000,
-                  borderRadius: BorderRadius.circular(24.0),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    for (ReactionType reactionType in ReactionType.values)
-                      DetailEmojiButton(
-                        isLoggedInUser: isLoggedInUser,
-                        newsId: newsId,
-                        shortFormInfo: shortFormInfo,
-                        reactionType: reactionType,
-                      ),
-                  ],
-                ),
-              )
-                  .animate(target: isDetailEmojiButtonVisible ? 1 : 0)
-                  .scaleXY(begin: 0, end: 1, duration: Duration.zero)
-                  .fadeIn(
-                    duration: AnimationDuration.emojiDetailAnimationDuration,
-                    curve: Curves.easeInOut,
-                  )
-                  .slideX(
-                    begin: 1.5,
-                    end: 0,
-                    duration: AnimationDuration.emojiDetailAnimationDuration,
-                    curve: Curves.easeInOut,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(50.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 216.0,
+            height: 64.0,
+            decoration: BoxDecoration(
+              color: ColorName.white000,
+              borderRadius: BorderRadius.circular(50.0),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                for (ReactionType reactionType in ReactionType.values)
+                  DetailEmojiButton(
+                    isLoggedInUser: isLoggedInUser,
+                    newsId: newsId,
+                    shortFormInfo: shortFormInfo,
+                    reactionType: reactionType,
                   ),
-              CustomFloatingButton(
-                icon: Assets.icons.svg.icGoodWhite.svg(),
-                label: shortFormInfo.reactionCnt.total.toString(),
-                onTap: () => ref
-                    .read(detailEmojiButtonVisibilityProvider(newsId).notifier)
-                    .setDetailEmojiButtonVisibility(
-                      !isDetailEmojiButtonVisible,
-                    ),
+              ],
+            ),
+          )
+              .animate(target: isDetailEmojiButtonVisible ? 1 : 0)
+              .scaleXY(begin: 0, end: 1, duration: Duration.zero)
+              .fadeIn(
+                duration: AnimationDuration.emojiDetailAnimationDuration,
+                curve: Curves.easeInOut,
+              )
+              .slideX(
+                begin: 1.5,
+                end: 0,
+                duration: AnimationDuration.emojiDetailAnimationDuration,
+                curve: Curves.easeInOut,
               ),
-            ],
+          CustomFloatingButton(
+            width: 64.0,
+            height: 64.0,
+            icon: Assets.icons.svg.icGoodWhite.svg(),
+            label: shortFormInfo.reactionCnt.total.toString(),
+            onTap: () => ref
+                .read(detailEmojiButtonVisibilityProvider(newsId).notifier)
+                .setDetailEmojiButtonVisibility(
+                  !isDetailEmojiButtonVisible,
+                ),
           ),
-        ),
-        const SizedBox(
-          width: 8.0,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -109,6 +105,10 @@ class DetailEmojiButton extends ConsumerWidget {
     final userReactionType = shortFormInfo.userReaction.getReactionType();
 
     return CustomFloatingButton(
+      isInkWell: false,
+      width: 48.0,
+      height: 64.0,
+      shadowEnabled: false,
       icon: userReactionType == reactionType
           ? SvgPicture.asset(reactionType.blueSvgPath)
               .animate()
@@ -116,18 +116,24 @@ class DetailEmojiButton extends ConsumerWidget {
                 begin: 0.1,
                 end: 1.0,
               )
-              .shake()
+              .shake(
+                duration: const Duration(milliseconds: 400),
+              )
               .then()
               .scaleXY(
-                begin: 1.2,
+                begin: 1.4,
                 end: 1.1,
               )
-              .shake()
+              .shake(
+                duration: const Duration(milliseconds: 400),
+              )
           : SvgPicture.asset(reactionType.graySvgPath),
       label: shortFormInfo.reactionCnt
           .getReactionCountByType(reactionType)
           .toString(),
-      labelColor: Colors.black,
+      labelColor: userReactionType == reactionType
+          ? ColorName.gray500
+          : ColorName.gray200,
       onTap: () {
         // 로그인 상태가 아닌 경우 이모지 버튼 닫고 로그인 모달창 띄우기
         if (!isLoggedInUser) {

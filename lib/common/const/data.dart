@@ -36,9 +36,6 @@ class Constants {
   static double bottomNavigationBarHeightWithSafeArea =
       bottomNavigationBarHeight;
 
-  // 숏폼 화면 플로팅 버튼 크기
-  static const double shortFormFloatingButtonSize = 36.0;
-
   static const Color modalBarrierColor = Colors.black54;
   static const Color bottomNavigationBarModalBarrierColor = Color(0xFF0C0C10);
 

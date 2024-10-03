@@ -136,12 +136,19 @@ class CustomTextStyle {
         decorationThickness: decorationThickness,
       );
 
-  static TextStyle detail2Bold({Color color = textColor}) => TextStyle(
+  static TextStyle detail2Bold({
+    Color color = textColor,
+    TextDecoration? decoration,
+    Color? decorationColor,
+  }) =>
+      TextStyle(
         fontFamily: fontFamily,
         color: color,
         fontWeight: CustomFontWeight.bold,
         fontSize: 12,
         height: 1.4,
+        decoration: decoration,
+        decorationColor: decorationColor,
       );
 
   static TextStyle detail2Reg({Color color = textColor}) => TextStyle(

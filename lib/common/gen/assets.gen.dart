@@ -80,6 +80,10 @@ class $AssetsIconsSvgGen {
   SvgGenImage get btnClose =>
       const SvgGenImage('assets/icons/svg/btn_close.svg');
 
+  /// File path: assets/icons/svg/btn_comment_menu.svg
+  SvgGenImage get btnCommentMenu =>
+      const SvgGenImage('assets/icons/svg/btn_comment_menu.svg');
+
   /// File path: assets/icons/svg/btn_delete.svg
   SvgGenImage get btnDelete =>
       const SvgGenImage('assets/icons/svg/btn_delete.svg');
@@ -87,6 +91,17 @@ class $AssetsIconsSvgGen {
   /// File path: assets/icons/svg/btn_enter.svg
   SvgGenImage get btnEnter =>
       const SvgGenImage('assets/icons/svg/btn_enter.svg');
+
+  /// File path: assets/icons/svg/btn_filter.svg
+  SvgGenImage get btnFilter =>
+      const SvgGenImage('assets/icons/svg/btn_filter.svg');
+
+  /// File path: assets/icons/svg/btn_menu.svg
+  SvgGenImage get btnMenu => const SvgGenImage('assets/icons/svg/btn_menu.svg');
+
+  /// File path: assets/icons/svg/btn_menuopen.svg
+  SvgGenImage get btnMenuopen =>
+      const SvgGenImage('assets/icons/svg/btn_menuopen.svg');
 
   /// File path: assets/icons/svg/btn_notice_default.svg
   SvgGenImage get btnNoticeDefault =>
@@ -99,6 +114,21 @@ class $AssetsIconsSvgGen {
   /// File path: assets/icons/svg/btn_profile_edit.svg
   SvgGenImage get btnProfileEdit =>
       const SvgGenImage('assets/icons/svg/btn_profile_edit.svg');
+
+  /// File path: assets/icons/svg/btn_search_dark.svg
+  SvgGenImage get btnSearchDark =>
+      const SvgGenImage('assets/icons/svg/btn_search_dark.svg');
+
+  /// File path: assets/icons/svg/btn_search_light.svg
+  SvgGenImage get btnSearchLight =>
+      const SvgGenImage('assets/icons/svg/btn_search_light.svg');
+
+  /// File path: assets/icons/svg/btn_search_small.svg
+  SvgGenImage get btnSearchSmall =>
+      const SvgGenImage('assets/icons/svg/btn_search_small.svg');
+
+  /// File path: assets/icons/svg/btn_send.svg
+  SvgGenImage get btnSend => const SvgGenImage('assets/icons/svg/btn_send.svg');
 
   /// File path: assets/icons/svg/btn_setting.svg
   SvgGenImage get btnSetting =>
@@ -173,6 +203,10 @@ class $AssetsIconsSvgGen {
   /// File path: assets/icons/svg/ic_checkbox_enabled.svg
   SvgGenImage get icCheckboxEnabled =>
       const SvgGenImage('assets/icons/svg/ic_checkbox_enabled.svg');
+
+  /// File path: assets/icons/svg/ic_comment.svg
+  SvgGenImage get icComment =>
+      const SvgGenImage('assets/icons/svg/ic_comment.svg');
 
   /// File path: assets/icons/svg/ic_economy_blue.svg
   SvgGenImage get icEconomyBlue =>
@@ -250,6 +284,9 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icLightnaviSearchEnabled =>
       const SvgGenImage('assets/icons/svg/ic_lightnavi_search_enabled.svg');
 
+  /// File path: assets/icons/svg/ic_more.svg
+  SvgGenImage get icMore => const SvgGenImage('assets/icons/svg/ic_more.svg');
+
   /// File path: assets/icons/svg/ic_navi_home_disabled.svg
   SvgGenImage get icNaviHomeDisabled =>
       const SvgGenImage('assets/icons/svg/ic_navi_home_disabled.svg');
@@ -319,6 +356,9 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icSadWhite =>
       const SvgGenImage('assets/icons/svg/ic_sad_white.svg');
 
+  /// File path: assets/icons/svg/ic_share.svg
+  SvgGenImage get icShare => const SvgGenImage('assets/icons/svg/ic_share.svg');
+
   /// File path: assets/icons/svg/ic_society_blue.svg
   SvgGenImage get icSocietyBlue =>
       const SvgGenImage('assets/icons/svg/ic_society_blue.svg');
@@ -355,6 +395,9 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icUnsubscribe =>
       const SvgGenImage('assets/icons/svg/ic_unsubscribe.svg');
 
+  /// File path: assets/icons/svg/ic_view.svg
+  SvgGenImage get icView => const SvgGenImage('assets/icons/svg/ic_view.svg');
+
   /// File path: assets/icons/svg/ic_world_blue.svg
   SvgGenImage get icWorldBlue =>
       const SvgGenImage('assets/icons/svg/ic_world_blue.svg');
@@ -379,11 +422,19 @@ class $AssetsIconsSvgGen {
   List<SvgGenImage> get values => [
         btnBack,
         btnClose,
+        btnCommentMenu,
         btnDelete,
         btnEnter,
+        btnFilter,
+        btnMenu,
+        btnMenuopen,
         btnNoticeDefault,
         btnNoticeNew,
         btnProfileEdit,
+        btnSearchDark,
+        btnSearchLight,
+        btnSearchSmall,
+        btnSend,
         btnSetting,
         chipEconomy,
         chipEntertain,
@@ -403,6 +454,7 @@ class $AssetsIconsSvgGen {
         icCheckEnabled,
         icCheckboxDisabled,
         icCheckboxEnabled,
+        icComment,
         icEconomyBlue,
         icEconomyGray,
         icEntertainBlue,
@@ -422,6 +474,7 @@ class $AssetsIconsSvgGen {
         icLightnaviMyEnabled,
         icLightnaviSearchDisabled,
         icLightnaviSearchEnabled,
+        icMore,
         icNaviHomeDisabled,
         icNaviHomeEnabled,
         icNaviMyDisabled,
@@ -440,6 +493,7 @@ class $AssetsIconsSvgGen {
         icSadBlue,
         icSadGray,
         icSadWhite,
+        icShare,
         icSocietyBlue,
         icSocietyGray,
         icSportsBlue,
@@ -449,6 +503,7 @@ class $AssetsIconsSvgGen {
         icSurpriseWhite,
         icUnlike,
         icUnsubscribe,
+        icView,
         icWorldBlue,
         icWorldGray,
         imgLoginEmpty,
