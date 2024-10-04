@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
@@ -33,7 +34,8 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
 
           final resp = await showConfirmationDialog(
             context: context,
-            content: '정말 댓글 수정을 취소하시겠습니까?',
+            content: '정말 댓글 수정을 취소하시겠어요?',
+            details: '작성 중인 댓글은 저장되지 않아요',
             confirmText: '수정 취소',
             cancelText: '계속하기',
           );
@@ -58,6 +60,7 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
                   autofocus: true,
                   minLines: 1,
                   maxLines: 3,
+                  maxLength: Constants.maxCommentLength,
                   hintText: '댓글을 입력하세요',
                   suffixIcon: GestureDetector(
                     onTap: () => controller.clear(),
@@ -69,14 +72,17 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
                 ),
               ),
               const SizedBox(width: 8.0),
-              SendButton(
-                newsId: newsId,
-                parentCommentId: parentCommentId,
-                commentId: commentId,
-                index: index,
-                controller: controller,
-                isInBottomSheet: true,
-                type: type,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 26.0),
+                child: SendButton(
+                  newsId: newsId,
+                  parentCommentId: parentCommentId,
+                  commentId: commentId,
+                  index: index,
+                  controller: controller,
+                  isInBottomSheet: true,
+                  type: type,
+                ),
               ),
             ],
           ),

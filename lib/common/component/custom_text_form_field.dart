@@ -24,6 +24,7 @@ class CustomTextFormField extends StatefulWidget {
   final bool autofocus;
   final int? minLines;
   final int? maxLines;
+  final bool showCounter;
 
   const CustomTextFormField({
     super.key,
@@ -48,6 +49,7 @@ class CustomTextFormField extends StatefulWidget {
     this.autofocus = false,
     this.minLines,
     this.maxLines = 1,
+    this.showCounter = true,
   });
 
   @override
@@ -170,7 +172,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             widget.helper ?? const SizedBox(),
             Expanded(
               child: widget.errorMessage ??
-                  (widget.maxLength != null
+                  (widget.maxLength != null && widget.showCounter
                       ? Text.rich(
                           textAlign: TextAlign.end,
                           TextSpan(

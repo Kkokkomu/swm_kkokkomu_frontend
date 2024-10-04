@@ -51,6 +51,9 @@ class Constants {
 
   // 출생연도를 선택안했을 때 사용하는 값 (1800년)
   static const int birthYearNotSelected = 1800;
+
+  // 댓글 최대 길이
+  static const int maxCommentLength = 250;
 }
 
 class AnimationDuration {

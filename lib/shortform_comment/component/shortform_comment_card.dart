@@ -173,7 +173,8 @@ class ShortFormCommentCard extends ConsumerWidget {
                       // 댓글 삭제 여부 확인 다이얼로그
                       final isDelete = await showConfirmationDialog(
                         context: context,
-                        content: '정말 댓글을 삭제하시겠습니까?',
+                        content: '정말 댓글을 삭제하시겠어요?',
+                        details: '삭제된 댓글은 복구할 수 없어요',
                         confirmText: '삭제',
                         cancelText: '취소',
                       );

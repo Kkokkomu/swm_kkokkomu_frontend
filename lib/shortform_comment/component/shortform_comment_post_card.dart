@@ -88,6 +88,8 @@ class _ShortFormCommentInputCardState
                 },
                 child: AbsorbPointer(
                   child: CustomTextFormField(
+                    maxLength: Constants.maxCommentLength,
+                    showCounter: false,
                     hintText: '댓글을 입력하세요',
                     controller: _controller,
                     readOnly: true,
