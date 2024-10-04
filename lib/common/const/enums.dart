@@ -168,9 +168,9 @@ enum ShortFormCommentSendButtonType {
 enum CommentReportType {
   offensive('OFFENSIVE', '불쾌감을 주거나 부적절한 이름'),
   profane('PROFANE', '욕설'),
-  violent('VIOLENT', '폭력적 또는 혐오스러운 콘텐츠'),
-  porno('PORNO', '성적인 콘텐츠'),
-  spam('SPAM', '스팸 또는 혼동을 야기하는 콘텐츠');
+  violent('VIOLENT', '폭력적 또는 혐오적인 댓글'),
+  porno('PORNO', '성적인 댓글'),
+  spam('SPAM', '스팸 또는 혼동을 야기하는 댓글');
 
   final String name;
   final String message;
