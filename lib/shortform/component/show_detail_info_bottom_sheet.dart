@@ -4,7 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_close_button.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_grabber.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
@@ -23,7 +26,7 @@ Future<dynamic> showDetailInfoBottomSheet({
       context: context,
       builder: (context) => ClipRRect(
         borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(16.0),
+          top: Radius.circular(12.0),
         ),
         child: DraggableScrollableSheet(
           expand: false,
@@ -41,87 +44,99 @@ Future<dynamic> showDetailInfoBottomSheet({
                   SliverAppBar(
                     pinned: true,
                     backgroundColor: ColorName.white000,
+                    surfaceTintColor: ColorName.white000,
                     elevation: 0.0,
                     scrolledUnderElevation: 0.0,
-                    title: const Text('설명'),
+                    titleSpacing: 18.0,
+                    toolbarHeight: 62.0,
+                    titleTextStyle: CustomTextStyle.head3(),
+                    title: Text(
+                      '설명',
+                      style: CustomTextStyle.head3(),
+                    ),
                     automaticallyImplyLeading: false,
-                    flexibleSpace: FlexibleSpaceBar(
+                    flexibleSpace: const FlexibleSpaceBar(
                       background: Align(
                         alignment: Alignment.topCenter,
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 8.0),
-                          width: 48.0,
-                          height: 6.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.0),
-                            color: ColorName.gray100,
-                          ),
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 5.5),
+                          child: CustomGrabber(),
                         ),
                       ),
                     ),
-                    actions: [
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => context.pop(),
+                    actions: const [
+                      Padding(
+                        padding: EdgeInsets.only(right: 4.0),
+                        child: CustomCloseButton(),
                       ),
                     ],
                     bottom: const PreferredSize(
                       preferredSize: Size.fromHeight(0),
                       child: Divider(
-                        thickness: 1.0,
-                        height: 1.0,
+                        thickness: 0.5,
+                        height: 0.5,
+                        color: ColorName.gray200,
                       ),
                     ),
                   ),
                   SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Consumer(
-                        builder: (_, ref, __) {
-                          final user = ref.watch(userInfoProvider);
-                          final newsInfo = user is UserModel
-                              ? ref.watch(
-                                  loggedInUserShortFormInfoProvider(newsId))
-                              : ref.watch(
-                                  guestUserShortFormInfoProvider(newsId));
+                    child: Consumer(
+                      builder: (_, ref, __) {
+                        final user = ref.watch(userInfoProvider);
+                        final newsInfo = user is UserModel
+                            ? ref.watch(
+                                loggedInUserShortFormInfoProvider(newsId))
+                            : ref.watch(guestUserShortFormInfoProvider(newsId));
 
-                          switch (newsInfo) {
-                            case ShortFormModelLoading():
-                              return const Center(
-                                child: CustomCircularProgressIndicator(),
-                              );
+                        switch (newsInfo) {
+                          case ShortFormModelLoading():
+                            return const Center(
+                              child: CustomCircularProgressIndicator(),
+                            );
 
-                            case ShortFormModelError():
-                              return Center(
-                                child: Text(newsInfo.message),
-                              );
+                          case ShortFormModelError():
+                            return Center(
+                              child: Text(
+                                newsInfo.message,
+                                style: CustomTextStyle.body1Medi(
+                                  color: ColorName.gray200,
+                                ),
+                              ),
+                            );
 
-                            case ShortFormModel():
-                              final userReaction =
-                                  newsInfo.userReaction.getReactionType();
+                          case ShortFormModel():
+                            final userReaction =
+                                newsInfo.userReaction.getReactionType();
 
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 24.0),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 18.0,
+                                  ),
+                                  child: Text(
                                     newsInfo.info.news.title,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 4,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: CustomTextStyle.head4(),
                                   ),
-                                  const SizedBox(height: 16.0),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      for (ReactionType reactionType
-                                          in ReactionType.values)
-                                        Column(
-                                          children: [
-                                            GestureDetector(
+                                ),
+                                const SizedBox(height: 18.0),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    for (ReactionType reactionType
+                                        in ReactionType.values)
+                                      Column(
+                                        children: [
+                                          Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              customBorder:
+                                                  const CircleBorder(),
                                               onTap: () {
                                                 // 로그인 상태가 아닌 경우 정보창 닫고 로그인 모달창 띄우기
                                                 if (user is! UserModel) {
@@ -171,52 +186,102 @@ Future<dynamic> showDetailInfoBottomSheet({
                                                         begin: 0.1,
                                                         end: 1.0,
                                                       )
-                                                      .shake()
+                                                      .shake(
+                                                        duration:
+                                                            const Duration(
+                                                          milliseconds: 400,
+                                                        ),
+                                                      )
                                                       .then()
                                                       .scaleXY(
-                                                        begin: 1.2,
+                                                        begin: 1.4,
                                                         end: 1.1,
                                                       )
-                                                      .shake()
+                                                      .shake(
+                                                        duration:
+                                                            const Duration(
+                                                          milliseconds: 400,
+                                                        ),
+                                                      )
                                                   : SvgPicture.asset(
                                                       reactionType.graySvgPath,
                                                     ),
                                             ),
-                                            Text(reactionType.label),
-                                            Text(
-                                              newsInfo.reactionCnt
-                                                  .getReactionCountByType(
-                                                    reactionType,
-                                                  )
-                                                  .toString(),
+                                          ),
+                                          const SizedBox(height: 8.0),
+                                          Text(
+                                            reactionType.label,
+                                            style: CustomTextStyle.detail3Reg(
+                                              color: ColorName.gray500,
                                             ),
-                                          ],
-                                        ),
-                                    ],
+                                          ),
+                                          Text(
+                                            newsInfo.reactionCnt
+                                                .getReactionCountByType(
+                                                  reactionType,
+                                                )
+                                                .toString(),
+                                            style: CustomTextStyle.detail2Bold(
+                                              color: ColorName.gray500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                                const SizedBox(height: 27.0),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 18.0,
                                   ),
-                                  const SizedBox(height: 16.0),
-                                  Text('조회수 | ${newsInfo.info.news.viewCnt}'),
-                                  Text(
-                                      '업로드 날짜 | ${newsInfo.info.news.createdAt}'),
-                                  const Divider(
-                                    height: 48.0,
-                                  ),
-                                  Text(newsInfo.info.news.summary),
-                                  const SizedBox(height: 16.0),
-                                  Wrap(
-                                    spacing: 8.0,
-                                    runSpacing: 8.0,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      for (String keyword
-                                          in newsInfo.info.keywords)
-                                        Text('#$keyword'),
+                                      Text(
+                                        '조회수 | ${newsInfo.info.news.viewCnt}',
+                                        style: CustomTextStyle.detail3Reg(
+                                          color: ColorName.gray300,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4.0),
+                                      Text(
+                                        '업로드 날짜 | ${newsInfo.info.news.createdAt}',
+                                        style: CustomTextStyle.detail3Reg(
+                                          color: ColorName.gray300,
+                                        ),
+                                      ),
+                                      const Divider(
+                                        height: 48.0,
+                                        thickness: 1.0,
+                                        color: ColorName.gray200,
+                                      ),
+                                      Text(
+                                        newsInfo.info.news.summary,
+                                        style: CustomTextStyle.body2Reg(),
+                                      ),
+                                      const SizedBox(height: 28.0),
+                                      Wrap(
+                                        spacing: 8.0,
+                                        runSpacing: 8.0,
+                                        children: [
+                                          for (String keyword
+                                              in newsInfo.info.keywords)
+                                            Text(
+                                              '#$keyword',
+                                              style: CustomTextStyle.body3Medi(
+                                                color: ColorName.gray200,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
                                     ],
                                   ),
-                                ],
-                              );
-                          }
-                        },
-                      ),
+                                ),
+                              ],
+                            );
+                        }
+                      },
                     ),
                   ),
                 ],
