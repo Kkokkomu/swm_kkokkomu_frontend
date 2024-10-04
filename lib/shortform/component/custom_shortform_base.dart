@@ -21,7 +21,7 @@ class CustomShortFormBase extends StatelessWidget {
         child,
         SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.fromLTRB(4.0, 4.0, 0.0, 0.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

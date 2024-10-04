@@ -49,20 +49,34 @@ class CustomFloatingButton extends StatelessWidget {
                   ],
                 )
               : null,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                icon,
-                if (label != null)
-                  Text(
-                    label!,
-                    style: CustomTextStyle.detail3Reg(color: labelColor),
+          // width와 height가 모두 null인 경우에는 Center로 감싸지 않음
+          child: width == null && height == null
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    icon,
+                    if (label != null)
+                      Text(
+                        label!,
+                        style: CustomTextStyle.detail3Reg(color: labelColor),
+                      ),
+                  ],
+                )
+              : Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      icon,
+                      if (label != null)
+                        Text(
+                          label!,
+                          style: CustomTextStyle.detail3Reg(color: labelColor),
+                        ),
+                    ],
                   ),
-              ],
-            ),
-          ),
+                ),
         ),
       ),
     );

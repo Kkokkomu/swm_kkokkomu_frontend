@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_close_button.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_grabber.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_sort_type_provider.dart';
@@ -27,91 +31,152 @@ class ShortFormCommentTitle extends ConsumerWidget {
           .read(shortFormCommentHeightControllerProvider((newsId)).notifier)
           .onVerticalDragEnd(details, maxCommentBodyHeight),
       child: Container(
-        color: ColorName.white000,
+        decoration: const BoxDecoration(
+          color: ColorName.white000,
+          border: Border(
+            bottom: BorderSide(
+              color: ColorName.gray200,
+              width: 0.5,
+            ),
+          ),
+        ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 6.0),
-            Container(
-              width: 54.0,
-              height: 6.0,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(3.0),
+            const SizedBox(height: 5.5),
+            const Center(
+              child: CustomGrabber(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: isReply ? 0.0 : 18.0, right: 4.0),
+              child: Row(
+                children: [
+                  // back button
+                  if (isReply)
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        customBorder: const CircleBorder(),
+                        onTap: ref
+                            .read(
+                              shortFormCommentHeightControllerProvider(
+                                (newsId),
+                              ).notifier,
+                            )
+                            .deactivateReply,
+                        child: Assets.icons.svg.btnBack.svg(),
+                      ),
+                    ),
+                  Text(
+                    isReply ? '답글' : '댓글',
+                    style: CustomTextStyle.head3(),
+                  ),
+                  const Spacer(),
+                  CustomCloseButton(
+                    onTap: ref
+                        .read(
+                          shortFormCommentHeightControllerProvider((newsId))
+                              .notifier,
+                        )
+                        .setCommentBodySizeSmall,
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 6.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Row(
+            if (!isReply)
+              Consumer(
+                builder: (_, ref, __) {
+                  final sortType =
+                      ref.watch(shortFormCommentSortTypeProvider(newsId));
+
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      // back button
-                      if (isReply)
-                        IconButton(
-                          onPressed: ref
-                              .read(
-                                shortFormCommentHeightControllerProvider(
-                                  (newsId),
-                                ).notifier,
-                              )
-                              .deactivateReply,
-                          icon: const Icon(
-                            Icons.arrow_back_ios,
-                            size: 24.0,
+                      const SizedBox(width: 18.0),
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(20.0),
+                          onTap: () => ref
+                              .read(shortFormCommentSortTypeProvider(newsId)
+                                  .notifier)
+                              .state = ShortFormCommentSortType.popular,
+                          child: Ink(
+                            width: 58.0,
+                            height: 30.0,
+                            decoration: BoxDecoration(
+                              color:
+                                  sortType == ShortFormCommentSortType.popular
+                                      ? ColorName.gray600
+                                      : ColorName.white000,
+                              borderRadius: BorderRadius.circular(20.0),
+                              border:
+                                  sortType == ShortFormCommentSortType.popular
+                                      ? null
+                                      : Border.all(
+                                          color: ColorName.gray100,
+                                          width: 1.0,
+                                        ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '인기순',
+                                style: CustomTextStyle.detail1Reg(
+                                  color: sortType ==
+                                          ShortFormCommentSortType.popular
+                                      ? ColorName.white000
+                                      : ColorName.gray500,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      Text(
-                        isReply ? '답글' : '댓글',
-                        style: const TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
+                      ),
+                      const SizedBox(width: 4.0),
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(20.0),
+                          onTap: () => ref
+                              .read(shortFormCommentSortTypeProvider(newsId)
+                                  .notifier)
+                              .state = ShortFormCommentSortType.latest,
+                          child: Ink(
+                            width: 58.0,
+                            height: 30.0,
+                            decoration: BoxDecoration(
+                              color: sortType == ShortFormCommentSortType.latest
+                                  ? ColorName.gray600
+                                  : ColorName.white000,
+                              borderRadius: BorderRadius.circular(20.0),
+                              border:
+                                  sortType == ShortFormCommentSortType.latest
+                                      ? null
+                                      : Border.all(
+                                          color: ColorName.gray100,
+                                          width: 1.0,
+                                        ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '최신순',
+                                style: CustomTextStyle.detail1Reg(
+                                  color: sortType ==
+                                          ShortFormCommentSortType.latest
+                                      ? ColorName.white000
+                                      : ColorName.gray500,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      if (!isReply)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(width: 16.0),
-                            ElevatedButton(
-                              onPressed: () => ref
-                                  .read(shortFormCommentSortTypeProvider(newsId)
-                                      .notifier)
-                                  .state = ShortFormCommentSortType.popular,
-                              child: const Text('인기순'),
-                            ),
-                            const SizedBox(width: 8.0),
-                            ElevatedButton(
-                              onPressed: () => ref
-                                  .read(shortFormCommentSortTypeProvider(newsId)
-                                      .notifier)
-                                  .state = ShortFormCommentSortType.latest,
-                              child: const Text('최신순'),
-                            ),
-                          ],
-                        ),
                     ],
-                  ),
-                ),
-                IconButton(
-                  onPressed: ref
-                      .read(
-                        shortFormCommentHeightControllerProvider((newsId))
-                            .notifier,
-                      )
-                      .setCommentBodySizeSmall,
-                  icon: const Icon(
-                    Icons.close,
-                    size: 28.0,
-                  ),
-                ),
-              ],
-            ),
-            const Divider(
-              height: 1.0,
-              thickness: 1.0,
-            ),
+                  );
+                },
+              ),
+            SizedBox(height: isReply ? 4.0 : 12.0),
           ],
         ),
       ),

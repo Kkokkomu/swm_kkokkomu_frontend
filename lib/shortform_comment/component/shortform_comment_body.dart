@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/cursor_pagination_list_view.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
@@ -60,13 +62,24 @@ class ShortFormCommentBody extends StatelessWidget {
             return CursorPaginationListView<ShortFormCommentModel>(
               id: newsId,
               provider: provider,
-              separatorBuilder: (_, __) => const SizedBox(height: 16.0),
+              separatorBuilder: (_, __) => const SizedBox(),
               itemBuilder: (_, index, model) => ShortFormCommentCard(
                 shortFormCommentModel: model,
                 parentCommentId: isReply ? parentCommentId : null,
                 index: index,
                 isReply: isReply,
                 isReplyHeader: false,
+              ),
+              emptyWidget: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Assets.images.svg.imgCommentEmpty.svg(),
+                  const SizedBox(height: 6.0),
+                  Text(
+                    '작성된 댓글이 없어요',
+                    style: CustomTextStyle.body1Medi(color: ColorName.gray200),
+                  ),
+                ],
               ),
             );
           }
@@ -162,16 +175,13 @@ class ShortFormCommentBody extends StatelessWidget {
                     // 부모 댓글 정보를 보여줌
                     SliverToBoxAdapter(
                       child: Container(
-                        color: ColorName.gray100,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: ShortFormCommentCard(
-                            shortFormCommentModel: parentComment.model!,
-                            index: parentComment.index,
-                            isReply: false,
-                            isReplyHeader: true,
-                            parentCommentId: null,
-                          ),
+                        color: ColorName.gray50,
+                        child: ShortFormCommentCard(
+                          shortFormCommentModel: parentComment.model!,
+                          index: parentComment.index,
+                          isReply: false,
+                          isReplyHeader: true,
+                          parentCommentId: null,
                         ),
                       ),
                     ),

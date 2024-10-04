@@ -13,6 +13,7 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
   final PaginationWidgetBuilder<T> itemBuilder;
   final PaginationSeparatorBuilder separatorBuilder;
   final int id;
+  final Widget? emptyWidget;
 
   const CursorPaginationListView({
     super.key,
@@ -20,6 +21,7 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
     required this.itemBuilder,
     required this.separatorBuilder,
     required this.id,
+    this.emptyWidget,
   });
 
   @override
@@ -61,89 +63,96 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
 
     final paginationData = state as CursorPagination<T>;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: CustomRefreshIndicator(
+    if (paginationData.items.isEmpty) {
+      return CustomRefreshIndicator(
         onRefresh: () =>
             ref.read(provider(id).notifier).paginate(forceRefetch: true),
-        child: Scrollbar(
-          child: ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: paginationData.items.length + 1,
-            separatorBuilder: separatorBuilder,
-            itemBuilder: (_, index) {
-              if (state is! CursorPaginationFetchingMoreError &&
-                  index ==
-                      paginationData.items.length -
-                          1 -
-                          (Constants.cursorPaginationFetchCount * 0.1)
-                              .toInt()) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  ref.read(provider(id).notifier).paginate(fetchMore: true);
-                });
-              }
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: emptyWidget ?? const Text('데이터가 없습니다'),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
-              if (index == paginationData.items.length) {
-                if (paginationData.items.isEmpty) {
-                  return const Center(
-                    child: Text('데이터가 없습니다.'),
-                  );
-                }
+    return CustomRefreshIndicator(
+      onRefresh: () =>
+          ref.read(provider(id).notifier).paginate(forceRefetch: true),
+      child: Scrollbar(
+        child: ListView.separated(
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: paginationData.items.length + 1,
+          separatorBuilder: separatorBuilder,
+          itemBuilder: (_, index) {
+            if (state is! CursorPaginationFetchingMoreError &&
+                index ==
+                    paginationData.items.length -
+                        1 -
+                        (Constants.cursorPaginationFetchCount * 0.1).toInt()) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ref.read(provider(id).notifier).paginate(fetchMore: true);
+              });
+            }
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
-                  child: Center(
-                    child: paginationData is CursorPaginationFetchingMore
-                        ? const CustomCircularProgressIndicator()
-                        : paginationData is CursorPaginationFetchingMoreError
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    (paginationData
-                                            as CursorPaginationFetchingMoreError)
-                                        .message,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(color: Colors.white),
+            if (index == paginationData.items.length) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: Center(
+                  child: paginationData is CursorPaginationFetchingMore
+                      ? const CustomCircularProgressIndicator()
+                      : paginationData is CursorPaginationFetchingMoreError
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  (paginationData
+                                          as CursorPaginationFetchingMoreError)
+                                      .message,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                const SizedBox(height: 16.0),
+                                ElevatedButton(
+                                  onPressed: () => ref
+                                      .read(provider(id).notifier)
+                                      .paginate(fetchMore: true),
+                                  child: const Text(
+                                    '다시시도',
                                   ),
-                                  const SizedBox(height: 16.0),
-                                  ElevatedButton(
-                                    onPressed: () => ref
-                                        .read(provider(id).notifier)
-                                        .paginate(fetchMore: true),
-                                    child: const Text(
-                                      '다시시도',
-                                    ),
+                                ),
+                                const SizedBox(height: 16.0),
+                                ElevatedButton(
+                                  onPressed: () => ref
+                                      .read(provider(id).notifier)
+                                      .paginate(forceRefetch: true),
+                                  child: const Text(
+                                    '전체 새로고침',
                                   ),
-                                  const SizedBox(height: 16.0),
-                                  ElevatedButton(
-                                    onPressed: () => ref
-                                        .read(provider(id).notifier)
-                                        .paginate(forceRefetch: true),
-                                    child: const Text(
-                                      '전체 새로고침',
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : const SizedBox(),
-                  ),
-                );
-              }
-
-              final paginationItem = paginationData.items[index];
-
-              return itemBuilder(
-                context,
-                index,
-                paginationItem,
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
+                ),
               );
-            },
-          ),
+            }
+
+            final paginationItem = paginationData.items[index];
+
+            return itemBuilder(
+              context,
+              index,
+              paginationItem,
+            );
+          },
         ),
       ),
     );

@@ -3,8 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 
 class CustomCloseButton extends StatelessWidget {
+  final void Function()? onTap;
+
   const CustomCloseButton({
     super.key,
+    this.onTap,
   });
 
   @override
@@ -13,7 +16,7 @@ class CustomCloseButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         customBorder: const CircleBorder(),
-        onTap: () => context.pop(),
+        onTap: onTap ?? () => context.pop(),
         child: Assets.icons.svg.btnClose.svg(),
       ),
     );

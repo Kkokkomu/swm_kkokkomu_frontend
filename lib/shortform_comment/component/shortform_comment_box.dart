@@ -32,25 +32,31 @@ class ShortFormCommentBox extends StatelessWidget {
                   (duration: value.animationDuration, height: value.height),
             ));
 
-            return AnimatedContainer(
-              onEnd: () {
-                // 댓글창이 닫히고 애니메이션이 종료된 경우
-                // FloatingButton을 보이도록 설정
-                if (!ref
-                    .read(shortFormCommentHeightControllerProvider((newsId)))
-                    .isShortFormCommentVisible) {
-                  ref
-                      .read(shortFormCommentHeightControllerProvider((newsId))
-                          .notifier)
-                      .setShortFormFloatingButtonVisibility(true);
-                }
-              },
-              curve: Curves.easeInOut,
-              height: animationDurationAndHeight.height,
-              duration: animationDurationAndHeight.duration,
-              width: double.infinity,
-              color: ColorName.white000,
-              child: child,
+            return ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12.0),
+                topRight: Radius.circular(12.0),
+              ),
+              child: AnimatedContainer(
+                onEnd: () {
+                  // 댓글창이 닫히고 애니메이션이 종료된 경우
+                  // FloatingButton을 보이도록 설정
+                  if (!ref
+                      .read(shortFormCommentHeightControllerProvider((newsId)))
+                      .isShortFormCommentVisible) {
+                    ref
+                        .read(shortFormCommentHeightControllerProvider((newsId))
+                            .notifier)
+                        .setShortFormFloatingButtonVisibility(true);
+                  }
+                },
+                curve: Curves.easeInOut,
+                height: animationDurationAndHeight.height,
+                duration: animationDurationAndHeight.duration,
+                width: double.infinity,
+                color: ColorName.white000,
+                child: child,
+              ),
             );
           },
           child: Column(

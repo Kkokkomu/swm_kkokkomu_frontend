@@ -49,6 +49,9 @@ class $AssetsIconsGen {
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// Directory path: assets/images/svg
+  $AssetsImagesSvgGen get svg => const $AssetsImagesSvgGen();
 }
 
 class $AssetsIconsPngGen {
@@ -134,6 +137,14 @@ class $AssetsIconsSvgGen {
   SvgGenImage get btnSetting =>
       const SvgGenImage('assets/icons/svg/btn_setting.svg');
 
+  /// File path: assets/icons/svg/btn_thumbup_disabled.svg
+  SvgGenImage get btnThumbupDisabled =>
+      const SvgGenImage('assets/icons/svg/btn_thumbup_disabled.svg');
+
+  /// File path: assets/icons/svg/btn_thumbup_enabled.svg
+  SvgGenImage get btnThumbupEnabled =>
+      const SvgGenImage('assets/icons/svg/btn_thumbup_enabled.svg');
+
   /// File path: assets/icons/svg/chip_economy.svg
   SvgGenImage get chipEconomy =>
       const SvgGenImage('assets/icons/svg/chip_economy.svg');
@@ -208,6 +219,10 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icComment =>
       const SvgGenImage('assets/icons/svg/ic_comment.svg');
 
+  /// File path: assets/icons/svg/ic_delete.svg
+  SvgGenImage get icDelete =>
+      const SvgGenImage('assets/icons/svg/ic_delete.svg');
+
   /// File path: assets/icons/svg/ic_economy_blue.svg
   SvgGenImage get icEconomyBlue =>
       const SvgGenImage('assets/icons/svg/ic_economy_blue.svg');
@@ -215,6 +230,9 @@ class $AssetsIconsSvgGen {
   /// File path: assets/icons/svg/ic_economy_gray.svg
   SvgGenImage get icEconomyGray =>
       const SvgGenImage('assets/icons/svg/ic_economy_gray.svg');
+
+  /// File path: assets/icons/svg/ic_edit.svg
+  SvgGenImage get icEdit => const SvgGenImage('assets/icons/svg/ic_edit.svg');
 
   /// File path: assets/icons/svg/ic_entertain_blue.svg
   SvgGenImage get icEntertainBlue =>
@@ -436,6 +454,8 @@ class $AssetsIconsSvgGen {
         btnSearchSmall,
         btnSend,
         btnSetting,
+        btnThumbupDisabled,
+        btnThumbupEnabled,
         chipEconomy,
         chipEntertain,
         chipIt,
@@ -455,8 +475,10 @@ class $AssetsIconsSvgGen {
         icCheckboxDisabled,
         icCheckboxEnabled,
         icComment,
+        icDelete,
         icEconomyBlue,
         icEconomyGray,
+        icEdit,
         icEntertainBlue,
         icEntertainGray,
         icFolder,
@@ -510,6 +532,17 @@ class $AssetsIconsSvgGen {
         splashLogo,
         splashTypoLogo
       ];
+}
+
+class $AssetsImagesSvgGen {
+  const $AssetsImagesSvgGen();
+
+  /// File path: assets/images/svg/img_comment_empty.svg
+  SvgGenImage get imgCommentEmpty =>
+      const SvgGenImage('assets/images/svg/img_comment_empty.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [imgCommentEmpty];
 }
 
 class Assets {
