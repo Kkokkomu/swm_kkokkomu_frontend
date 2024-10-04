@@ -225,7 +225,8 @@ class ShortFormCommentCard extends ConsumerWidget {
                       // 유저 차단 여부 확인 다이얼로그
                       final isDelete = await showConfirmationDialog(
                         context: context,
-                        content: '정말 해당 유저를 차단하시겠습니까?',
+                        content: '정말 해당 유저를 차단하시겠어요?',
+                        details: '차단된 유저의 댓글이 숨김 처리돼요',
                         confirmText: '차단',
                         cancelText: '취소',
                       );

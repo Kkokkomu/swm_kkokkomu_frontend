@@ -83,75 +83,79 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
     return CustomRefreshIndicator(
       onRefresh: () =>
           ref.read(provider(id).notifier).paginate(forceRefetch: true),
-      child: Scrollbar(
-        child: ListView.separated(
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: paginationData.items.length + 1,
-          separatorBuilder: separatorBuilder,
-          itemBuilder: (_, index) {
-            if (state is! CursorPaginationFetchingMoreError &&
-                index ==
-                    paginationData.items.length -
-                        1 -
-                        (Constants.cursorPaginationFetchCount * 0.1).toInt()) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                ref.read(provider(id).notifier).paginate(fetchMore: true);
-              });
-            }
+      child: Padding(
+        padding: const EdgeInsets.only(right: 4.0),
+        child: Scrollbar(
+          child: ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: paginationData.items.length + 1,
+            separatorBuilder: separatorBuilder,
+            itemBuilder: (_, index) {
+              if (state is! CursorPaginationFetchingMoreError &&
+                  index ==
+                      paginationData.items.length -
+                          1 -
+                          (Constants.cursorPaginationFetchCount * 0.1)
+                              .toInt()) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  ref.read(provider(id).notifier).paginate(fetchMore: true);
+                });
+              }
 
-            if (index == paginationData.items.length) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12.0,
-                ),
-                child: Center(
-                  child: paginationData is CursorPaginationFetchingMore
-                      ? const CustomCircularProgressIndicator()
-                      : paginationData is CursorPaginationFetchingMoreError
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  (paginationData
-                                          as CursorPaginationFetchingMoreError)
-                                      .message,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                                const SizedBox(height: 16.0),
-                                ElevatedButton(
-                                  onPressed: () => ref
-                                      .read(provider(id).notifier)
-                                      .paginate(fetchMore: true),
-                                  child: const Text(
-                                    '다시시도',
+              if (index == paginationData.items.length) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12.0,
+                  ),
+                  child: Center(
+                    child: paginationData is CursorPaginationFetchingMore
+                        ? const CustomCircularProgressIndicator()
+                        : paginationData is CursorPaginationFetchingMoreError
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    (paginationData
+                                            as CursorPaginationFetchingMoreError)
+                                        .message,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(color: Colors.white),
                                   ),
-                                ),
-                                const SizedBox(height: 16.0),
-                                ElevatedButton(
-                                  onPressed: () => ref
-                                      .read(provider(id).notifier)
-                                      .paginate(forceRefetch: true),
-                                  child: const Text(
-                                    '전체 새로고침',
+                                  const SizedBox(height: 16.0),
+                                  ElevatedButton(
+                                    onPressed: () => ref
+                                        .read(provider(id).notifier)
+                                        .paginate(fetchMore: true),
+                                    child: const Text(
+                                      '다시시도',
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )
-                          : const SizedBox(),
-                ),
+                                  const SizedBox(height: 16.0),
+                                  ElevatedButton(
+                                    onPressed: () => ref
+                                        .read(provider(id).notifier)
+                                        .paginate(forceRefetch: true),
+                                    child: const Text(
+                                      '전체 새로고침',
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
+                  ),
+                );
+              }
+
+              final paginationItem = paginationData.items[index];
+
+              return itemBuilder(
+                context,
+                index,
+                paginationItem,
               );
-            }
-
-            final paginationItem = paginationData.items[index];
-
-            return itemBuilder(
-              context,
-              index,
-              paginationItem,
-            );
-          },
+            },
+          ),
         ),
       ),
     );

@@ -101,7 +101,7 @@ class MoreInfoButton extends ConsumerWidget {
 
               final isConfirmed = await showConfirmationDialog(
                 context: context,
-                content: '정말 관심없음 처리하시겠습니까?',
+                content: '정말 관심없음 처리하시겠어요?',
                 confirmText: '관심없음',
                 cancelText: '취소',
               );
