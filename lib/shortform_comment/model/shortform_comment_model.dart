@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
+import 'package:swm_kkokkomu_frontend/common/utils/custom_date_utils.dart';
 
 part 'shortform_comment_model.g.dart';
 
@@ -24,7 +25,10 @@ class ShortFormCommentModel implements IModelWithId {
     int? commentLikeCnt,
     bool? userLike,
   })  : user = user ?? ShortFormCommentUserInfo(),
-        comment = comment ?? ShortFormCommentInfo(),
+        comment = comment ??
+            ShortFormCommentInfo(
+              editedAt: DateTime(Constants.unknownErrorDateTimeYear),
+            ),
         replyCnt = replyCnt ?? 0,
         commentLikeCnt = commentLikeCnt ?? 0,
         id = comment?.id ?? Constants.unknownErrorId,
@@ -89,25 +93,24 @@ class ShortFormCommentInfo {
   final int userId;
   final int newsId;
   final String content;
-  final String editedAt;
+  @JsonKey(
+    fromJson: CustomDateUtils.parseDateTime,
+    toJson: CustomDateUtils.formatDateTime,
+  )
+  final DateTime editedAt;
 
   ShortFormCommentInfo({
     int? id,
     int? userId,
     int? newsId,
     String? content,
-    String? editedAt,
+    required this.editedAt,
   })  : id = id ?? Constants.unknownErrorId,
         userId = userId ?? Constants.unknownErrorId,
         newsId = newsId ?? Constants.unknownErrorId,
-        content = content ?? '',
-        editedAt = editedAt ?? Constants.unknownErrorString {
+        content = content ?? '' {
     // 널값이 하나라도 들어오면 기본값으로 설정하고 로그를 남김
-    if (id == null ||
-        userId == null ||
-        newsId == null ||
-        content == null ||
-        editedAt == null) {
+    if (id == null || userId == null || newsId == null || content == null) {
       debugPrint('[Null Detected] ShortFormCommentInfo: Null value detected');
     }
   }
@@ -120,7 +123,7 @@ class ShortFormCommentInfo {
     int? userId,
     int? newsId,
     String? content,
-    String? editedAt,
+    DateTime? editedAt,
   }) {
     return ShortFormCommentInfo(
       id: id ?? this.id,

@@ -46,6 +46,8 @@ class Constants {
   static const int unknownErrorId = -99999;
   // 서버로 부터 String을 받지 못했을 때 사용하는 에러 String
   static const String unknownErrorString = 'N/A';
+  // 서버로 부터 DateTime을 받지 못했을 때 사용하는 에러 DateTimeYear
+  static const int unknownErrorDateTimeYear = 9999;
   // 에러 발생시 이동할 관련기사 url
   static const String relatedUrlOnError = 'https://www.naver.com';
 

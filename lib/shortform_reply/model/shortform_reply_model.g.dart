@@ -13,7 +13,7 @@ ShortFormReplyInfo _$ShortFormReplyInfoFromJson(Map<String, dynamic> json) =>
       newsId: (json['newsId'] as num?)?.toInt(),
       parentId: (json['parentId'] as num?)?.toInt(),
       content: json['content'] as String?,
-      editedAt: json['editedAt'] as String?,
+      editedAt: CustomDateUtils.parseDateTime(json['editedAt'] as String?),
     );
 
 Map<String, dynamic> _$ShortFormReplyInfoToJson(ShortFormReplyInfo instance) =>
@@ -23,5 +23,5 @@ Map<String, dynamic> _$ShortFormReplyInfoToJson(ShortFormReplyInfo instance) =>
       'newsId': instance.newsId,
       'parentId': instance.parentId,
       'content': instance.content,
-      'editedAt': instance.editedAt,
+      'editedAt': CustomDateUtils.formatDateTime(instance.editedAt),
     };

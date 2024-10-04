@@ -57,8 +57,8 @@ ShortFormNewsInfo _$ShortFormNewsInfoFromJson(Map<String, dynamic> json) =>
       summary: json['summary'] as String?,
       sharedCnt: (json['sharedCnt'] as num?)?.toInt(),
       category: $enumDecodeNullable(_$NewsCategoryEnumMap, json['category']),
-      createdAt: json['createdAt'] as String?,
-      editedAt: json['editedAt'] as String?,
+      createdAt: CustomDateUtils.parseDateTime(json['createdAt'] as String?),
+      editedAt: CustomDateUtils.parseDateTime(json['editedAt'] as String?),
     );
 
 Map<String, dynamic> _$ShortFormNewsInfoToJson(ShortFormNewsInfo instance) =>
@@ -74,8 +74,8 @@ Map<String, dynamic> _$ShortFormNewsInfoToJson(ShortFormNewsInfo instance) =>
       'summary': instance.summary,
       'sharedCnt': instance.sharedCnt,
       'category': _$NewsCategoryEnumMap[instance.category]!,
-      'createdAt': instance.createdAt,
-      'editedAt': instance.editedAt,
+      'createdAt': CustomDateUtils.formatDateTime(instance.createdAt),
+      'editedAt': CustomDateUtils.formatDateTime(instance.editedAt),
     };
 
 const _$NewsCategoryEnumMap = {

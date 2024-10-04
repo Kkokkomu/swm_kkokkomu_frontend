@@ -55,7 +55,7 @@ ShortFormCommentInfo _$ShortFormCommentInfoFromJson(
       userId: (json['userId'] as num?)?.toInt(),
       newsId: (json['newsId'] as num?)?.toInt(),
       content: json['content'] as String?,
-      editedAt: json['editedAt'] as String?,
+      editedAt: CustomDateUtils.parseDateTime(json['editedAt'] as String?),
     );
 
 Map<String, dynamic> _$ShortFormCommentInfoToJson(
@@ -65,5 +65,5 @@ Map<String, dynamic> _$ShortFormCommentInfoToJson(
       'userId': instance.userId,
       'newsId': instance.newsId,
       'content': instance.content,
-      'editedAt': instance.editedAt,
+      'editedAt': CustomDateUtils.formatDateTime(instance.editedAt),
     };

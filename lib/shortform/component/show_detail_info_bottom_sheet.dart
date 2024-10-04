@@ -3,11 +3,13 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_close_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_grabber.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
@@ -246,7 +248,7 @@ Future<dynamic> showDetailInfoBottomSheet({
                                       ),
                                       const SizedBox(height: 4.0),
                                       Text(
-                                        '업로드 날짜 | ${newsInfo.info.news.createdAt}',
+                                        '업로드 날짜 | ${newsInfo.info.news.createdAt.year == Constants.unknownErrorDateTimeYear ? Constants.unknownErrorString : DateFormat('yyyy.MM.dd a hh:mm', 'ko_KR').format(newsInfo.info.news.createdAt)}',
                                         style: CustomTextStyle.detail3Reg(
                                           color: ColorName.gray300,
                                         ),

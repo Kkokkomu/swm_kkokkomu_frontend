@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
@@ -119,7 +121,12 @@ class ShortFormCommentCard extends ConsumerWidget {
                     Text(
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      shortFormCommentModel.comment.editedAt,
+                      shortFormCommentModel.comment.editedAt.year ==
+                              Constants.unknownErrorDateTimeYear
+                          ? Constants.unknownErrorString
+                          : DateFormat('yyyy.MM.dd a hh:mm', 'ko_KR').format(
+                              shortFormCommentModel.comment.editedAt,
+                            ),
                       style:
                           CustomTextStyle.detail3Reg(color: ColorName.gray200),
                     ),

@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/utils/custom_date_utils.dart';
 
 part 'shortform_model.g.dart';
 
@@ -56,7 +57,11 @@ class ShortFormInfo {
   ShortFormInfo({
     ShortFormNewsInfo? news,
     List<String>? keywords,
-  })  : news = news ?? ShortFormNewsInfo(),
+  })  : news = news ??
+            ShortFormNewsInfo(
+              createdAt: DateTime(Constants.unknownErrorDateTimeYear),
+              editedAt: DateTime(Constants.unknownErrorDateTimeYear),
+            ),
         keywords = keywords ?? [];
 
   factory ShortFormInfo.fromJson(Map<String, dynamic> json) =>
@@ -76,8 +81,16 @@ class ShortFormNewsInfo {
   String summary;
   int sharedCnt;
   NewsCategory category;
-  String createdAt;
-  String editedAt;
+  @JsonKey(
+    fromJson: CustomDateUtils.parseDateTime,
+    toJson: CustomDateUtils.formatDateTime,
+  )
+  DateTime createdAt;
+  @JsonKey(
+    fromJson: CustomDateUtils.parseDateTime,
+    toJson: CustomDateUtils.formatDateTime,
+  )
+  DateTime editedAt;
 
   ShortFormNewsInfo({
     int? id,
@@ -91,17 +104,15 @@ class ShortFormNewsInfo {
     String? summary,
     int? sharedCnt,
     NewsCategory? category,
-    String? createdAt,
-    String? editedAt,
+    required this.createdAt,
+    required this.editedAt,
   })  : id = id ?? Constants.unknownErrorId,
         relatedUrl = relatedUrl ?? Constants.relatedUrlOnError,
         viewCnt = viewCnt ?? 0,
         title = title ?? Constants.unknownErrorString,
         summary = summary ?? Constants.unknownErrorString,
         sharedCnt = sharedCnt ?? 0,
-        category = category ?? NewsCategory.social,
-        createdAt = createdAt ?? Constants.unknownErrorString,
-        editedAt = editedAt ?? Constants.unknownErrorString;
+        category = category ?? NewsCategory.social;
 
   factory ShortFormNewsInfo.fromJson(Map<String, dynamic> json) =>
       _$ShortFormNewsInfoFromJson(json);

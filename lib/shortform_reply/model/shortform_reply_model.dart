@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/utils/custom_date_utils.dart';
 
 part 'shortform_reply_model.g.dart';
 
@@ -11,7 +12,11 @@ class ShortFormReplyInfo {
   final int newsId;
   final int parentId;
   final String content;
-  final String editedAt;
+  @JsonKey(
+    fromJson: CustomDateUtils.parseDateTime,
+    toJson: CustomDateUtils.formatDateTime,
+  )
+  final DateTime editedAt;
 
   ShortFormReplyInfo({
     int? id,
@@ -19,20 +24,18 @@ class ShortFormReplyInfo {
     int? newsId,
     int? parentId,
     String? content,
-    String? editedAt,
+    required this.editedAt,
   })  : id = id ?? Constants.unknownErrorId,
         userId = userId ?? Constants.unknownErrorId,
         newsId = newsId ?? Constants.unknownErrorId,
         parentId = parentId ?? Constants.unknownErrorId,
-        content = content ?? '',
-        editedAt = editedAt ?? Constants.unknownErrorString {
+        content = content ?? '' {
     // 널값이 하나라도 들어오면 기본값으로 설정하고 로그를 남김
     if (id == null ||
         userId == null ||
         newsId == null ||
         parentId == null ||
-        content == null ||
-        editedAt == null) {
+        content == null) {
       debugPrint('[Null Detected] ShortFormReplyInfo: Null value detected');
     }
   }
@@ -46,7 +49,7 @@ class ShortFormReplyInfo {
     int? newsId,
     int? parentId,
     String? content,
-    String? editedAt,
+    DateTime? editedAt,
   }) {
     return ShortFormReplyInfo(
       id: id ?? this.id,
