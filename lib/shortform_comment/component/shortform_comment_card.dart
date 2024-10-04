@@ -489,10 +489,11 @@ class ShortFormCommentCard extends ConsumerWidget {
                       ),
                     ),
                     SizedBox(
-                      width: 28.0,
+                      width: 44.0,
                       child: Text(
                         maxLines: 1,
-                        '${shortFormCommentModel.commentLikeCnt}',
+                        NumberFormat.compact(locale: 'ko_KR')
+                            .format(shortFormCommentModel.commentLikeCnt),
                         style: CustomTextStyle.detail3Reg(
                           color: ColorName.gray300,
                         ),
@@ -522,7 +523,8 @@ class ShortFormCommentCard extends ConsumerWidget {
                           ),
                           Text(
                             maxLines: 1,
-                            shortFormCommentModel.replyCnt.toString(),
+                            NumberFormat.compact(locale: 'ko_KR')
+                                .format(shortFormCommentModel.replyCnt),
                             style: CustomTextStyle.detail3Reg(
                               color: ColorName.gray300,
                             ),

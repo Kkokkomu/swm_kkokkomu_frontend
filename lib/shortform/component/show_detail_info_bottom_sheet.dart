@@ -218,11 +218,14 @@ Future<dynamic> showDetailInfoBottomSheet({
                                             ),
                                           ),
                                           Text(
-                                            newsInfo.reactionCnt
-                                                .getReactionCountByType(
-                                                  reactionType,
-                                                )
-                                                .toString(),
+                                            NumberFormat.compact(
+                                              locale: 'ko_KR',
+                                            ).format(
+                                              newsInfo.reactionCnt
+                                                  .getReactionCountByType(
+                                                reactionType,
+                                              ),
+                                            ),
                                             style: CustomTextStyle.detail2Bold(
                                               color: ColorName.gray500,
                                             ),
@@ -241,7 +244,7 @@ Future<dynamic> showDetailInfoBottomSheet({
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '조회수 | ${newsInfo.info.news.viewCnt}',
+                                        '조회수 | ${NumberFormat.compactLong(locale: 'ko_KR').format(newsInfo.info.news.viewCnt)}',
                                         style: CustomTextStyle.detail3Reg(
                                           color: ColorName.gray300,
                                         ),

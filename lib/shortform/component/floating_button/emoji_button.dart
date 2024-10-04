@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
@@ -73,7 +74,9 @@ class EmojiButton extends ConsumerWidget {
             width: 64.0,
             height: 64.0,
             icon: Assets.icons.svg.icGoodWhite.svg(),
-            label: shortFormInfo.reactionCnt.total.toString(),
+            label: NumberFormat.compact(locale: 'ko_KR').format(
+              shortFormInfo.reactionCnt.total,
+            ),
             onTap: () => ref
                 .read(detailEmojiButtonVisibilityProvider(newsId).notifier)
                 .setDetailEmojiButtonVisibility(
@@ -128,9 +131,9 @@ class DetailEmojiButton extends ConsumerWidget {
                 duration: const Duration(milliseconds: 400),
               )
           : SvgPicture.asset(reactionType.graySvgPath),
-      label: shortFormInfo.reactionCnt
-          .getReactionCountByType(reactionType)
-          .toString(),
+      label: NumberFormat.compact(locale: 'ko_KR').format(
+        shortFormInfo.reactionCnt.getReactionCountByType(reactionType),
+      ),
       labelColor: userReactionType == reactionType
           ? ColorName.gray500
           : ColorName.gray200,
