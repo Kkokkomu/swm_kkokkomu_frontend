@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
-import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
@@ -19,6 +19,7 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
+    shape: const RoundedRectangleBorder(),
     backgroundColor: ColorName.white000,
     builder: (BuildContext _) {
       return PopScope(
@@ -42,53 +43,42 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
           }
         },
         child: Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
+          padding: EdgeInsets.fromLTRB(
+            18.0,
+            7.0,
+            8.0,
+            MediaQuery.of(context).viewInsets.bottom + 7.0,
           ),
-          child: Container(
-            constraints: BoxConstraints(
-              minHeight: Constants.bottomNavigationBarHeightWithSafeArea,
-            ),
-            color: Colors.white,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(width: 16.0),
-                Expanded(
-                  child: TextFormField(
-                    controller: controller,
-                    autofocus: true,
-                    minLines: 1,
-                    maxLines: 3,
-                    decoration: InputDecoration(
-                      hintText: '댓글을 입력하세요',
-                      border: InputBorder.none,
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          controller.clear();
-                        },
-                        child: Assets.icons.svg.btnDelete.svg(),
-                      ),
-                      suffixIconConstraints: const BoxConstraints(
-                        minWidth: 40.0,
-                        minHeight: 40.0,
-                        maxWidth: 40.0,
-                        maxHeight: 40.0,
-                      ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  controller: controller,
+                  autofocus: true,
+                  minLines: 1,
+                  maxLines: 3,
+                  hintText: '댓글을 입력하세요',
+                  suffixIcon: GestureDetector(
+                    onTap: () => controller.clear(),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: Assets.icons.svg.btnDelete.svg(),
                     ),
                   ),
                 ),
-                SendButton(
-                  newsId: newsId,
-                  parentCommentId: parentCommentId,
-                  commentId: commentId,
-                  index: index,
-                  controller: controller,
-                  isInBottomSheet: true,
-                  type: type,
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 8.0),
+              SendButton(
+                newsId: newsId,
+                parentCommentId: parentCommentId,
+                commentId: commentId,
+                index: index,
+                controller: controller,
+                isInBottomSheet: true,
+                type: type,
+              ),
+            ],
           ),
         ),
       );

@@ -92,12 +92,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           controller: nicknameController,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              ref
-                                  .read(nickNameValidationProvider(formKey)
-                                      .notifier)
-                                  .setValidation(value);
-                            });
+                            WidgetsBinding.instance.addPostFrameCallback(
+                              (_) {
+                                ref
+                                    .read(nickNameValidationProvider(formKey)
+                                        .notifier)
+                                    .setValidation(value);
+                              },
+                            );
 
                             if (ref
                                 .read(nickNameValidationProvider(formKey)

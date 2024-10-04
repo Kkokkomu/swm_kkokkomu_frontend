@@ -3,7 +3,7 @@ import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
 class CustomTextFormField extends StatefulWidget {
-  final String labelText;
+  final String? labelText;
   final String? hintText;
   final String? initialValue;
   final Widget? prefixIcon;
@@ -22,10 +22,12 @@ class CustomTextFormField extends StatefulWidget {
   final bool readOnly;
   final void Function()? onTap;
   final bool autofocus;
+  final int? minLines;
+  final int? maxLines;
 
   const CustomTextFormField({
     super.key,
-    required this.labelText,
+    this.labelText,
     this.hintText,
     this.initialValue,
     this.prefixIcon,
@@ -44,6 +46,8 @@ class CustomTextFormField extends StatefulWidget {
     this.readOnly = false,
     this.onTap,
     this.autofocus = false,
+    this.minLines,
+    this.maxLines = 1,
   });
 
   @override
@@ -57,13 +61,15 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.labelText,
-          style: CustomTextStyle.body1Bold(),
-        ),
-        const SizedBox(height: 8.0),
+        if (widget.labelText != null)
+          Text(
+            widget.labelText!,
+            style: CustomTextStyle.body1Bold(),
+          ),
+        if (widget.labelText != null) const SizedBox(height: 8.0),
         Focus(
           onFocusChange: (bool hasFocus) =>
               setState(() => isFocused = hasFocus),
@@ -101,6 +107,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             ),
             autofocus: widget.autofocus,
             maxLength: widget.maxLength,
+            minLines: widget.minLines,
+            maxLines: widget.maxLines,
             decoration: InputDecoration(
               suffixIcon: isFocused ? widget.suffixIcon : null,
               suffixIconConstraints:

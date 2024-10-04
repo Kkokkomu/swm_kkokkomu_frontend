@@ -27,10 +27,11 @@ class ShortFormCommentBox extends StatelessWidget {
         Consumer(
           builder: (_, ref, child) {
             final animationDurationAndHeight = ref.watch(
-                shortFormCommentHeightControllerProvider((newsId)).select(
-              (value) =>
-                  (duration: value.animationDuration, height: value.height),
-            ));
+              shortFormCommentHeightControllerProvider((newsId)).select(
+                (value) =>
+                    (duration: value.animationDuration, height: value.height),
+              ),
+            );
 
             return ClipRRect(
               borderRadius: const BorderRadius.only(

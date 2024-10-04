@@ -102,8 +102,7 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
             if (index == paginationData.items.length) {
               return Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
+                  vertical: 12.0,
                 ),
                 child: Center(
                   child: paginationData is CursorPaginationFetchingMore

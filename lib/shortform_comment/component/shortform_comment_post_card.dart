@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_send_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/show_shortform_comment_input_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
@@ -28,7 +30,6 @@ class ShortFormCommentPostCard extends ConsumerStatefulWidget {
 
 class _ShortFormCommentInputCardState
     extends ConsumerState<ShortFormCommentPostCard> {
-  static const double _dividerHeight = 1.0;
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -44,73 +45,71 @@ class _ShortFormCommentInputCardState
       return const SizedBox();
     }
 
-    return Column(
-      children: [
-        const Divider(
-          height: _dividerHeight,
-          thickness: 1.0,
+    return Container(
+      width: double.infinity,
+      height: Constants.bottomNavigationBarHeightWithSafeArea,
+      decoration: const BoxDecoration(
+        color: ColorName.white000,
+        border: Border(
+          top: BorderSide(
+            color: ColorName.gray200,
+            width: 0.5,
+          ),
         ),
-        Container(
-          width: double.infinity,
-          height:
-              Constants.bottomNavigationBarHeightWithSafeArea - _dividerHeight,
-          color: Colors.white,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(width: 16.0),
-              Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    // 로그인하지 않은 사용자는 댓글 입력을 할 수 없음
-                    // 로그인 모달 바텀 시트를 띄워줌
-                    if (ref.read(userInfoProvider) is! UserModel) {
-                      showLoginModalBottomSheet(context);
-                      return;
-                    }
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(18.0, 7.0, 8.0, 7.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  // 로그인하지 않은 사용자는 댓글 입력을 할 수 없음
+                  // 로그인 모달 바텀 시트를 띄워줌
+                  if (ref.read(userInfoProvider) is! UserModel) {
+                    showLoginModalBottomSheet(context);
+                    return;
+                  }
 
-                    // 로그인한 사용자인 경우 댓글 입력 바텀 시트를 띄워줌
-                    showShortFormCommentInputBottomSheet(
-                      context: context,
-                      newsId: widget.newsId,
-                      parentCommentId:
-                          widget.isReply ? widget.parentCommentId : null,
-                      commentId: null,
-                      index: null,
-                      controller: _controller,
-                      type: widget.isReply
-                          ? ShortFormCommentSendButtonType.replyPost
-                          : ShortFormCommentSendButtonType.post,
-                    );
-                  },
-                  child: AbsorbPointer(
-                    child: TextFormField(
-                      controller: _controller,
-                      readOnly: true,
-                      decoration: const InputDecoration(
-                        hintText: '댓글을 입력하세요',
-                        border: InputBorder.none,
-                      ),
-                    ),
+                  // 로그인한 사용자인 경우 댓글 입력 바텀 시트를 띄워줌
+                  showShortFormCommentInputBottomSheet(
+                    context: context,
+                    newsId: widget.newsId,
+                    parentCommentId:
+                        widget.isReply ? widget.parentCommentId : null,
+                    commentId: null,
+                    index: null,
+                    controller: _controller,
+                    type: widget.isReply
+                        ? ShortFormCommentSendButtonType.replyPost
+                        : ShortFormCommentSendButtonType.post,
+                  );
+                },
+                child: AbsorbPointer(
+                  child: CustomTextFormField(
+                    hintText: '댓글을 입력하세요',
+                    controller: _controller,
+                    readOnly: true,
                   ),
                 ),
               ),
-              SendButton(
-                newsId: widget.newsId,
-                parentCommentId: widget.isReply ? widget.parentCommentId : null,
-                commentId: null,
-                index: null,
-                controller: _controller,
-                isInBottomSheet: false,
-                type: widget.isReply
-                    ? ShortFormCommentSendButtonType.replyPost
-                    : ShortFormCommentSendButtonType.post,
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 8.0),
+            SendButton(
+              newsId: widget.newsId,
+              parentCommentId: widget.isReply ? widget.parentCommentId : null,
+              commentId: null,
+              index: null,
+              controller: _controller,
+              isInBottomSheet: false,
+              type: widget.isReply
+                  ? ShortFormCommentSendButtonType.replyPost
+                  : ShortFormCommentSendButtonType.post,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

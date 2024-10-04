@@ -161,8 +161,11 @@ class ShortFormCommentBody extends StatelessWidget {
                       .deactivateReply(),
                 );
 
-                return const Center(
-                  child: Text('댓글이 삭제/차단되었습니다.'),
+                return Center(
+                  child: Text(
+                    '댓글이 삭제/차단되었어요',
+                    style: CustomTextStyle.body1Medi(color: ColorName.gray200),
+                  ),
                 );
               }
 
@@ -190,13 +193,25 @@ class ShortFormCommentBody extends StatelessWidget {
                 body: CursorPaginationListView<ShortFormCommentModel>(
                   id: parentCommentId!,
                   provider: provider,
-                  separatorBuilder: (_, __) => const SizedBox(height: 16.0),
+                  separatorBuilder: (_, __) => const SizedBox(),
                   itemBuilder: (_, index, model) => ShortFormCommentCard(
                     shortFormCommentModel: model,
                     parentCommentId: isReply ? parentCommentId : null,
                     index: index,
                     isReply: isReply,
                     isReplyHeader: false,
+                  ),
+                  emptyWidget: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Assets.images.svg.imgCommentEmpty.svg(),
+                      const SizedBox(height: 6.0),
+                      Text(
+                        '작성된 댓글이 없어요',
+                        style:
+                            CustomTextStyle.body1Medi(color: ColorName.gray200),
+                      ),
+                    ],
                   ),
                 ),
               );
