@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_radio_button.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
-import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
+import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/filter_category_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform/provider/filter_screen_setting_provider.dart';
@@ -23,100 +25,105 @@ class ShortFormFilterScreen extends ConsumerWidget {
     // 필터 스크린에서 변경된 설정
     final screenSetting = ref.watch(filterScreenSettingProvider(prevSetting));
 
-    return DefaultLayout(
+    return DefaultLayoutWithDefaultAppBar(
       statusBarBrightness: Brightness.dark,
       systemNavigationBarColor: ColorName.white000,
       systemNavigationBarIconBrightness: Brightness.dark,
-      titleWidget: const Text('필터'),
+      title: '필터',
+      onBackButtonPressed: () => context.pop(),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(18.0, 24.0, 18.0, 12.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Text(
+              '카테고리',
+              style: CustomTextStyle.body1Bold(),
+            ),
+            const SizedBox(height: 12.0),
+            Wrap(
+              spacing: 6.0,
+              runSpacing: 6.0,
               children: [
-                const Text('카테고리'),
-                const SizedBox(height: 16.0),
-                Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  children: [
-                    for (NewsCategory category in NewsCategory.values)
-                      CustomCategoryButton(
-                        isEnabled: screenSetting.isCategorySelected(category),
-                        category: category,
-                        onTap: () => ref
-                            .read(filterScreenSettingProvider(prevSetting)
-                                .notifier)
-                            .toggleCategory(category),
-                      ),
-                  ],
+                for (NewsCategory category in NewsCategory.values)
+                  CustomCategoryButton(
+                    isEnabled: screenSetting.isCategorySelected(category),
+                    category: category,
+                    onTap: () => ref
+                        .read(filterScreenSettingProvider(prevSetting).notifier)
+                        .toggleCategory(category),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 28.0),
+            Text(
+              '정렬',
+              style: CustomTextStyle.body1Bold(),
+            ),
+            const SizedBox(height: 12.0),
+            Row(
+              children: [
+                CustomRadioButton(
+                  isEnabled: screenSetting.shortFormSortType ==
+                      ShortFormSortType.recommend,
+                  text: '추천순',
+                  onTap: () => ref
+                      .read(filterScreenSettingProvider(prevSetting).notifier)
+                      .setSortType(ShortFormSortType.recommend),
                 ),
-                const SizedBox(height: 16.0),
-                const Text('정렬'),
-                const SizedBox(height: 16.0),
-                Row(
-                  children: [
-                    CustomRadioButton(
-                      isEnabled: screenSetting.shortFormSortType ==
-                          ShortFormSortType.recommend,
-                      text: '추천순',
-                      onTap: () => ref
-                          .read(
-                              filterScreenSettingProvider(prevSetting).notifier)
-                          .setSortType(ShortFormSortType.recommend),
-                    ),
-                    const SizedBox(width: 16.0),
-                    CustomRadioButton(
-                      isEnabled: screenSetting.shortFormSortType ==
-                          ShortFormSortType.latest,
-                      text: '최신순',
-                      onTap: () => ref
-                          .read(
-                              filterScreenSettingProvider(prevSetting).notifier)
-                          .setSortType(ShortFormSortType.latest),
-                    ),
-                  ],
+                const SizedBox(width: 7.0),
+                CustomRadioButton(
+                  isEnabled: screenSetting.shortFormSortType ==
+                      ShortFormSortType.latest,
+                  text: '최신순',
+                  onTap: () => ref
+                      .read(filterScreenSettingProvider(prevSetting).notifier)
+                      .setSortType(ShortFormSortType.latest),
                 ),
               ],
             ),
+            const Spacer(),
             SafeArea(
               child: Row(
                 children: [
                   Flexible(
                     fit: FlexFit.tight,
-                    flex: 1,
-                    child: GestureDetector(
-                      onTap: ref
-                          .read(
-                              filterScreenSettingProvider(prevSetting).notifier)
-                          .reset,
-                      child: Container(
-                        height: 48.0,
-                        color: Colors.grey,
-                        child: Center(
-                          child: RichText(
-                            text: TextSpan(children: [
-                              WidgetSpan(
-                                alignment: PlaceholderAlignment.middle,
-                                child: Assets.icons.svg.icRe.svg(),
-                              ),
-                              const WidgetSpan(
-                                child: SizedBox(width: 8.0),
-                              ),
-                              const TextSpan(text: '초기화'),
-                            ]),
+                    flex: 94,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8.0),
+                        onTap: ref
+                            .read(filterScreenSettingProvider(prevSetting)
+                                .notifier)
+                            .reset,
+                        child: Ink(
+                          width: double.infinity,
+                          height: 52.0,
+                          color: ColorName.white000,
+                          child: Center(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Assets.icons.svg.icRe.svg(),
+                                const SizedBox(width: 4.0),
+                                Text(
+                                  '초기화',
+                                  style: CustomTextStyle.body1Medi(),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16.0),
+                  const SizedBox(width: 12.0),
                   Flexible(
                     fit: FlexFit.tight,
-                    flex: 2,
-                    child: GestureDetector(
+                    flex: 233,
+                    child: CustomSelectButton(
                       onTap: () async {
                         // 변경된 설정을 저장
                         final resp = await ref
@@ -133,16 +140,7 @@ class ShortFormFilterScreen extends ConsumerWidget {
                         // 필터 스크린을 닫음
                         if (context.mounted) context.pop();
                       },
-                      child: Container(
-                        height: 48.0,
-                        color: Colors.black,
-                        child: const Center(
-                          child: Text(
-                            '필터 적용하기',
-                            style: TextStyle(color: ColorName.white000),
-                          ),
-                        ),
-                      ),
+                      content: '필터 적용하기',
                     ),
                   ),
                 ],

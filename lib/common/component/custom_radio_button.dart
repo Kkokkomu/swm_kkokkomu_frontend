@@ -18,23 +18,27 @@ class CustomRadioButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SvgPicture.asset(
-            isEnabled
-                ? Assets.icons.svg.icRadioEnabled.path
-                : Assets.icons.svg.icRadioDisabled.path,
-          ),
-          const SizedBox(width: 2.0),
-          Text(
-            text,
-            style: CustomTextStyle.detail1Reg(color: ColorName.gray500),
-          ),
-          const SizedBox(width: 11.0),
-        ],
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12.0),
+        onTap: onTap,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              isEnabled
+                  ? Assets.icons.svg.icRadioEnabled.path
+                  : Assets.icons.svg.icRadioDisabled.path,
+            ),
+            const SizedBox(width: 2.0),
+            Text(
+              text,
+              style: CustomTextStyle.detail1Reg(color: ColorName.gray500),
+            ),
+            const SizedBox(width: 11.0),
+          ],
+        ),
       ),
     );
   }

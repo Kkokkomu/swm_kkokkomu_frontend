@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
 class CustomCategoryButton extends StatelessWidget {
-  static const double _iconSize = 24.0;
-
   final NewsCategory category;
   final bool isEnabled;
   final void Function()? onTap;
@@ -22,41 +22,31 @@ class CustomCategoryButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(
-          vertical: 8.0,
-          horizontal: 8.0,
+          vertical: 6.0,
+          horizontal: 12.0,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24.0),
+          borderRadius: BorderRadius.circular(20.0),
           border: Border.all(
-            color: Colors.black,
+            color: isEnabled ? Colors.transparent : ColorName.gray100,
             width: 1.0,
           ),
-          color: isEnabled ? Colors.black : Colors.white,
+          color: isEnabled ? ColorName.gray600 : ColorName.white000,
         ),
-        child: RichText(
-          text: TextSpan(
-            children: [
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: SvgPicture.asset(
-                  category.blueSvgPath,
-                  width: _iconSize,
-                  height: _iconSize,
-                ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              category.blueSvgPath,
+            ),
+            const SizedBox(width: 4.0),
+            Text(
+              category.label,
+              style: CustomTextStyle.detail1Reg(
+                color: isEnabled ? ColorName.white000 : ColorName.gray500,
               ),
-              const WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: SizedBox(width: 8.0),
-              ),
-              TextSpan(
-                text: category.label,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: isEnabled ? Colors.white : Colors.black,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
