@@ -89,34 +89,16 @@ class ShortFormFilterScreen extends ConsumerWidget {
                   Flexible(
                     fit: FlexFit.tight,
                     flex: 94,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(8.0),
-                        onTap: ref
-                            .read(filterScreenSettingProvider(prevSetting)
-                                .notifier)
-                            .reset,
-                        child: Ink(
-                          width: double.infinity,
-                          height: 52.0,
-                          color: ColorName.white000,
-                          child: Center(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Assets.icons.svg.icRe.svg(),
-                                const SizedBox(width: 4.0),
-                                Text(
-                                  '초기화',
-                                  style: CustomTextStyle.body1Medi(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                    child: CustomSelectButton(
+                      isInkWell: true,
+                      onTap: ref
+                          .read(
+                              filterScreenSettingProvider(prevSetting).notifier)
+                          .reset,
+                      prefixIcon: Assets.icons.svg.icRe.svg(),
+                      content: '초기화',
+                      backgroundColor: ColorName.white000,
+                      textStyle: CustomTextStyle.body1Medi(),
                     ),
                   ),
                   const SizedBox(width: 12.0),

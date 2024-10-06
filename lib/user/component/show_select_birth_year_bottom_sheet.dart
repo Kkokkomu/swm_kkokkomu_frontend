@@ -80,9 +80,31 @@ Future<DateTime?> showSelectBirthYearBottomSheet({
               const SizedBox(height: 22.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: CustomSelectButton(
-                  content: '선택',
-                  onTap: () => context.pop(tempSavedDate),
+                child: Row(
+                  children: [
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 94,
+                      child: CustomSelectButton(
+                        isInkWell: true,
+                        onTap: () => context.pop(
+                          DateTime(Constants.birthYearNotSelected),
+                        ),
+                        content: '선택안함',
+                        backgroundColor: ColorName.white000,
+                        textStyle: CustomTextStyle.body1Medi(),
+                      ),
+                    ),
+                    const SizedBox(width: 12.0),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 233,
+                      child: CustomSelectButton(
+                        content: '선택',
+                        onTap: () => context.pop(tempSavedDate),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

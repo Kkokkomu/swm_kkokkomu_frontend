@@ -155,7 +155,7 @@ class MoreInfoButton extends ConsumerWidget {
                     context.mounted) {
                   showInfoDialog(
                     context: context,
-                    content: resp.errorMessage ?? '이미 신고되었습니다.',
+                    content: '이미 신고한 영상이에요',
                   );
                   return;
                 }
