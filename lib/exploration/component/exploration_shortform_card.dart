@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ExplorationShortFormCard extends StatelessWidget {
   final ShortFormNewsInfo newsInfo;
@@ -16,7 +20,7 @@ class ExplorationShortFormCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constraints) => ClipRRect(
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(10.0),
         child: Stack(
           children: [
             Positioned.fill(
@@ -56,57 +60,78 @@ class ExplorationShortFormCard extends StatelessWidget {
             Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      newsInfo.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: ColorName.white000,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black,
-                            blurRadius: 16.0,
-                          ),
-                        ],
-                        fontSize: 13.0,
+                padding: const EdgeInsets.all(12.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8.0,
                       ),
-                    ),
-                    const SizedBox(height: 4.0),
-                    RichText(
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(
-                        children: [
-                          const WidgetSpan(
-                            alignment: PlaceholderAlignment.middle,
-                            child: Icon(
-                              Icons.play_circle_fill,
-                              size: 16,
-                              color: ColorName.white000,
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        newsInfo.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: CustomTextStyle.body3Bold(
+                          color: ColorName.white000,
+                          shadows: [
+                            const Shadow(
+                              color: Colors.black,
+                              blurRadius: 16.0,
                             ),
+                          ],
+                        ),
+                      ),
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Assets.icons.svg.icView.svg(),
+                              const SizedBox(width: 4.0),
+                              Flexible(
+                                child: Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  '${NumberFormat.compact(locale: 'ko_KR').format(newsInfo.viewCnt)} · ',
+                                  style: CustomTextStyle.detail3Reg(
+                                    color: ColorName.gray50,
+                                    shadows: [
+                                      const Shadow(
+                                        color: Colors.black,
+                                        blurRadius: 16.0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          const WidgetSpan(child: SizedBox(width: 4.0)),
-                          TextSpan(
-                            text: '${newsInfo.viewCnt} · ${newsInfo.createdAt}',
-                            style: const TextStyle(
-                              color: ColorName.white000,
+                          Text(
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            timeago.format(newsInfo.createdAt, locale: 'ko'),
+                            style: CustomTextStyle.detail3Reg(
+                              color: ColorName.gray50,
                               shadows: [
-                                Shadow(
+                                const Shadow(
                                   color: Colors.black,
                                   blurRadius: 16.0,
                                 ),
                               ],
-                              fontSize: 13.0,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

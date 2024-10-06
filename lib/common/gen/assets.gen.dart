@@ -76,6 +76,9 @@ class $AssetsIconsPngGen {
 class $AssetsIconsSvgGen {
   const $AssetsIconsSvgGen();
 
+  /// File path: assets/icons/svg/app_icon.svg
+  SvgGenImage get appIcon => const SvgGenImage('assets/icons/svg/app_icon.svg');
+
   /// File path: assets/icons/svg/btn_back.svg
   SvgGenImage get btnBack => const SvgGenImage('assets/icons/svg/btn_back.svg');
 
@@ -428,6 +431,10 @@ class $AssetsIconsSvgGen {
   SvgGenImage get imgLoginEmpty =>
       const SvgGenImage('assets/icons/svg/img_login_empty.svg');
 
+  /// File path: assets/icons/svg/newsnack_typo_logo.svg
+  SvgGenImage get newsnackTypoLogo =>
+      const SvgGenImage('assets/icons/svg/newsnack_typo_logo.svg');
+
   /// File path: assets/icons/svg/splash_logo.svg
   SvgGenImage get splashLogo =>
       const SvgGenImage('assets/icons/svg/splash_logo.svg');
@@ -438,6 +445,7 @@ class $AssetsIconsSvgGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        appIcon,
         btnBack,
         btnClose,
         btnCommentMenu,
@@ -529,6 +537,7 @@ class $AssetsIconsSvgGen {
         icWorldBlue,
         icWorldGray,
         imgLoginEmpty,
+        newsnackTypoLogo,
         splashLogo,
         splashTypoLogo
       ];
@@ -541,12 +550,17 @@ class $AssetsImagesSvgGen {
   SvgGenImage get imgCommentEmpty =>
       const SvgGenImage('assets/images/svg/img_comment_empty.svg');
 
+  /// File path: assets/images/svg/img_empty.svg
+  SvgGenImage get imgEmpty =>
+      const SvgGenImage('assets/images/svg/img_empty.svg');
+
   /// File path: assets/images/svg/img_profile_default.svg
   SvgGenImage get imgProfileDefault =>
       const SvgGenImage('assets/images/svg/img_profile_default.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [imgCommentEmpty, imgProfileDefault];
+  List<SvgGenImage> get values =>
+      [imgCommentEmpty, imgEmpty, imgProfileDefault];
 }
 
 class Assets {

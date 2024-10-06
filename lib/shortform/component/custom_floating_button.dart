@@ -72,7 +72,15 @@ class CustomFloatingButton extends StatelessWidget {
                       if (label != null)
                         Text(
                           label!,
-                          style: CustomTextStyle.detail3Reg(color: labelColor),
+                          style: CustomTextStyle.detail3Reg(
+                            color: labelColor,
+                            shadows: [
+                              const Shadow(
+                                color: Colors.black,
+                                blurRadius: 16.0,
+                              ),
+                            ],
+                          ),
                         ),
                     ],
                   ),

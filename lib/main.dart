@@ -14,6 +14,7 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 // import 'package:swm_kkokkomu_frontend/common/model/provider_logger_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main(name, options) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,6 +63,9 @@ void main(name, options) async {
   if (!kDebugMode) {
     debugPrint = (String? message, {int? wrapWidth}) {};
   }
+
+  // timeago 한국어 설정
+  timeago.setLocaleMessages('ko', timeago.KoMessages());
 
   runApp(
     const ProviderScope(

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/cursor_pagination_sliver_grid_view.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
@@ -47,8 +50,7 @@ class ExplorationScreen extends ConsumerWidget {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.fromLTRB(16.0, 2.0, 4.0, 2.0),
               child: Row(
                 children: [
                   Material(
@@ -71,31 +73,22 @@ class ExplorationScreen extends ConsumerWidget {
                   ),
                   const Spacer(),
                   // TODO : 구현 필요
-                  Visibility(
+                  Visibility.maintain(
                     visible: false,
-                    child: IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        // Handle search icon press
-                      },
-                    ),
+                    child: Assets.icons.svg.btnSearchLight.svg(),
                   ),
                   // TODO : 구현 필요
-                  Visibility(
+                  Visibility.maintain(
                     visible: false,
-                    child: IconButton(
-                      icon: const Icon(Icons.notifications_none),
-                      onPressed: () {
-                        // Handle more icon press
-                      },
-                    ),
+                    child: Assets.icons.svg.btnNoticeDefault.svg(),
                   ),
                 ],
               ),
             ),
             const Divider(
-              thickness: 1.0,
-              height: 1.0,
+              thickness: 0.5,
+              height: 0.5,
+              color: ColorName.gray100,
             ),
             Expanded(
               child: CursorPaginationSliverGridView<PaginationShortFormModel>(
@@ -109,6 +102,90 @@ class ExplorationScreen extends ConsumerWidget {
                   child: ExplorationShortFormCard(
                     newsInfo: model.info.news,
                   ),
+                ),
+                emptyWidget: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Assets.images.svg.imgEmpty.svg(),
+                    const SizedBox(height: 6.0),
+                    Text(
+                      '일치하는 뉴스가 없어요',
+                      style: CustomTextStyle.body1Medi(
+                        color: ColorName.gray200,
+                      ),
+                    ),
+                  ],
+                ),
+                errorWidget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Assets.images.svg.imgEmpty.svg(),
+                    const SizedBox(height: 6.0),
+                    Text(
+                      '뉴스를 불러오는 중 에러가 발생했어요\n다시 시도해주세요',
+                      textAlign: TextAlign.center,
+                      style: CustomTextStyle.body1Medi(
+                        color: ColorName.gray200,
+                      ),
+                    ),
+                    const SizedBox(height: 18.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: CustomSelectButton(
+                        onTap: () => ref
+                            .read(provider.notifier)
+                            .paginate(forceRefetch: true),
+                        content: '뉴스 다시 불러오기',
+                        backgroundColor: ColorName.gray100,
+                        textColor: ColorName.gray300,
+                      ),
+                    ),
+                  ],
+                ),
+                fetchingMoreErrorWidget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '뉴스를 더 불러오는 중 에러가 발생했어요\n다시 시도해주세요',
+                      textAlign: TextAlign.center,
+                      style: CustomTextStyle.body1Medi(
+                        color: ColorName.gray200,
+                      ),
+                    ),
+                    const SizedBox(height: 18.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: CustomSelectButton(
+                              onTap: () => ref
+                                  .read(provider.notifier)
+                                  .paginate(fetchMore: true),
+                              content: '더 불러오기',
+                              backgroundColor: ColorName.gray100,
+                              textColor: ColorName.gray300,
+                            ),
+                          ),
+                          const SizedBox(width: 12.0),
+                          Flexible(
+                            child: CustomSelectButton(
+                              onTap: () => ref
+                                  .read(provider.notifier)
+                                  .paginate(forceRefetch: true),
+                              content: '새로고침',
+                              backgroundColor: ColorName.gray100,
+                              textColor: ColorName.gray300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 18.0),
+                  ],
                 ),
               ),
             ),

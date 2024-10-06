@@ -87,12 +87,17 @@ class CustomTextStyle {
         height: 1.4,
       );
 
-  static TextStyle body3Bold({Color color = textColor}) => TextStyle(
+  static TextStyle body3Bold({
+    Color color = textColor,
+    List<Shadow>? shadows,
+  }) =>
+      TextStyle(
         fontFamily: fontFamily,
         color: color,
         fontWeight: CustomFontWeight.bold,
         fontSize: 14,
         height: 1.4,
+        shadows: shadows,
       );
 
   static TextStyle body3Medi({Color color = textColor}) => TextStyle(
@@ -167,11 +172,16 @@ class CustomTextStyle {
         height: 1.4,
       );
 
-  static TextStyle detail3Reg({Color color = textColor}) => TextStyle(
+  static TextStyle detail3Reg({
+    Color color = textColor,
+    List<Shadow>? shadows,
+  }) =>
+      TextStyle(
         fontFamily: fontFamily,
         color: color,
         fontWeight: CustomFontWeight.regular,
         fontSize: 11,
         height: 1.4,
+        shadows: shadows,
       );
 }

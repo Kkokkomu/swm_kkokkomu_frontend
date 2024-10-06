@@ -13,12 +13,18 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
       CursorPaginationBase> provider;
   final PaginationWidgetBuilder<T> itemBuilder;
   final ScrollController? scrollController;
+  final Widget? emptyWidget;
+  final Widget? errorWidget;
+  final Widget? fetchingMoreErrorWidget;
 
   const CursorPaginationSliverGridView({
     super.key,
     required this.provider,
     required this.itemBuilder,
     this.scrollController,
+    this.emptyWidget,
+    this.errorWidget,
+    this.fetchingMoreErrorWidget,
   });
 
   @override
@@ -34,24 +40,25 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
 
     // 에러
     if (state is CursorPaginationError) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            state.message,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            onPressed: () =>
-                ref.read(provider.notifier).paginate(forceRefetch: true),
-            child: const Text(
-              '다시시도',
-            ),
-          ),
-        ],
-      );
+      return errorWidget ??
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                state.message,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () =>
+                    ref.read(provider.notifier).paginate(forceRefetch: true),
+                child: const Text(
+                  '다시시도',
+                ),
+              ),
+            ],
+          );
     }
 
     // CursorPagination
@@ -61,15 +68,26 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
     final paginationData = state as CursorPagination<T>;
 
     if (paginationData.items.isEmpty) {
-      return const Center(
-        child: Text('데이터가 없습니다.'),
+      return CustomRefreshIndicator(
+        onRefresh: () =>
+            ref.read(provider.notifier).paginate(forceRefetch: true),
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: emptyWidget ?? const Text('데이터가 없습니다'),
+              ),
+            ),
+          ],
+        ),
       );
     }
 
     return CustomRefreshIndicator(
       onRefresh: () => ref.read(provider.notifier).paginate(forceRefetch: true),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: Scrollbar(
           controller: scrollController,
           child: CustomScrollView(
@@ -77,15 +95,15 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
             slivers: [
               SliverPadding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 24.0,
+                  horizontal: 14.0,
+                  vertical: 20.0,
                 ),
                 sliver: SliverGrid(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, // 열 개수
                     childAspectRatio: 164.0 / 230.0, // 자식 위젯의 가로 세로 비율
-                    mainAxisSpacing: 24.0,
-                    crossAxisSpacing: 24.0,
+                    mainAxisSpacing: 12.0,
+                    crossAxisSpacing: 11.0,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     childCount: paginationData.items.length, // 그리드 항목 수
@@ -128,37 +146,38 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
                     )
                   : paginationData is CursorPaginationFetchingMoreError
                       ? SliverToBoxAdapter(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                (paginationData
-                                        as CursorPaginationFetchingMoreError)
-                                    .message,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(color: Colors.white),
+                          child: fetchingMoreErrorWidget ??
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    (paginationData
+                                            as CursorPaginationFetchingMoreError)
+                                        .message,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  const SizedBox(height: 16.0),
+                                  ElevatedButton(
+                                    onPressed: () => ref
+                                        .read(provider.notifier)
+                                        .paginate(fetchMore: true),
+                                    child: const Text(
+                                      '다시시도',
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16.0),
+                                  ElevatedButton(
+                                    onPressed: () => ref
+                                        .read(provider.notifier)
+                                        .paginate(forceRefetch: true),
+                                    child: const Text(
+                                      '전체 새로고침',
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 16.0),
-                              ElevatedButton(
-                                onPressed: () => ref
-                                    .read(provider.notifier)
-                                    .paginate(fetchMore: true),
-                                child: const Text(
-                                  '다시시도',
-                                ),
-                              ),
-                              const SizedBox(height: 16.0),
-                              ElevatedButton(
-                                onPressed: () => ref
-                                    .read(provider.notifier)
-                                    .paginate(forceRefetch: true),
-                                child: const Text(
-                                  '전체 새로고침',
-                                ),
-                              ),
-                            ],
-                          ),
                         )
                       : const SliverToBoxAdapter(child: SizedBox()),
             ],

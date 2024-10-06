@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_refresh_indicator.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
@@ -66,18 +69,25 @@ class _CursorPaginationShortFormViewState
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Assets.images.svg.imgEmpty.svg(),
+            const SizedBox(height: 6.0),
             Text(
-              state.message,
+              '뉴스를 불러오는 중 에러가 발생했어요\n다시 시도해주세요',
               textAlign: TextAlign.center,
-              style: const TextStyle(color: ColorName.white000),
+              style: CustomTextStyle.body1Medi(
+                color: ColorName.gray200,
+              ),
             ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () => ref
-                  .read(widget.provider.notifier)
-                  .paginate(forceRefetch: true),
-              child: const Text(
-                '다시시도',
+            const SizedBox(height: 18.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: CustomSelectButton(
+                onTap: () => ref
+                    .read(widget.provider.notifier)
+                    .paginate(forceRefetch: true),
+                content: '뉴스 다시 불러오기',
+                backgroundColor: ColorName.gray100,
+                textColor: ColorName.gray300,
               ),
             ),
           ],
@@ -90,6 +100,38 @@ class _CursorPaginationShortFormViewState
     // CursorPaginationRefetching
 
     final paginationData = state as CursorPagination<PaginationShortFormModel>;
+
+    if (paginationData.items.isEmpty) {
+      return CustomRefreshIndicator(
+        onRefresh: () =>
+            ref.read(widget.provider.notifier).paginate(forceRefetch: true),
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: CustomShortFormBase(
+                shortFormScreenType: widget.shortFormScreenType,
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Assets.images.svg.imgEmpty.svg(),
+                      const SizedBox(height: 6.0),
+                      Text(
+                        '일치하는 뉴스가 없어요',
+                        style: CustomTextStyle.body1Medi(
+                          color: ColorName.gray200,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     return CustomRefreshIndicator(
       onRefresh: () =>
@@ -130,28 +172,37 @@ class _CursorPaginationShortFormViewState
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Assets.images.svg.imgEmpty.svg(),
+                    const SizedBox(height: 6.0),
                     Text(
-                      (paginationData as CursorPaginationFetchingMoreError)
-                          .message,
+                      '뉴스를 더 불러오는 중 에러가 발생했어요\n다시 시도해주세요',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: ColorName.white000),
-                    ),
-                    const SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: () => ref
-                          .read(widget.provider.notifier)
-                          .paginate(fetchMore: true),
-                      child: const Text(
-                        '다시시도',
+                      style: CustomTextStyle.body1Medi(
+                        color: ColorName.gray200,
                       ),
                     ),
-                    const SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: () => ref
-                          .read(widget.provider.notifier)
-                          .paginate(forceRefetch: true),
-                      child: const Text(
-                        '전체 새로고침',
+                    const SizedBox(height: 18.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: CustomSelectButton(
+                        onTap: () => ref
+                            .read(widget.provider.notifier)
+                            .paginate(fetchMore: true),
+                        content: '뉴스 더 불러오기',
+                        backgroundColor: ColorName.gray100,
+                        textColor: ColorName.gray300,
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: CustomSelectButton(
+                        onTap: () => ref
+                            .read(widget.provider.notifier)
+                            .paginate(forceRefetch: true),
+                        content: '뉴스 처음부터 다시 불러오기',
+                        backgroundColor: ColorName.gray100,
+                        textColor: ColorName.gray300,
                       ),
                     ),
                   ],
@@ -161,27 +212,31 @@ class _CursorPaginationShortFormViewState
 
             return CustomShortFormBase(
               shortFormScreenType: widget.shortFormScreenType,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    '더 가져올 데이터가 없습니다.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: ColorName.white000,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Assets.images.svg.imgEmpty.svg(),
+                    const SizedBox(height: 6.0),
+                    Text(
+                      '모든 뉴스를 불러왔어요',
+                      style: CustomTextStyle.body1Medi(
+                        color: ColorName.gray200,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 16.0,
-                  ),
-                  ElevatedButton(
-                    onPressed: () => ref
-                        .read(widget.provider.notifier)
-                        .paginate(forceRefetch: true),
-                    child: const Text('새로고침'),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: CustomSelectButton(
+                        onTap: () => ref
+                            .read(widget.provider.notifier)
+                            .paginate(forceRefetch: true),
+                        content: '새 뉴스 불러오기',
+                        backgroundColor: ColorName.gray100,
+                        textColor: ColorName.gray300,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }
@@ -196,18 +251,21 @@ class _CursorPaginationShortFormViewState
 
             return CustomShortFormBase(
               shortFormScreenType: widget.shortFormScreenType,
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Text(
-                      '비디오 에러 발생\n다음 비디오로 넘어가주세요.',
-                      style: TextStyle(
-                        color: ColorName.white000,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Assets.images.svg.imgEmpty.svg(),
+                    const SizedBox(height: 6.0),
+                    Text(
+                      '에러가 발생했어요\n다음 영상으로 넘어가주세요',
+                      textAlign: TextAlign.center,
+                      style: CustomTextStyle.body1Medi(
+                        color: ColorName.gray200,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           }
