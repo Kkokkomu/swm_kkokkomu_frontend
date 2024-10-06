@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/cursor_pagination_list_view.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_error_widget.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
@@ -18,7 +19,7 @@ import 'package:swm_kkokkomu_frontend/shortform_reply/provider/logged_in_user_sh
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class ShortFormCommentBody extends StatelessWidget {
+class ShortFormCommentBody extends StatefulWidget {
   final int newsId;
   final bool isReply;
   final int? parentCommentId;
@@ -31,13 +32,20 @@ class ShortFormCommentBody extends StatelessWidget {
   });
 
   @override
+  State<ShortFormCommentBody> createState() => _ShortFormCommentBodyState();
+}
+
+class _ShortFormCommentBodyState extends State<ShortFormCommentBody> {
+  final _scrollController = ScrollController();
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Consumer(
         builder: (_, ref, __) {
           final user = ref.watch(userInfoProvider);
           final isShortFormCommentCreated = ref.watch(
-              shortFormCommentHeightControllerProvider(newsId)
+              shortFormCommentHeightControllerProvider(widget.newsId)
                   .select((value) => value.isShortFormCommentCreated));
 
           // 댓글창이 생성되지 않은 경우 댓글 리스트를 보여주지 않음
@@ -52,7 +60,7 @@ class ShortFormCommentBody extends StatelessWidget {
               int> provider;
 
           // 대댓글이 아닌 댓글인 경우 댓글 리스트를 보여줌
-          if (!isReply) {
+          if (!widget.isReply) {
             if (user is UserModel) {
               provider = loggedInUserShortFormCommentProvider;
             } else {
@@ -60,14 +68,15 @@ class ShortFormCommentBody extends StatelessWidget {
             }
 
             return CursorPaginationListView<ShortFormCommentModel>(
-              id: newsId,
+              scrollController: _scrollController,
+              id: widget.newsId,
               provider: provider,
               separatorBuilder: (_, __) => const SizedBox(),
               itemBuilder: (_, index, model) => ShortFormCommentCard(
                 shortFormCommentModel: model,
-                parentCommentId: isReply ? parentCommentId : null,
+                parentCommentId: widget.isReply ? widget.parentCommentId : null,
                 index: index,
-                isReply: isReply,
+                isReply: widget.isReply,
                 isReplyHeader: false,
               ),
               emptyWidget: Column(
@@ -80,6 +89,28 @@ class ShortFormCommentBody extends StatelessWidget {
                     style: CustomTextStyle.body1Medi(color: ColorName.gray200),
                   ),
                 ],
+              ),
+              errorWidget: Center(
+                child: CustomErrorWidget(
+                  errorIcon: Assets.images.svg.imgCommentEmpty.svg(),
+                  errorText: '댓글을 불러오는 중 오류가 발생했어요',
+                  firstButtonText: '댓글 다시 불러오기',
+                  onFirstButtonTap: () => ref
+                      .read(provider(widget.newsId).notifier)
+                      .paginate(forceRefetch: true),
+                ),
+              ),
+              fetchingMoreErrorWidget: CustomErrorWidget(
+                errorText: '댓글을 더 불러오는 중 오류가 발생했어요',
+                firstButtonText: '더 불러오기',
+                secondButtonText: '새로고침',
+                onFirstButtonTap: () => ref
+                    .read(provider(widget.newsId).notifier)
+                    .paginate(fetchMore: true),
+                onSecondButtonTap: () => ref
+                    .read(provider(widget.newsId).notifier)
+                    .paginate(forceRefetch: true),
+                bottomPadding: 18.0,
               ),
             );
           }
@@ -95,8 +126,8 @@ class ShortFormCommentBody extends StatelessWidget {
             builder: (_, ref, child) {
               // 대댓글인 경우 부모 댓글 정보를 가져옴
               final parentCommentProvider = user is UserModel
-                  ? loggedInUserShortFormCommentProvider(newsId)
-                  : guestUserShortFormCommentProvider(newsId);
+                  ? loggedInUserShortFormCommentProvider(widget.newsId)
+                  : guestUserShortFormCommentProvider(widget.newsId);
 
               final parentComment = ref.watch(
                 parentCommentProvider.select(
@@ -110,7 +141,8 @@ class ShortFormCommentBody extends StatelessWidget {
                     final parentCommentState = value;
 
                     final parentCommentIndex = parentCommentState.items
-                        .indexWhere((element) => element.id == parentCommentId);
+                        .indexWhere(
+                            (element) => element.id == widget.parentCommentId);
 
                     if (parentCommentIndex == -1) {
                       return (index: parentCommentIndex, model: null);
@@ -126,24 +158,25 @@ class ShortFormCommentBody extends StatelessWidget {
               // 대댓글 숫자가 바뀐 경우 부모 댓글의 replyCnt값을 업데이트
               // 이때 대댓글 페이지가 마지막 페이지인 경우에만 업데이트 (모든 대댓글을 불러온 경우)
               ref.listen(
-                provider(parentCommentId!),
+                provider(widget.parentCommentId!),
                 (_, next) {
                   if (next is CursorPagination<ShortFormCommentModel> &&
                       next.pageInfo.isLast) {
                     if (user is UserModel) {
                       ref
-                          .read(loggedInUserShortFormCommentProvider(newsId)
+                          .read(loggedInUserShortFormCommentProvider(
+                                  widget.newsId)
                               .notifier)
                           .setReplyCnt(
-                            commentId: parentCommentId!,
+                            commentId: widget.parentCommentId!,
                             cnt: next.items.length,
                           );
                     } else {
                       ref
-                          .read(guestUserShortFormCommentProvider(newsId)
+                          .read(guestUserShortFormCommentProvider(widget.newsId)
                               .notifier)
                           .setReplyCnt(
-                            commentId: parentCommentId!,
+                            commentId: widget.parentCommentId!,
                             cnt: next.items.length,
                           );
                     }
@@ -156,7 +189,8 @@ class ShortFormCommentBody extends StatelessWidget {
                 // 대댓글 삭제/차단된 경우 대댓글 창을 닫음
                 WidgetsBinding.instance.addPostFrameCallback(
                   (_) => ref
-                      .read(shortFormCommentHeightControllerProvider(newsId)
+                      .read(shortFormCommentHeightControllerProvider(
+                              widget.newsId)
                           .notifier)
                       .deactivateReply(),
                 );
@@ -169,10 +203,8 @@ class ShortFormCommentBody extends StatelessWidget {
                 );
               }
 
-              final scrollController = ScrollController();
-
               return NestedScrollView(
-                controller: scrollController,
+                controller: _scrollController,
                 headerSliverBuilder: (_, __) {
                   return [
                     // 부모 댓글 정보를 보여줌
@@ -191,14 +223,15 @@ class ShortFormCommentBody extends StatelessWidget {
                   ];
                 },
                 body: CursorPaginationListView<ShortFormCommentModel>(
-                  id: parentCommentId!,
+                  id: widget.parentCommentId!,
                   provider: provider,
                   separatorBuilder: (_, __) => const SizedBox(),
                   itemBuilder: (_, index, model) => ShortFormCommentCard(
                     shortFormCommentModel: model,
-                    parentCommentId: isReply ? parentCommentId : null,
+                    parentCommentId:
+                        widget.isReply ? widget.parentCommentId : null,
                     index: index,
-                    isReply: isReply,
+                    isReply: widget.isReply,
                     isReplyHeader: false,
                   ),
                   emptyWidget: Column(
@@ -207,7 +240,7 @@ class ShortFormCommentBody extends StatelessWidget {
                       Assets.images.svg.imgCommentEmpty.svg(),
                       const SizedBox(height: 6.0),
                       Text(
-                        '작성된 댓글이 없어요',
+                        '작성된 대댓글이 없어요',
                         style:
                             CustomTextStyle.body1Medi(color: ColorName.gray200),
                       ),

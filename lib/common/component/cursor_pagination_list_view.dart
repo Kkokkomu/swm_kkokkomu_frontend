@@ -14,6 +14,9 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
   final PaginationSeparatorBuilder separatorBuilder;
   final int id;
   final Widget? emptyWidget;
+  final Widget? errorWidget;
+  final Widget? fetchingMoreErrorWidget;
+  final ScrollController? scrollController;
 
   const CursorPaginationListView({
     super.key,
@@ -22,6 +25,9 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
     required this.separatorBuilder,
     required this.id,
     this.emptyWidget,
+    this.errorWidget,
+    this.fetchingMoreErrorWidget,
+    this.scrollController,
   });
 
   @override
@@ -37,23 +43,36 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
 
     // 에러
     if (state is CursorPaginationError) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            state.message,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            onPressed: () =>
-                ref.read(provider(id).notifier).paginate(forceRefetch: true),
-            child: const Text(
-              '다시시도',
+      return CustomRefreshIndicator(
+        onRefresh: () =>
+            ref.read(provider(id).notifier).paginate(forceRefetch: true),
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: errorWidget ??
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        state.message,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16.0),
+                      ElevatedButton(
+                        onPressed: () => ref
+                            .read(provider(id).notifier)
+                            .paginate(forceRefetch: true),
+                        child: const Text(
+                          '다시시도',
+                        ),
+                      ),
+                    ],
+                  ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     }
 
@@ -86,7 +105,9 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.only(right: 4.0),
         child: Scrollbar(
+          controller: scrollController,
           child: ListView.separated(
+            controller: scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             itemCount: paginationData.items.length + 1,
             separatorBuilder: separatorBuilder,
@@ -111,37 +132,40 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
                     child: paginationData is CursorPaginationFetchingMore
                         ? const CustomCircularProgressIndicator()
                         : paginationData is CursorPaginationFetchingMoreError
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    (paginationData
-                                            as CursorPaginationFetchingMoreError)
-                                        .message,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  const SizedBox(height: 16.0),
-                                  ElevatedButton(
-                                    onPressed: () => ref
-                                        .read(provider(id).notifier)
-                                        .paginate(fetchMore: true),
-                                    child: const Text(
-                                      '다시시도',
+                            ? fetchingMoreErrorWidget ??
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      (paginationData
+                                              as CursorPaginationFetchingMoreError)
+                                          .message,
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
-                                  ),
-                                  const SizedBox(height: 16.0),
-                                  ElevatedButton(
-                                    onPressed: () => ref
-                                        .read(provider(id).notifier)
-                                        .paginate(forceRefetch: true),
-                                    child: const Text(
-                                      '전체 새로고침',
+                                    const SizedBox(height: 16.0),
+                                    ElevatedButton(
+                                      onPressed: () => ref
+                                          .read(provider(id).notifier)
+                                          .paginate(fetchMore: true),
+                                      child: const Text(
+                                        '다시시도',
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
+                                    const SizedBox(height: 16.0),
+                                    ElevatedButton(
+                                      onPressed: () => ref
+                                          .read(provider(id).notifier)
+                                          .paginate(forceRefetch: true),
+                                      child: const Text(
+                                        '전체 새로고침',
+                                      ),
+                                    ),
+                                  ],
+                                )
                             : const SizedBox(),
                   ),
                 );
