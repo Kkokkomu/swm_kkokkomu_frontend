@@ -58,7 +58,14 @@ class _ShortFormCommentInputCardState
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(18.0, 7.0, 8.0, 7.0),
+        padding: EdgeInsets.fromLTRB(
+          18.0,
+          7.0,
+          8.0,
+          7.0 +
+              Constants.bottomNavigationBarHeightWithSafeArea -
+              Constants.bottomNavigationBarHeight,
+        ),
         child: Row(
           children: [
             Expanded(

@@ -554,13 +554,17 @@ class $AssetsImagesSvgGen {
   SvgGenImage get imgEmpty =>
       const SvgGenImage('assets/images/svg/img_empty.svg');
 
+  /// File path: assets/images/svg/img_logo.svg
+  SvgGenImage get imgLogo =>
+      const SvgGenImage('assets/images/svg/img_logo.svg');
+
   /// File path: assets/images/svg/img_profile_default.svg
   SvgGenImage get imgProfileDefault =>
       const SvgGenImage('assets/images/svg/img_profile_default.svg');
 
   /// List of all assets
   List<SvgGenImage> get values =>
-      [imgCommentEmpty, imgEmpty, imgProfileDefault];
+      [imgCommentEmpty, imgEmpty, imgLogo, imgProfileDefault];
 }
 
 class Assets {

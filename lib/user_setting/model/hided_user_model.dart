@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/utils/custom_date_utils.dart';
 
 part 'hided_user_model.g.dart';
 
@@ -30,15 +31,18 @@ class HidedUserModel extends HidedUserModelBase {
 class HidedUserData {
   final int id;
   final String userName;
-  final String createdAt;
+  @JsonKey(
+    fromJson: CustomDateUtils.parseDateTime,
+    toJson: CustomDateUtils.formatDateTime,
+  )
+  final DateTime createdAt;
 
   HidedUserData({
-    required int? id,
-    required String? userName,
-    required String? createdAt,
+    int? id,
+    String? userName,
+    required this.createdAt,
   })  : id = id ?? Constants.unknownErrorId,
-        userName = userName ?? Constants.unknownErrorString,
-        createdAt = createdAt ?? Constants.unknownErrorString;
+        userName = userName ?? Constants.unknownErrorString;
 
   factory HidedUserData.fromJson(Map<String, dynamic> json) =>
       _$HidedUserDataFromJson(json);

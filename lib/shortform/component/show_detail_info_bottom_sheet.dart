@@ -56,6 +56,7 @@ Future<dynamic> showDetailInfoBottomSheet({
                       '설명',
                       style: CustomTextStyle.head3(),
                     ),
+                    centerTitle: false,
                     automaticallyImplyLeading: false,
                     flexibleSpace: const FlexibleSpaceBar(
                       background: Align(
