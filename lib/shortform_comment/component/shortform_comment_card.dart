@@ -87,12 +87,11 @@ class ShortFormCommentCard extends ConsumerWidget {
                         ),
                       );
                     },
-                    errorBuilder: (_, __, ___) {
-                      return const Icon(
-                        Icons.person,
-                        size: 40.0,
-                      );
-                    },
+                    errorBuilder: (_, __, ___) =>
+                        Assets.images.svg.imgProfileDefault.svg(
+                      width: 40.0,
+                      height: 40.0,
+                    ),
                     fit: BoxFit.cover,
                     height: 40.0,
                     width: 40.0,
@@ -308,19 +307,18 @@ class ShortFormCommentCard extends ConsumerWidget {
                             context.mounted) {
                           showInfoDialog(
                             context: context,
-                            content: resp.errorMessage ?? '이미 신고한 댓글입니다.',
+                            content: '이미 신고한 댓글이에요',
                           );
                           return;
                         }
 
                         CustomToastMessage.showErrorToastMessage(
-                            '댓글 신고에 실패했습니다.');
+                            '댓글 신고에 실패했어요');
                         return;
                       }
 
                       // 신고 성공 시 성공 메시지 출력
-                      CustomToastMessage.showSuccessToastMessage(
-                          '댓글이 신고되었습니다.');
+                      CustomToastMessage.showSuccessToastMessage('댓글이 신고되었어요');
                       return;
 
                     default:

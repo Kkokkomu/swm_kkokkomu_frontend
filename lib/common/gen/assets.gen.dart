@@ -541,8 +541,12 @@ class $AssetsImagesSvgGen {
   SvgGenImage get imgCommentEmpty =>
       const SvgGenImage('assets/images/svg/img_comment_empty.svg');
 
+  /// File path: assets/images/svg/img_profile_default.svg
+  SvgGenImage get imgProfileDefault =>
+      const SvgGenImage('assets/images/svg/img_profile_default.svg');
+
   /// List of all assets
-  List<SvgGenImage> get values => [imgCommentEmpty];
+  List<SvgGenImage> get values => [imgCommentEmpty, imgProfileDefault];
 }
 
 class Assets {
