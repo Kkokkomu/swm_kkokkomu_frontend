@@ -112,6 +112,7 @@ class DetailEmojiButton extends ConsumerWidget {
       width: 48.0,
       height: 64.0,
       shadowEnabled: false,
+      isTextShadowEnabled: false,
       icon: userReactionType == reactionType
           ? SvgPicture.asset(reactionType.blueSvgPath)
               .animate()

@@ -31,6 +31,7 @@ class HidedUserModel extends HidedUserModelBase {
 class HidedUserData {
   final int id;
   final String userName;
+  final String profileImg;
   @JsonKey(
     fromJson: CustomDateUtils.parseDateTime,
     toJson: CustomDateUtils.formatDateTime,
@@ -40,9 +41,13 @@ class HidedUserData {
   HidedUserData({
     int? id,
     String? userName,
+    String? profileImg,
     required this.createdAt,
   })  : id = id ?? Constants.unknownErrorId,
-        userName = userName ?? Constants.unknownErrorString;
+        userName = userName ?? Constants.unknownErrorString,
+        profileImg = profileImg ??
+            Constants.defaultProfileImageUrl ??
+            Constants.unknownErrorString;
 
   factory HidedUserData.fromJson(Map<String, dynamic> json) =>
       _$HidedUserDataFromJson(json);

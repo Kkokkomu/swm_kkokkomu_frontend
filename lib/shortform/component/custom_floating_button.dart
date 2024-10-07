@@ -11,6 +11,7 @@ class CustomFloatingButton extends StatelessWidget {
   final double? width;
   final double? height;
   final bool isInkWell;
+  final bool isTextShadowEnabled;
 
   const CustomFloatingButton({
     super.key,
@@ -22,6 +23,7 @@ class CustomFloatingButton extends StatelessWidget {
     this.width,
     this.height,
     this.isInkWell = true,
+    this.isTextShadowEnabled = true,
   });
 
   @override
@@ -43,8 +45,8 @@ class CustomFloatingButton extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8.0,
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 6.0,
                     ),
                   ],
                 )
@@ -74,12 +76,14 @@ class CustomFloatingButton extends StatelessWidget {
                           label!,
                           style: CustomTextStyle.detail3Reg(
                             color: labelColor,
-                            shadows: [
-                              const Shadow(
-                                color: Colors.black,
-                                blurRadius: 16.0,
-                              ),
-                            ],
+                            shadows: isTextShadowEnabled
+                                ? [
+                                    const Shadow(
+                                      color: Colors.black,
+                                      blurRadius: 16.0,
+                                    ),
+                                  ]
+                                : null,
                           ),
                         ),
                     ],

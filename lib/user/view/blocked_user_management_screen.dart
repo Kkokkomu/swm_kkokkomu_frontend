@@ -7,7 +7,6 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_
 import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
-import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
@@ -136,8 +135,7 @@ class _BlockedUserManagementScreenState
                                       ),
                                       child: ClipOval(
                                         child: Image.network(
-                                          Constants.defaultProfileImageUrl ??
-                                              '',
+                                          hidedUser.profileImg,
                                           loadingBuilder:
                                               (_, child, loadingProgress) {
                                             if (loadingProgress == null) {
