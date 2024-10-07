@@ -28,10 +28,19 @@ class AppInfoStateNotifier extends StateNotifier<AppInfoModelBase> {
       final currentAppInfo = await PackageInfo.fromPlatform();
       final latestAppInfo = await appInfoRepository.getLatestAppInfo();
 
+      // 서버가 오프라인인 경우
+      // 앱을 오프라인 상태로 변경
+      if (!latestAppInfo.isOnline) {
+        state = AppInfoModelOffline();
+        return state;
+      }
+
       // 앱의 최소 지원 버전보다 낮은 버전의 앱을 사용 중인 경우
+      // 또는 블랙리스트에 등록된 버전을 사용 중인 경우
       // 앱을 강제로 업데이트하도록 함
-      if (Version.parse(latestAppInfo.version) >
-          Version.parse(currentAppInfo.version)) {
+      if (Version.parse(latestAppInfo.minVersion) >
+              Version.parse(currentAppInfo.version) ||
+          latestAppInfo.blacklistedVersions.contains(currentAppInfo.version)) {
         state = AppInfoModelForceUpdate(
           currentAppInfo: currentAppInfo,
           latestAppInfo: latestAppInfo,

@@ -8,6 +8,7 @@ import 'package:swm_kkokkomu_frontend/common/model/app_info_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/app_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/component/custom_menu_card.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:version/version.dart';
 
 class AppInfoScreen extends ConsumerWidget {
   static String get routeName => 'info';
@@ -17,6 +18,10 @@ class AppInfoScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appInfo = ref.watch(appInfoProvider);
+
+    final isUpdateAvailable = appInfo is AppInfoModel &&
+        Version.parse(appInfo.latestAppInfo.version) >
+            Version.parse(appInfo.currentAppInfo.version);
 
     return DefaultLayoutWithDefaultAppBar(
       statusBarBrightness: Brightness.dark,
@@ -50,7 +55,32 @@ class AppInfoScreen extends ConsumerWidget {
                         : '',
                     style: CustomTextStyle.detail1Reg(color: ColorName.blue500),
                   ),
-                  const SizedBox(width: 18.0)
+                  if (isUpdateAvailable) const SizedBox(width: 12.0),
+                  if (isUpdateAvailable)
+                    InkWell(
+                      borderRadius: BorderRadius.circular(20.0),
+                      onTap: () =>
+                          launchUrl(Uri.parse(appInfo.latestAppInfo.url)),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          color: ColorName.blue100,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0,
+                            vertical: 6.0,
+                          ),
+                          child: Text(
+                            '업데이트',
+                            style: CustomTextStyle.detail1Reg(
+                              color: ColorName.blue500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  SizedBox(width: isUpdateAvailable ? 12.0 : 18.0),
                 ],
               ),
             ),

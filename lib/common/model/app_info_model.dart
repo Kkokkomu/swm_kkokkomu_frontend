@@ -13,6 +13,8 @@ class AppInfoModelError extends AppInfoModelBase {
   AppInfoModelError(this.message);
 }
 
+class AppInfoModelOffline extends AppInfoModelBase {}
+
 class AppInfoModelForceUpdate extends AppInfoModelBase {
   final PackageInfo currentAppInfo;
   final LatestAppInfo latestAppInfo;
@@ -38,11 +40,17 @@ class AppInfoModel extends AppInfoModelBase {
 @JsonSerializable()
 class LatestAppInfo {
   final String version;
+  final String minVersion;
   final String url;
+  final List<String> blacklistedVersions;
+  final bool isOnline;
 
   LatestAppInfo({
     required this.version,
+    required this.minVersion,
     required this.url,
+    required this.blacklistedVersions,
+    required this.isOnline,
   });
 
   factory LatestAppInfo.fromJson(Map<String, dynamic> json) =>

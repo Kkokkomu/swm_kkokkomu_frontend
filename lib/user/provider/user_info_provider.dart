@@ -47,9 +47,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
     required this.storage,
     required this.userRepository,
     required this.authRepository,
-  }) : super(UserModelLoading()) {
-    getUserInfo();
-  }
+  }) : super(UserModelLoading());
 
   Future<void> getUserInfo() async {
     final prevState = state;
@@ -349,20 +347,20 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
       // 이 경우 토큰 만료 에러 토스트 메세지가 별도로 뜨므로 여기서는 띄우지 않음
       // 에러 코드가 401이 아닌 경우만 에러 토스트 메세지 띄움
       if (userInfoResponse.error?.code != '401') {
-        CustomToastMessage.showLoginError('유저 정보를 가져오는데 실패했습니다.');
+        CustomToastMessage.showLoginError('유저 정보를 가져오는데 실패했어요');
       }
 
       // 이전 상태가 UserModelLoading인 경우는 스플래시 스크린에서 자동 로그인에 실패한 경우이므로
       // 스플래시 스크린에서 로그인 화면으로 이동시키기 위해 UserModelError로 상태 변경
       if (prevState is UserModelLoading) {
-        state = UserModelError(message: '유저 정보를 가져오는데 실패했습니다.');
+        state = UserModelError(message: '유저 정보를 가져오는데 실패했어요');
         return;
       }
 
       // 이전 상태가 UnregisteredUserModel인 경우는 등록화면에서 로그인에 실패한 경우이므로
       // 등록화면에서 로그인 화면으로 이동시키기 위해 UserModelError로 상태 변경
       if (prevState is UnregisteredUserModel) {
-        state = UserModelError(message: '유저 정보를 가져오는데 실패했습니다.');
+        state = UserModelError(message: '유저 정보를 가져오는데 실패했어요');
         return;
       }
 
