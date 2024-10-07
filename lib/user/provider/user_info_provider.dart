@@ -90,7 +90,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
       // resp가 null인 경우는 소셜로그인을 제공해주는 서버에서 인증 실패한 경우 ex) 카카오, 애플 서버에서 인증 실패
       // 에러 토스트 메시지 띄움
       // 로그인에 실패했으므로 상태를 기존 상태로 원복
-      CustomToastMessage.showLoginError('로그인에 실패했습니다.');
+      CustomToastMessage.showLoginError('로그인에 실패했어요');
       state = prevState;
       debugPrint('${socialLoginType.name} 서버로부터 인증 실패');
       return;
@@ -141,7 +141,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
         );
       } else {
         // 다른 에러 코드인 경우는 에러 토스트 메시지를 띄움
-        CustomToastMessage.showLoginError('로그인에 실패했습니다.');
+        CustomToastMessage.showLoginError('로그인에 실패했어요');
       }
 
       state = prevState;
@@ -155,6 +155,7 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
       state = UnregisteredUserModel(
         socialLoginType: socialLoginType,
         accessToken: accessToken,
+        agreedToTerms: false,
       );
       return;
     }
@@ -181,6 +182,24 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
     );
   }
 
+  void agreeToTermsForRegister() {
+    final prevState = state;
+
+    if (prevState is! UnregisteredUserModel) {
+      // 약관 동의를 시도하는데 UnregisteredUserModel이 아닌 경우는 로직상 에러
+      // 약관 동의에 실패했으므로 에러 토스트 메시지를 띄움
+      CustomToastMessage.showLoginError('회원 등록에 실패했어요');
+      state = UserModelError(message: '회원 등록에 실패했어요');
+      return;
+    }
+
+    state = UnregisteredUserModel(
+      socialLoginType: prevState.socialLoginType,
+      accessToken: prevState.accessToken,
+      agreedToTerms: true,
+    );
+  }
+
   Future<ProviderResponseModel> register({
     required String nickname,
     required GenderType sex,
@@ -193,12 +212,12 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
       // 등록을 시도하는데 UnregisteredUserModel이 아닌 경우는 로직상 에러
       // 등록에 실패했으므로 에러 토스트 메시지를 띄움
       // 등록화면에서 로그인 화면으로 이동시켜야 하므로 상태를 에러 상태로 변경
-      CustomToastMessage.showLoginError('등록에 실패했어요');
-      state = UserModelError(message: '등록에 실패했어요');
+      CustomToastMessage.showLoginError('회원 등록에 실패했어요');
+      state = UserModelError(message: '회원 등록에 실패했어요');
       return ProviderResponseModel(
         success: false,
         errorCode: CustomErrorCode.unknownCode,
-        errorMessage: '등록에 실패했어요',
+        errorMessage: '회원 등록에 실패했어요',
       );
     }
 
@@ -229,12 +248,12 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
 
       // 그 외 오류에 의해서 등록에 실패한 경우 에러 토스트 메시지를 띄움
       // 등록화면에서 로그인 화면으로 이동시켜야 하므로 상태를 에러 상태로 변경
-      CustomToastMessage.showLoginError('등록에 실패했어요');
-      state = UserModelError(message: '등록에 실패했어요');
+      CustomToastMessage.showLoginError('회원 등록에 실패했어요');
+      state = UserModelError(message: '회원 등록에 실패했어요');
       return ProviderResponseModel(
         success: false,
         errorCode: resp.error?.code ?? CustomErrorCode.unknownCode,
-        errorMessage: resp.error?.message ?? '등록에 실패했어요',
+        errorMessage: resp.error?.message ?? '회원 등록에 실패했어요',
       );
     }
 
@@ -258,8 +277,8 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
   void cancelRegister() {
     // 등록화면에서 취소 버튼을 누른 경우
     // 등록을 취소하고 로그인 화면으로 이동시키기 위해 상태를 에러 상태로 변경
-    CustomToastMessage.showLoginError('등록을 취소했습니다.');
-    state = UserModelError(message: '등록을 취소했습니다.');
+    CustomToastMessage.showLoginError('회원 등록을 취소했어요');
+    state = UserModelError(message: '회원 등록을 취소했어요');
   }
 
   Future<void> logout({
@@ -280,8 +299,8 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
     // 에러 토스트 메시지를 띄움
     // 자동로그인이 해제되었음을 알리기 위해 UserModelError로 상태 변경하여 최초 로그인 화면으로 이동시킴
     if (isAuthErrorLogout) {
-      CustomToastMessage.showLoginError('세션이 만료되었습니다.');
-      state = UserModelError(message: '세션이 만료되었습니다.');
+      CustomToastMessage.showLoginError('세션이 만료되었어요');
+      state = UserModelError(message: '세션이 만료되었어요');
 
       return;
     }

@@ -18,6 +18,7 @@ import 'package:swm_kkokkomu_frontend/user/view/edit_personal_info_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/login_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/profile_screen.dart';
+import 'package:swm_kkokkomu_frontend/user/view/register_agreement_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/register_screen.dart';
 
 final authProvider = ChangeNotifierProvider<AuthProvider>(
@@ -148,6 +149,11 @@ class AuthProvider extends ChangeNotifier {
           name: RegisterScreen.routeName,
           builder: (_, __) => const RegisterScreen(),
         ),
+        GoRoute(
+          path: '/register-agreement',
+          name: RegisterAgreementScreen.routeName,
+          builder: (_, __) => const RegisterAgreementScreen(),
+        ),
       ];
 
   void authErrorLogout() {
@@ -176,9 +182,17 @@ class AuthProvider extends ChangeNotifier {
     // UnregisteredUserModel
     // UnregisteredUserModel 상태인 경우 무조건 회원가입 페이지로 이동
     if (user is UnregisteredUserModel) {
-      return state.fullPath != CustomRoutePath.register
-          ? CustomRoutePath.register
-          : null;
+      if (user.agreedToTerms) {
+        // 약관 동의를 한 경우 무조건 회원가입 페이지로 이동
+        return state.fullPath != CustomRoutePath.register
+            ? CustomRoutePath.register
+            : null;
+      } else {
+        // 약관 동의를 하지 않은 경우 무조건 약관 동의 페이지로 이동
+        return state.fullPath != CustomRoutePath.registerAgreement
+            ? CustomRoutePath.registerAgreement
+            : null;
+      }
     }
 
     // UserModelError

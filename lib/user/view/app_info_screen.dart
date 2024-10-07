@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/const/policy_links.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
 import 'package:swm_kkokkomu_frontend/common/model/app_info_model.dart';
@@ -88,15 +89,13 @@ class AppInfoScreen extends ConsumerWidget {
           CustomMenuCard(
             content: '서비스 이용 약관',
             onTap: () => launchUrl(
-              Uri.parse(
-                  'https://wooded-crib-541.notion.site/1-0-0ver-106908e7bbc5806dac39caf5ebc3dee4?pvs=4'),
+              Uri.parse(PolicyLinks.termsOfService),
             ),
           ),
           CustomMenuCard(
             content: '개인 정보 처리 방침',
             onTap: () => launchUrl(
-              Uri.parse(
-                  'https://wooded-crib-541.notion.site/1-0-0ver-105908e7bbc58012b04ef2df397d0cff?pvs=4'),
+              Uri.parse(PolicyLinks.privacyPolicy),
             ),
           ),
           const SizedBox(height: 18.0),

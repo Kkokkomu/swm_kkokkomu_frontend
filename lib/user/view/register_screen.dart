@@ -64,6 +64,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         child: DefaultLayoutWithDefaultAppBar(
           resizeToAvoidBottomInset: true,
           statusBarBrightness: Brightness.dark,
+          systemNavigationBarColor: ColorName.white000,
+          systemNavigationBarIconBrightness: Brightness.dark,
           title: '프로필 설정',
           onBackButtonPressed: () async {
             final resp = await showConfirmationDialog(

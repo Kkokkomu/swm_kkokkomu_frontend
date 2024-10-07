@@ -26,6 +26,7 @@ class DefaultLayoutWithDefaultAppBar extends StatelessWidget {
   final Brightness? statusBarBrightness;
   final Color? systemNavigationBarColor;
   final Brightness? systemNavigationBarIconBrightness;
+  final bool isBottomBorderVisible;
 
   const DefaultLayoutWithDefaultAppBar({
     required this.child,
@@ -49,6 +50,7 @@ class DefaultLayoutWithDefaultAppBar extends StatelessWidget {
     this.statusBarBrightness,
     this.systemNavigationBarColor,
     this.systemNavigationBarIconBrightness,
+    this.isBottomBorderVisible = true,
     super.key,
   });
 
@@ -109,13 +111,15 @@ class DefaultLayoutWithDefaultAppBar extends StatelessWidget {
             style: CustomTextStyle.head4(),
           ),
           foregroundColor: appBarForegroundColor ?? ColorName.gray700,
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(0),
-            child: Container(
-              color: ColorName.gray100,
-              height: 0.5,
-            ),
-          ),
+          bottom: isBottomBorderVisible
+              ? PreferredSize(
+                  preferredSize: const Size.fromHeight(0),
+                  child: Container(
+                    color: ColorName.gray100,
+                    height: 0.5,
+                  ),
+                )
+              : null,
         ),
         drawer: drawer,
         drawerEnableOpenDragGesture: drawerEnableOpenDragGesture,
