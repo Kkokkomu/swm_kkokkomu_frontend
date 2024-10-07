@@ -53,8 +53,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     if (appInfo is AppInfoModelError && mounted) {
       showForceCheckDialog(
         context: context,
-        content: '앱이 점검중이거나\n업데이트가 필요해요',
-        details: '업데이트를 확인해주세요',
+        content: '서버와 통신 중 문제가 발생했어요\n\n인터넷 상태와 앱 업데이트를\n확인해주세요',
         checkMessage: Platform.isAndroid ? '종료' : '다시시도',
         onCheck: () {
           context.pop();

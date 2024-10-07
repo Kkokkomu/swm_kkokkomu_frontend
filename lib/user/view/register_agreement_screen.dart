@@ -67,105 +67,108 @@ class _RegisterAgreementScreenState
             ref.read(userInfoProvider.notifier).cancelRegister();
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 28.0),
-              Text(
-                '서비스 이용약관에\n동의해주세요',
-                style: CustomTextStyle.head2(),
-              ),
-              const SizedBox(height: 32.0),
-              InkWell(
-                borderRadius: BorderRadius.circular(8.0),
-                onTap: () => setState(() {
-                  if (areAllRequiredTermsAgreed) {
-                    isMoreThan14Agreed = false;
-                    isTermsOfServiceAgreed = false;
-                    isPrivacyPolicyAgreed = false;
-                  } else {
-                    isMoreThan14Agreed = true;
-                    isTermsOfServiceAgreed = true;
-                    isPrivacyPolicyAgreed = true;
-                  }
-                }),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    color: areAllRequiredTermsAgreed
-                        ? ColorName.blue100
-                        : ColorName.gray50,
-                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 9.0,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 28.0),
+                Text(
+                  '서비스 이용약관에\n동의해주세요',
+                  style: CustomTextStyle.head2(),
+                ),
+                const SizedBox(height: 32.0),
+                InkWell(
+                  borderRadius: BorderRadius.circular(8.0),
+                  onTap: () => setState(() {
+                    if (areAllRequiredTermsAgreed) {
+                      isMoreThan14Agreed = false;
+                      isTermsOfServiceAgreed = false;
+                      isPrivacyPolicyAgreed = false;
+                    } else {
+                      isMoreThan14Agreed = true;
+                      isTermsOfServiceAgreed = true;
+                      isPrivacyPolicyAgreed = true;
+                    }
+                  }),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      color: areAllRequiredTermsAgreed
+                          ? ColorName.blue100
+                          : ColorName.gray50,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(8.0)),
                     ),
-                    child: Row(
-                      children: [
-                        areAllRequiredTermsAgreed
-                            ? Assets.icons.svg.icCheckboxEnabled.svg()
-                            : Assets.icons.svg.icCheckboxDisabled.svg(),
-                        const SizedBox(width: 8.0),
-                        Text(
-                          '모두 동의',
-                          style: CustomTextStyle.body2Medi(
-                            color: ColorName.gray500,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 9.0,
+                      ),
+                      child: Row(
+                        children: [
+                          areAllRequiredTermsAgreed
+                              ? Assets.icons.svg.icCheckboxEnabled.svg()
+                              : Assets.icons.svg.icCheckboxDisabled.svg(),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            '모두 동의',
+                            style: CustomTextStyle.body2Medi(
+                              color: ColorName.gray500,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 24.0),
-              const Divider(
-                color: ColorName.gray200,
-                thickness: 1.0,
-                height: 1.0,
-              ),
-              const SizedBox(height: 32.0),
-              _TermsWidget(
-                content: '[필수] 만 14세 이상',
-                isAgreed: isMoreThan14Agreed,
-                onTap: () =>
-                    setState(() => isMoreThan14Agreed = !isMoreThan14Agreed),
-              ),
-              _TermsWidget(
-                content: '[필수] 이용약관 동의',
-                isAgreed: isTermsOfServiceAgreed,
-                detailUrl: PolicyLinks.termsOfService,
-                onTap: () => setState(
-                  () => isTermsOfServiceAgreed = !isTermsOfServiceAgreed,
+                const SizedBox(height: 24.0),
+                const Divider(
+                  color: ColorName.gray200,
+                  thickness: 1.0,
+                  height: 1.0,
                 ),
-              ),
-              _TermsWidget(
-                content: '[필수] 개인정보 처리방침 동의',
-                isAgreed: isPrivacyPolicyAgreed,
-                detailUrl: PolicyLinks.privacyPolicy,
-                onTap: () => setState(
-                  () => isPrivacyPolicyAgreed = !isPrivacyPolicyAgreed,
+                const SizedBox(height: 32.0),
+                _TermsWidget(
+                  content: '[필수] 만 14세 이상',
+                  isAgreed: isMoreThan14Agreed,
+                  onTap: () =>
+                      setState(() => isMoreThan14Agreed = !isMoreThan14Agreed),
                 ),
-              ),
-              const Spacer(),
-              CustomSelectButton(
-                onTap: areAllRequiredTermsAgreed
-                    ? () => ref
-                        .read(userInfoProvider.notifier)
-                        .agreeToTermsForRegister()
-                    : null,
-                content: '동의하고 가입하기',
-                backgroundColor: areAllRequiredTermsAgreed
-                    ? ColorName.gray600
-                    : ColorName.gray100,
-                textColor: areAllRequiredTermsAgreed
-                    ? ColorName.white000
-                    : ColorName.gray200,
-              ),
-              const SizedBox(height: 12.0),
-            ],
+                _TermsWidget(
+                  content: '[필수] 이용약관 동의',
+                  isAgreed: isTermsOfServiceAgreed,
+                  detailUrl: PolicyLinks.termsOfService,
+                  onTap: () => setState(
+                    () => isTermsOfServiceAgreed = !isTermsOfServiceAgreed,
+                  ),
+                ),
+                _TermsWidget(
+                  content: '[필수] 개인정보 처리방침 동의',
+                  isAgreed: isPrivacyPolicyAgreed,
+                  detailUrl: PolicyLinks.privacyPolicy,
+                  onTap: () => setState(
+                    () => isPrivacyPolicyAgreed = !isPrivacyPolicyAgreed,
+                  ),
+                ),
+                const Spacer(),
+                CustomSelectButton(
+                  onTap: areAllRequiredTermsAgreed
+                      ? () => ref
+                          .read(userInfoProvider.notifier)
+                          .agreeToTermsForRegister()
+                      : null,
+                  content: '동의하고 가입하기',
+                  backgroundColor: areAllRequiredTermsAgreed
+                      ? ColorName.gray600
+                      : ColorName.gray100,
+                  textColor: areAllRequiredTermsAgreed
+                      ? ColorName.white000
+                      : ColorName.gray200,
+                ),
+                const SizedBox(height: 12.0),
+              ],
+            ),
           ),
         ),
       ),
