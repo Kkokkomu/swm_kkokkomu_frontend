@@ -43,59 +43,73 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Future<void> fetchAppInfoAndRoute() async {
     _controller.reset();
     final futureResp = _controller.forward();
-    final futureAppInfo = ref.read(appInfoProvider.notifier).getAppInfo();
-    await ref.read(userInfoProvider.notifier).getUserInfo();
-    final appInfo = await futureAppInfo;
+    final appInfo = await ref.read(appInfoProvider.notifier).getAppInfo();
+    if (appInfo is AppInfoModel) {
+      // 앱 상태가 정상인 경우에만
+      // 로그인 정보를 받아오기 위해 사용자 정보 요청
+      await ref.read(userInfoProvider.notifier).getUserInfo();
+    }
     await futureResp;
 
-    // 앱 정보 요청 에러가 발생한 경우
-    // 에러 다이얼로그 표시 후, 앱 종료 유도
-    if (appInfo is AppInfoModelError && mounted) {
-      showForceCheckDialog(
-        context: context,
-        content: '서버와 통신 중 문제가 발생했어요\n\n인터넷 상태와 앱 업데이트를\n확인해주세요',
-        checkMessage: Platform.isAndroid ? '종료' : '다시시도',
-        onCheck: () {
-          context.pop();
-          Platform.isAndroid ? SystemNavigator.pop() : fetchAppInfoAndRoute();
-        },
-      );
-      return;
-    }
+    switch (appInfo) {
+      case AppInfoModelLoading() || AppInfoModelError():
+        // 앱 정보 요청 에러가 발생한 경우
+        // 에러 다이얼로그 표시 후, 앱 종료 혹은 재시도 유도
+        if (mounted) {
+          showForceCheckDialog(
+            context: context,
+            content: '서버와 통신 중 문제가 발생했어요\n\n인터넷 상태와 앱 업데이트를\n확인해주세요',
+            checkMessage: Platform.isAndroid ? '종료' : '다시시도',
+            onCheck: () {
+              context.pop();
+              Platform.isAndroid
+                  ? SystemNavigator.pop()
+                  : fetchAppInfoAndRoute();
+            },
+          );
+        }
+        return;
 
-    // 서버가 오프라인 상태인 경우
-    // 오프라인 다이얼로그 표시 후, 앱 종료 유도
-    if (appInfo is AppInfoModelOffline && mounted) {
-      showForceCheckDialog(
-        context: context,
-        content: '서버가 점검 중이에요',
-        details: '잠시 후 다시 시도해주세요',
-        checkMessage: Platform.isAndroid ? '종료' : '다시시도',
-        onCheck: () {
-          context.pop();
-          Platform.isAndroid ? SystemNavigator.pop() : fetchAppInfoAndRoute();
-        },
-      );
-      return;
-    }
+      case AppInfoModelOffline():
+        // 서버가 오프라인 상태인 경우
+        // 오프라인 다이얼로그 표시 후, 앱 종료 유도
+        if (mounted) {
+          showForceCheckDialog(
+            context: context,
+            content: '서버가 점검 중이에요',
+            details: '잠시 후 다시 시도해주세요',
+            checkMessage: Platform.isAndroid ? '종료' : '다시시도',
+            onCheck: () {
+              context.pop();
+              Platform.isAndroid
+                  ? SystemNavigator.pop()
+                  : fetchAppInfoAndRoute();
+            },
+          );
+        }
+        return;
 
-    // 앱에 강제 업데이트가 필요한 경우
-    // 강제 업데이트 다이얼로그 표시
-    if (appInfo is AppInfoModelForceUpdate && mounted) {
-      showForceCheckDialog(
-        context: context,
-        content: '앱 업데이트가 필요해요',
-        details: '최신 버전으로 업데이트 해주세요',
-        checkMessage: '업데이트',
-        onCheck: () => launchUrl(Uri.parse(appInfo.storeUrl)),
-      );
-      return;
-    }
+      case AppInfoModelForceUpdate():
+        // 앱에 강제 업데이트가 필요한 경우
+        // 강제 업데이트 다이얼로그 표시
+        if (mounted) {
+          showForceCheckDialog(
+            context: context,
+            content: '앱 업데이트가 필요해요',
+            details: '최신 버전으로 업데이트 해주세요',
+            checkMessage: '업데이트',
+            onCheck: () => launchUrl(Uri.parse(appInfo.storeUrl)),
+          );
+        }
+        return;
 
-    // 정상적으로 앱 정보를 받아온 경우
-    // 로그인 화면으로 이동
-    if (mounted) {
-      context.go(CustomRoutePath.login);
+      case AppInfoModel():
+        // 정상적으로 앱 정보를 받아온 경우
+        // 로그인 화면으로 이동
+        if (mounted) {
+          context.go(CustomRoutePath.login);
+        }
+        return;
     }
   }
 
@@ -120,7 +134,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           child: Assets.animation.newsnackSplash.lottie(
             controller: _controller,
             onLoaded: (composition) {
-              _controller.duration = composition.duration * 0.75;
+              _controller.duration = composition.duration * 0.8;
               fetchAppInfoAndRoute();
             },
           ),
