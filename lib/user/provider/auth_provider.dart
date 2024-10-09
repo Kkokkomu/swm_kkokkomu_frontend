@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router_navigator_key_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/view/root_tab.dart';
+import 'package:swm_kkokkomu_frontend/common/view/search_screen.dart';
 import 'package:swm_kkokkomu_frontend/common/view/splash_screen.dart';
 import 'package:swm_kkokkomu_frontend/exploration/view/exploration_screen.dart';
 import 'package:swm_kkokkomu_frontend/exploration/view/exploration_shortform_screen.dart';
@@ -153,6 +154,12 @@ class AuthProvider extends ChangeNotifier {
           path: '/register-agreement',
           name: RegisterAgreementScreen.routeName,
           builder: (_, __) => const RegisterAgreementScreen(),
+        ),
+        GoRoute(
+          parentNavigatorKey: rootNavigationKey,
+          path: '/search',
+          name: SearchScreen.routeName,
+          builder: (_, __) => const SearchScreen(),
         ),
       ];
 

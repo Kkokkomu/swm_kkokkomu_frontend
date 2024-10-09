@@ -12,12 +12,14 @@ class CustomTextFormField extends StatefulWidget {
   final FormFieldValidator<String>? validator;
   final void Function(String)? onChanged;
   final void Function(String?)? onSaved;
+  final void Function(String?)? onFieldSubmitted;
   final TextEditingController? controller;
   final AutovalidateMode? autovalidateMode;
   final Widget? helper;
   final Widget? errorMessage;
   final int? maxLength;
   final Widget? suffixIcon;
+  final Widget? persistentSuffixIcon;
   final FocusNode? focusNode;
   final bool readOnly;
   final void Function()? onTap;
@@ -25,6 +27,7 @@ class CustomTextFormField extends StatefulWidget {
   final int? minLines;
   final int? maxLines;
   final bool showCounter;
+  final TextInputAction? textInputAction;
 
   const CustomTextFormField({
     super.key,
@@ -37,12 +40,14 @@ class CustomTextFormField extends StatefulWidget {
     this.validator,
     this.onChanged,
     this.onSaved,
+    this.onFieldSubmitted,
     this.controller,
     this.autovalidateMode,
     this.helper,
     this.errorMessage,
     this.maxLength,
     this.suffixIcon,
+    this.persistentSuffixIcon,
     this.focusNode,
     this.readOnly = false,
     this.onTap,
@@ -50,6 +55,7 @@ class CustomTextFormField extends StatefulWidget {
     this.minLines,
     this.maxLines = 1,
     this.showCounter = true,
+    this.textInputAction,
   });
 
   @override
@@ -101,6 +107,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               }
             },
             onSaved: widget.onSaved,
+            onFieldSubmitted: widget.onFieldSubmitted,
             cursorColor: ColorName.blue500,
             cursorErrorColor: ColorName.error500,
             style: CustomTextStyle.detail1Reg(
@@ -111,8 +118,20 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             maxLength: widget.maxLength,
             minLines: widget.minLines,
             maxLines: widget.maxLines,
+            textInputAction: widget.textInputAction,
             decoration: InputDecoration(
-              suffixIcon: isFocused ? widget.suffixIcon : null,
+              suffixIcon: widget.suffixIcon == null &&
+                      widget.persistentSuffixIcon == null
+                  ? null
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (isFocused && widget.suffixIcon != null)
+                          widget.suffixIcon!,
+                        if (widget.persistentSuffixIcon != null)
+                          widget.persistentSuffixIcon!,
+                      ],
+                    ),
               suffixIconConstraints:
                   widget.suffixIcon != null ? const BoxConstraints() : null,
               counterText: '',

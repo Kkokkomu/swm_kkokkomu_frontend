@@ -268,6 +268,7 @@ class SingleShortForm extends ConsumerWidget {
                                           CrossAxisAlignment.center,
                                       children: [
                                         const SearchButton(),
+                                        const SizedBox(width: 4.0),
                                         MoreInfoButton(
                                           isLoggedInUser: isLoggedInUser,
                                           newsId: newsId,

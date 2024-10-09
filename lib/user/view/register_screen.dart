@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field_clear_button.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
@@ -115,11 +116,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           labelText: '닉네임',
                           hintText: '닉네임을 입력해주세요',
                           maxLength: 10,
-                          suffixIcon: GestureDetector(
-                            onTap: () => nicknameController.clear(),
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: Assets.icons.svg.btnDelete.svg(),
+                          suffixIcon: Container(
+                            margin: const EdgeInsets.only(right: 10.0),
+                            child: CustomTextFormFieldClearButton(
+                              controller: nicknameController,
                             ),
                           ),
                           helper: Text.rich(

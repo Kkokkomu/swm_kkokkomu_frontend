@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field_clear_button.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
-import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_send_button.dart';
 
@@ -62,11 +62,10 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
                   maxLines: 3,
                   maxLength: Constants.maxCommentLength,
                   hintText: '댓글을 입력하세요',
-                  suffixIcon: GestureDetector(
-                    onTap: () => controller.clear(),
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
-                      child: Assets.icons.svg.btnDelete.svg(),
+                  suffixIcon: Container(
+                    margin: const EdgeInsets.only(right: 10.0),
+                    child: CustomTextFormFieldClearButton(
+                      controller: controller,
                     ),
                   ),
                 ),

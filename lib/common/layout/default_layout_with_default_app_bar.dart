@@ -9,6 +9,7 @@ class DefaultLayoutWithDefaultAppBar extends StatelessWidget {
   final Color? appBarBackGroundColor;
   final Color? appBarForegroundColor;
   final Widget child;
+  final Widget? titleWidget;
   final String title;
   final bool isBackButtonVisible;
   final void Function()? onBackButtonPressed;
@@ -27,10 +28,12 @@ class DefaultLayoutWithDefaultAppBar extends StatelessWidget {
   final Color? systemNavigationBarColor;
   final Brightness? systemNavigationBarIconBrightness;
   final bool isBottomBorderVisible;
+  final double? toolbarHeight;
 
   const DefaultLayoutWithDefaultAppBar({
     required this.child,
     required this.title,
+    this.titleWidget,
     this.scaffoldKey,
     this.backgroundColor,
     this.appBarBackGroundColor,
@@ -51,6 +54,7 @@ class DefaultLayoutWithDefaultAppBar extends StatelessWidget {
     this.systemNavigationBarColor,
     this.systemNavigationBarIconBrightness,
     this.isBottomBorderVisible = true,
+    this.toolbarHeight,
     super.key,
   });
 
@@ -91,7 +95,7 @@ class DefaultLayoutWithDefaultAppBar extends StatelessWidget {
           backgroundColor: appBarBackGroundColor ?? ColorName.white000,
           elevation: 0,
           centerTitle: true,
-          toolbarHeight: 48.0,
+          toolbarHeight: toolbarHeight ?? 48.0,
           leading: isBackButtonVisible
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2.0),
@@ -106,10 +110,11 @@ class DefaultLayoutWithDefaultAppBar extends StatelessWidget {
           flexibleSpace: titleFlexibleSpace,
           actions: titleActions,
           titleSpacing: titleSpacing,
-          title: Text(
-            title,
-            style: CustomTextStyle.head4(),
-          ),
+          title: titleWidget ??
+              Text(
+                title,
+                style: CustomTextStyle.head4(),
+              ),
           foregroundColor: appBarForegroundColor ?? ColorName.gray700,
           bottom: isBottomBorderVisible
               ? PreferredSize(

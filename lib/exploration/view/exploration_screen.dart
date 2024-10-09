@@ -72,13 +72,16 @@ class ExplorationScreen extends ConsumerWidget {
                     ),
                   ),
                   const Spacer(),
-                  // TODO : 구현 필요
-                  Visibility.maintain(
-                    visible: false,
-                    child: Assets.icons.svg.btnSearchLight.svg(),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      onTap: () => context.push(CustomRoutePath.search),
+                      child: Assets.icons.svg.btnSearchLight.svg(),
+                    ),
                   ),
                   // TODO : 구현 필요
-                  Visibility.maintain(
+                  Visibility(
                     visible: false,
                     child: Assets.icons.svg.btnNoticeDefault.svg(),
                   ),
