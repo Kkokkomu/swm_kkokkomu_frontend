@@ -159,8 +159,12 @@ class CustomBetterPlayerControllerStateNotifier
       }
 
       // 현재 라우트 path
-      final currentRoutePath =
-          ref.read(routerProvider).routeInformationProvider.value.uri.path;
+      final currentRoutePath = ref
+          .read(routerProvider)
+          .routerDelegate
+          .currentConfiguration
+          .last
+          .matchedLocation;
       // 현재 비디오의 재생 위치
       final currentPosition =
           _betterPlayerController?.videoPlayerController?.value.position;
