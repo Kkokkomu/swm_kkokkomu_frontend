@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/policy_links.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
@@ -97,6 +98,11 @@ class AppInfoScreen extends ConsumerWidget {
             onTap: () => launchUrl(
               Uri.parse(PolicyLinks.privacyPolicy),
             ),
+          ),
+          CustomMenuCard(
+            content: '앱 리뷰 남기기',
+            onTap: () =>
+                InAppReview.instance.openStoreListing(appStoreId: '6717599440'),
           ),
           const SizedBox(height: 18.0),
           Row(
