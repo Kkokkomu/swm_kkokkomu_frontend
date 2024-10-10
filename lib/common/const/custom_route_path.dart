@@ -8,6 +8,8 @@ class CustomRoutePath {
   static const String myPage = '/mypage';
   static const String blockedUserManagement = '/mypage/manage-blocked-users';
   static const String appInfo = '/mypage/info';
+  static const String openSourceLicenses = '/mypage/info/open-source-licenses';
+  static const String officialSnsAccount = '/mypage/info/official-sns-account';
   static const String profile = '/mypage/profile';
   static const String editPersonalInfo = '/mypage/profile/edit-personal-info';
   static const String accountDeletion = '/mypage/profile/account-deletion';

@@ -57,6 +57,18 @@ class $AssetsImagesGen {
 class $AssetsIconsPngGen {
   const $AssetsIconsPngGen();
 
+  /// File path: assets/icons/png/Instagram_Glyph_Gradient.png
+  AssetGenImage get instagramGlyphGradient =>
+      const AssetGenImage('assets/icons/png/Instagram_Glyph_Gradient.png');
+
+  /// File path: assets/icons/png/TikTok_Icon_Black_Circle.png
+  AssetGenImage get tikTokIconBlackCircle =>
+      const AssetGenImage('assets/icons/png/TikTok_Icon_Black_Circle.png');
+
+  /// File path: assets/icons/png/TikTok_Icon_Black_Square.png
+  AssetGenImage get tikTokIconBlackSquare =>
+      const AssetGenImage('assets/icons/png/TikTok_Icon_Black_Square.png');
+
   /// File path: assets/icons/png/login_apple@3x.png
   AssetGenImage get loginApple3x =>
       const AssetGenImage('assets/icons/png/login_apple@3x.png');
@@ -69,8 +81,30 @@ class $AssetsIconsPngGen {
   AssetGenImage get loginKakao3x =>
       const AssetGenImage('assets/icons/png/login_kakao@3x.png');
 
+  /// File path: assets/icons/png/youtube_social_circle_red.png
+  AssetGenImage get youtubeSocialCircleRed =>
+      const AssetGenImage('assets/icons/png/youtube_social_circle_red.png');
+
+  /// File path: assets/icons/png/youtube_social_icon_red.png
+  AssetGenImage get youtubeSocialIconRed =>
+      const AssetGenImage('assets/icons/png/youtube_social_icon_red.png');
+
+  /// File path: assets/icons/png/youtube_social_squircle_red.png
+  AssetGenImage get youtubeSocialSquircleRed =>
+      const AssetGenImage('assets/icons/png/youtube_social_squircle_red.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [loginApple3x, loginGoogle3x, loginKakao3x];
+  List<AssetGenImage> get values => [
+        instagramGlyphGradient,
+        tikTokIconBlackCircle,
+        tikTokIconBlackSquare,
+        loginApple3x,
+        loginGoogle3x,
+        loginKakao3x,
+        youtubeSocialCircleRed,
+        youtubeSocialIconRed,
+        youtubeSocialSquircleRed
+      ];
 }
 
 class $AssetsIconsSvgGen {

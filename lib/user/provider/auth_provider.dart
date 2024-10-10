@@ -18,6 +18,8 @@ import 'package:swm_kkokkomu_frontend/user/view/blocked_user_management_screen.d
 import 'package:swm_kkokkomu_frontend/user/view/edit_personal_info_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/login_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
+import 'package:swm_kkokkomu_frontend/user/view/official_sns_account_screen.dart';
+import 'package:swm_kkokkomu_frontend/user/view/open_source_licenses_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/profile_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/register_agreement_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/register_screen.dart';
@@ -128,6 +130,20 @@ class AuthProvider extends ChangeNotifier {
                       path: 'info',
                       name: AppInfoScreen.routeName,
                       builder: (_, __) => const AppInfoScreen(),
+                      routes: [
+                        GoRoute(
+                          parentNavigatorKey: rootNavigationKey,
+                          path: 'open-source-licenses',
+                          name: OpenSourceLicensesScreen.routeName,
+                          builder: (_, __) => const OpenSourceLicensesScreen(),
+                        ),
+                        GoRoute(
+                          parentNavigatorKey: rootNavigationKey,
+                          path: 'official-sns-account',
+                          name: OfficialSnsAccountScreen.routeName,
+                          builder: (_, __) => const OfficialSnsAccountScreen(),
+                        ),
+                      ],
                     ),
                   ],
                 ),

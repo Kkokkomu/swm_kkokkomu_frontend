@@ -5,12 +5,14 @@ import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 
 class CustomMenuCard extends StatelessWidget {
   final String content;
+  final Widget? prefixIcon;
   final bool isEnterIcon;
   final void Function()? onTap;
 
   const CustomMenuCard({
     super.key,
     required this.content,
+    this.prefixIcon,
     this.isEnterIcon = true,
     this.onTap,
   });
@@ -34,6 +36,8 @@ class CustomMenuCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(width: 18.0),
+              if (prefixIcon != null) prefixIcon!,
+              if (prefixIcon != null) const SizedBox(width: 18.0),
               Text(
                 content,
                 style: CustomTextStyle.body2Bold(),

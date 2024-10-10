@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
-import 'package:swm_kkokkomu_frontend/common/const/policy_links.dart';
+import 'package:swm_kkokkomu_frontend/common/const/in_app_links.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
@@ -138,7 +138,7 @@ class _RegisterAgreementScreenState
                 _TermsWidget(
                   content: '[필수] 이용약관 동의',
                   isAgreed: isTermsOfServiceAgreed,
-                  detailUrl: PolicyLinks.termsOfService,
+                  detailUrl: InAppLinks.termsOfService,
                   onTap: () => setState(
                     () => isTermsOfServiceAgreed = !isTermsOfServiceAgreed,
                   ),
@@ -146,7 +146,7 @@ class _RegisterAgreementScreenState
                 _TermsWidget(
                   content: '[필수] 개인정보 처리방침 동의',
                   isAgreed: isPrivacyPolicyAgreed,
-                  detailUrl: PolicyLinks.privacyPolicy,
+                  detailUrl: InAppLinks.privacyPolicy,
                   onTap: () => setState(
                     () => isPrivacyPolicyAgreed = !isPrivacyPolicyAgreed,
                   ),
