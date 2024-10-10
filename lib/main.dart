@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -16,7 +14,7 @@ import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-void main(name, options) async {
+void main(name, FirebaseOptions options) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 앱 최초 실행 시 secure storage 초기화

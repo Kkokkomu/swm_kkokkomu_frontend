@@ -30,25 +30,23 @@ class OpenSourceLicensesScreen extends ConsumerWidget {
             centerTitle: true,
             titleTextStyle: CustomTextStyle.head4(),
           ),
+          progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: ColorName.blue500,
+          ),
           fontFamily: FontFamily.pretendard,
           cardColor: ColorName.white000,
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: Scrollbar(
-            child: LicensePage(
-              applicationIcon: Assets.icons.svg.appIcon.svg(),
-              applicationName:
-                  appInfo is AppInfoModel ? appInfo.currentAppInfo.appName : '',
-              applicationVersion:
-                  appInfo is AppInfoModel ? appInfo.currentAppInfo.version : '',
-              applicationLegalese: 'This application is Copyright © 2024 KKM.\n'
-                  'All rights reserved.\n\n'
-                  'The following sets forth attribution notices for third party software that may be contained in this application.\n\n'
-                  'If you have any questions about these notices,\n'
-                  'please email us at kkokkomu27@gmail.com',
-            ),
-          ),
+        child: LicensePage(
+          applicationIcon: Assets.icons.svg.appIcon.svg(),
+          applicationName:
+              appInfo is AppInfoModel ? appInfo.currentAppInfo.appName : '',
+          applicationVersion:
+              appInfo is AppInfoModel ? appInfo.currentAppInfo.version : '',
+          applicationLegalese: 'This application is Copyright © 2024 KKM.\n'
+              'All rights reserved.\n\n'
+              'The following sets forth attribution notices for third party software that may be contained in this application.\n\n'
+              'If you have any questions about these notices,\n'
+              'please email us at kkokkomu27@gmail.com',
         ),
       ),
     );
