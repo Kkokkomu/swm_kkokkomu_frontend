@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field_clear_button.dart';
+import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
@@ -10,7 +12,12 @@ import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_
 class SearchScreen extends StatefulWidget {
   static String get routeName => 'search';
 
-  const SearchScreen({super.key});
+  final String? initialSearchKeyword;
+
+  const SearchScreen({
+    super.key,
+    this.initialSearchKeyword,
+  });
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -18,6 +25,14 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialSearchKeyword != null) {
+      _searchController.text = widget.initialSearchKeyword!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +49,18 @@ class _SearchScreenState extends State<SearchScreen> {
             controller: _searchController,
             autofocus: true,
             hintText: '검색어를 입력하세요',
-            onFieldSubmitted: (value) {},
+            maxLength: 250,
+            showCounter: false,
+            onFieldSubmitted: (value) {
+              if (value != null && value.isNotEmpty) {
+                context.go(
+                  CustomRoutePath.searchShortFormList,
+                  extra: {
+                    GoRouterExtraKeys.searchKeyword: value,
+                  },
+                );
+              }
+            },
             suffixIcon: CustomTextFormFieldClearButton(
               controller: _searchController,
             ),
@@ -45,7 +71,15 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: InkWell(
                   customBorder: const CircleBorder(),
                   onTap: () {
-                    FocusScope.of(context).unfocus();
+                    if (_searchController.text.isNotEmpty) {
+                      context.go(
+                        CustomRoutePath.searchShortFormList,
+                        extra: {
+                          GoRouterExtraKeys.searchKeyword:
+                              _searchController.text,
+                        },
+                      );
+                    }
                   },
                   child: Assets.icons.svg.btnSearchSmall.svg(),
                 ),

@@ -245,6 +245,18 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icDelete =>
       const SvgGenImage('assets/icons/svg/ic_delete.svg');
 
+  /// File path: assets/icons/svg/ic_down_black.svg
+  SvgGenImage get icDownBlack =>
+      const SvgGenImage('assets/icons/svg/ic_down_black.svg');
+
+  /// File path: assets/icons/svg/ic_down_blue.svg
+  SvgGenImage get icDownBlue =>
+      const SvgGenImage('assets/icons/svg/ic_down_blue.svg');
+
+  /// File path: assets/icons/svg/ic_down_white.svg
+  SvgGenImage get icDownWhite =>
+      const SvgGenImage('assets/icons/svg/ic_down_white.svg');
+
   /// File path: assets/icons/svg/ic_economy_blue.svg
   SvgGenImage get icEconomyBlue =>
       const SvgGenImage('assets/icons/svg/ic_economy_blue.svg');
@@ -435,6 +447,14 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icUnsubscribe =>
       const SvgGenImage('assets/icons/svg/ic_unsubscribe.svg');
 
+  /// File path: assets/icons/svg/ic_up_default.svg
+  SvgGenImage get icUpDefault =>
+      const SvgGenImage('assets/icons/svg/ic_up_default.svg');
+
+  /// File path: assets/icons/svg/ic_up_enabled.svg
+  SvgGenImage get icUpEnabled =>
+      const SvgGenImage('assets/icons/svg/ic_up_enabled.svg');
+
   /// File path: assets/icons/svg/ic_view.svg
   SvgGenImage get icView => const SvgGenImage('assets/icons/svg/ic_view.svg');
 
@@ -503,6 +523,9 @@ class $AssetsIconsSvgGen {
         icCheckboxEnabled,
         icComment,
         icDelete,
+        icDownBlack,
+        icDownBlue,
+        icDownWhite,
         icEconomyBlue,
         icEconomyGray,
         icEdit,
@@ -552,6 +575,8 @@ class $AssetsIconsSvgGen {
         icSurpriseWhite,
         icUnlike,
         icUnsubscribe,
+        icUpDefault,
+        icUpEnabled,
         icView,
         icWorldBlue,
         icWorldGray,

@@ -66,7 +66,7 @@ class ShortFormFilterScreen extends ConsumerWidget {
                 CustomRadioButton(
                   isEnabled: screenSetting.shortFormSortType ==
                       ShortFormSortType.recommend,
-                  text: '추천순',
+                  text: ShortFormSortType.recommend.label,
                   onTap: () => ref
                       .read(filterScreenSettingProvider(prevSetting).notifier)
                       .setSortType(ShortFormSortType.recommend),
@@ -75,7 +75,7 @@ class ShortFormFilterScreen extends ConsumerWidget {
                 CustomRadioButton(
                   isEnabled: screenSetting.shortFormSortType ==
                       ShortFormSortType.latest,
-                  text: '최신순',
+                  text: ShortFormSortType.latest.label,
                   onTap: () => ref
                       .read(filterScreenSettingProvider(prevSetting).notifier)
                       .setSortType(ShortFormSortType.latest),

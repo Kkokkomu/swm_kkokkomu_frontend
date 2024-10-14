@@ -25,12 +25,13 @@ enum GenderType {
 
 @JsonEnum(alwaysCreate: true, valueField: 'name')
 enum ShortFormSortType {
-  recommend('RECOMMEND'),
-  latest('LATEST');
+  recommend('RECOMMEND', '추천순'),
+  latest('LATEST', '최신순');
 
   final String name;
+  final String label;
 
-  const ShortFormSortType(this.name);
+  const ShortFormSortType(this.name, this.label);
 
   static final _shortFormSortTypeNameMap =
       _$ShortFormSortTypeEnumMap.map((key, value) => MapEntry(value, key));
@@ -228,7 +229,8 @@ enum ReactionType {
 
 enum ShortFormScreenType {
   home(CustomRoutePath.home),
-  exploration(CustomRoutePath.explorationShortForm);
+  exploration(CustomRoutePath.explorationShortForm),
+  shortFormSearched(CustomRoutePath.shortFormSearched);
 
   final String path;
 

@@ -102,7 +102,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 widget.onChanged!(value);
               }
               // 글자 수 표시를 위해 setState() 호출
-              if (widget.maxLength != null) {
+              if (widget.maxLength != null && widget.showCounter) {
                 setState(() {});
               }
             },

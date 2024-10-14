@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router_navigator_key_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/view/root_tab.dart';
 import 'package:swm_kkokkomu_frontend/common/view/search_screen.dart';
@@ -10,6 +11,8 @@ import 'package:swm_kkokkomu_frontend/exploration/view/exploration_screen.dart';
 import 'package:swm_kkokkomu_frontend/exploration/view/exploration_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_filter_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_screen.dart';
+import 'package:swm_kkokkomu_frontend/shortform_search/view/search_shortform_list_screen.dart';
+import 'package:swm_kkokkomu_frontend/shortform_search/view/shortform_searched_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/view/account_deletion_screen.dart';
@@ -54,7 +57,7 @@ class AuthProvider extends ChangeNotifier {
   List<RouteBase> get routes => [
         StatefulShellRoute.indexedStack(
           parentNavigatorKey: rootNavigationKey,
-          builder: (_, state, navigationShell) =>
+          builder: (_, __, navigationShell) =>
               RootTab(navigationShell: navigationShell),
           branches: <StatefulShellBranch>[
             StatefulShellBranch(
@@ -66,10 +69,43 @@ class AuthProvider extends ChangeNotifier {
                   routes: [
                     GoRoute(
                       path: 'shortform',
-                      name: ExplorationShortformScreen.routeName,
-                      builder: (_, state) => ExplorationShortformScreen(
+                      name: ExplorationShortFormScreen.routeName,
+                      builder: (_, state) => ExplorationShortFormScreen(
                         initialPageIndex: state.extra as int? ?? 0,
                       ),
+                    ),
+                    GoRoute(
+                      path: 'search-shortform-list',
+                      name: SearchShortFormListScreen.routeName,
+                      builder: (_, state) {
+                        final extra = state.extra as Map<String, dynamic>?;
+
+                        return SearchShortFormListScreen(
+                          searchKeyword: extra?[GoRouterExtraKeys.searchKeyword]
+                                  as String? ??
+                              '',
+                        );
+                      },
+                      routes: [
+                        GoRoute(
+                          path: 'shortform',
+                          name: ShortFormSearchedScreen.routeName,
+                          builder: (_, state) {
+                            final extra = state.extra as Map<String, dynamic>?;
+
+                            return ShortFormSearchedScreen(
+                              searchKeyword:
+                                  extra?[GoRouterExtraKeys.searchKeyword]
+                                          as String? ??
+                                      '',
+                              initialPageIndex:
+                                  extra?[GoRouterExtraKeys.initialPageIndex]
+                                          as int? ??
+                                      0,
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -175,7 +211,14 @@ class AuthProvider extends ChangeNotifier {
           parentNavigatorKey: rootNavigationKey,
           path: '/search',
           name: SearchScreen.routeName,
-          builder: (_, __) => const SearchScreen(),
+          builder: (_, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+
+            return SearchScreen(
+              initialSearchKeyword:
+                  extra?[GoRouterExtraKeys.searchKeyword] as String?,
+            );
+          },
         ),
       ];
 
@@ -227,18 +270,20 @@ class AuthProvider extends ChangeNotifier {
     // UserModel
     // 사용자 정보가 있는 상태면
     // 로그인 중이거나 현재 위치가 RegisterScreen이면
-    // 홈(숏폼화면)으로 이동
+    // 메인화면으로 이동
+    // exploration 화면으로 이동하지만, exploration 화면을 initialize만 한 후, home 화면으로 이동하게 됨
     if (user is UserModel) {
       return isLoggingIn || state.fullPath == CustomRoutePath.register
-          ? CustomRoutePath.home
+          ? CustomRoutePath.exploration
           : null;
     }
 
     // GuestUserModel
     // 게스트 유저 정보가 있는 상태고 현재 로그인 화면이라면
-    // 홈(숏폼화면)으로 이동
+    // 메인화면으로 이동
+    // exploration 화면으로 이동하지만, exploration 화면을 initialize만 한 후, home 화면으로 이동하게 됨
     if (user is GuestUserModel && isLoggingIn) {
-      return CustomRoutePath.home;
+      return CustomRoutePath.exploration;
     }
 
     return null;

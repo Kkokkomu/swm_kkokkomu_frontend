@@ -98,6 +98,11 @@ class SharedPreferencesKeys {
   static const String shortFormSortType = 'short_form_sort_type';
 }
 
+class GoRouterExtraKeys {
+  static const String searchKeyword = 'searchKeyword';
+  static const String initialPageIndex = 'initialPageIndex';
+}
+
 // BetterPlayer 캐시 설정값
 const customBetterPlayerCacheConfiguration = BetterPlayerCacheConfiguration(
   useCache: true,

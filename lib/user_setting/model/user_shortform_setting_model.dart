@@ -10,37 +10,6 @@ class UserShortFormSettingModel {
     required this.shortFormSortType,
   });
 
-  // String categoriesToString() {
-  //   final categories = <String>[];
-
-  //   if (userShortFormCategoryFilter.politics) {
-  //     categories.add(NewsCategory.politics.name.toLowerCase());
-  //   }
-  //   if (userShortFormCategoryFilter.economy) {
-  //     categories.add(NewsCategory.economy.name.toLowerCase());
-  //   }
-  //   if (userShortFormCategoryFilter.social) {
-  //     categories.add(NewsCategory.social.name.toLowerCase());
-  //   }
-  //   if (userShortFormCategoryFilter.entertain) {
-  //     categories.add(NewsCategory.entertain.name.toLowerCase());
-  //   }
-  //   if (userShortFormCategoryFilter.sports) {
-  //     categories.add(NewsCategory.sports.name.toLowerCase());
-  //   }
-  //   if (userShortFormCategoryFilter.living) {
-  //     categories.add(NewsCategory.living.name.toLowerCase());
-  //   }
-  //   if (userShortFormCategoryFilter.world) {
-  //     categories.add(NewsCategory.world.name.toLowerCase());
-  //   }
-  //   if (userShortFormCategoryFilter.it) {
-  //     categories.add(NewsCategory.it.name.toLowerCase());
-  //   }
-
-  //   return categories.join(',');
-  // }
-
   bool isCategorySelected(NewsCategory category) => switch (category) {
         NewsCategory.politics => userShortFormCategoryFilter.politics,
         NewsCategory.economy => userShortFormCategoryFilter.economy,

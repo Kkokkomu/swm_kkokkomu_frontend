@@ -21,13 +21,29 @@ import 'package:swm_kkokkomu_frontend/shortform/model/pagination_shortform_model
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class ExplorationScreen extends ConsumerWidget {
+class ExplorationScreen extends ConsumerStatefulWidget {
   static String get routeName => 'exploration';
 
   const ExplorationScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ExplorationScreen> createState() => _ExplorationScreenState();
+}
+
+class _ExplorationScreenState extends ConsumerState<ExplorationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // 최초 진입 시, exploration 화면을 initialize만 한 후, home 화면으로 이동
+    // exploration 화면을 초기화 하지 않고, exploration 화면의 하위 화면으로 이동 시 발생하는 오류를 방지하기 위함
+    // ex) '/exploration' 화면을 초기화 하지 않고, '/exploration/search-shortform-list' 화면으로 이동 시, 문제가 발생함
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => context.go(CustomRoutePath.home),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final user = ref.watch(userInfoProvider);
     final category = ref.watch(explorationCategoryProvider);
     final scrollController =

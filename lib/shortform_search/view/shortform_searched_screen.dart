@@ -4,21 +4,23 @@ import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
-import 'package:swm_kkokkomu_frontend/exploration/provider/guest_user_explore_shortform_provider.dart';
-import 'package:swm_kkokkomu_frontend/exploration/provider/logged_in_user_explore_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/cursor_pagination_shortform_view.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/pagination_shortform_model.dart';
+import 'package:swm_kkokkomu_frontend/shortform_search/provider/guest_user_search_shortform_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform_search/provider/logged_in_user_search_shortform_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class ExplorationShortFormScreen extends ConsumerWidget {
-  static String get routeName => 'exploration-shortform';
+class ShortFormSearchedScreen extends ConsumerWidget {
+  static String get routeName => 'shortform-searched';
 
+  final String searchKeyword;
   final int initialPageIndex;
 
-  const ExplorationShortFormScreen({
+  const ShortFormSearchedScreen({
     super.key,
-    this.initialPageIndex = 0,
+    required this.searchKeyword,
+    required this.initialPageIndex,
   });
 
   @override
@@ -31,13 +33,13 @@ class ExplorationShortFormScreen extends ConsumerWidget {
         CursorPaginationBase> provider;
 
     if (user is UserModel) {
-      provider = loggedInUserExploreShortFormProvider;
+      provider = loggedInUserSearchShortFormProvider(searchKeyword);
     } else {
-      provider = guestUserExploreShortFormProvider;
+      provider = guestUserSearchShortFormProvider(searchKeyword);
     }
 
     return CursorPaginationShortFormView(
-      shortFormScreenType: ShortFormScreenType.exploration,
+      shortFormScreenType: ShortFormScreenType.shortFormSearched,
       initialPageIndex: initialPageIndex,
       provider: provider,
     );

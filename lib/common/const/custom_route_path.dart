@@ -15,5 +15,9 @@ class CustomRoutePath {
   static const String accountDeletion = '/mypage/profile/account-deletion';
   static const String filter = '/filter';
   static const String explorationShortForm = '/exploration/shortform';
+  static const String searchShortFormList =
+      '/exploration/search-shortform-list';
+  static const String shortFormSearched =
+      '/exploration/search-shortform-list/shortform';
   static const String search = '/search';
 }

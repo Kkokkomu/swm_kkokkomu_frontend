@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
-import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
@@ -32,8 +31,10 @@ class RootTab extends ConsumerWidget {
 
     // 현재 라우트 경로를 가져온 후, 숏폼 화면 인지 확인
     final routePath = navigationShell.shellRouteContext.routerState.fullPath;
-    final isShortFormScreen = routePath == CustomRoutePath.home ||
-        routePath == CustomRoutePath.explorationShortForm;
+    bool isShortFormScreen = false;
+    for (final ShortFormScreenType type in ShortFormScreenType.values) {
+      type.path == routePath ? isShortFormScreen = true : null;
+    }
 
     return PopScope(
       canPop: false,
@@ -115,8 +116,9 @@ class _CustomBottomNavigationBarState
       case RootTabBottomNavigationBarType.exploration:
         final scrollController =
             ref.read(explorationScreenScrollControllerProvider);
-        if (!scrollController.hasClients) {
+        if (!scrollController.hasClients || scrollController.offset == 0.0) {
           // 만약 스크롤 컨트롤러가 스크롤뷰에 연결되어있지 않으면 스크롤을 조정하지 않음
+          // 또는 스크롤이 맨 위에 있으면 스크롤을 조정하지 않음
           return;
         }
 

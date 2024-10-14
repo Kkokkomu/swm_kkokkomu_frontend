@@ -16,6 +16,8 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
   final Widget? emptyWidget;
   final Widget? errorWidget;
   final Widget? fetchingMoreErrorWidget;
+  final SliverAppBar? sliverAppBar;
+  final double? topPadding;
 
   const CursorPaginationSliverGridView({
     super.key,
@@ -25,6 +27,8 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
     this.emptyWidget,
     this.errorWidget,
     this.fetchingMoreErrorWidget,
+    this.sliverAppBar,
+    this.topPadding,
   });
 
   @override
@@ -40,25 +44,44 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
 
     // 에러
     if (state is CursorPaginationError) {
-      return errorWidget ??
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                state.message,
-                textAlign: TextAlign.center,
+      return CustomRefreshIndicator(
+        onRefresh: () =>
+            ref.read(provider.notifier).paginate(forceRefetch: true),
+        child: CustomScrollView(
+          slivers: [
+            if (sliverAppBar != null)
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                sliver: sliverAppBar!,
               ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () =>
-                    ref.read(provider.notifier).paginate(forceRefetch: true),
-                child: const Text(
-                  '다시시도',
-                ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: errorWidget ??
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          state.message,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16.0),
+                        ElevatedButton(
+                          onPressed: () => ref
+                              .read(provider.notifier)
+                              .paginate(forceRefetch: true),
+                          child: const Text(
+                            '다시시도',
+                          ),
+                        ),
+                      ],
+                    ),
               ),
-            ],
-          );
+            ),
+          ],
+        ),
+      );
     }
 
     // CursorPagination
@@ -73,6 +96,11 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
             ref.read(provider.notifier).paginate(forceRefetch: true),
         child: CustomScrollView(
           slivers: [
+            if (sliverAppBar != null)
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                sliver: sliverAppBar!,
+              ),
             SliverFillRemaining(
               hasScrollBody: false,
               child: Center(
@@ -93,10 +121,17 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
           child: CustomScrollView(
             controller: scrollController,
             slivers: [
+              if (sliverAppBar != null)
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  sliver: sliverAppBar!,
+                ),
               SliverPadding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14.0,
-                  vertical: 20.0,
+                padding: EdgeInsets.fromLTRB(
+                  14.0,
+                  topPadding ?? 20.0,
+                  14.0,
+                  20.0,
                 ),
                 sliver: SliverGrid(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
