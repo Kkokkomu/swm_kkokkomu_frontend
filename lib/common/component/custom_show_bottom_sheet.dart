@@ -99,7 +99,9 @@ Future<dynamic> showLoginModalBottomSheet(BuildContext context) {
                                 .login(SocialLoginType.apple),
                             child: Assets.icons.png.loginApple3x.image(
                               width: 60.0,
-                              height: 60.0,
+                              cacheWidth: (60.0 *
+                                      MediaQuery.of(context).devicePixelRatio)
+                                  .round(),
                             ),
                           ),
                         if (Platform.isIOS) const SizedBox(width: 24.0),
@@ -109,7 +111,9 @@ Future<dynamic> showLoginModalBottomSheet(BuildContext context) {
                               .login(SocialLoginType.google),
                           child: Assets.icons.png.loginGoogle3x.image(
                             width: 60.0,
-                            height: 60.0,
+                            cacheWidth:
+                                (60.0 * MediaQuery.of(context).devicePixelRatio)
+                                    .round(),
                           ),
                         ),
                         const SizedBox(width: 24.0),
@@ -119,7 +123,9 @@ Future<dynamic> showLoginModalBottomSheet(BuildContext context) {
                               .login(SocialLoginType.kakao),
                           child: Assets.icons.png.loginKakao3x.image(
                             width: 60.0,
-                            height: 60.0,
+                            cacheWidth:
+                                (60.0 * MediaQuery.of(context).devicePixelRatio)
+                                    .round(),
                           ),
                         ),
                       ],

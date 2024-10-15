@@ -25,7 +25,8 @@ class OfficialSnsAccountScreen extends StatelessWidget {
           CustomMenuCard(
             prefixIcon: Assets.icons.png.youtubeSocialIconRed.image(
               width: 40.0,
-              height: 40.0,
+              cacheWidth:
+                  (40.0 * MediaQuery.of(context).devicePixelRatio).round(),
             ),
             content: '공식 유튜브 계정',
             onTap: () => launchUrl(
@@ -35,7 +36,8 @@ class OfficialSnsAccountScreen extends StatelessWidget {
           CustomMenuCard(
             prefixIcon: Assets.icons.png.instagramGlyphGradient.image(
               width: 40.0,
-              height: 40.0,
+              cacheWidth:
+                  (40.0 * MediaQuery.of(context).devicePixelRatio).round(),
             ),
             content: '공식 인스타그램 계정',
             onTap: () => launchUrl(
@@ -45,7 +47,8 @@ class OfficialSnsAccountScreen extends StatelessWidget {
           CustomMenuCard(
             prefixIcon: Assets.icons.png.tikTokIconBlackCircle.image(
               width: 40.0,
-              height: 40.0,
+              cacheWidth:
+                  (40.0 * MediaQuery.of(context).devicePixelRatio).round(),
             ),
             content: '공식 틱톡 계정',
             onTap: () => launchUrl(

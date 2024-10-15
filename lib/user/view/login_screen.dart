@@ -78,24 +78,36 @@ class LoginScreen extends ConsumerWidget {
                               onTap: () => ref
                                   .read(userInfoProvider.notifier)
                                   .login(SocialLoginType.apple),
-                              child: Assets.icons.png.loginApple3x
-                                  .image(width: 60.0),
+                              child: Assets.icons.png.loginApple3x.image(
+                                width: 60.0,
+                                cacheWidth: (60.0 *
+                                        MediaQuery.of(context).devicePixelRatio)
+                                    .round(),
+                              ),
                             ),
                           if (Platform.isIOS) const SizedBox(width: 24.0),
                           GestureDetector(
                             onTap: () => ref
                                 .read(userInfoProvider.notifier)
                                 .login(SocialLoginType.google),
-                            child: Assets.icons.png.loginGoogle3x
-                                .image(width: 60.0),
+                            child: Assets.icons.png.loginGoogle3x.image(
+                              width: 60.0,
+                              cacheWidth: (60.0 *
+                                      MediaQuery.of(context).devicePixelRatio)
+                                  .round(),
+                            ),
                           ),
                           const SizedBox(width: 24.0),
                           GestureDetector(
                             onTap: () => ref
                                 .read(userInfoProvider.notifier)
                                 .login(SocialLoginType.kakao),
-                            child: Assets.icons.png.loginKakao3x
-                                .image(width: 60.0),
+                            child: Assets.icons.png.loginKakao3x.image(
+                              width: 60.0,
+                              cacheWidth: (60.0 *
+                                      MediaQuery.of(context).devicePixelRatio)
+                                  .round(),
+                            ),
                           ),
                         ],
                       ),
