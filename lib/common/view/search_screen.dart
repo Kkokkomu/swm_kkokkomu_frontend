@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.dart';
@@ -53,6 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
             showCounter: false,
             onFieldSubmitted: (value) {
               if (value != null && value.isNotEmpty) {
+                FirebaseAnalytics.instance.logSearch(searchTerm: value);
                 context.go(
                   CustomRoutePath.searchShortFormList,
                   extra: {
@@ -72,6 +74,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   customBorder: const CircleBorder(),
                   onTap: () {
                     if (_searchController.text.isNotEmpty) {
+                      FirebaseAnalytics.instance
+                          .logSearch(searchTerm: _searchController.text);
                       context.go(
                         CustomRoutePath.searchShortFormList,
                         extra: {
