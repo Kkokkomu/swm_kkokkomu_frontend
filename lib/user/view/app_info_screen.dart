@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/in_app_links.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout_with_default_app_bar.dart';
@@ -115,7 +116,7 @@ class AppInfoScreen extends ConsumerWidget {
             CustomMenuCard(
               content: '앱 리뷰 남기기',
               onTap: () => InAppReview.instance
-                  .openStoreListing(appStoreId: '6717599440'),
+                  .openStoreListing(appStoreId: Constants.iosAppStoreId),
             ),
             const SizedBox(height: 18.0),
             Row(

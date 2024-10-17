@@ -87,10 +87,10 @@ class CustomBetterPlayerControllerStateNotifier
       state = CustomBetterPlayerControllerModel(_betterPlayerController!);
     } catch (error) {
       debugPrint(error.toString());
-      debugPrint('에러 비디오: ${shortFormInfo.shortFormUrl}');
+      debugPrint('에러 영상: ${shortFormInfo.shortFormUrl}');
       _betterPlayerController?.dispose(forceDispose: true);
 
-      state = CustomBetterPlayerControllerModelError('비디오를 불러오는 중 오류가 발생했습니다.');
+      state = CustomBetterPlayerControllerModelError('영상을 불러오는 중 오류가 발생했습니다.');
     }
   }
 

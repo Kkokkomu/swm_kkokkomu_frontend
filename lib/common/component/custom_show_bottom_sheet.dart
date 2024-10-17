@@ -84,9 +84,12 @@ Future<dynamic> showLoginModalBottomSheet(BuildContext context) {
               ),
               const SizedBox(height: 24.0),
               userInfo is UserModelLoading
-                  ? const Center(
-                      child: CustomCircularProgressIndicator(
-                        color: ColorName.gray400,
+                  ? const SizedBox(
+                      height: 60.0,
+                      child: Center(
+                        child: CustomCircularProgressIndicator(
+                          color: ColorName.gray400,
+                        ),
                       ),
                     )
                   : Row(

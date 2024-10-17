@@ -50,6 +50,9 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// Directory path: assets/images/png
+  $AssetsImagesPngGen get png => const $AssetsImagesPngGen();
+
   /// Directory path: assets/images/svg
   $AssetsImagesSvgGen get svg => const $AssetsImagesSvgGen();
 }
@@ -241,6 +244,10 @@ class $AssetsIconsSvgGen {
   SvgGenImage get icComment =>
       const SvgGenImage('assets/icons/svg/ic_comment.svg');
 
+  /// File path: assets/icons/svg/ic_comment_history.svg
+  SvgGenImage get icCommentHistory =>
+      const SvgGenImage('assets/icons/svg/ic_comment_history.svg');
+
   /// File path: assets/icons/svg/ic_delete.svg
   SvgGenImage get icDelete =>
       const SvgGenImage('assets/icons/svg/ic_delete.svg');
@@ -338,6 +345,18 @@ class $AssetsIconsSvgGen {
 
   /// File path: assets/icons/svg/ic_more.svg
   SvgGenImage get icMore => const SvgGenImage('assets/icons/svg/ic_more.svg');
+
+  /// File path: assets/icons/svg/ic_mylog_clock.svg
+  SvgGenImage get icMylogClock =>
+      const SvgGenImage('assets/icons/svg/ic_mylog_clock.svg');
+
+  /// File path: assets/icons/svg/ic_mylog_comment.svg
+  SvgGenImage get icMylogComment =>
+      const SvgGenImage('assets/icons/svg/ic_mylog_comment.svg');
+
+  /// File path: assets/icons/svg/ic_mylog_emotion.svg
+  SvgGenImage get icMylogEmotion =>
+      const SvgGenImage('assets/icons/svg/ic_mylog_emotion.svg');
 
   /// File path: assets/icons/svg/ic_navi_home_disabled.svg
   SvgGenImage get icNaviHomeDisabled =>
@@ -522,6 +541,7 @@ class $AssetsIconsSvgGen {
         icCheckboxDisabled,
         icCheckboxEnabled,
         icComment,
+        icCommentHistory,
         icDelete,
         icDownBlack,
         icDownBlue,
@@ -547,6 +567,9 @@ class $AssetsIconsSvgGen {
         icLightnaviSearchDisabled,
         icLightnaviSearchEnabled,
         icMore,
+        icMylogClock,
+        icMylogComment,
+        icMylogEmotion,
         icNaviHomeDisabled,
         icNaviHomeEnabled,
         icNaviMyDisabled,
@@ -585,6 +608,17 @@ class $AssetsIconsSvgGen {
         splashLogo,
         splashTypoLogo
       ];
+}
+
+class $AssetsImagesPngGen {
+  const $AssetsImagesPngGen();
+
+  /// File path: assets/images/png/img_review_banner.png
+  AssetGenImage get imgReviewBanner =>
+      const AssetGenImage('assets/images/png/img_review_banner.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [imgReviewBanner];
 }
 
 class $AssetsImagesSvgGen {

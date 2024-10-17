@@ -56,6 +56,9 @@ class Constants {
 
   // 댓글 최대 길이
   static const int maxCommentLength = 250;
+
+  // iOS 앱스토어 ID
+  static const String iosAppStoreId = '6717599440';
 }
 
 class AnimationDuration {

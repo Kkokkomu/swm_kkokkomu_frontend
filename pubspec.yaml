@@ -105,6 +105,7 @@ flutter:
   assets:
     - assets/config/
     - assets/images/svg/
+    - assets/images/png/
     - assets/icons/svg/
     - assets/icons/png/
     - assets/animation/
