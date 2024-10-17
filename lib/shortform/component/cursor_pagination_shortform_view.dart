@@ -13,14 +13,16 @@ import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_stat
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/custom_shortform_base.dart';
+import 'package:swm_kkokkomu_frontend/shortform/component/shortform_model_with_id_and_url.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/single_shortform.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/pagination_shortform_model.dart';
 
 class CursorPaginationShortFormView extends ConsumerStatefulWidget {
   final ShortFormScreenType shortFormScreenType;
   final AutoDisposeStateNotifierProvider<
-      CursorPaginationProvider<PaginationShortFormModel,
-          IBaseCursorPaginationRepository<PaginationShortFormModel>>,
+      CursorPaginationProvider<
+          IShortFormModelWithIdAndNewsIdAndUrl,
+          IBaseCursorPaginationRepository<
+              IShortFormModelWithIdAndNewsIdAndUrl>>,
       CursorPaginationBase> provider;
   final int initialPageIndex;
 
@@ -99,7 +101,8 @@ class _CursorPaginationShortFormViewState
     // CursorPaginationFetchingMore
     // CursorPaginationRefetching
 
-    final paginationData = state as CursorPagination<PaginationShortFormModel>;
+    final paginationData =
+        state as CursorPagination<IShortFormModelWithIdAndNewsIdAndUrl>;
 
     if (paginationData.items.isEmpty) {
       return CustomRefreshIndicator(
@@ -136,6 +139,7 @@ class _CursorPaginationShortFormViewState
     return CustomRefreshIndicator(
       onRefresh: () =>
           ref.read(widget.provider.notifier).paginate(forceRefetch: true),
+      isRefresh: widget.shortFormScreenType == ShortFormScreenType.home,
       child: PageView.builder(
         controller: PageController(initialPage: initialPage),
         allowImplicitScrolling: true,
@@ -224,17 +228,18 @@ class _CursorPaginationShortFormViewState
                         color: ColorName.gray200,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: CustomSelectButton(
-                        onTap: () => ref
-                            .read(widget.provider.notifier)
-                            .paginate(forceRefetch: true),
-                        content: '새 뉴스 불러오기',
-                        backgroundColor: ColorName.gray100,
-                        textColor: ColorName.gray300,
+                    if (widget.shortFormScreenType == ShortFormScreenType.home)
+                      Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: CustomSelectButton(
+                          onTap: () => ref
+                              .read(widget.provider.notifier)
+                              .paginate(forceRefetch: true),
+                          content: '새 뉴스 불러오기',
+                          backgroundColor: ColorName.gray100,
+                          textColor: ColorName.gray300,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -243,10 +248,10 @@ class _CursorPaginationShortFormViewState
 
           final paginationItem = paginationData.items[index];
 
-          final newsInfo = paginationItem.info.news;
+          final newsId = paginationItem.newsId;
+          final shortFormUrl = paginationItem.shortFormUrl;
 
-          if (newsInfo.id == Constants.unknownErrorId ||
-              newsInfo.shortformUrl == null) {
+          if (newsId == Constants.unknownErrorId || shortFormUrl == null) {
             debugPrint('newsId 또는 shortFormUrl이 null 값입니다.');
 
             return CustomShortFormBase(
@@ -273,8 +278,8 @@ class _CursorPaginationShortFormViewState
           return SingleShortForm(
             shortFormScreenType: widget.shortFormScreenType,
             // 로그인된 사용자인 경우 provider를 넘겨줌
-            newsId: newsInfo.id,
-            shortFormUrl: newsInfo.shortformUrl!,
+            newsId: newsId,
+            shortFormUrl: shortFormUrl,
           );
         },
       ),

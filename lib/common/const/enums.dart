@@ -230,7 +230,8 @@ enum ReactionType {
 enum ShortFormScreenType {
   home(CustomRoutePath.home),
   exploration(CustomRoutePath.explorationShortForm),
-  shortFormSearched(CustomRoutePath.shortFormSearched);
+  shortFormSearched(CustomRoutePath.shortFormSearched),
+  myViewLog(CustomRoutePath.myViewLogShortForm);
 
   final String path;
 

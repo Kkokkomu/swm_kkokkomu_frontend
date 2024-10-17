@@ -9,6 +9,7 @@ import 'package:swm_kkokkomu_frontend/common/view/search_screen.dart';
 import 'package:swm_kkokkomu_frontend/common/view/splash_screen.dart';
 import 'package:swm_kkokkomu_frontend/exploration/view/exploration_screen.dart';
 import 'package:swm_kkokkomu_frontend/exploration/view/exploration_shortform_screen.dart';
+import 'package:swm_kkokkomu_frontend/my_log/view/my_view_log_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_filter_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform_search/view/search_shortform_list_screen.dart';
@@ -20,7 +21,10 @@ import 'package:swm_kkokkomu_frontend/user/view/app_info_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/blocked_user_management_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/edit_personal_info_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/login_screen.dart';
+import 'package:swm_kkokkomu_frontend/my_log/view/my_comment_log_screen.dart';
+import 'package:swm_kkokkomu_frontend/my_log/view/my_emotion_log_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
+import 'package:swm_kkokkomu_frontend/my_log/view/my_view_log_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/official_sns_account_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/open_source_licenses_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/profile_screen.dart';
@@ -180,6 +184,30 @@ class AuthProvider extends ChangeNotifier {
                           builder: (_, __) => const OfficialSnsAccountScreen(),
                         ),
                       ],
+                    ),
+                    GoRoute(
+                      path: 'my-view-log',
+                      name: MyViewLogScreen.routeName,
+                      builder: (_, __) => const MyViewLogScreen(),
+                      routes: [
+                        GoRoute(
+                          path: 'shortform',
+                          name: MyViewLogShortFormScreen.routeName,
+                          builder: (_, state) => MyViewLogShortFormScreen(
+                            initialPageIndex: state.extra as int? ?? 0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    GoRoute(
+                      path: 'my-comment-log',
+                      name: MyCommentLogScreen.routeName,
+                      builder: (_, __) => const MyCommentLogScreen(),
+                    ),
+                    GoRoute(
+                      path: 'my-emotion-log',
+                      name: MyEmotionLogScreen.routeName,
+                      builder: (_, __) => const MyEmotionLogScreen(),
                     ),
                   ],
                 ),

@@ -628,6 +628,10 @@ class $AssetsImagesSvgGen {
   SvgGenImage get imgCommentEmpty =>
       const SvgGenImage('assets/images/svg/img_comment_empty.svg');
 
+  /// File path: assets/images/svg/img_emotion_logo.svg
+  SvgGenImage get imgEmotionLogo =>
+      const SvgGenImage('assets/images/svg/img_emotion_logo.svg');
+
   /// File path: assets/images/svg/img_empty.svg
   SvgGenImage get imgEmpty =>
       const SvgGenImage('assets/images/svg/img_empty.svg');
@@ -642,7 +646,7 @@ class $AssetsImagesSvgGen {
 
   /// List of all assets
   List<SvgGenImage> get values =>
-      [imgCommentEmpty, imgEmpty, imgLogo, imgProfileDefault];
+      [imgCommentEmpty, imgEmotionLogo, imgEmpty, imgLogo, imgProfileDefault];
 }
 
 class Assets {

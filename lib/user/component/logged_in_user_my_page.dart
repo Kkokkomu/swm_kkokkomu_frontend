@@ -79,20 +79,24 @@ class LoggedInUserMyPage extends ConsumerWidget {
                   Flexible(
                     flex: 88,
                     fit: FlexFit.tight,
-                    child: SizedBox(
-                      height: 82.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Assets.icons.svg.icMylogClock.svg(
-                            height: 24.0,
-                          ),
-                          const SizedBox(height: 4.0),
-                          Text(
-                            '시청기록',
-                            style: CustomTextStyle.detail1Reg(),
-                          ),
-                        ],
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(8.0),
+                      onTap: () => context.go(CustomRoutePath.myViewLog),
+                      child: SizedBox(
+                        height: 82.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Assets.icons.svg.icMylogClock.svg(
+                              height: 24.0,
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              '시청기록',
+                              style: CustomTextStyle.detail1Reg(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -104,20 +108,24 @@ class LoggedInUserMyPage extends ConsumerWidget {
                   Flexible(
                     flex: 88,
                     fit: FlexFit.tight,
-                    child: SizedBox(
-                      height: 82.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Assets.icons.svg.icMylogComment.svg(
-                            height: 24.0,
-                          ),
-                          const SizedBox(height: 4.0),
-                          Text(
-                            '내 댓글',
-                            style: CustomTextStyle.detail1Reg(),
-                          ),
-                        ],
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(8.0),
+                      onTap: () => context.go(CustomRoutePath.myCommentLog),
+                      child: SizedBox(
+                        height: 82.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Assets.icons.svg.icMylogComment.svg(
+                              height: 24.0,
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              '내 댓글',
+                              style: CustomTextStyle.detail1Reg(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -129,20 +137,24 @@ class LoggedInUserMyPage extends ConsumerWidget {
                   Flexible(
                     flex: 88,
                     fit: FlexFit.tight,
-                    child: SizedBox(
-                      height: 82.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Assets.icons.svg.icMylogEmotion.svg(
-                            height: 24.0,
-                          ),
-                          const SizedBox(height: 4.0),
-                          Text(
-                            '내 반응',
-                            style: CustomTextStyle.detail1Reg(),
-                          ),
-                        ],
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(8.0),
+                      onTap: () => context.go(CustomRoutePath.myEmotionLog),
+                      child: SizedBox(
+                        height: 82.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Assets.icons.svg.icMylogEmotion.svg(
+                              height: 24.0,
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              '내 반응',
+                              style: CustomTextStyle.detail1Reg(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
