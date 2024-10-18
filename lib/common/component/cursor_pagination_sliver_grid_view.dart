@@ -18,6 +18,7 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
   final Widget? fetchingMoreErrorWidget;
   final SliverAppBar? sliverAppBar;
   final double? topPadding;
+  final bool isRefreshable;
 
   const CursorPaginationSliverGridView({
     super.key,
@@ -29,6 +30,7 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
     this.fetchingMoreErrorWidget,
     this.sliverAppBar,
     this.topPadding,
+    this.isRefreshable = true,
   });
 
   @override
@@ -114,6 +116,7 @@ class CursorPaginationSliverGridView<T extends IModelWithId>
 
     return CustomRefreshIndicator(
       onRefresh: () => ref.read(provider.notifier).paginate(forceRefetch: true),
+      isRefreshable: isRefreshable,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: Scrollbar(

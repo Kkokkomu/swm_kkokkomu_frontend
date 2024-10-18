@@ -139,7 +139,7 @@ class _CursorPaginationShortFormViewState
     return CustomRefreshIndicator(
       onRefresh: () =>
           ref.read(widget.provider.notifier).paginate(forceRefetch: true),
-      isRefresh: widget.shortFormScreenType == ShortFormScreenType.home,
+      isRefreshable: widget.shortFormScreenType == ShortFormScreenType.home,
       child: PageView.builder(
         controller: PageController(initialPage: initialPage),
         allowImplicitScrolling: true,

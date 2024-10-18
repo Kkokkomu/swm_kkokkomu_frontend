@@ -58,17 +58,17 @@ class MyViewLogStateNotifier
     return true;
   }
 
-  Future<bool> deleteSelectedLog(List<int> newsIdList) async {
+  Future<bool> deleteSelectedLog(Set<int> logIdList) async {
     // 로그 삭제 전 상태를 저장
     final prevState = _getValidPrevState();
 
-    if (prevState == null || newsIdList.isEmpty) {
+    if (prevState == null || logIdList.isEmpty) {
       return false;
     }
 
     // 로그 삭제 요청
     final resp = await repository.deleteSelectedLog(
-      newsIdList: newsIdList.join(','),
+      newsIdList: logIdList.join(','),
     );
 
     // success값이 true가 아니면 실패 처리
@@ -77,8 +77,7 @@ class MyViewLogStateNotifier
     }
 
     // 로그 삭제
-    prevState.items
-        .removeWhere((element) => newsIdList.contains(element.news.id));
+    prevState.items.removeWhere((element) => logIdList.contains(element.id));
     state = prevState.copyWith();
 
     return true;

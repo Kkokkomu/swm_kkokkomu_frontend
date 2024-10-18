@@ -10,10 +10,14 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class ExplorationShortFormCard extends StatelessWidget {
   final ShortFormNewsInfo newsInfo;
+  final bool isSelectMode;
+  final bool isSelected;
 
   const ExplorationShortFormCard({
     super.key,
     required this.newsInfo,
+    this.isSelectMode = false,
+    this.isSelected = false,
   });
 
   @override
@@ -57,6 +61,16 @@ class ExplorationShortFormCard extends StatelessWidget {
                 ),
               ),
             ),
+            if (isSelectMode)
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 0.0),
+                  child: isSelected
+                      ? Assets.icons.svg.icRadioEnabled.svg()
+                      : Assets.icons.svg.icRadioDisabled.svg(),
+                ),
+              ),
             Align(
               alignment: Alignment.bottomLeft,
               child: Padding(
