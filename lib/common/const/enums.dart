@@ -231,7 +231,8 @@ enum ShortFormScreenType {
   home(CustomRoutePath.home),
   exploration(CustomRoutePath.explorationShortForm),
   shortFormSearched(CustomRoutePath.shortFormSearched),
-  myViewLog(CustomRoutePath.myViewLogShortForm);
+  myViewLog(CustomRoutePath.myViewLogShortForm),
+  myReactionLog(CustomRoutePath.myReactionLogShortForm);
 
   final String path;
 

@@ -139,7 +139,7 @@ class LoggedInUserMyPage extends ConsumerWidget {
                     fit: FlexFit.tight,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(8.0),
-                      onTap: () => context.go(CustomRoutePath.myEmotionLog),
+                      onTap: () => context.go(CustomRoutePath.myReactionLog),
                       child: SizedBox(
                         height: 82.0,
                         child: Column(

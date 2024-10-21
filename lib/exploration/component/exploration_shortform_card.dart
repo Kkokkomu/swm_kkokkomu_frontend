@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
@@ -12,12 +14,14 @@ class ExplorationShortFormCard extends StatelessWidget {
   final ShortFormNewsInfo newsInfo;
   final bool isSelectMode;
   final bool isSelected;
+  final ReactionType? reactionType;
 
   const ExplorationShortFormCard({
     super.key,
     required this.newsInfo,
     this.isSelectMode = false,
     this.isSelected = false,
+    this.reactionType,
   });
 
   @override
@@ -88,6 +92,9 @@ class ExplorationShortFormCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (reactionType != null)
+                        SvgPicture.asset(reactionType!.whiteSvgPath),
+                      if (reactionType != null) const SizedBox(height: 4.0),
                       Text(
                         newsInfo.title,
                         maxLines: 2,

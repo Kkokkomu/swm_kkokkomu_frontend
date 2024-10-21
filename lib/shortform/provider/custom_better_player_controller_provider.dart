@@ -90,7 +90,9 @@ class CustomBetterPlayerControllerStateNotifier
       debugPrint('에러 영상: ${shortFormInfo.shortFormUrl}');
       _betterPlayerController?.dispose(forceDispose: true);
 
-      state = CustomBetterPlayerControllerModelError('영상을 불러오는 중 오류가 발생했습니다.');
+      state = CustomBetterPlayerControllerModelError(
+        '영상을 불러오는 중 에러가 발생했어요\n다시 시도해주세요',
+      );
     }
   }
 

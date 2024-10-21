@@ -11,4 +11,8 @@ class InAppLinks {
   // 개인정보 처리방침 링크
   static const String privacyPolicy =
       'https://wooded-crib-541.notion.site/1-0-0ver-105908e7bbc58012b04ef2df397d0cff?pvs=4';
+  // 채널톡 링크
+  static const String channelTalk = 'https://1j3y2.channel.io/home';
+  // 공식 홈페이지
+  static const String officialWebsite = 'https://newsnack.imweb.me/';
 }

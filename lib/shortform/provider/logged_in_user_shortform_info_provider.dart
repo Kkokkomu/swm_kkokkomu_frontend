@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/my_log/provider/my_reaction_log_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/pagination_shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_news_id_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
@@ -46,7 +48,7 @@ class LoggedInUserShortFormInfoStateNotifier
 
     // 서버 요청 실패 시 에러 처리
     if (resp.success != true || resp.data == null) {
-      state = ShortFormModelError('뉴스 정보를 불러오는데 실패했습니다.');
+      state = ShortFormModelError('뉴스 정보를 불러오는 중 에러가 발생했어요\n다시 시도해주세요');
       return;
     }
 
@@ -95,6 +97,32 @@ class LoggedInUserShortFormInfoStateNotifier
       userReaction:
           ShortFormUserReactionInfo.createByReactionType(reactionType),
     );
+
+    // myReactionLogProvider가 초기화 된 경우 유저 리액션 로그에 감정표현 추가된 뉴스 삽입
+    // isReacted가 false인 경우 이전에 반응을 하지 않았던 경우이므로 삽입
+    if (ref.exists(myReactionLogProvider)) {
+      if (!isReacted) {
+        ref.read(myReactionLogProvider.notifier).addShortForm(
+              PaginationShortFormModel(
+                info: prevState.info,
+                reactionCnt: prevState.reactionCnt.copyWith(
+                  like: nextLikeCnt,
+                  angry: nextAngryCnt,
+                  surprise: nextSurpriseCnt,
+                  sad: nextSadCnt,
+                ),
+                userReaction: ShortFormUserReactionInfo.createByReactionType(
+                  reactionType,
+                ),
+              ),
+            );
+      } else {
+        ref.read(myReactionLogProvider.notifier).updateShortFormReactionType(
+              newsId: newsId,
+              newReactionType: reactionType,
+            );
+      }
+    }
 
     // 서버에 반응 정보 전송
     // isReacted가 true인 경우 updateReaction, false인 경우 postReaction 요청
@@ -146,6 +174,11 @@ class LoggedInUserShortFormInfoStateNotifier
       ),
       userReaction: ShortFormUserReactionInfo(),
     );
+
+    // myReactionLogProvider 가 초기화 된 경우 유저 리액션 로그에서 감정표현 해제한 뉴스를 삭제
+    if (ref.exists(myReactionLogProvider)) {
+      ref.read(myReactionLogProvider.notifier).deleteShortFormByNewsId(newsId);
+    }
 
     // 서버에 삭제 정보 전송
     final resp = await repository.deleteReaction(

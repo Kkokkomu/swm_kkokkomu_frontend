@@ -277,7 +277,6 @@ class _CursorPaginationShortFormViewState
 
           return SingleShortForm(
             shortFormScreenType: widget.shortFormScreenType,
-            // 로그인된 사용자인 경우 provider를 넘겨줌
             newsId: newsId,
             shortFormUrl: shortFormUrl,
           );

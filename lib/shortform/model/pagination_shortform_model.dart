@@ -30,4 +30,16 @@ class PaginationShortFormModel implements IShortFormModelWithIdAndNewsIdAndUrl {
 
   factory PaginationShortFormModel.fromJson(Map<String, dynamic> json) =>
       _$PaginationShortFormModelFromJson(json);
+
+  PaginationShortFormModel copyWith({
+    ShortFormInfo? info,
+    ShortFormReactionCountInfo? reactionCnt,
+    ShortFormUserReactionInfo? userReaction,
+  }) {
+    return PaginationShortFormModel(
+      info: info ?? this.info,
+      reactionCnt: reactionCnt ?? this.reactionCnt,
+      userReaction: userReaction ?? this.userReaction,
+    );
+  }
 }

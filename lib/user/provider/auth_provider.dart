@@ -9,6 +9,7 @@ import 'package:swm_kkokkomu_frontend/common/view/search_screen.dart';
 import 'package:swm_kkokkomu_frontend/common/view/splash_screen.dart';
 import 'package:swm_kkokkomu_frontend/exploration/view/exploration_screen.dart';
 import 'package:swm_kkokkomu_frontend/exploration/view/exploration_shortform_screen.dart';
+import 'package:swm_kkokkomu_frontend/my_log/view/my_reaction_log_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_view_log_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_filter_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_screen.dart';
@@ -22,7 +23,7 @@ import 'package:swm_kkokkomu_frontend/user/view/blocked_user_management_screen.d
 import 'package:swm_kkokkomu_frontend/user/view/edit_personal_info_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/login_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_comment_log_screen.dart';
-import 'package:swm_kkokkomu_frontend/my_log/view/my_emotion_log_screen.dart';
+import 'package:swm_kkokkomu_frontend/my_log/view/my_reaction_log_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_view_log_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/official_sns_account_screen.dart';
@@ -205,9 +206,28 @@ class AuthProvider extends ChangeNotifier {
                       builder: (_, __) => const MyCommentLogScreen(),
                     ),
                     GoRoute(
-                      path: 'my-emotion-log',
-                      name: MyEmotionLogScreen.routeName,
-                      builder: (_, __) => const MyEmotionLogScreen(),
+                      path: 'my-reaction-log',
+                      name: MyReactionLogScreen.routeName,
+                      builder: (_, __) => const MyReactionLogScreen(),
+                      routes: [
+                        GoRoute(
+                          path: 'shortform',
+                          name: MyReactionLogShortFormScreen.routeName,
+                          builder: (_, state) {
+                            final extra = state.extra as Map<String, dynamic>?;
+
+                            return MyReactionLogShortFormScreen(
+                              newsId:
+                                  extra?[GoRouterExtraKeys.newsId] as int? ??
+                                      Constants.unknownErrorId,
+                              shortFormUrl:
+                                  extra?[GoRouterExtraKeys.shortFormUrl]
+                                          as String? ??
+                                      Constants.unknownErrorString,
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),

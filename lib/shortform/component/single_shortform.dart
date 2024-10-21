@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/custom_shortform_base.dart';
 import 'package:swm_kkokkomu_frontend/shortform/component/floating_button/comment_button.dart';
@@ -78,46 +80,59 @@ class SingleShortForm extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                betterPlayerControllerModel
-                        is CustomBetterPlayerControllerModelError
-                    ? betterPlayerControllerModel.message
-                    : (shortFormModel as ShortFormModelError).message,
-                style: const TextStyle(
-                  color: ColorName.white000,
-                ),
-              ),
-              const SizedBox(
-                height: 16.0,
-              ),
-              ElevatedButton(
-                onPressed: () => betterPlayerControllerModel
-                        is CustomBetterPlayerControllerModelError
-                    // 비디오 로딩 중 에러가 발생한 경우 비디오를 다시 로딩
-                    ? ref
-                        .read(
-                          customBetterPlayerControllerProvider(
-                            (
-                              shortFormScreenType: shortFormScreenType,
-                              newsId: newsId,
-                              shortFormUrl: shortFormUrl,
-                            ),
-                          ).notifier,
-                        )
-                        .setUpVideo()
-                    // 숏폼 정보 로딩 중 에러가 발생한 경우 숏폼 정보를 다시 로딩
-                    : isLoggedInUser
-                        // 로그인한 사용자인 경우
-                        ? ref
-                            .read(loggedInUserShortFormInfoProvider(newsId)
-                                .notifier)
-                            .getShortFormInfo()
-                        // 비로그인 사용자인 경우
-                        : ref
-                            .read(
-                                guestUserShortFormInfoProvider(newsId).notifier)
-                            .getShortFormInfo(),
-                child: const Text('재시도'),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Assets.images.svg.imgEmpty.svg(),
+                  const SizedBox(height: 6.0),
+                  Text(
+                    betterPlayerControllerModel
+                            is CustomBetterPlayerControllerModelError
+                        ? betterPlayerControllerModel.message
+                        : (shortFormModel as ShortFormModelError).message,
+                    textAlign: TextAlign.center,
+                    style: CustomTextStyle.body1Medi(
+                      color: ColorName.gray200,
+                    ),
+                  ),
+                  const SizedBox(height: 18.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: CustomSelectButton(
+                      onTap: () => betterPlayerControllerModel
+                              is CustomBetterPlayerControllerModelError
+                          // 비디오 로딩 중 에러가 발생한 경우 비디오를 다시 로딩
+                          ? ref
+                              .read(
+                                customBetterPlayerControllerProvider(
+                                  (
+                                    shortFormScreenType: shortFormScreenType,
+                                    newsId: newsId,
+                                    shortFormUrl: shortFormUrl,
+                                  ),
+                                ).notifier,
+                              )
+                              .setUpVideo()
+                          // 숏폼 정보 로딩 중 에러가 발생한 경우 숏폼 정보를 다시 로딩
+                          : isLoggedInUser
+                              // 로그인한 사용자인 경우
+                              ? ref
+                                  .read(
+                                      loggedInUserShortFormInfoProvider(newsId)
+                                          .notifier)
+                                  .getShortFormInfo()
+                              // 비로그인 사용자인 경우
+                              : ref
+                                  .read(guestUserShortFormInfoProvider(newsId)
+                                      .notifier)
+                                  .getShortFormInfo(),
+                      content: '영상 다시 불러오기',
+                      backgroundColor: ColorName.gray100,
+                      textColor: ColorName.gray300,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

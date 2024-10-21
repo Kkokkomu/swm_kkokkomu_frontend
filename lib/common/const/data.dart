@@ -104,6 +104,8 @@ class SharedPreferencesKeys {
 class GoRouterExtraKeys {
   static const String searchKeyword = 'searchKeyword';
   static const String initialPageIndex = 'initialPageIndex';
+  static const String newsId = 'newsId';
+  static const String shortFormUrl = 'shortFormUrl';
 }
 
 // BetterPlayer 캐시 설정값

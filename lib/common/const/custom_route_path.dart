@@ -14,7 +14,9 @@ class CustomRoutePath {
   static const String myCommentLog = '/mypage/my-comment-log';
   static const String myViewLog = '/mypage/my-view-log';
   static const String myViewLogShortForm = '/mypage/my-view-log/shortform';
-  static const String myEmotionLog = '/mypage/my-emotion-log';
+  static const String myReactionLog = '/mypage/my-reaction-log';
+  static const String myReactionLogShortForm =
+      '/mypage/my-reaction-log/shortform';
   static const String editPersonalInfo = '/mypage/profile/edit-personal-info';
   static const String accountDeletion = '/mypage/profile/account-deletion';
   static const String filter = '/filter';

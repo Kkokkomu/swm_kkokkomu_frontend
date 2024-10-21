@@ -38,7 +38,7 @@ class GuestUserShortFormInfoStateNotifier
 
     // 서버 요청 실패 시 에러 처리
     if (resp.success != true || resp.data == null) {
-      state = ShortFormModelError('뉴스 정보를 불러오는데 실패했습니다.');
+      state = ShortFormModelError('뉴스 정보를 불러오는 중 에러가 발생했어요\n다시 시도해주세요');
       return;
     }
 
