@@ -110,6 +110,7 @@ Map<String, dynamic> _$ShortFormReactionCountInfoToJson(
 ShortFormUserReactionInfo _$ShortFormUserReactionInfoFromJson(
         Map<String, dynamic> json) =>
     ShortFormUserReactionInfo(
+      id: (json['id'] as num?)?.toInt(),
       like: json['like'] as bool?,
       surprise: json['surprise'] as bool?,
       sad: json['sad'] as bool?,
@@ -119,6 +120,7 @@ ShortFormUserReactionInfo _$ShortFormUserReactionInfoFromJson(
 Map<String, dynamic> _$ShortFormUserReactionInfoToJson(
         ShortFormUserReactionInfo instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'like': instance.like,
       'surprise': instance.surprise,
       'sad': instance.sad,

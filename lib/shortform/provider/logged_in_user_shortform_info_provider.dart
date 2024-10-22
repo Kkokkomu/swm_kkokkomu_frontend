@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/my_log/model/my_reaction_log_model.dart';
 import 'package:swm_kkokkomu_frontend/my_log/provider/my_reaction_log_provider.dart';
-import 'package:swm_kkokkomu_frontend/shortform/model/pagination_shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_report_shortform_body_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/post_news_id_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform/model/put_post_reaction_model.dart';
@@ -103,7 +103,7 @@ class LoggedInUserShortFormInfoStateNotifier
     if (ref.exists(myReactionLogProvider)) {
       if (!isReacted) {
         ref.read(myReactionLogProvider.notifier).addShortForm(
-              PaginationShortFormModel(
+              MyReactionLogModel(
                 info: prevState.info,
                 reactionCnt: prevState.reactionCnt.copyWith(
                   like: nextLikeCnt,

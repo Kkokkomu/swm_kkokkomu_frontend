@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
@@ -166,17 +165,20 @@ class ShortFormReactionCountInfo {
 
 @JsonSerializable()
 class ShortFormUserReactionInfo {
+  final int id;
   final bool like;
   final bool surprise;
   final bool sad;
   final bool angry;
 
   ShortFormUserReactionInfo({
+    int? id,
     bool? like,
     bool? surprise,
     bool? sad,
     bool? angry,
-  })  : like = like ?? false,
+  })  : id = id ?? Constants.unknownErrorId,
+        like = like ?? false,
         surprise = surprise ?? false,
         sad = sad ?? false,
         angry = angry ?? false;
@@ -184,8 +186,11 @@ class ShortFormUserReactionInfo {
   factory ShortFormUserReactionInfo.fromJson(Map<String, dynamic> json) =>
       _$ShortFormUserReactionInfoFromJson(json);
 
-  ShortFormUserReactionInfo.createByReactionType(ReactionType reactionType)
-      : like = reactionType == ReactionType.like,
+  ShortFormUserReactionInfo.createByReactionType(
+    ReactionType reactionType, {
+    int? id,
+  })  : id = id ?? Constants.unknownErrorId,
+        like = reactionType == ReactionType.like,
         surprise = reactionType == ReactionType.surprise,
         sad = reactionType == ReactionType.sad,
         angry = reactionType == ReactionType.angry;
@@ -197,5 +202,15 @@ class ShortFormUserReactionInfo {
     if (angry) return ReactionType.angry;
 
     return null;
+  }
+
+  ShortFormUserReactionInfo copyWithByReactionType(ReactionType reactionType) {
+    return ShortFormUserReactionInfo(
+      id: id,
+      like: reactionType == ReactionType.like,
+      surprise: reactionType == ReactionType.surprise,
+      sad: reactionType == ReactionType.sad,
+      angry: reactionType == ReactionType.angry,
+    );
   }
 }
