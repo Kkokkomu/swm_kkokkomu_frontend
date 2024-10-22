@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:swm_kkokkomu_frontend/common/component/cursor_pagination_list_view.dart';
+import 'package:swm_kkokkomu_frontend/common/component/cursor_pagination_list_view_by_provider_family.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_error_widget.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
@@ -67,7 +67,8 @@ class _ShortFormCommentBodyState extends State<ShortFormCommentBody> {
               provider = guestUserShortFormCommentProvider;
             }
 
-            return CursorPaginationListView<ShortFormCommentModel>(
+            return CursorPaginationListViewByProviderFamily<
+                ShortFormCommentModel>(
               scrollController: _scrollController,
               id: widget.newsId,
               provider: provider,
@@ -222,7 +223,8 @@ class _ShortFormCommentBodyState extends State<ShortFormCommentBody> {
                     ),
                   ];
                 },
-                body: CursorPaginationListView<ShortFormCommentModel>(
+                body: CursorPaginationListViewByProviderFamily<
+                    ShortFormCommentModel>(
                   id: widget.parentCommentId!,
                   provider: provider,
                   separatorBuilder: (_, __) => const SizedBox(),

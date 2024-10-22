@@ -9,6 +9,7 @@ import 'package:swm_kkokkomu_frontend/common/view/search_screen.dart';
 import 'package:swm_kkokkomu_frontend/common/view/splash_screen.dart';
 import 'package:swm_kkokkomu_frontend/exploration/view/exploration_screen.dart';
 import 'package:swm_kkokkomu_frontend/exploration/view/exploration_shortform_screen.dart';
+import 'package:swm_kkokkomu_frontend/my_log/view/my_comment_log_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_reaction_log_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_view_log_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_filter_screen.dart';
@@ -204,6 +205,25 @@ class AuthProvider extends ChangeNotifier {
                       path: 'my-comment-log',
                       name: MyCommentLogScreen.routeName,
                       builder: (_, __) => const MyCommentLogScreen(),
+                      routes: [
+                        GoRoute(
+                          path: 'shortform',
+                          name: MyCommentLogShortFormScreen.routeName,
+                          builder: (_, state) {
+                            final extra = state.extra as Map<String, dynamic>?;
+
+                            return MyCommentLogShortFormScreen(
+                              newsId:
+                                  extra?[GoRouterExtraKeys.newsId] as int? ??
+                                      Constants.unknownErrorId,
+                              shortFormUrl:
+                                  extra?[GoRouterExtraKeys.shortFormUrl]
+                                          as String? ??
+                                      Constants.unknownErrorString,
+                            );
+                          },
+                        ),
+                      ],
                     ),
                     GoRoute(
                       path: 'my-reaction-log',

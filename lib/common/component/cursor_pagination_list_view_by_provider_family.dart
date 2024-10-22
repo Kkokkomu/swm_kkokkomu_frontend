@@ -7,7 +7,8 @@ import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 
-class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
+class CursorPaginationListViewByProviderFamily<T extends IModelWithId>
+    extends ConsumerWidget {
   final AutoDisposeStateNotifierProviderFamily<CursorPaginationProvider,
       CursorPaginationBase, int> provider;
   final PaginationWidgetBuilder<T> itemBuilder;
@@ -18,7 +19,7 @@ class CursorPaginationListView<T extends IModelWithId> extends ConsumerWidget {
   final Widget? fetchingMoreErrorWidget;
   final ScrollController? scrollController;
 
-  const CursorPaginationListView({
+  const CursorPaginationListViewByProviderFamily({
     super.key,
     required this.provider,
     required this.itemBuilder,

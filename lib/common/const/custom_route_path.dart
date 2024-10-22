@@ -12,6 +12,8 @@ class CustomRoutePath {
   static const String officialSnsAccount = '/mypage/info/official-sns-account';
   static const String profile = '/mypage/profile';
   static const String myCommentLog = '/mypage/my-comment-log';
+  static const String myCommentLogShortForm =
+      '/mypage/my-comment-log/shortform';
   static const String myViewLog = '/mypage/my-view-log';
   static const String myViewLogShortForm = '/mypage/my-view-log/shortform';
   static const String myReactionLog = '/mypage/my-reaction-log';

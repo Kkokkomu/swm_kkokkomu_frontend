@@ -10,13 +10,13 @@ import 'package:swm_kkokkomu_frontend/shortform/component/single_shortform.dart'
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class MyReactionLogShortFormScreen extends ConsumerWidget {
-  static String get routeName => 'my-reaction-log-shortform';
+class MyCommentLogShortFormScreen extends ConsumerWidget {
+  static String get routeName => 'my-comment-log-shortform';
 
   final int newsId;
   final String shortFormUrl;
 
-  const MyReactionLogShortFormScreen({
+  const MyCommentLogShortFormScreen({
     super.key,
     required this.newsId,
     required this.shortFormUrl,
@@ -32,7 +32,7 @@ class MyReactionLogShortFormScreen extends ConsumerWidget {
       debugPrint('유저의 상태가 올바르지 않거나 newsId 또는 shortFormUrl이 null 값입니다.');
 
       return CustomShortFormBase(
-        shortFormScreenType: ShortFormScreenType.myReactionLog,
+        shortFormScreenType: ShortFormScreenType.myCommentLog,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +53,7 @@ class MyReactionLogShortFormScreen extends ConsumerWidget {
     }
 
     return SingleShortForm(
-      shortFormScreenType: ShortFormScreenType.myReactionLog,
+      shortFormScreenType: ShortFormScreenType.myCommentLog,
       newsId: newsId,
       shortFormUrl: shortFormUrl,
     );
