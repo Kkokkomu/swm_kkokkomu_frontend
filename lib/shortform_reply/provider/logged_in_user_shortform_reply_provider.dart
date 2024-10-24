@@ -4,6 +4,9 @@ import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
+import 'package:swm_kkokkomu_frontend/my_log/model/my_comment_log_model.dart';
+import 'package:swm_kkokkomu_frontend/my_log/provider/my_comment_log_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/post_shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/logged_in_user_shortform_comment_provider.dart';
@@ -51,6 +54,7 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
   Future<({bool success, String? errorCode, String? errorMessage})> postReply({
     required int newsId,
     required String content,
+    required ShortFormModel shortFormModel,
   }) async {
     // 대댓글 작성 전 상태를 저장
     final prevState = _getValidPrevState(replyId: null);
@@ -114,6 +118,28 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
       state = prevState.copyWith();
     }
 
+    // 내 댓글 화면이 활성화되어 있는 경우
+    // 내 댓글 화면에서도 추가 처리
+    if (ref.exists(myCommentLogProvider)) {
+      ref.read(myCommentLogProvider.notifier).updateAddedCommentOrReplyState(
+            MyCommentLogModel(
+              news: MyCommentLogShortFormInfo(
+                info: shortFormModel.info,
+                reactionCnt: shortFormModel.reactionCnt,
+                userReaction: shortFormModel.userReaction,
+              ),
+              comment: MyCommentLogInfo(
+                id: replyInfo.id,
+                userId: replyInfo.userId,
+                newsId: replyInfo.newsId,
+                content: replyInfo.content,
+                editedAt: replyInfo.editedAt,
+                parentId: replyInfo.parentId,
+              ),
+            ),
+          );
+    }
+
     // 대댓글이 추가된 경우 댓글창에 보여지는 replyCnt를 1개 증가시킴
     // 마지막 페이지가 아닌 경우에만 증가시킴
     // 마지막 페이지인 경우 다른 로직에 의해 증가됨
@@ -164,6 +190,15 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
       return false;
     }
 
+    // 내 댓글 화면이 활성화되어 있는 경우
+    // 내 댓글 화면에서도 수정 처리
+    if (ref.exists(myCommentLogProvider)) {
+      ref.read(myCommentLogProvider.notifier).updateEditedCommentOrReplyState(
+            commentOrReplyId: replyId,
+            editedContent: updatedContent,
+          );
+    }
+
     state = prevState.copyWith();
 
     return true;
@@ -195,6 +230,12 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
     } catch (e) {
       debugPrint(e.toString());
       return false;
+    }
+
+    // 내 댓글 화면이 활성화되어 있는 경우
+    // 내 댓글 화면에서도 삭제 처리
+    if (ref.exists(myCommentLogProvider)) {
+      ref.read(myCommentLogProvider.notifier).updateDeletedReplyState(replyId);
     }
 
     state = prevState.copyWith();

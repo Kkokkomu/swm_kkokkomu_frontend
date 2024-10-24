@@ -61,39 +61,6 @@ class _MyCommentLogRepository implements MyCommentLogRepository {
   }
 
   @override
-  Future<ResponseModel<String?>> updateComment(
-      {required PutShortFormCommentBody body}) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'accessToken': true};
-    _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    _data.addAll(body.toJson());
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ResponseModel<String>>(Options(
-      method: 'PUT',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/comment',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = ResponseModel<String?>.fromJson(
-      _result.data!,
-      (json) => json as String?,
-    );
-    return value;
-  }
-
-  @override
   Future<ResponseModel<String?>> deleteComment({required int commentId}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'commentId': commentId};
@@ -109,39 +76,6 @@ class _MyCommentLogRepository implements MyCommentLogRepository {
             .compose(
               _dio.options,
               '/comment',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = ResponseModel<String?>.fromJson(
-      _result.data!,
-      (json) => json as String?,
-    );
-    return value;
-  }
-
-  @override
-  Future<ResponseModel<String?>> updateReply(
-      {required PutShortFormReplyBody body}) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'accessToken': true};
-    _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    _data.addAll(body.toJson());
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ResponseModel<String>>(Options(
-      method: 'PUT',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/comment/reply',
               queryParameters: queryParameters,
               data: _data,
             )

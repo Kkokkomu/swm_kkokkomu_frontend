@@ -40,28 +40,12 @@ abstract class MyCommentLogRepository
     @Queries() AdditionalParams? additionalParams,
   });
 
-  @PUT('/comment')
-  @Headers({
-    'accessToken': true,
-  })
-  Future<ResponseModel<String?>> updateComment({
-    @Body() required PutShortFormCommentBody body,
-  });
-
   @DELETE('/comment')
   @Headers({
     'accessToken': true,
   })
   Future<ResponseModel<String?>> deleteComment({
     @Query('commentId') required int commentId,
-  });
-
-  @PUT('/comment/reply')
-  @Headers({
-    'accessToken': true,
-  })
-  Future<ResponseModel<String?>> updateReply({
-    @Body() required PutShortFormReplyBody body,
   });
 
   @DELETE('/comment/reply')

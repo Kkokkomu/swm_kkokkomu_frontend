@@ -5,6 +5,9 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
+import 'package:swm_kkokkomu_frontend/my_log/model/my_comment_log_model.dart';
+import 'package:swm_kkokkomu_frontend/my_log/provider/my_comment_log_provider.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/post_shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/put_shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_additional_params.dart';
@@ -50,8 +53,11 @@ class LoggedInUserShortFormCommentStateNotifier
     super.additionalParams,
   });
 
-  Future<({bool success, String? errorCode, String? errorMessage})> postComment(
-      String content) async {
+  Future<({bool success, String? errorCode, String? errorMessage})>
+      postComment({
+    required String content,
+    required ShortFormModel shortFormModel,
+  }) async {
     // 댓글 작성 전 상태를 저장
     final prevState = _getValidPrevState(commentId: null);
 
@@ -102,6 +108,28 @@ class LoggedInUserShortFormCommentStateNotifier
       ),
     );
 
+    // 내 댓글 화면이 활성화되어 있는 경우
+    // 내 댓글 화면에서도 추가 처리
+    if (ref.exists(myCommentLogProvider)) {
+      ref.read(myCommentLogProvider.notifier).updateAddedCommentOrReplyState(
+            MyCommentLogModel(
+              news: MyCommentLogShortFormInfo(
+                info: shortFormModel.info,
+                reactionCnt: shortFormModel.reactionCnt,
+                userReaction: shortFormModel.userReaction,
+              ),
+              comment: MyCommentLogInfo(
+                id: commentInfo.id,
+                userId: commentInfo.userId,
+                newsId: commentInfo.newsId,
+                content: commentInfo.content,
+                editedAt: commentInfo.editedAt,
+                parentId: null,
+              ),
+            ),
+          );
+    }
+
     // 페이지네이션에 의해 중복된 데이터를 불러오는 것을 방지하기 위해 postedItems에 Id값을 추가
     postedItems.add(commentInfo.id);
 
@@ -148,6 +176,15 @@ class LoggedInUserShortFormCommentStateNotifier
       return false;
     }
 
+    // 내 댓글 화면이 활성화되어 있는 경우
+    // 내 댓글 화면에서도 수정 처리
+    if (ref.exists(myCommentLogProvider)) {
+      ref.read(myCommentLogProvider.notifier).updateEditedCommentOrReplyState(
+            commentOrReplyId: commentId,
+            editedContent: updatedContent,
+          );
+    }
+
     state = prevState.copyWith();
 
     return true;
@@ -178,6 +215,14 @@ class LoggedInUserShortFormCommentStateNotifier
     } catch (e) {
       debugPrint(e.toString());
       return false;
+    }
+
+    // 내 댓글 화면이 활성화되어 있는 경우
+    // 내 댓글 화면에서도 삭제 처리
+    if (ref.exists(myCommentLogProvider)) {
+      ref
+          .read(myCommentLogProvider.notifier)
+          .updateDeletedCommentState(commentId);
     }
 
     state = prevState.copyWith();

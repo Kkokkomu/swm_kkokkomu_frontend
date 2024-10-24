@@ -5,6 +5,7 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field.da
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_send_button.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/show_shortform_comment_input_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
@@ -15,12 +16,14 @@ class ShortFormCommentPostCard extends ConsumerStatefulWidget {
   final int newsId;
   final int? parentCommentId;
   final bool isReply;
+  final ShortFormModel shortFormModel;
 
   const ShortFormCommentPostCard({
     super.key,
     required this.newsId,
     required this.parentCommentId,
     required this.isReply,
+    required this.shortFormModel,
   });
 
   @override
@@ -81,6 +84,7 @@ class _ShortFormCommentInputCardState
 
                   // 로그인한 사용자인 경우 댓글 입력 바텀 시트를 띄워줌
                   showShortFormCommentInputBottomSheet(
+                    shortFormModel: widget.shortFormModel,
                     context: context,
                     newsId: widget.newsId,
                     parentCommentId:
@@ -106,6 +110,7 @@ class _ShortFormCommentInputCardState
             ),
             const SizedBox(width: 8.0),
             SendButton(
+              shortFormModel: widget.shortFormModel,
               newsId: widget.newsId,
               parentCommentId: widget.isReply ? widget.parentCommentId : null,
               commentId: null,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_body.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_post_card.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_title.dart';
@@ -11,6 +12,7 @@ class ShortFormCommentBox extends StatelessWidget {
   final int? parentCommentId;
   final double maxCommentBodyHeight;
   final bool isReply;
+  final ShortFormModel shortFormModel;
 
   const ShortFormCommentBox({
     super.key,
@@ -18,6 +20,7 @@ class ShortFormCommentBox extends StatelessWidget {
     required this.parentCommentId,
     required this.maxCommentBodyHeight,
     required this.isReply,
+    required this.shortFormModel,
   });
 
   @override
@@ -68,6 +71,7 @@ class ShortFormCommentBox extends StatelessWidget {
                 isReply: isReply,
               ),
               ShortFormCommentBody(
+                shortFormModel: shortFormModel,
                 newsId: newsId,
                 parentCommentId: isReply ? parentCommentId : null,
                 isReply: isReply,
@@ -76,6 +80,7 @@ class ShortFormCommentBox extends StatelessWidget {
           ),
         ),
         ShortFormCommentPostCard(
+          shortFormModel: shortFormModel,
           newsId: newsId,
           parentCommentId: isReply ? parentCommentId : null,
           isReply: isReply,

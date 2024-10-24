@@ -8,6 +8,7 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/logged_in_user_shortform_comment_provider.dart';
 import 'package:swm_kkokkomu_frontend/shortform_reply/provider/logged_in_user_shortform_reply_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
@@ -21,6 +22,7 @@ class SendButton extends ConsumerWidget {
   final TextEditingController controller;
   final bool isInBottomSheet;
   final ShortFormCommentSendButtonType type;
+  final ShortFormModel shortFormModel;
 
   const SendButton({
     super.key,
@@ -31,6 +33,7 @@ class SendButton extends ConsumerWidget {
     required this.controller,
     required this.type,
     required this.isInBottomSheet,
+    required this.shortFormModel,
   });
 
   @override
@@ -58,7 +61,10 @@ class SendButton extends ConsumerWidget {
               // 댓글 작성 요청
               final resp = await ref
                   .read(loggedInUserShortFormCommentProvider(newsId).notifier)
-                  .postComment(controller.text);
+                  .postComment(
+                    content: controller.text,
+                    shortFormModel: shortFormModel,
+                  );
 
               // 댓글 작성에 실패한 경우
               // 에러 메시지를 표시하고 리턴
@@ -128,6 +134,7 @@ class SendButton extends ConsumerWidget {
                   .postReply(
                     newsId: newsId,
                     content: controller.text,
+                    shortFormModel: shortFormModel,
                   );
 
               // 대댓글 작성에 실패한 경우

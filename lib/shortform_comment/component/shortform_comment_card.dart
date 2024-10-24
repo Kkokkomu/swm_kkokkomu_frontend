@@ -12,6 +12,7 @@ import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_report_dialog.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/show_shortform_comment_input_bottom_sheet.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
@@ -28,6 +29,7 @@ class ShortFormCommentCard extends ConsumerWidget {
   final bool isReply;
   final bool isReplyHeader;
   final int? parentCommentId;
+  final ShortFormModel shortFormModel;
 
   const ShortFormCommentCard({
     super.key,
@@ -36,6 +38,7 @@ class ShortFormCommentCard extends ConsumerWidget {
     required this.isReply,
     required this.isReplyHeader,
     required this.parentCommentId,
+    required this.shortFormModel,
   });
 
   @override
@@ -163,6 +166,7 @@ class ShortFormCommentCard extends ConsumerWidget {
                       );
 
                       showShortFormCommentInputBottomSheet(
+                        shortFormModel: shortFormModel,
                         context: context,
                         newsId: shortFormCommentModel.comment.newsId,
                         parentCommentId: isReply ? parentCommentId : null,
@@ -180,7 +184,9 @@ class ShortFormCommentCard extends ConsumerWidget {
                       final isDelete = await showConfirmationDialog(
                         context: context,
                         content: '정말 댓글을 삭제하시겠어요?',
-                        details: '삭제된 댓글은 복구할 수 없어요',
+                        details: isReply
+                            ? '삭제된 댓글은 복구할 수 없어요'
+                            : '해당 댓글의 대댓글도 함께 삭제돼요\n삭제된 댓글은 복구할 수 없어요',
                         confirmText: '삭제',
                         cancelText: '취소',
                       );

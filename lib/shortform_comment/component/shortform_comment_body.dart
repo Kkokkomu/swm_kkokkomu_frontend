@@ -9,6 +9,7 @@ import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart'
 import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_card.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/model/shortform_comment_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/guest_user_shortform_comment_provider.dart';
@@ -23,12 +24,14 @@ class ShortFormCommentBody extends StatefulWidget {
   final int newsId;
   final bool isReply;
   final int? parentCommentId;
+  final ShortFormModel shortFormModel;
 
   const ShortFormCommentBody({
     super.key,
     required this.newsId,
     required this.isReply,
     required this.parentCommentId,
+    required this.shortFormModel,
   });
 
   @override
@@ -74,6 +77,7 @@ class _ShortFormCommentBodyState extends State<ShortFormCommentBody> {
               provider: provider,
               separatorBuilder: (_, __) => const SizedBox(),
               itemBuilder: (_, index, model) => ShortFormCommentCard(
+                shortFormModel: widget.shortFormModel,
                 shortFormCommentModel: model,
                 parentCommentId: widget.isReply ? widget.parentCommentId : null,
                 index: index,
@@ -213,6 +217,7 @@ class _ShortFormCommentBodyState extends State<ShortFormCommentBody> {
                       child: Container(
                         color: ColorName.gray50,
                         child: ShortFormCommentCard(
+                          shortFormModel: widget.shortFormModel,
                           shortFormCommentModel: parentComment.model!,
                           index: parentComment.index,
                           isReply: false,
@@ -229,6 +234,7 @@ class _ShortFormCommentBodyState extends State<ShortFormCommentBody> {
                   provider: provider,
                   separatorBuilder: (_, __) => const SizedBox(),
                   itemBuilder: (_, index, model) => ShortFormCommentCard(
+                    shortFormModel: widget.shortFormModel,
                     shortFormCommentModel: model,
                     parentCommentId:
                         widget.isReply ? widget.parentCommentId : null,

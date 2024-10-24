@@ -1,18 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
-import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/model/my_comment_log_model.dart';
-import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
-import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
 class MyCommentLogCard extends ConsumerWidget {
   final int index;
@@ -138,140 +134,66 @@ class MyCommentLogCard extends ConsumerWidget {
                 ],
               ),
             ),
-            PopupMenuButton(
-              padding: EdgeInsets.zero,
-              style: const ButtonStyle(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              offset: const Offset(0.0, 41.0),
-              menuPadding: EdgeInsets.zero,
-              icon: Assets.icons.svg.btnCommentMenu.svg(),
-              surfaceTintColor: ColorName.white000,
-              color: ColorName.white000,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              onSelected: (value) async {
-                final user = ref.read(userInfoProvider);
+            const SizedBox(width: 12.0),
+            InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () async {
+                // 댓글 삭제 여부 확인 다이얼로그
+                final isDelete = await showConfirmationDialog(
+                  context: context,
+                  content: '정말 댓글을 삭제하시겠어요?',
+                  details: '삭제된 댓글은 복구할 수 없어요',
+                  confirmText: '삭제',
+                  cancelText: '취소',
+                );
 
-                // 로그인된 사용자가 아닌 경우 잘못된 접근이므로 현재 화면을 pop하고 리턴
-                if (user is! UserModel) {
-                  context.pop();
+                // 사용자가 삭제를 선택하지 않은 경우 리턴
+                if (isDelete != true) {
                   return;
                 }
 
-                switch (value) {
-                  case ShortFormCommentPopupType.update:
-                    // 댓글 수정 바텀시트 띄우기
-                    final controller = TextEditingController(
-                      text: commentLogModel.comment.content,
-                    );
+                // 사용자가 삭제를 선택한 경우 댓글 삭제 요청
+                // 댓글 삭제와 대댓글 삭제 구분
+                // parentId가 있는 경우 대댓글 삭제, 없는 경우 댓글 삭제
+                // final resp = switch (model.comment.parentId != null) {
+                //   true => await ref
+                //       .read(
+                //         loggedInUserShortFormReplyProvider(
+                //                 parentCommentId!)
+                //             .notifier,
+                //       )
+                //       .deleteReply(
+                //         newsId: shortFormCommentModel.comment.newsId,
+                //         replyId: shortFormCommentModel.id,
+                //         index: index,
+                //       ),
+                //   false => await ref
+                //       .read(
+                //         loggedInUserShortFormCommentProvider(
+                //           shortFormCommentModel.comment.newsId,
+                //         ).notifier,
+                //       )
+                //       .deleteComment(
+                //         commentId: shortFormCommentModel.id,
+                //         index: index,
+                //       )
+                // };
 
-                    // showShortFormCommentInputBottomSheet(
-                    //   context: context,
-                    //   newsId: shortFormCommentModel.comment.newsId,
-                    //   parentCommentId: isReply ? parentCommentId : null,
-                    //   commentId: shortFormCommentModel.id,
-                    //   index: index,
-                    //   controller: controller,
-                    //   type: isReply
-                    //       ? ShortFormCommentSendButtonType.replyUpdate
-                    //       : ShortFormCommentSendButtonType.update,
-                    // );
-                    return;
+                // 삭제 실패 시 에러 메시지 출력
+                // if (resp == false) {
+                //   CustomToastMessage.showErrorToastMessage(
+                //       '댓글 삭제에 실패했습니다.');
+                //   return;
+                // }
 
-                  case ShortFormCommentPopupType.delete:
-                    // 댓글 삭제 여부 확인 다이얼로그
-                    final isDelete = await showConfirmationDialog(
-                      context: context,
-                      content: '정말 댓글을 삭제하시겠어요?',
-                      details: '삭제된 댓글은 복구할 수 없어요',
-                      confirmText: '삭제',
-                      cancelText: '취소',
-                    );
-
-                    // 사용자가 삭제를 선택하지 않은 경우 리턴
-                    if (isDelete != true) {
-                      return;
-                    }
-
-                    // 사용자가 삭제를 선택한 경우 댓글 삭제 요청
-                    // 댓글 삭제와 대댓글 삭제 구분
-                    // parentId가 있는 경우 대댓글 삭제, 없는 경우 댓글 삭제
-                    // final resp = switch (model.comment.parentId != null) {
-                    //   true => await ref
-                    //       .read(
-                    //         loggedInUserShortFormReplyProvider(
-                    //                 parentCommentId!)
-                    //             .notifier,
-                    //       )
-                    //       .deleteReply(
-                    //         newsId: shortFormCommentModel.comment.newsId,
-                    //         replyId: shortFormCommentModel.id,
-                    //         index: index,
-                    //       ),
-                    //   false => await ref
-                    //       .read(
-                    //         loggedInUserShortFormCommentProvider(
-                    //           shortFormCommentModel.comment.newsId,
-                    //         ).notifier,
-                    //       )
-                    //       .deleteComment(
-                    //         commentId: shortFormCommentModel.id,
-                    //         index: index,
-                    //       )
-                    // };
-
-                    // 삭제 실패 시 에러 메시지 출력
-                    // if (resp == false) {
-                    //   CustomToastMessage.showErrorToastMessage(
-                    //       '댓글 삭제에 실패했습니다.');
-                    //   return;
-                    // }
-
-                    // 삭제 성공 시 성공 메시지 출력
-                    // CustomToastMessage.showSuccessToastMessage(
-                    //     '댓글이 삭제되었습니다.');
-                    return;
-
-                  default:
-                    return;
-                }
+                // 삭제 성공 시 성공 메시지 출력
+                // CustomToastMessage.showSuccessToastMessage(
+                //     '댓글이 삭제되었습니다.');
+                return;
               },
-              itemBuilder: (context) => <PopupMenuEntry>[
-                PopupMenuItem(
-                  height: 40.0,
-                  value: ShortFormCommentPopupType.update,
-                  child: Center(
-                    child: Row(
-                      children: [
-                        Assets.icons.svg.icEdit.svg(),
-                        const SizedBox(width: 2.0),
-                        Text(
-                          '수정하기',
-                          style: CustomTextStyle.detail1Reg(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  height: 40.0,
-                  value: ShortFormCommentPopupType.delete,
-                  child: Center(
-                    child: Row(
-                      children: [
-                        Assets.icons.svg.icDelete.svg(),
-                        const SizedBox(width: 2.0),
-                        Text(
-                          '삭제하기',
-                          style: CustomTextStyle.detail1Reg(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+              child: Assets.icons.svg.btnClose.svg(
+                width: 30.0,
+              ),
             ),
           ],
         ),

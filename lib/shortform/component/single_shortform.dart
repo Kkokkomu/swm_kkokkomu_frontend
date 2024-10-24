@@ -481,6 +481,7 @@ class SingleShortForm extends ConsumerWidget {
               Stack(
                 children: [
                   ShortFormCommentBox(
+                    shortFormModel: shortFormModel,
                     newsId: newsId,
                     maxCommentBodyHeight: constraints.maxHeight -
                         Constants.bottomNavigationBarHeightWithSafeArea,
@@ -506,6 +507,7 @@ class SingleShortForm extends ConsumerWidget {
 
                       // 대댓글 입력창이 활성화 된 경우 대댓글 입력창을 반환
                       return ShortFormCommentBox(
+                        shortFormModel: shortFormModel,
                         newsId: newsId,
                         maxCommentBodyHeight: constraints.maxHeight -
                             Constants.bottomNavigationBarHeightWithSafeArea,

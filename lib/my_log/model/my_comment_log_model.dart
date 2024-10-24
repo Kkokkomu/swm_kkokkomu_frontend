@@ -27,6 +27,16 @@ class MyCommentLogModel implements IModelWithId {
 
   factory MyCommentLogModel.fromJson(Map<String, dynamic> json) =>
       _$MyCommentLogModelFromJson(json);
+
+  MyCommentLogModel copyWith({
+    MyCommentLogInfo? comment,
+    MyCommentLogShortFormInfo? news,
+  }) {
+    return MyCommentLogModel(
+      comment: comment ?? this.comment,
+      news: news ?? this.news,
+    );
+  }
 }
 
 @JsonSerializable()

@@ -6,6 +6,7 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_text_form_field_cl
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
+import 'package:swm_kkokkomu_frontend/shortform/model/shortform_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/component/shortform_comment_send_button.dart';
 
 Future<dynamic> showShortFormCommentInputBottomSheet({
@@ -16,6 +17,7 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
   required int? index,
   required TextEditingController controller,
   required ShortFormCommentSendButtonType type,
+  required ShortFormModel shortFormModel,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -74,6 +76,7 @@ Future<dynamic> showShortFormCommentInputBottomSheet({
               Padding(
                 padding: const EdgeInsets.only(bottom: 26.0),
                 child: SendButton(
+                  shortFormModel: shortFormModel,
                   newsId: newsId,
                   parentCommentId: parentCommentId,
                   commentId: commentId,
