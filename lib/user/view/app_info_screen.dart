@@ -106,6 +106,12 @@ class AppInfoScreen extends ConsumerWidget {
               ),
             ),
             CustomMenuCard(
+              content: '공식 홈페이지',
+              onTap: () => launchUrl(
+                Uri.parse(InAppLinks.officialWebsite),
+              ),
+            ),
+            CustomMenuCard(
               content: '공식 SNS 계정',
               onTap: () => context.go(CustomRoutePath.officialSnsAccount),
             ),
@@ -118,6 +124,12 @@ class AppInfoScreen extends ConsumerWidget {
               onTap: () => InAppReview.instance
                   .openStoreListing(appStoreId: Constants.iosAppStoreId),
             ),
+            CustomMenuCard(
+              content: '1:1 채널톡 문의',
+              onTap: () => launchUrl(
+                Uri.parse(InAppLinks.channelTalk),
+              ),
+            ),
             const SizedBox(height: 18.0),
             Row(
               children: [
@@ -126,7 +138,7 @@ class AppInfoScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '문의 사항',
+                      '이메일 문의',
                       style: CustomTextStyle.body2Bold(),
                     ),
                     const SizedBox(height: 4.0),
