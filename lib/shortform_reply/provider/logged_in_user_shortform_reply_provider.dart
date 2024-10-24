@@ -252,6 +252,48 @@ class LoggedInUserShortFormReplyStateNotifier extends CursorPaginationProvider<
     return true;
   }
 
+  Future<bool> deleteReplyById({
+    required int newsId,
+    required int replyId,
+  }) async {
+    // 대댓글 삭제 전 상태를 저장
+    final prevState = _getValidPrevState(replyId: replyId);
+
+    if (prevState == null) {
+      return false;
+    }
+
+    // 대댓글 삭제 요청
+    final resp = await repository.deleteReply(replyId: replyId);
+
+    // success값이 true가 아니면 실패 처리
+    if (resp.success != true) {
+      return false;
+    }
+
+    // 대댓글 삭제
+    prevState.items.removeWhere((element) => element.comment.id == replyId);
+
+    // 내 댓글 화면이 활성화되어 있는 경우
+    // 내 댓글 화면에서도 삭제 처리
+    if (ref.exists(myCommentLogProvider)) {
+      ref.read(myCommentLogProvider.notifier).updateDeletedReplyState(replyId);
+    }
+
+    state = prevState.copyWith();
+
+    // 대댓글이 삭제된 경우 댓글창에 보여지는 replyCnt를 1개 감소시킴
+    // 마지막 페이지가 아닌 경우에만 감소시킴
+    // 마지막 페이지인 경우 다른 로직에 의해 감소됨
+    if (!prevState.pageInfo.isLast) {
+      ref
+          .read(loggedInUserShortFormCommentProvider(newsId).notifier)
+          .setReplyCntByDelta(commentId: parentCommentId, delta: -1);
+    }
+
+    return true;
+  }
+
   Future<bool> toggleCommentLike({
     required int replyId,
     required int index,

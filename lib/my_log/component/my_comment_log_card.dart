@@ -8,7 +8,9 @@ import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
+import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/my_log/model/my_comment_log_model.dart';
+import 'package:swm_kkokkomu_frontend/my_log/provider/my_comment_log_provider.dart';
 
 class MyCommentLogCard extends ConsumerWidget {
   final int index;
@@ -142,7 +144,9 @@ class MyCommentLogCard extends ConsumerWidget {
                 final isDelete = await showConfirmationDialog(
                   context: context,
                   content: '정말 댓글을 삭제하시겠어요?',
-                  details: '삭제된 댓글은 복구할 수 없어요',
+                  details: commentLogModel.comment.parentId != null
+                      ? '삭제된 댓글은 복구할 수 없어요'
+                      : '해당 댓글의 대댓글도 함께 삭제돼요\n삭제된 댓글은 복구할 수 없어요',
                   confirmText: '삭제',
                   cancelText: '취소',
                 );
@@ -155,40 +159,29 @@ class MyCommentLogCard extends ConsumerWidget {
                 // 사용자가 삭제를 선택한 경우 댓글 삭제 요청
                 // 댓글 삭제와 대댓글 삭제 구분
                 // parentId가 있는 경우 대댓글 삭제, 없는 경우 댓글 삭제
-                // final resp = switch (model.comment.parentId != null) {
-                //   true => await ref
-                //       .read(
-                //         loggedInUserShortFormReplyProvider(
-                //                 parentCommentId!)
-                //             .notifier,
-                //       )
-                //       .deleteReply(
-                //         newsId: shortFormCommentModel.comment.newsId,
-                //         replyId: shortFormCommentModel.id,
-                //         index: index,
-                //       ),
-                //   false => await ref
-                //       .read(
-                //         loggedInUserShortFormCommentProvider(
-                //           shortFormCommentModel.comment.newsId,
-                //         ).notifier,
-                //       )
-                //       .deleteComment(
-                //         commentId: shortFormCommentModel.id,
-                //         index: index,
-                //       )
-                // };
+                final resp = switch (commentLogModel.comment.parentId != null) {
+                  true =>
+                    await ref.read(myCommentLogProvider.notifier).deleteReply(
+                          replyId: commentLogModel.id,
+                          index: index,
+                          parentCommentId: commentLogModel.comment.parentId!,
+                          newsId: commentLogModel.news.info.news.id,
+                        ),
+                  false =>
+                    await ref.read(myCommentLogProvider.notifier).deleteComment(
+                          commentId: commentLogModel.id,
+                          newsId: commentLogModel.news.info.news.id,
+                        ),
+                };
 
                 // 삭제 실패 시 에러 메시지 출력
-                // if (resp == false) {
-                //   CustomToastMessage.showErrorToastMessage(
-                //       '댓글 삭제에 실패했습니다.');
-                //   return;
-                // }
+                if (resp == false) {
+                  CustomToastMessage.showErrorToastMessage('댓글 삭제에 실패했어요');
+                  return;
+                }
 
                 // 삭제 성공 시 성공 메시지 출력
-                // CustomToastMessage.showSuccessToastMessage(
-                //     '댓글이 삭제되었습니다.');
+                CustomToastMessage.showSuccessToastMessage('댓글이 삭제되었어요');
                 return;
               },
               child: Assets.icons.svg.btnClose.svg(

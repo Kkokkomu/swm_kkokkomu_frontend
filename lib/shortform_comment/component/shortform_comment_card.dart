@@ -225,13 +225,13 @@ class ShortFormCommentCard extends ConsumerWidget {
                       // 삭제 실패 시 에러 메시지 출력
                       if (resp == false) {
                         CustomToastMessage.showErrorToastMessage(
-                            '댓글 삭제에 실패했습니다.');
+                          '댓글 삭제에 실패했어요',
+                        );
                         return;
                       }
 
                       // 삭제 성공 시 성공 메시지 출력
-                      CustomToastMessage.showSuccessToastMessage(
-                          '댓글이 삭제되었습니다.');
+                      CustomToastMessage.showSuccessToastMessage('댓글이 삭제되었어요');
                       return;
 
                     case ShortFormCommentPopupType.block:

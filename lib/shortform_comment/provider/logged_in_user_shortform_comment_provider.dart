@@ -194,7 +194,44 @@ class LoggedInUserShortFormCommentStateNotifier
     required int commentId,
     required int index,
   }) async {
-    // 댓글 작성 전 상태를 저장
+    // 댓글 삭제 전 상태를 저장
+    final prevState = _getValidPrevState(commentId: commentId);
+
+    if (prevState == null) {
+      return false;
+    }
+
+    // 댓글 삭제 요청
+    final resp = await repository.deleteComment(commentId: commentId);
+
+    // success값이 true가 아니면 실패 처리
+    if (resp.success != true) {
+      return false;
+    }
+
+    // 댓글 삭제
+    try {
+      prevState.items.removeAt(index);
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+
+    // 내 댓글 화면이 활성화되어 있는 경우
+    // 내 댓글 화면에서도 삭제 처리
+    if (ref.exists(myCommentLogProvider)) {
+      ref
+          .read(myCommentLogProvider.notifier)
+          .updateDeletedCommentState(commentId);
+    }
+
+    state = prevState.copyWith();
+
+    return true;
+  }
+
+  Future<bool> deleteCommentById(int commentId) async {
+    // 댓글 삭제 전 상태를 저장
     final prevState = _getValidPrevState(commentId: commentId);
 
     if (prevState == null) {
@@ -210,12 +247,7 @@ class LoggedInUserShortFormCommentStateNotifier
     }
 
     // 댓글 삭제
-    try {
-      prevState.items.removeAt(index);
-    } catch (e) {
-      debugPrint(e.toString());
-      return false;
-    }
+    prevState.items.removeWhere((element) => element.comment.id == commentId);
 
     // 내 댓글 화면이 활성화되어 있는 경우
     // 내 댓글 화면에서도 삭제 처리

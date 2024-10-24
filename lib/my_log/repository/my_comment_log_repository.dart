@@ -9,8 +9,6 @@ import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_params.dart
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/repository/base_cursor_pagination_repository.dart';
 import 'package:swm_kkokkomu_frontend/my_log/model/my_comment_log_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform_comment/model/put_shortform_comment_model.dart';
-import 'package:swm_kkokkomu_frontend/shortform_reply/model/put_shortform_reply_model.dart';
 
 part 'my_comment_log_repository.g.dart';
 
