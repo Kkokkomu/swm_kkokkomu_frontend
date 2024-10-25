@@ -124,33 +124,6 @@ class AppInfoScreen extends ConsumerWidget {
               onTap: () => InAppReview.instance
                   .openStoreListing(appStoreId: Constants.iosAppStoreId),
             ),
-            CustomMenuCard(
-              content: '1:1 채널톡 문의',
-              onTap: () => launchUrl(
-                Uri.parse(InAppLinks.channelTalk),
-              ),
-            ),
-            const SizedBox(height: 18.0),
-            Row(
-              children: [
-                const SizedBox(width: 18.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '이메일 문의',
-                      style: CustomTextStyle.body2Bold(),
-                    ),
-                    const SizedBox(height: 4.0),
-                    Text(
-                      'kkokkomu27@gmail.com',
-                      style:
-                          CustomTextStyle.detail1Reg(color: ColorName.gray300),
-                    ),
-                  ],
-                ),
-              ],
-            ),
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/const/in_app_links.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/user/component/app_info_menu_card.dart';
@@ -11,6 +12,7 @@ import 'package:swm_kkokkomu_frontend/user/component/custom_menu_card.dart';
 import 'package:swm_kkokkomu_frontend/user/component/my_page_event_banner.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoggedInUserMyPage extends ConsumerWidget {
   final UserModel userInfo;
@@ -175,6 +177,12 @@ class LoggedInUserMyPage extends ConsumerWidget {
                   content: '차단 목록',
                   onTap: () => context.go(
                     CustomRoutePath.blockedUserManagement,
+                  ),
+                ),
+                CustomMenuCard(
+                  content: '문의하기',
+                  onTap: () => launchUrl(
+                    Uri.parse(InAppLinks.channelTalk),
                   ),
                 ),
                 const AppInfoMenuCard(),

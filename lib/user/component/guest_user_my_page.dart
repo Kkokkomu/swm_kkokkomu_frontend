@@ -5,12 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/const/in_app_links.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/user/component/app_info_menu_card.dart';
+import 'package:swm_kkokkomu_frontend/user/component/custom_menu_card.dart';
 import 'package:swm_kkokkomu_frontend/user/component/my_page_event_banner.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GuestUserMyPage extends ConsumerWidget {
   const GuestUserMyPage({super.key});
@@ -116,6 +119,12 @@ class GuestUserMyPage extends ConsumerWidget {
             const SizedBox(height: 18.0),
             const MyPageEventBanner(),
             const SizedBox(height: 18.0),
+            CustomMenuCard(
+              content: '문의하기',
+              onTap: () => launchUrl(
+                Uri.parse(InAppLinks.channelTalk),
+              ),
+            ),
             const AppInfoMenuCard(),
           ],
         ),
