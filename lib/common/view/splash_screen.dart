@@ -76,8 +76,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         if (mounted) {
           showForceCheckDialog(
             context: context,
-            content: '서버가 점검 중이에요',
-            details: '잠시 후 다시 시도해주세요',
+            content: appInfo.offlineMessage,
+            details: appInfo.detailedOfflineMessage,
             checkMessage: Platform.isAndroid ? '종료' : '다시시도',
             onCheck: () {
               context.pop();

@@ -13,7 +13,15 @@ class AppInfoModelError extends AppInfoModelBase {
   AppInfoModelError(this.message);
 }
 
-class AppInfoModelOffline extends AppInfoModelBase {}
+class AppInfoModelOffline extends AppInfoModelBase {
+  final String offlineMessage;
+  final String detailedOfflineMessage;
+
+  AppInfoModelOffline({
+    required this.offlineMessage,
+    required this.detailedOfflineMessage,
+  });
+}
 
 class AppInfoModelForceUpdate extends AppInfoModelBase {
   final PackageInfo currentAppInfo;
@@ -44,6 +52,8 @@ class LatestAppInfo {
   final String url;
   final List<String> blacklistedVersions;
   final bool isOnline;
+  final String? offlineMessage;
+  final String? detailedOfflineMessage;
 
   LatestAppInfo({
     required this.version,
@@ -51,6 +61,8 @@ class LatestAppInfo {
     required this.url,
     required this.blacklistedVersions,
     required this.isOnline,
+    this.offlineMessage,
+    this.detailedOfflineMessage,
   });
 
   factory LatestAppInfo.fromJson(Map<String, dynamic> json) =>

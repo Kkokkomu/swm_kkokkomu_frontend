@@ -31,7 +31,11 @@ class AppInfoStateNotifier extends StateNotifier<AppInfoModelBase> {
       // 서버가 오프라인인 경우
       // 앱을 오프라인 상태로 변경
       if (!latestAppInfo.isOnline) {
-        state = AppInfoModelOffline();
+        state = AppInfoModelOffline(
+          offlineMessage: latestAppInfo.offlineMessage ?? '서버가 점검 중이에요',
+          detailedOfflineMessage:
+              latestAppInfo.detailedOfflineMessage ?? '잠시 후 다시 시도해주세요',
+        );
         return state;
       }
 

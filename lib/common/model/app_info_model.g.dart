@@ -15,6 +15,8 @@ LatestAppInfo _$LatestAppInfoFromJson(Map<String, dynamic> json) =>
           .map((e) => e as String)
           .toList(),
       isOnline: json['isOnline'] as bool,
+      offlineMessage: json['offlineMessage'] as String?,
+      detailedOfflineMessage: json['detailedOfflineMessage'] as String?,
     );
 
 Map<String, dynamic> _$LatestAppInfoToJson(LatestAppInfo instance) =>
@@ -24,4 +26,6 @@ Map<String, dynamic> _$LatestAppInfoToJson(LatestAppInfo instance) =>
       'url': instance.url,
       'blacklistedVersions': instance.blacklistedVersions,
       'isOnline': instance.isOnline,
+      'offlineMessage': instance.offlineMessage,
+      'detailedOfflineMessage': instance.detailedOfflineMessage,
     };
