@@ -240,6 +240,35 @@ enum ShortFormScreenType {
   const ShortFormScreenType(this.path);
 }
 
+@JsonEnum(alwaysCreate: true, valueField: 'channelId')
+enum PushNotificationChannelType {
+  // 공지사항 알림 채널
+  notice('notice', '공지사항'),
+  // 대댓글 알림 채널
+  reply('reply', '대댓글'),
+  // 새 뉴스 알림 채널
+  newArticle('new_article', '새 뉴스'),
+  // 디폴트 알림 채널
+  general('general', '일반');
+
+  final String channelId;
+  final String channelName;
+
+  const PushNotificationChannelType(this.channelId, this.channelName);
+
+  static final _pushNotificationChannelTypeIdMap =
+      _$PushNotificationChannelTypeEnumMap
+          .map((key, value) => MapEntry(value, key));
+
+  static PushNotificationChannelType fromId(String channelId) =>
+      _pushNotificationChannelTypeIdMap[channelId] ?? general;
+}
+
+// TODO : 딥링크 타입 구현해야 함 ex) 공지, 대댓글, 새 뉴스 등등
+enum DeepLinkType {
+  notice,
+}
+
 // loadingStateProvider 에서 사용하는 요청 종류
 // enum RequestType {
 //   postComment,

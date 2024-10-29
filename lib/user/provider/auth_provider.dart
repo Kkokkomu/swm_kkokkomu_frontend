@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router_navigator_key_provider.dart';
+import 'package:swm_kkokkomu_frontend/common/view/permission_screen.dart';
 import 'package:swm_kkokkomu_frontend/common/view/root_tab.dart';
 import 'package:swm_kkokkomu_frontend/common/view/search_screen.dart';
 import 'package:swm_kkokkomu_frontend/common/view/splash_screen.dart';
@@ -261,6 +262,11 @@ class AuthProvider extends ChangeNotifier {
           builder: (_, __) => const SplashScreen(),
         ),
         GoRoute(
+          path: '/permission',
+          name: PermissionScreen.routeName,
+          builder: (_, __) => const PermissionScreen(),
+        ),
+        GoRoute(
           path: '/login',
           name: LoginScreen.routeName,
           builder: (_, __) => const LoginScreen(),
@@ -295,9 +301,10 @@ class AuthProvider extends ChangeNotifier {
   }
 
   String? redirectLogic(BuildContext _, GoRouterState state) {
-    // 스플래시 화면인 경우 리다이렉트 로직 실행하지 않음
-    // 스플래시 화면에서 자체 로직을 실행하도록 함
-    if (state.fullPath == CustomRoutePath.splash) {
+    // 스플래시 화면 또는 접근권한 허용 화면인 경우 리다이렉트 로직 실행하지 않음
+    // 스플래시 화면 또는 접근권한 허용 화면에서 자체 로직을 실행하도록 함
+    if (state.fullPath == CustomRoutePath.splash ||
+        state.fullPath == CustomRoutePath.permission) {
       return null;
     }
 

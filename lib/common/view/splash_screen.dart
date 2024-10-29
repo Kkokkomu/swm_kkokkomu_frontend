@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/fcm/push_notification_service.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/layout/default_layout.dart';
@@ -43,12 +46,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Future<void> fetchAppInfoAndRoute() async {
     _controller.reset();
     final futureResp = _controller.forward();
+    final futurePrefs = SharedPreferences.getInstance();
+    final futurePushNotificationServiceInit =
+        ref.read(pushNotificationServiceProvider).initializeNotification();
     final appInfo = await ref.read(appInfoProvider.notifier).getAppInfo();
     if (appInfo is AppInfoModel) {
       // 앱 상태가 정상인 경우에만
       // 로그인 정보를 받아오기 위해 사용자 정보 요청
       await ref.read(userInfoProvider.notifier).getUserInfo();
     }
+    await futurePushNotificationServiceInit;
+    final prefs = await futurePrefs;
     await futureResp;
 
     switch (appInfo) {
@@ -105,9 +113,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
       case AppInfoModel():
         // 정상적으로 앱 정보를 받아온 경우
-        // 로그인 화면으로 이동
         if (mounted) {
-          context.go(CustomRoutePath.login);
+          // 앱 권한 확인을 완료한 경우
+          // 로그인 화면으로 이동
+          if (prefs.getBool(SharedPreferencesKeys.isPermissionChecked) ??
+              false) {
+            context.go(CustomRoutePath.login);
+            return;
+          }
+
+          // 앱 권한을 아직 확인하지 않은 경우
+          // 권한 확인 화면으로 이동
+          context.go(CustomRoutePath.permission);
         }
         return;
     }

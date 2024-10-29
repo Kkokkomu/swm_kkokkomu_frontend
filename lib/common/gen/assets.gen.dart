@@ -205,6 +205,9 @@ class $AssetsIconsSvgGen {
   SvgGenImage get chipWorld =>
       const SvgGenImage('assets/icons/svg/chip_world.svg');
 
+  /// File path: assets/icons/svg/ic_alarm.svg
+  SvgGenImage get icAlarm => const SvgGenImage('assets/icons/svg/ic_alarm.svg');
+
   /// File path: assets/icons/svg/ic_angry_blue.svg
   SvgGenImage get icAngryBlue =>
       const SvgGenImage('assets/icons/svg/ic_angry_blue.svg');
@@ -531,6 +534,7 @@ class $AssetsIconsSvgGen {
         chipSociety,
         chipSports,
         chipWorld,
+        icAlarm,
         icAngryBlue,
         icAngryGray,
         icAngryWhite,

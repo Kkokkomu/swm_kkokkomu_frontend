@@ -28,3 +28,10 @@ const _$NewsCategoryInExplorationEnumMap = {
   NewsCategoryInExploration.world: 'world',
   NewsCategoryInExploration.it: 'it',
 };
+
+const _$PushNotificationChannelTypeEnumMap = {
+  PushNotificationChannelType.notice: 'notice',
+  PushNotificationChannelType.reply: 'reply',
+  PushNotificationChannelType.newArticle: 'new_article',
+  PushNotificationChannelType.general: 'general',
+};

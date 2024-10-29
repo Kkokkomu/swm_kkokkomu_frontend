@@ -28,4 +28,5 @@ class CustomRoutePath {
   static const String shortFormSearched =
       '/exploration/search-shortform-list/shortform';
   static const String search = '/search';
+  static const String permission = '/permission';
 }
