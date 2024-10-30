@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/cursor_pagination_sliver_grid_view.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
+import 'package:swm_kkokkomu_frontend/common/component/notification_button.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
@@ -96,11 +97,7 @@ class _ExplorationScreenState extends ConsumerState<ExplorationScreen> {
                       child: Assets.icons.svg.btnSearchLight.svg(),
                     ),
                   ),
-                  // TODO : 구현 필요
-                  Visibility(
-                    visible: false,
-                    child: Assets.icons.svg.btnNoticeDefault.svg(),
-                  ),
+                  const NotificationButton(),
                 ],
               ),
             ),

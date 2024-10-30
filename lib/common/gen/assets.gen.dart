@@ -170,6 +170,10 @@ class $AssetsIconsSvgGen {
   SvgGenImage get btnThumbupEnabled =>
       const SvgGenImage('assets/icons/svg/btn_thumbup_enabled.svg');
 
+  /// File path: assets/icons/svg/btn_toggle_on.svg
+  SvgGenImage get btnToggleOn =>
+      const SvgGenImage('assets/icons/svg/btn_toggle_on.svg');
+
   /// File path: assets/icons/svg/chip_economy.svg
   SvgGenImage get chipEconomy =>
       const SvgGenImage('assets/icons/svg/chip_economy.svg');
@@ -525,6 +529,7 @@ class $AssetsIconsSvgGen {
         btnSetting,
         btnThumbupDisabled,
         btnThumbupEnabled,
+        btnToggleOn,
         chipEconomy,
         chipEntertain,
         chipIt,
@@ -644,13 +649,23 @@ class $AssetsImagesSvgGen {
   SvgGenImage get imgLogo =>
       const SvgGenImage('assets/images/svg/img_logo.svg');
 
+  /// File path: assets/images/svg/img_notice_empty.svg
+  SvgGenImage get imgNoticeEmpty =>
+      const SvgGenImage('assets/images/svg/img_notice_empty.svg');
+
   /// File path: assets/images/svg/img_profile_default.svg
   SvgGenImage get imgProfileDefault =>
       const SvgGenImage('assets/images/svg/img_profile_default.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values =>
-      [imgCommentEmpty, imgEmotionLogo, imgEmpty, imgLogo, imgProfileDefault];
+  List<SvgGenImage> get values => [
+        imgCommentEmpty,
+        imgEmotionLogo,
+        imgEmpty,
+        imgLogo,
+        imgNoticeEmpty,
+        imgProfileDefault
+      ];
 }
 
 class Assets {

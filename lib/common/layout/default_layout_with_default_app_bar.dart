@@ -95,7 +95,7 @@ class DefaultLayoutWithDefaultAppBar extends StatelessWidget {
           backgroundColor: appBarBackGroundColor ?? ColorName.white000,
           elevation: 0,
           centerTitle: true,
-          toolbarHeight: toolbarHeight ?? 48.0,
+          toolbarHeight: toolbarHeight ?? 52.0,
           leading: isBackButtonVisible
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2.0),

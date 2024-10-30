@@ -11,6 +11,8 @@ class CustomRoutePath {
   static const String openSourceLicenses = '/mypage/info/open-source-licenses';
   static const String officialSnsAccount = '/mypage/info/official-sns-account';
   static const String profile = '/mypage/profile';
+  static const String notification = '/mypage/notification';
+  static const String notificationSetting = '/mypage/notification/setting';
   static const String myCommentLog = '/mypage/my-comment-log';
   static const String myCommentLogShortForm =
       '/mypage/my-comment-log/shortform';

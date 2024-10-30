@@ -28,6 +28,8 @@ import 'package:swm_kkokkomu_frontend/my_log/view/my_comment_log_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_reaction_log_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_view_log_screen.dart';
+import 'package:swm_kkokkomu_frontend/user/view/notification_screen.dart';
+import 'package:swm_kkokkomu_frontend/user/view/notification_setting_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/official_sns_account_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/open_source_licenses_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/profile_screen.dart';
@@ -165,6 +167,20 @@ class AuthProvider extends ChangeNotifier {
                           path: 'account-deletion',
                           name: AccountDeletionScreen.routeName,
                           builder: (_, __) => const AccountDeletionScreen(),
+                        ),
+                      ],
+                    ),
+                    GoRoute(
+                      parentNavigatorKey: rootNavigationKey,
+                      path: 'notification',
+                      name: NotificationScreen.routeName,
+                      builder: (_, __) => const NotificationScreen(),
+                      routes: [
+                        GoRoute(
+                          parentNavigatorKey: rootNavigationKey,
+                          path: 'setting',
+                          name: NotificationSettingScreen.routeName,
+                          builder: (_, __) => const NotificationSettingScreen(),
                         ),
                       ],
                     ),

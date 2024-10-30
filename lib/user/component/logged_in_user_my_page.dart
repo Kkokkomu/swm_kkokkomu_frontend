@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
+import 'package:swm_kkokkomu_frontend/common/component/notification_button.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/in_app_links.dart';
@@ -37,11 +38,7 @@ class LoggedInUserMyPage extends ConsumerWidget {
                   onTap: () => context.go(CustomRoutePath.profile),
                   child: Assets.icons.svg.btnSetting.svg(),
                 ),
-                // TODO : 구현 필요
-                Visibility(
-                  visible: false,
-                  child: Assets.icons.svg.btnNoticeDefault.svg(),
-                ),
+                const NotificationButton(),
                 const SizedBox(width: 4.0),
               ],
             ),
