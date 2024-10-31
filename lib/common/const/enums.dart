@@ -264,6 +264,17 @@ enum PushNotificationChannelType {
       _pushNotificationChannelTypeIdMap[channelId] ?? general;
 }
 
+enum NotificationSettingType {
+  notice('공지사항 알림'),
+  newArticle('새 뉴스 알림'),
+  reply('대댓글 알림'),
+  nightNotification('야간 알림 허용');
+
+  final String label;
+
+  const NotificationSettingType(this.label);
+}
+
 // TODO : 딥링크 타입 구현해야 함 ex) 공지, 대댓글, 새 뉴스 등등
 enum DeepLinkType {
   notice,

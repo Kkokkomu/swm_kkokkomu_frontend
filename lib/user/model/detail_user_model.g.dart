@@ -17,6 +17,10 @@ DetailUserModel _$DetailUserModelFromJson(Map<String, dynamic> json) =>
       createdAt: json['createdAt'] as String?,
       editedAt: json['editedAt'] as String?,
       profileEditedAt: json['profileEditedAt'] as String?,
+      nightAlarmYn: json['nightAlarmYn'] as bool?,
+      alarmNewContentYn: json['alarmNewContentYn'] as bool?,
+      alarmReplyYn: json['alarmReplyYn'] as bool?,
+      alarmInformYn: json['alarmInformYn'] as bool?,
     );
 
 Map<String, dynamic> _$DetailUserModelToJson(DetailUserModel instance) =>
@@ -30,6 +34,10 @@ Map<String, dynamic> _$DetailUserModelToJson(DetailUserModel instance) =>
       'createdAt': instance.createdAt,
       'editedAt': instance.editedAt,
       'profileEditedAt': instance.profileEditedAt,
+      'nightAlarmYn': instance.nightAlarmYn,
+      'alarmNewContentYn': instance.alarmNewContentYn,
+      'alarmReplyYn': instance.alarmReplyYn,
+      'alarmInformYn': instance.alarmInformYn,
     };
 
 const _$GenderTypeEnumMap = {

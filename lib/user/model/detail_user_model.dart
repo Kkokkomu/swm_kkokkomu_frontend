@@ -31,6 +31,10 @@ class DetailUserModel extends DetailUserModelBase {
   final String createdAt;
   final String editedAt;
   final String profileEditedAt;
+  final bool nightAlarmYn;
+  final bool alarmNewContentYn;
+  final bool alarmReplyYn;
+  final bool alarmInformYn;
 
   DetailUserModel({
     int? id,
@@ -42,6 +46,10 @@ class DetailUserModel extends DetailUserModelBase {
     String? createdAt,
     String? editedAt,
     String? profileEditedAt,
+    bool? nightAlarmYn,
+    bool? alarmNewContentYn,
+    bool? alarmReplyYn,
+    bool? alarmInformYn,
   })  : id = id ?? Constants.unknownErrorId,
         profileUrl = profileUrl ?? Constants.defaultProfileImageUrl,
         nickname = nickname ?? Constants.unknownErrorString,
@@ -50,7 +58,11 @@ class DetailUserModel extends DetailUserModelBase {
         createdAt = createdAt ?? Constants.unknownErrorString,
         editedAt = editedAt ?? Constants.unknownErrorString,
         profileEditedAt =
-            profileEditedAt ?? DateTime.now().millisecondsSinceEpoch.toString();
+            profileEditedAt ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        nightAlarmYn = nightAlarmYn ?? false,
+        alarmNewContentYn = alarmNewContentYn ?? false,
+        alarmReplyYn = alarmReplyYn ?? false,
+        alarmInformYn = alarmInformYn ?? false;
 
   factory DetailUserModel.fromJson(Map<String, dynamic> json) =>
       _$DetailUserModelFromJson(json);

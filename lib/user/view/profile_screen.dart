@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_circular_progress_indicator.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_close_button.dart';
 import 'package:swm_kkokkomu_frontend/common/component/custom_grabber.dart';
+import 'package:swm_kkokkomu_frontend/common/component/custom_select_button.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
@@ -41,12 +44,36 @@ class ProfileScreen extends ConsumerWidget {
           : null,
       child: switch (detailUserInfo) {
         DetailUserModelLoading() => const Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(),
           ),
         DetailUserModelError() => Center(
-            child: Text(
-              '유저 정보를 불러오는데 실패했습니다.',
-              style: CustomTextStyle.body2Reg(),
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        CupertinoIcons.exclamationmark_triangle,
+                      ),
+                      const SizedBox(width: 8.0),
+                      Text(
+                        '유저 정보를 불러오는데 실패했어요',
+                        style: CustomTextStyle.body2Reg(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18.0),
+                  CustomSelectButton(
+                    content: '다시 시도',
+                    onTap: () => ref
+                        .read(detailUserInfoProvider.notifier)
+                        .getDetailUserInfo(),
+                  ),
+                ],
+              ),
             ),
           ),
         DetailUserModel() => SafeArea(

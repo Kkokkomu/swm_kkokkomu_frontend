@@ -170,10 +170,6 @@ class $AssetsIconsSvgGen {
   SvgGenImage get btnThumbupEnabled =>
       const SvgGenImage('assets/icons/svg/btn_thumbup_enabled.svg');
 
-  /// File path: assets/icons/svg/btn_toggle_on.svg
-  SvgGenImage get btnToggleOn =>
-      const SvgGenImage('assets/icons/svg/btn_toggle_on.svg');
-
   /// File path: assets/icons/svg/chip_economy.svg
   SvgGenImage get chipEconomy =>
       const SvgGenImage('assets/icons/svg/chip_economy.svg');
@@ -529,7 +525,6 @@ class $AssetsIconsSvgGen {
         btnSetting,
         btnThumbupDisabled,
         btnThumbupEnabled,
-        btnToggleOn,
         chipEconomy,
         chipEntertain,
         chipIt,

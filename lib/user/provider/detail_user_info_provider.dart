@@ -8,6 +8,7 @@ import 'package:swm_kkokkomu_frontend/common/model/provider_response_model.dart'
 import 'package:swm_kkokkomu_frontend/common/toast_message/custom_toast_message.dart';
 import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comment_height_controller_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/detail_user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/model/put_user_notification_setting_body.dart';
 import 'package:swm_kkokkomu_frontend/user/model/put_user_profile_body.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
@@ -53,6 +54,61 @@ class DetailUserInfoStateNotifier extends StateNotifier<DetailUserModelBase> {
 
     // 정상적인 응답이라면 상태 반영
     state = detailInfo;
+  }
+
+  Future<ProviderResponseModel> updateUserNotificationSetting({
+    required NotificationSettingType notificationSettingType,
+    required bool value,
+  }) async {
+    final prevState = _getValidPrevState();
+
+    // 이전 상태가 유효하지 않다면 실패 반환
+    if (prevState == null) {
+      return ProviderResponseModel(
+        success: false,
+        errorCode: CustomErrorCode.unknownCode,
+        errorMessage: '알림 설정 변경에 실패했어요',
+      );
+    }
+
+    // 서버에 유저 알림 설정 수정 요청
+    final resp = await userRepository.updateUserNotificationSetting(
+      setting: PutUserNotificationSettingBody(
+        alarmInformYn: notificationSettingType == NotificationSettingType.notice
+            ? value
+            : prevState.alarmInformYn,
+        alarmNewContentYn:
+            notificationSettingType == NotificationSettingType.newArticle
+                ? value
+                : prevState.alarmNewContentYn,
+        alarmReplyYn: notificationSettingType == NotificationSettingType.reply
+            ? value
+            : prevState.alarmReplyYn,
+        nightAlarmYn:
+            notificationSettingType == NotificationSettingType.nightNotification
+                ? value
+                : prevState.nightAlarmYn,
+      ),
+    );
+
+    final respProfile = resp.data;
+
+    // 정상적인 응답이 아니라면 실패 반환
+    if (resp.success != true || respProfile == null) {
+      return ProviderResponseModel(
+        success: false,
+        errorCode: resp.error?.code ?? CustomErrorCode.unknownCode,
+        errorMessage: resp.error?.message ?? '알림 설정 변경에 실패했어요',
+      );
+    }
+
+    // 정상적인 응답이라면 상태 반영
+    state = respProfile;
+    return ProviderResponseModel(
+      success: true,
+      errorCode: null,
+      errorMessage: null,
+    );
   }
 
   Future<bool> updateUserProfileImg(ImageSource imageSource) async {

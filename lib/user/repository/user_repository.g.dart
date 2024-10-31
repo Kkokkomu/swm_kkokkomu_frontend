@@ -52,6 +52,41 @@ class _UserRepository implements UserRepository {
   }
 
   @override
+  Future<ResponseModel<DetailUserModel?>> updateUserNotificationSetting(
+      {required PutUserNotificationSettingBody setting}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': true};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(setting.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseModel<DetailUserModel>>(Options(
+      method: 'PUT',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/alarmSetting',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ResponseModel<DetailUserModel?>.fromJson(
+      _result.data!,
+      (json) => json == null
+          ? null
+          : DetailUserModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
   Future<ResponseModel<DetailUserModel?>> updateUserProfileImg(
       {required File image}) async {
     const _extra = <String, dynamic>{};

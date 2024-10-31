@@ -7,6 +7,7 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/dio/dio.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/user/model/detail_user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/model/put_user_notification_setting_body.dart';
 import 'package:swm_kkokkomu_frontend/user/model/put_user_profile_body.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 
@@ -32,6 +33,14 @@ abstract class UserRepository {
     'accessToken': true,
   })
   Future<ResponseModel<DetailUserModel?>> getDetailUserInfo();
+
+  @PUT('/alarmSetting')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<DetailUserModel?>> updateUserNotificationSetting({
+    @Body() required PutUserNotificationSettingBody setting,
+  });
 
   @PUT('/img')
   @Headers({

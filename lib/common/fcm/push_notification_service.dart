@@ -195,11 +195,11 @@ class PushNotificationService {
   }
 
   // 알림 권한 요청 메서드
-  Future<bool?> requestPermission() async {
+  Future<AuthorizationStatus> requestPermission() async {
     // 이미 권한이 허용된 경우, true 반환
     final permission = await hasPermission();
-    if (permission == true) {
-      return true;
+    if (permission == AuthorizationStatus.authorized) {
+      return AuthorizationStatus.authorized;
     }
 
     final settings = await FirebaseMessaging.instance.requestPermission(
@@ -212,32 +212,14 @@ class PushNotificationService {
       sound: true,
     );
 
-    return switch (settings.authorizationStatus) {
-      // 권한이 허용된 경우 true 반환
-      AuthorizationStatus.authorized => true,
-
-      // iOS에만 존재하는 상태. iOS는 Push 권한을 나중에 받지만 Android는 Manifest에서 받기 때문에 true/false로만 반환
-      AuthorizationStatus.notDetermined => null,
-
-      // 그 외의 경우는 false로 반환
-      _ => false
-    };
+    return settings.authorizationStatus;
   }
 
   // 현재 알림 권한 상태를 가져오는 메서드
-  Future<bool?> hasPermission() async {
+  Future<AuthorizationStatus> hasPermission() async {
     final settings = await FirebaseMessaging.instance.getNotificationSettings();
 
-    return switch (settings.authorizationStatus) {
-      // 권한이 허용된 경우 true 반환
-      AuthorizationStatus.authorized => true,
-
-      // iOS에만 존재하는 상태. iOS는 Push 권한을 나중에 받지만 Android는 Manifest에서 받기 때문에 true/false로만 반환
-      AuthorizationStatus.notDetermined => null,
-
-      // 그 외의 경우는 false로 반환
-      _ => false
-    };
+    return settings.authorizationStatus;
   }
 
   // 현재 FCM 토큰을 가져오는 메서드
