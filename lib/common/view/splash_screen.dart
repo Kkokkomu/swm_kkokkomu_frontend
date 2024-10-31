@@ -47,15 +47,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _controller.reset();
     final futureResp = _controller.forward();
     final futurePrefs = SharedPreferences.getInstance();
-    final futurePushNotificationServiceInit =
-        ref.read(pushNotificationServiceProvider).initializeNotification();
     final appInfo = await ref.read(appInfoProvider.notifier).getAppInfo();
     if (appInfo is AppInfoModel) {
       // 앱 상태가 정상인 경우에만
       // 로그인 정보를 받아오기 위해 사용자 정보 요청
       await ref.read(userInfoProvider.notifier).getUserInfo();
+
+      // 로그인 정보를 받아온 후, fcm 서비스 초기화
+      await ref.read(pushNotificationServiceProvider).initializeNotification();
     }
-    await futurePushNotificationServiceInit;
     final prefs = await futurePrefs;
     await futureResp;
 

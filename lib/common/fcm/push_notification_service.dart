@@ -5,7 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
-import 'package:swm_kkokkomu_frontend/common/fcm/deep_link_provider.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/deep_link_provider.dart';
+import 'package:swm_kkokkomu_frontend/user/model/post_update_fcm_token_body.dart';
+import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
+import 'package:swm_kkokkomu_frontend/user/repository/user_repository.dart';
 
 // 플러그인 인스턴스를 전역으로 정의
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -148,7 +152,7 @@ class PushNotificationService {
       (token) async {
         debugPrint('[FCM Token] [Refresh] $token');
         // 서버에 토큰 갱신 요청
-        await updateToken(token);
+        await updateToken();
       },
     );
 
@@ -187,11 +191,63 @@ class PushNotificationService {
     }
   }
 
-  // TODO : 서버에 토큰 갱신 요청 로직을 구현해야 함
-  // TODO : 이 메서드를 통해 로그인, 로그아웃 시 토큰 갱신을 처리해야 함
-  Future<void> updateToken(String token) async {
-    // 서버에 토큰 갱신 요청
-    // await updatedTokenHandler(token);
+  Future<bool> updateToken() async {
+    final user = ref.read(userInfoProvider);
+
+    // 로그인 상태가 아닌 경우, 서버에 토큰 갱신 요청을 보내지 않음
+    if (user is! UserModel) {
+      return false;
+    }
+
+    // 로그인 상태인 경우, 서버에 토큰 갱신 요청을 보냄
+    final userRepository = ref.read(userRepositoryProvider);
+    final token = await getToken();
+
+    // 토큰이 없는 경우, 갱신 요청을 보내지 않음
+    if (token == null) {
+      return false;
+    }
+
+    // 토큰 갱신 요청
+    final resp = await userRepository.updateFcmToken(
+      body: PostUpdateFcmTokenBody(fcmToken: token),
+    );
+
+    // 정상적인 응답이 아니라면 실패 반환
+    if (resp.success != true || resp.data == null) {
+      return false;
+    }
+
+    return true;
+  }
+
+  // 로그아웃시 토큰 삭제를 위한 메서드
+  Future<bool> deleteToken() async {
+    final user = ref.read(userInfoProvider);
+
+    // 로그인 상태가 아닌 경우, 서버에 토큰 삭제 요청을 보내지 않음
+    if (user is! UserModel) {
+      return false;
+    }
+
+    // 로그인 상태인 경우, 서버에 토큰 삭제 요청을 보냄
+    final userRepository = ref.read(userRepositoryProvider);
+    final token = await getToken();
+
+    // 토큰이 없는 경우, 삭제 요청을 보내지 않음
+    if (token == null) {
+      return false;
+    }
+
+    // 토큰 삭제 요청
+    final resp = await userRepository.deleteFcmToken(fcmToken: token);
+
+    // 정상적인 응답이 아니라면 실패 반환
+    if (resp.success != true) {
+      return false;
+    }
+
+    return true;
   }
 
   // 알림 권한 요청 메서드

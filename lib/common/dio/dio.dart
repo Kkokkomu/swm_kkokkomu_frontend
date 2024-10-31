@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
+import 'package:swm_kkokkomu_frontend/common/fcm/push_notification_service.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/model/token_response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/secure_storage/secure_storage.dart';
@@ -165,6 +166,9 @@ class CustomIntercepter extends Interceptor {
           );
         }
 
+        // 토큰 갱신 성공했다면 fcmToken도 갱신 요청
+        _refreshFcmToken(newAccessToken);
+
         // 재발급 받은 토큰으로 요청 재전송
         final retryOptions = err.requestOptions;
         retryOptions.headers.addAll(
@@ -193,11 +197,22 @@ class CustomIntercepter extends Interceptor {
         // 토큰 재발급 후 재요청 실패
         debugPrint(e.toString());
         debugPrint('토큰 재발급 후 재요청 로직 실패');
-        if (err.requestOptions.toString() !=
-            '${Constants.baseUrl}/oauth2/logout') {
-          // 토큰이 유효하지 않으므로 로그아웃 처리를 해줘야 함
-          // 요청이 로그아웃 요청이 아니었을 경우에만 로그아웃 로직을 실행
-          // 요청이 로그아웃 요청이었을 경우 추가적으로 로그아웃 로직을 한번 더 실행할 필요 없음
+
+        final isLogoutRequest = err.requestOptions.toString() ==
+            '${Constants.baseUrl}/oauth2/logout';
+
+        final isDeleteTokenRequest = err.requestOptions.toString() ==
+                '${Constants.baseUrl}/alarm/token' &&
+            err.requestOptions.method == 'DELETE';
+
+        // 토큰이 유효하지 않으므로 로그아웃 처리를 해줘야 함
+        // 요청이 로그아웃 요청이 아니었을 경우에만 로그아웃 로직을 실행
+        // 요청이 로그아웃 요청이었을 경우 추가적으로 로그아웃 로직을 한번 더 실행할 필요 없음
+        // 토큰 삭제 요청을 하다 에러가 발생한 경우에는 강제 로그아웃 로직을 실행하지 않음
+        // 토큰 삭제 요청을 했다는 것은 이미 로그아웃 로직이 실행되었음을 의미
+        if (!isLogoutRequest && !isDeleteTokenRequest) {
+          // 요청이 로그아웃 요청 또는 토큰 삭제 요청이 아닌 경우
+          // 로그아웃 로직 실행
           ref.read(authProvider.notifier).authErrorLogout();
         }
       }
@@ -219,5 +234,52 @@ class CustomIntercepter extends Interceptor {
         },
       ),
     );
+  }
+
+  Future<void> _refreshFcmToken(String accessToken) async {
+    try {
+      // fcmToken을 가져옴
+      final fcmToken =
+          await ref.read(pushNotificationServiceProvider).getToken();
+
+      // fcmToken이 null인 경우, 갱신 요청을 보내지 않음
+      // fcmToken이 null이 아닌 경우에만 fcmToken 갱신 요청
+      if (fcmToken == null) {
+        return;
+      }
+
+      final dio = Dio();
+
+      // fcmToken 갱신 요청 옵션
+      final fcmTokenRefreshRequestOption = RequestOptions(
+        path: '${Constants.baseUrl}/alarm/token',
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+        data: {
+          'fcmToken': fcmToken,
+        },
+      );
+
+      debugPrint(
+          '[REFRESH FCM REQ] [${fcmTokenRefreshRequestOption.method}] ${fcmTokenRefreshRequestOption.uri}');
+      debugPrint(
+          '[REFRESH FCM REQ] [${fcmTokenRefreshRequestOption.method}] [Headers] ${fcmTokenRefreshRequestOption.headers}');
+      debugPrint(
+          '[REFRESH FCM REQ] [${fcmTokenRefreshRequestOption.method}] [Data] ${fcmTokenRefreshRequestOption.data}');
+
+      // fcmToken 갱신 요청
+      final fcmTokenRefreshResponse =
+          await dio.fetch(fcmTokenRefreshRequestOption);
+
+      debugPrint(
+          '[REFRESH FCM RES] [${fcmTokenRefreshResponse.requestOptions.method}] [Data] ${fcmTokenRefreshResponse.data}');
+      debugPrint(
+          '[REFRESH FCM RES] [${fcmTokenRefreshResponse.requestOptions.method}] [${fcmTokenRefreshResponse.statusCode}] ${fcmTokenRefreshResponse.requestOptions.uri}');
+    } catch (e) {
+      debugPrint(e.toString());
+      debugPrint('[REFRESH FCM FAIL] FCM Token 갱신에 실패');
+    }
   }
 }

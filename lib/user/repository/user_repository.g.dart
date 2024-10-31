@@ -33,7 +33,7 @@ class _UserRepository implements UserRepository {
     )
             .compose(
               _dio.options,
-              '',
+              '/user',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -68,7 +68,7 @@ class _UserRepository implements UserRepository {
     )
             .compose(
               _dio.options,
-              '/alarmSetting',
+              '/user/alarmSetting',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -82,6 +82,73 @@ class _UserRepository implements UserRepository {
       (json) => json == null
           ? null
           : DetailUserModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<ResponseModel<UpdateFcmTokenResponseModel?>> updateFcmToken(
+      {required PostUpdateFcmTokenBody body}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'accessToken': true};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseModel<UpdateFcmTokenResponseModel>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/alarm/token',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ResponseModel<UpdateFcmTokenResponseModel?>.fromJson(
+      _result.data!,
+      (json) => json == null
+          ? null
+          : UpdateFcmTokenResponseModel.fromJson(json as Map<String, dynamic>),
+    );
+    return value;
+  }
+
+  @override
+  Future<ResponseModel<String?>> deleteFcmToken(
+      {required String fcmToken}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'fcmToken': fcmToken};
+    final _headers = <String, dynamic>{r'accessToken': true};
+    _headers.removeWhere((k, v) => v == null);
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResponseModel<String>>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/alarm/token',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ResponseModel<String?>.fromJson(
+      _result.data!,
+      (json) => json as String?,
     );
     return value;
   }
@@ -110,7 +177,7 @@ class _UserRepository implements UserRepository {
     )
             .compose(
               _dio.options,
-              '/img',
+              '/user/img',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -144,7 +211,7 @@ class _UserRepository implements UserRepository {
     )
             .compose(
               _dio.options,
-              '/img/default',
+              '/user/img/default',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -179,7 +246,7 @@ class _UserRepository implements UserRepository {
     )
             .compose(
               _dio.options,
-              '',
+              '/user',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -212,7 +279,7 @@ class _UserRepository implements UserRepository {
     )
             .compose(
               _dio.options,
-              '/mypage',
+              '/user/mypage',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -245,7 +312,7 @@ class _UserRepository implements UserRepository {
     )
             .compose(
               _dio.options,
-              '/exit',
+              '/user/exit',
               queryParameters: queryParameters,
               data: _data,
             )

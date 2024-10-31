@@ -7,6 +7,7 @@ import 'package:swm_kkokkomu_frontend/common/component/custom_show_dialog.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_error_code.dart';
 import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
+import 'package:swm_kkokkomu_frontend/common/fcm/push_notification_service.dart';
 import 'package:swm_kkokkomu_frontend/common/model/provider_response_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/bottom_navigation_bar_state_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/go_router.dart';
@@ -169,6 +170,12 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
 
     // 발급받은 토큰으로 유저 정보를 가져옴
     await _fetchUserInfoWithToken(prevState);
+
+    // 로그인에 정상적으로 성공해서, 유저 정보를 가져온 경우
+    // 즉, 현재 상태가 UserModel인 경우, 푸시 알림 토큰을 갱신
+    if (state is UserModel) {
+      await ref.read(pushNotificationServiceProvider).updateToken();
+    }
   }
 
   Future<void> guestLogin() async {
@@ -265,7 +272,15 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
         key: SecureStorageKeys.refreshTokenKey, value: refreshToken);
 
     // 등록에 성공한 경우 받아온 토큰으로 유저 정보를 가져옴
-    _fetchUserInfoWithToken(prevState);
+    _fetchUserInfoWithToken(prevState).then(
+      (_) {
+        // 로그인에 정상적으로 성공해서, 유저 정보를 가져온 경우
+        // 즉, 현재 상태가 UserModel인 경우, 푸시 알림 토큰을 갱신
+        if (state is UserModel) {
+          ref.read(pushNotificationServiceProvider).updateToken();
+        }
+      },
+    );
 
     return ProviderResponseModel(
       success: true,
@@ -284,7 +299,11 @@ class UserInfoStateNotifier extends StateNotifier<UserModelBase> {
   Future<void> logout({
     bool isAuthErrorLogout = false,
   }) async {
+    // 강제 로그아웃이 아닌 경우
     if (!isAuthErrorLogout) {
+      // 로그아웃 처리 전, 푸시 알림 토큰 삭제
+      await ref.read(pushNotificationServiceProvider).deleteToken();
+      // 토큰 삭제 후, 로그아웃 처리
       await authRepository.logout();
     }
 

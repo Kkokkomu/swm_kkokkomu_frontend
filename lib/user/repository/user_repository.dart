@@ -7,8 +7,10 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/dio/dio.dart';
 import 'package:swm_kkokkomu_frontend/common/model/response_model.dart';
 import 'package:swm_kkokkomu_frontend/user/model/detail_user_model.dart';
+import 'package:swm_kkokkomu_frontend/user/model/post_update_fcm_token_body.dart';
 import 'package:swm_kkokkomu_frontend/user/model/put_user_notification_setting_body.dart';
 import 'package:swm_kkokkomu_frontend/user/model/put_user_profile_body.dart';
+import 'package:swm_kkokkomu_frontend/user/model/update_fcm_token_response_model.dart';
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 
 part 'user_repository.g.dart';
@@ -19,7 +21,7 @@ final userRepositoryProvider = Provider<UserRepository>(
 
     return UserRepository(
       dio,
-      baseUrl: '${Constants.baseUrl}/user',
+      baseUrl: Constants.baseUrl,
     );
   },
 );
@@ -28,13 +30,13 @@ final userRepositoryProvider = Provider<UserRepository>(
 abstract class UserRepository {
   factory UserRepository(Dio dio, {String baseUrl}) = _UserRepository;
 
-  @GET('')
+  @GET('/user')
   @Headers({
     'accessToken': true,
   })
   Future<ResponseModel<DetailUserModel?>> getDetailUserInfo();
 
-  @PUT('/alarmSetting')
+  @PUT('/user/alarmSetting')
   @Headers({
     'accessToken': true,
   })
@@ -42,7 +44,23 @@ abstract class UserRepository {
     @Body() required PutUserNotificationSettingBody setting,
   });
 
-  @PUT('/img')
+  @POST('/alarm/token')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<UpdateFcmTokenResponseModel?>> updateFcmToken({
+    @Body() required PostUpdateFcmTokenBody body,
+  });
+
+  @DELETE('/alarm/token')
+  @Headers({
+    'accessToken': true,
+  })
+  Future<ResponseModel<String?>> deleteFcmToken({
+    @Query('fcmToken') required String fcmToken,
+  });
+
+  @PUT('/user/img')
   @Headers({
     'accessToken': true,
   })
@@ -51,13 +69,13 @@ abstract class UserRepository {
     @Part(name: 'image') required File image,
   });
 
-  @PUT('/img/default')
+  @PUT('/user/img/default')
   @Headers({
     'accessToken': true,
   })
   Future<ResponseModel<DetailUserModel?>> updateUserProfileImgToDefault();
 
-  @PUT('')
+  @PUT('/user')
   @Headers({
     'accessToken': true,
   })
@@ -65,13 +83,13 @@ abstract class UserRepository {
     @Body() required PutUserProfileBody personalInfo,
   });
 
-  @GET('/mypage')
+  @GET('/user/mypage')
   @Headers({
     'accessToken': true,
   })
   Future<ResponseModel<UserModel?>> getUserInfo();
 
-  @DELETE('/exit')
+  @DELETE('/user/exit')
   @Headers({
     'accessToken': true,
   })

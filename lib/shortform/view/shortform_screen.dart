@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
-import 'package:swm_kkokkomu_frontend/common/fcm/deep_link_provider.dart';
+import 'package:swm_kkokkomu_frontend/common/provider/deep_link_provider.dart';
 import 'package:swm_kkokkomu_frontend/common/fcm/push_notification_service.dart';
 import 'package:swm_kkokkomu_frontend/common/model/cursor_pagination_model.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/cursor_pagination_provider.dart';
