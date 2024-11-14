@@ -32,8 +32,8 @@ void main(name, FirebaseOptions options) async {
   );
 
   // Firebase Crashlytics 초기화
-  // prod 환경, 릴리즈 모드일때만 Crashlytics 사용
-  if (Constants.flavor == Constants.prod && kReleaseMode) {
+  // 릴리즈 모드일때만 Crashlytics 사용
+  if (kReleaseMode) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
     PlatformDispatcher.instance.onError = (error, stack) {

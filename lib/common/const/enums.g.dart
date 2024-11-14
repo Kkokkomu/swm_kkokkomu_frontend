@@ -35,3 +35,10 @@ const _$PushNotificationChannelTypeEnumMap = {
   PushNotificationChannelType.newArticle: 'new_article',
   PushNotificationChannelType.general: 'general',
 };
+
+const _$NotificationLogTypeEnumMap = {
+  NotificationLogType.notice: 'NOTICE',
+  NotificationLogType.reply: 'REPLY',
+  NotificationLogType.newsArticle: 'NEWS_ARTICLE',
+  NotificationLogType.test: 'TEST',
+};

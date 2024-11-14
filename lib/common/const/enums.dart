@@ -275,6 +275,24 @@ enum NotificationSettingType {
   const NotificationSettingType(this.label);
 }
 
+@JsonEnum(alwaysCreate: true, valueField: 'name')
+enum NotificationLogType {
+  notice('NOTICE'),
+  reply('REPLY'),
+  newsArticle('NEWS_ARTICLE'),
+  test('TEST');
+
+  final String name;
+
+  const NotificationLogType(this.name);
+
+  static final _notificationLogTypeNameMap =
+      _$NotificationLogTypeEnumMap.map((key, value) => MapEntry(value, key));
+
+  static NotificationLogType? fromName(String name) =>
+      _notificationLogTypeNameMap[name];
+}
+
 // TODO : 딥링크 타입 구현해야 함 ex) 공지, 대댓글, 새 뉴스 등등
 enum DeepLinkType {
   notice,

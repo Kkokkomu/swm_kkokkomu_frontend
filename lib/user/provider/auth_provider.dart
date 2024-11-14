@@ -13,6 +13,8 @@ import 'package:swm_kkokkomu_frontend/exploration/view/exploration_shortform_scr
 import 'package:swm_kkokkomu_frontend/my_log/view/my_comment_log_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_reaction_log_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_view_log_shortform_screen.dart';
+import 'package:swm_kkokkomu_frontend/notification/view/notification_detail_screen.dart';
+import 'package:swm_kkokkomu_frontend/notification/view/notification_shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_filter_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform/view/shortform_screen.dart';
 import 'package:swm_kkokkomu_frontend/shortform_search/view/search_shortform_list_screen.dart';
@@ -28,8 +30,8 @@ import 'package:swm_kkokkomu_frontend/my_log/view/my_comment_log_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_reaction_log_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/my_page_screen.dart';
 import 'package:swm_kkokkomu_frontend/my_log/view/my_view_log_screen.dart';
-import 'package:swm_kkokkomu_frontend/user/view/notification_screen.dart';
-import 'package:swm_kkokkomu_frontend/user/view/notification_setting_screen.dart';
+import 'package:swm_kkokkomu_frontend/notification/view/notification_screen.dart';
+import 'package:swm_kkokkomu_frontend/notification/view/notification_setting_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/official_sns_account_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/open_source_licenses_screen.dart';
 import 'package:swm_kkokkomu_frontend/user/view/profile_screen.dart';
@@ -181,6 +183,18 @@ class AuthProvider extends ChangeNotifier {
                           path: 'setting',
                           name: NotificationSettingScreen.routeName,
                           builder: (_, __) => const NotificationSettingScreen(),
+                        ),
+                        GoRoute(
+                          parentNavigatorKey: rootNavigationKey,
+                          path: 'detail',
+                          name: NotificationDetailScreen.routeName,
+                          builder: (_, __) => const NotificationDetailScreen(),
+                        ),
+                        GoRoute(
+                          path: 'shortform',
+                          name: NotificationShortFormScreen.routeName,
+                          builder: (_, __) =>
+                              const NotificationShortFormScreen(),
                         ),
                       ],
                     ),
