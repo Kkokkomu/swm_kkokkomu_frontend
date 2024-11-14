@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/provider/deep_link_provider.dart';
 import 'package:swm_kkokkomu_frontend/user/model/post_update_fcm_token_body.dart';
@@ -155,6 +156,11 @@ class PushNotificationService {
         await updateToken();
       },
     );
+
+    // dev-debug 모드일 때는 토큰 출력
+    if (Constants.flavor == Constants.dev && kDebugMode) {
+      debugPrint('[FCM] [Token] ${await getToken()}');
+    }
 
     // 앱이 종료된 상태에서 알림을 터치하여 앱을 실행한 경우의 로직 설정
     final firstMessage = await FirebaseMessaging.instance.getInitialMessage();
