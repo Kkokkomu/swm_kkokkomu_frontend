@@ -25,7 +25,7 @@ enum GenderType {
 
 @JsonEnum(alwaysCreate: true, valueField: 'name')
 enum ShortFormSortType {
-  recommend('RECOMMEND', '추천순'),
+  recommend('RECOMMEND', '인기순'),
   latest('LATEST', '최신순');
 
   final String name;

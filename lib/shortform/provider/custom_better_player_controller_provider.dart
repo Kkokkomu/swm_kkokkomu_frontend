@@ -80,7 +80,8 @@ class CustomBetterPlayerControllerStateNotifier
           BetterPlayerDataSourceType.network,
           shortFormInfo.shortFormUrl,
           cacheConfiguration: customBetterPlayerCacheConfiguration,
-          bufferingConfiguration: customBetterPlayerBufferingConfiguration,
+          // TODO : 현재 버퍼링 설정으로는 무한로딩 에러가 발생하여 주석처리
+          // bufferingConfiguration: customBetterPlayerBufferingConfiguration,
         ),
       );
 
