@@ -1,0 +1,24 @@
+default_platform(:android)
+
+platform :android do
+  desc "dev 버전 앱 빌드 및 Firebase App Distribution 업로드"
+  lane :dev_app_distribution do
+    build_android_dev
+
+    firebase_app_distribution(
+      app: ENV['DEV_FIREBASE_ANDROID_APP_ID'],
+      service_credentials_file: "fastlane/dev_app_distribution_key.json",
+      android_artifact_type: "APK",
+      android_artifact_path: "../build/app/outputs/flutter-apk/app-dev-release.apk",
+      release_notes_file: "../dev_app_release_note.txt",
+      groups_file: "fastlane/dev-app-distribution/groups.txt",
+      debug: true
+    )
+  end
+end
+
+desc "dev 버전 앱 빌드"
+lane :build_android_dev do
+  sh("flutter", "clean")
+  sh("flutter", "build", "apk", "--flavor", "dev", "-t", "lib/entry/dev.entry.dart", "--release")
+end

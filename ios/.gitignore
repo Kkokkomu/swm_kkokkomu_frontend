@@ -36,3 +36,6 @@ Runner/GeneratedPluginRegistrant.*
 **/DevConfig.xcconfig
 **/ProdConfig.xcconfig
 **/GoogleService-Info.plist
+
+fastlane/app_store_connect_api_key.json
+fastlane/report.xml

@@ -1,0 +1,31 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "dev 버전 앱 빌드 후 TestFlight 업로드"
+  lane :dev_testflight do
+    build_ios_dev
+
+    changelog = File.read("../../dev_app_release_note.txt")
+
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      ipa: "../build/ios/ipa/뉴스낵 DEV.ipa",
+      api_key_path: "fastlane/app_store_connect_api_key.json",
+      changelog: changelog,
+      localized_build_info: {
+        "default": {
+          whats_new: changelog,
+        },
+        "ko": {
+          whats_new: changelog,
+        }
+      }
+    )
+  end
+end
+
+desc "dev 버전 앱 빌드"
+lane :build_ios_dev do
+  sh("flutter", "clean")
+  sh("flutter", "build", "ipa", "--flavor", "dev", "-t", "lib/entry/dev.entry.dart", "--release")
+end

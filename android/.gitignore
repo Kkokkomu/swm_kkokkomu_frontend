@@ -13,3 +13,8 @@ key.properties
 **/*.jks
 
 **/google-services.json
+
+fastlane/google_play_console_key.json
+fastlane/dev_app_distribution_key.json
+fastlane/report.xml
+fastlane/.env.default
