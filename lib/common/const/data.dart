@@ -116,6 +116,7 @@ const customBetterPlayerCacheConfiguration = BetterPlayerCacheConfiguration(
 );
 
 // BetterPlayer 버퍼링 설정값
+// TODO : 현재 설정으로는 무한 로딩이 발생하여 수정 필요
 const customBetterPlayerBufferingConfiguration =
     BetterPlayerBufferingConfiguration(
   minBufferMs: 5000,
