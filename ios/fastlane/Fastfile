@@ -24,8 +24,36 @@ platform :ios do
   end
 end
 
+platform :ios do
+  desc "prod 버전 앱 빌드 후 App Store 업로드"
+  lane :upload_prod do
+    build_ios_prod
+
+    changelog = File.read("../../prod_app_release_note.txt")
+
+    upload_to_app_store(
+      ipa: "../build/ios/ipa/뉴스낵.ipa",
+      api_key_path: "fastlane/app_store_connect_api_key.json",
+      skip_screenshots: true,
+      force: true,
+      submit_for_review: true,
+      automatic_release: true,
+      precheck_include_in_app_purchases: false,
+      release_notes: {
+        'ko' => changelog,
+      }
+    )
+  end
+end
+
 desc "dev 버전 앱 빌드"
 lane :build_ios_dev do
   sh("flutter", "clean")
   sh("flutter", "build", "ipa", "--flavor", "dev", "-t", "lib/entry/dev.entry.dart", "--release")
+end
+
+desc "prod 버전 앱 빌드"
+lane :build_ios_prod do
+  sh("flutter", "clean")
+  sh("flutter", "build", "ipa", "--flavor", "prod", "-t", "lib/entry/prod.entry.dart", "--release")
 end

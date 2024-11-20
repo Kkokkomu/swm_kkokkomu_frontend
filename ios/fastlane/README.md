@@ -21,6 +21,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 dev 버전 앱 빌드
 
+### build_ios_prod
+
+```sh
+[bundle exec] fastlane build_ios_prod
+```
+
+prod 버전 앱 빌드
+
 ----
 
 
@@ -33,6 +41,14 @@ dev 버전 앱 빌드
 ```
 
 dev 버전 앱 빌드 후 TestFlight 업로드
+
+### ios upload_prod
+
+```sh
+[bundle exec] fastlane ios upload_prod
+```
+
+prod 버전 앱 빌드 후 App Store 업로드
 
 ----
 
