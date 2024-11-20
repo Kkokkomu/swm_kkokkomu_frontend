@@ -173,7 +173,6 @@ class AuthProvider extends ChangeNotifier {
                       ],
                     ),
                     GoRoute(
-                      parentNavigatorKey: rootNavigationKey,
                       path: 'notification',
                       name: NotificationScreen.routeName,
                       builder: (_, __) => const NotificationScreen(),
@@ -188,13 +187,27 @@ class AuthProvider extends ChangeNotifier {
                           parentNavigatorKey: rootNavigationKey,
                           path: 'detail',
                           name: NotificationDetailScreen.routeName,
-                          builder: (_, __) => const NotificationDetailScreen(),
+                          builder: (_, state) => NotificationDetailScreen(
+                            notificationId:
+                                state.extra as int? ?? Constants.unknownErrorId,
+                          ),
                         ),
                         GoRoute(
                           path: 'shortform',
                           name: NotificationShortFormScreen.routeName,
-                          builder: (_, __) =>
-                              const NotificationShortFormScreen(),
+                          builder: (_, state) {
+                            final extra = state.extra as Map<String, dynamic>?;
+
+                            return NotificationShortFormScreen(
+                              newsId:
+                                  extra?[GoRouterExtraKeys.newsId] as int? ??
+                                      Constants.unknownErrorId,
+                              shortFormUrl:
+                                  extra?[GoRouterExtraKeys.shortFormUrl]
+                                          as String? ??
+                                      Constants.unknownErrorString,
+                            );
+                          },
                         ),
                       ],
                     ),

@@ -16,9 +16,10 @@ NotificationLogModel _$NotificationLogModelFromJson(
       reply: json['reply'] == null
           ? null
           : ShortFormReplyInfo.fromJson(json['reply'] as Map<String, dynamic>),
+      shortFormUrl: json['shortFormUrl'] as String?,
       notification: json['notification'] == null
           ? null
-          : NotificationInfo.fromJson(
+          : NotificationDetailModel.fromJson(
               json['notification'] as Map<String, dynamic>),
     );
 
@@ -30,6 +31,7 @@ Map<String, dynamic> _$NotificationLogModelToJson(
       'createdAt': CustomDateUtils.formatDateTime(instance.createdAt),
       'alarmType': _$NotificationLogTypeEnumMap[instance.alarmType],
       'reply': instance.reply,
+      'shortFormUrl': instance.shortFormUrl,
       'notification': instance.notification,
     };
 
@@ -39,21 +41,3 @@ const _$NotificationLogTypeEnumMap = {
   NotificationLogType.newsArticle: 'NEWS_ARTICLE',
   NotificationLogType.test: 'TEST',
 };
-
-NotificationInfo _$NotificationInfoFromJson(Map<String, dynamic> json) =>
-    NotificationInfo(
-      id: (json['id'] as num?)?.toInt(),
-      title: json['title'] as String?,
-      body: json['body'] as String?,
-      editedAt: CustomDateUtils.parseDateTime(json['editedAt'] as String?),
-      createdAt: CustomDateUtils.parseDateTime(json['createdAt'] as String?),
-    );
-
-Map<String, dynamic> _$NotificationInfoToJson(NotificationInfo instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'body': instance.body,
-      'editedAt': CustomDateUtils.formatDateTime(instance.editedAt),
-      'createdAt': CustomDateUtils.formatDateTime(instance.createdAt),
-    };

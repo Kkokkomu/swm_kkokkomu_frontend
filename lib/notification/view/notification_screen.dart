@@ -5,6 +5,7 @@ import 'package:swm_kkokkomu_frontend/common/component/cursor_pagination_list_vi
 import 'package:swm_kkokkomu_frontend/common/component/custom_error_widget.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_route_path.dart';
 import 'package:swm_kkokkomu_frontend/common/const/custom_text_style.dart';
+import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/assets.gen.dart';
 import 'package:swm_kkokkomu_frontend/common/gen/colors.gen.dart';
@@ -196,12 +197,21 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen>
                     switch (notificationType) {
                       // 알림 타입이 공지사항인 경우, 공지사항 화면으로 이동
                       case NotificationLogType.notice:
-                        context.go(CustomRoutePath.notificationDetail);
+                        context.go(
+                          CustomRoutePath.notificationDetail,
+                          extra: model.notification?.id,
+                        );
                         return;
 
                       // 알림 타입이 대댓글인 경우, 해당 대댓글이 달린 숏폼 화면으로 이동
                       case NotificationLogType.reply:
-                        context.go(CustomRoutePath.notificationShortForm);
+                        context.go(
+                          CustomRoutePath.notificationShortForm,
+                          extra: {
+                            GoRouterExtraKeys.newsId: model.reply?.newsId,
+                            GoRouterExtraKeys.shortFormUrl: model.shortFormUrl,
+                          },
+                        );
                         return;
 
                       case _:

@@ -40,7 +40,7 @@ class MyCommentLogShortFormScreen extends ConsumerWidget {
               Assets.images.svg.imgEmpty.svg(),
               const SizedBox(height: 6.0),
               Text(
-                '에러가 발생했어요\n잠시후 다시 시도해주세요',
+                '에러가 발생했어요\n잠시 후 다시 시도해주세요',
                 textAlign: TextAlign.center,
                 style: CustomTextStyle.body1Medi(
                   color: ColorName.gray200,

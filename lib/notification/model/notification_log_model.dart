@@ -3,6 +3,7 @@ import 'package:swm_kkokkomu_frontend/common/const/data.dart';
 import 'package:swm_kkokkomu_frontend/common/const/enums.dart';
 import 'package:swm_kkokkomu_frontend/common/model/model_with_id.dart';
 import 'package:swm_kkokkomu_frontend/common/utils/custom_date_utils.dart';
+import 'package:swm_kkokkomu_frontend/notification/model/notification_detail_model.dart';
 import 'package:swm_kkokkomu_frontend/shortform_reply/model/shortform_reply_model.dart';
 
 part 'notification_log_model.g.dart';
@@ -20,7 +21,8 @@ class NotificationLogModel implements IModelWithId {
   final DateTime createdAt;
   final NotificationLogType? alarmType;
   final ShortFormReplyInfo? reply;
-  final NotificationInfo? notification;
+  final String? shortFormUrl;
+  final NotificationDetailModel? notification;
 
   NotificationLogModel({
     int? alarmLogId,
@@ -28,6 +30,7 @@ class NotificationLogModel implements IModelWithId {
     required this.createdAt,
     String? alarmType,
     this.reply,
+    this.shortFormUrl,
     this.notification,
   })  : id = alarmLogId ?? Constants.unknownErrorId,
         alarmLogId = alarmLogId ?? Constants.unknownErrorId,
@@ -37,34 +40,4 @@ class NotificationLogModel implements IModelWithId {
 
   factory NotificationLogModel.fromJson(Map<String, dynamic> json) =>
       _$NotificationLogModelFromJson(json);
-}
-
-@JsonSerializable()
-class NotificationInfo {
-  final int id;
-  final String title;
-  final String body;
-  @JsonKey(
-    fromJson: CustomDateUtils.parseDateTime,
-    toJson: CustomDateUtils.formatDateTime,
-  )
-  final DateTime editedAt;
-  @JsonKey(
-    fromJson: CustomDateUtils.parseDateTime,
-    toJson: CustomDateUtils.formatDateTime,
-  )
-  final DateTime createdAt;
-
-  NotificationInfo({
-    int? id,
-    String? title,
-    String? body,
-    required this.editedAt,
-    required this.createdAt,
-  })  : id = id ?? Constants.unknownErrorId,
-        title = title ?? Constants.unknownErrorString,
-        body = body ?? Constants.unknownErrorString;
-
-  factory NotificationInfo.fromJson(Map<String, dynamic> json) =>
-      _$NotificationInfoFromJson(json);
 }

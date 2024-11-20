@@ -33,7 +33,7 @@ import 'package:swm_kkokkomu_frontend/shortform_comment/provider/shortform_comme
 import 'package:swm_kkokkomu_frontend/user/model/user_model.dart';
 import 'package:swm_kkokkomu_frontend/user/provider/user_info_provider.dart';
 
-class SingleShortForm extends ConsumerWidget {
+class SingleShortForm extends ConsumerStatefulWidget {
   final ShortFormScreenType shortFormScreenType;
   final int newsId;
   final String shortFormUrl;
@@ -46,22 +46,29 @@ class SingleShortForm extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SingleShortForm> createState() => _SingleShortFormState();
+}
+
+class _SingleShortFormState extends ConsumerState<SingleShortForm> {
+  bool isInitialized = false;
+
+  @override
+  Widget build(BuildContext context) {
     final user = ref.watch(userInfoProvider);
     final betterPlayerControllerModel = ref.watch(
       customBetterPlayerControllerProvider(
         (
-          shortFormScreenType: shortFormScreenType,
-          newsId: newsId,
-          shortFormUrl: shortFormUrl,
+          shortFormScreenType: widget.shortFormScreenType,
+          newsId: widget.newsId,
+          shortFormUrl: widget.shortFormUrl,
         ),
       ),
     );
 
     final isLoggedInUser = user is UserModel;
     final shortFormModel = isLoggedInUser
-        ? ref.watch(loggedInUserShortFormInfoProvider(newsId))
-        : ref.watch(guestUserShortFormInfoProvider(newsId));
+        ? ref.watch(loggedInUserShortFormInfoProvider(widget.newsId))
+        : ref.watch(guestUserShortFormInfoProvider(widget.newsId));
 
     // 비디오가 로딩 중이거나 숏폼 정보가 로딩 중인 경우 로딩 스피너를 보여줌
     if (betterPlayerControllerModel
@@ -75,7 +82,7 @@ class SingleShortForm extends ConsumerWidget {
     if (betterPlayerControllerModel is CustomBetterPlayerControllerModelError ||
         shortFormModel is ShortFormModelError) {
       return CustomShortFormBase(
-        shortFormScreenType: shortFormScreenType,
+        shortFormScreenType: widget.shortFormScreenType,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -107,9 +114,10 @@ class SingleShortForm extends ConsumerWidget {
                               .read(
                                 customBetterPlayerControllerProvider(
                                   (
-                                    shortFormScreenType: shortFormScreenType,
-                                    newsId: newsId,
-                                    shortFormUrl: shortFormUrl,
+                                    shortFormScreenType:
+                                        widget.shortFormScreenType,
+                                    newsId: widget.newsId,
+                                    shortFormUrl: widget.shortFormUrl,
                                   ),
                                 ).notifier,
                               )
@@ -118,13 +126,14 @@ class SingleShortForm extends ConsumerWidget {
                           : isLoggedInUser
                               // 로그인한 사용자인 경우
                               ? ref
-                                  .read(
-                                      loggedInUserShortFormInfoProvider(newsId)
-                                          .notifier)
+                                  .read(loggedInUserShortFormInfoProvider(
+                                          widget.newsId)
+                                      .notifier)
                                   .getShortFormInfo()
                               // 비로그인 사용자인 경우
                               : ref
-                                  .read(guestUserShortFormInfoProvider(newsId)
+                                  .read(guestUserShortFormInfoProvider(
+                                          widget.newsId)
                                       .notifier)
                                   .getShortFormInfo(),
                       content: '영상 다시 불러오기',
@@ -149,7 +158,7 @@ class SingleShortForm extends ConsumerWidget {
     return Consumer(
       builder: (_, ref, child) {
         final isShortFormCommentVisible = ref.watch(
-          shortFormCommentHeightControllerProvider(newsId)
+          shortFormCommentHeightControllerProvider(widget.newsId)
               .select((value) => value.isShortFormCommentVisible),
         );
 
@@ -160,11 +169,12 @@ class SingleShortForm extends ConsumerWidget {
 
             // 대댓글창이 활성화 된 경우 대댓글 입력창을 닫음
             if (ref
-                .read(shortFormCommentHeightControllerProvider(newsId))
+                .read(shortFormCommentHeightControllerProvider(widget.newsId))
                 .isReplyVisible) {
               ref
                   .read(
-                    shortFormCommentHeightControllerProvider(newsId).notifier,
+                    shortFormCommentHeightControllerProvider(widget.newsId)
+                        .notifier,
                   )
                   .deactivateReply();
 
@@ -173,11 +183,11 @@ class SingleShortForm extends ConsumerWidget {
 
             // 대댓글창이 활성화 되지 않고 댓글 창이 활성화 된 경우 댓글 입력창을 닫음
             if (ref
-                .read(shortFormCommentHeightControllerProvider(newsId))
+                .read(shortFormCommentHeightControllerProvider(widget.newsId))
                 .isShortFormCommentVisible) {
               ref
-                  .read(
-                      shortFormCommentHeightControllerProvider(newsId).notifier)
+                  .read(shortFormCommentHeightControllerProvider(widget.newsId)
+                      .notifier)
                   .setCommentBodySizeSmall();
 
               return;
@@ -191,6 +201,25 @@ class SingleShortForm extends ConsumerWidget {
       },
       child: LayoutBuilder(
         builder: (BuildContext _, BoxConstraints constraints) {
+          // 내 댓글 기록이나 대댓글 알림을 누르고 숏폼 화면으로 이동한 경우
+          // 화면이 처음 로드될 때 댓글창을 활성화 시킴
+          if (!isInitialized &&
+              (widget.shortFormScreenType == ShortFormScreenType.myCommentLog ||
+                  widget.shortFormScreenType ==
+                      ShortFormScreenType.notification)) {
+            isInitialized = true;
+
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) {
+                ref
+                    .read(
+                        shortFormCommentHeightControllerProvider(widget.newsId)
+                            .notifier)
+                    .setCommentBodySizeMedium(constraints.maxHeight);
+              },
+            );
+          }
+
           return Column(
             children: [
               Expanded(
@@ -203,13 +232,13 @@ class SingleShortForm extends ConsumerWidget {
                         if (ref
                             .read(
                               shortFormCommentHeightControllerProvider(
-                                newsId,
+                                widget.newsId,
                               ),
                             )
                             .isShortFormCommentVisible) {
                           ref
                               .read(shortFormCommentHeightControllerProvider(
-                                      newsId)
+                                      widget.newsId)
                                   .notifier)
                               .setCommentBodySizeSmall();
 
@@ -219,9 +248,9 @@ class SingleShortForm extends ConsumerWidget {
                         ref
                             .read(customBetterPlayerControllerProvider(
                               (
-                                shortFormScreenType: shortFormScreenType,
-                                newsId: newsId,
-                                shortFormUrl: shortFormUrl,
+                                shortFormScreenType: widget.shortFormScreenType,
+                                newsId: widget.newsId,
+                                shortFormUrl: widget.shortFormUrl,
                               ),
                             ).notifier)
                             .togglePausePlay();
@@ -237,7 +266,7 @@ class SingleShortForm extends ConsumerWidget {
                       builder: (_, ref, child) {
                         final isShortFormFloatingButtonVisible = ref.watch(
                           shortFormCommentHeightControllerProvider(
-                            newsId,
+                            widget.newsId,
                           ).select(
                             (value) => value.isShortFormFloatingButtonVisible,
                           ),
@@ -273,7 +302,7 @@ class SingleShortForm extends ConsumerWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     // 홈 화면에서만 필터 버튼을 보여줌
-                                    shortFormScreenType ==
+                                    widget.shortFormScreenType ==
                                             ShortFormScreenType.home
                                         ? const FilterButton()
                                         : const CustomBackButton(),
@@ -286,7 +315,7 @@ class SingleShortForm extends ConsumerWidget {
                                         const SizedBox(width: 4.0),
                                         MoreInfoButton(
                                           isLoggedInUser: isLoggedInUser,
-                                          newsId: newsId,
+                                          newsId: widget.newsId,
                                         ),
                                       ],
                                     ),
@@ -299,11 +328,11 @@ class SingleShortForm extends ConsumerWidget {
                                 children: [
                                   CommentButton(
                                     ref: ref,
-                                    newsId: newsId,
+                                    newsId: widget.newsId,
                                     maxCommentHeight: constraints.maxHeight,
                                   ),
                                   ShareButton(
-                                    newsId: newsId,
+                                    newsId: widget.newsId,
                                     // TODO : 공유 기능 구현하기
                                     // 임시로 relatedUrl을 공유 URL로 사용
                                     shareUrl:
@@ -322,8 +351,8 @@ class SingleShortForm extends ConsumerWidget {
                     ),
                     Center(
                       child: ShortFormStartPauseButton(
-                        shortFormScreenType: shortFormScreenType,
-                        newsId: newsId,
+                        shortFormScreenType: widget.shortFormScreenType,
+                        newsId: widget.newsId,
                       ),
                     ),
                     Consumer(
@@ -331,7 +360,7 @@ class SingleShortForm extends ConsumerWidget {
                         final user = ref.watch(userInfoProvider);
                         final isShortFormFloatingButtonVisible = ref.watch(
                           shortFormCommentHeightControllerProvider(
-                            newsId,
+                            widget.newsId,
                           ).select(
                             (value) => value.isShortFormFloatingButtonVisible,
                           ),
@@ -410,8 +439,8 @@ class SingleShortForm extends ConsumerWidget {
                     ),
                     Consumer(
                       builder: (_, ref, child) {
-                        final isDetailEmojiButtonVisible = ref
-                            .watch(detailEmojiButtonVisibilityProvider(newsId));
+                        final isDetailEmojiButtonVisible = ref.watch(
+                            detailEmojiButtonVisibilityProvider(widget.newsId));
 
                         if (!isDetailEmojiButtonVisible) {
                           return const SizedBox();
@@ -427,13 +456,15 @@ class SingleShortForm extends ConsumerWidget {
                           if (didPop) return;
 
                           ref
-                              .read(detailEmojiButtonVisibilityProvider(newsId)
+                              .read(detailEmojiButtonVisibilityProvider(
+                                      widget.newsId)
                                   .notifier)
                               .setDetailEmojiButtonVisibility(false);
                         },
                         child: ModalBarrier(
                           onDismiss: () => ref
-                              .read(detailEmojiButtonVisibilityProvider(newsId)
+                              .read(detailEmojiButtonVisibilityProvider(
+                                      widget.newsId)
                                   .notifier)
                               .setDetailEmojiButtonVisibility(false),
                           dismissible: true,
@@ -445,7 +476,7 @@ class SingleShortForm extends ConsumerWidget {
                       builder: (_, ref, child) {
                         final isShortFormFloatingButtonVisible = ref.watch(
                           shortFormCommentHeightControllerProvider(
-                            newsId,
+                            widget.newsId,
                           ).select(
                             (value) => value.isShortFormFloatingButtonVisible,
                           ),
@@ -469,7 +500,7 @@ class SingleShortForm extends ConsumerWidget {
                           ),
                           child: EmojiButton(
                             isLoggedInUser: isLoggedInUser,
-                            newsId: newsId,
+                            newsId: widget.newsId,
                             shortFormInfo: shortFormInfo,
                           ),
                         ),
@@ -482,7 +513,7 @@ class SingleShortForm extends ConsumerWidget {
                 children: [
                   ShortFormCommentBox(
                     shortFormModel: shortFormModel,
-                    newsId: newsId,
+                    newsId: widget.newsId,
                     maxCommentBodyHeight: constraints.maxHeight -
                         Constants.bottomNavigationBarHeightWithSafeArea,
                     isReply: false,
@@ -491,7 +522,8 @@ class SingleShortForm extends ConsumerWidget {
                   Consumer(
                     builder: (_, ref, __) {
                       final replyState = ref.watch(
-                        shortFormCommentHeightControllerProvider(newsId).select(
+                        shortFormCommentHeightControllerProvider(widget.newsId)
+                            .select(
                           (value) => (
                             replyParentCommentId: value.parentCommentId,
                             isReplyVisible: value.isReplyVisible,
@@ -508,7 +540,7 @@ class SingleShortForm extends ConsumerWidget {
                       // 대댓글 입력창이 활성화 된 경우 대댓글 입력창을 반환
                       return ShortFormCommentBox(
                         shortFormModel: shortFormModel,
-                        newsId: newsId,
+                        newsId: widget.newsId,
                         maxCommentBodyHeight: constraints.maxHeight -
                             Constants.bottomNavigationBarHeightWithSafeArea,
                         isReply: true,
@@ -536,8 +568,8 @@ class SingleShortForm extends ConsumerWidget {
               ),
               Consumer(
                 builder: (_, ref, __) {
-                  final isDetailEnabled =
-                      ref.watch(shortFormDetailInfoBoxStateProvider(newsId));
+                  final isDetailEnabled = ref.watch(
+                      shortFormDetailInfoBoxStateProvider(widget.newsId));
 
                   if (!isDetailEnabled) {
                     return const SizedBox();
